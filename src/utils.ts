@@ -3,6 +3,7 @@
 import { PropsExtended, Message } from "./types"
 import { eventNames } from "./constants"
 import { deepmerge } from "@agyemanjp/standard/collections/object"
+import { ExtractOptional, Obj } from "@agyemanjp/standard/utility"
 
 /** Calculates a lighter or darker color of a base color in Hex representation.
  * @param hexColor a hex color value such as “#abc” or “#123456” (the hash is optional)
@@ -35,7 +36,7 @@ export function colorLuminance(hexColor: string, luminosity: number) {
 }
 
 /** Merge default props with actual props of renderer */
-export function mergeProps<P, M extends Message>(defaults: Partial<P>, props: PropsExtended<P, M>) {
+export function mergeProps<P extends Obj<string, unknown>, D extends Partial<P>>(defaults: D, props: P) {
 	return deepmerge(defaults, props) //as PropsExtended<P>
 }
 
@@ -72,7 +73,7 @@ export function isEventKey(key: string): key is keyof typeof eventNames {
 	const keyUpper = key.toUpperCase()
 
 	return keyUpper.startsWith("ON") // this condition is simply to prevent useless searches through the events list.
-		&& Object.keys(eventNames).map(String.prototype.toUpperCase).includes(keyUpper)
+		&& Object.keys(eventNames).includes(keyUpper)
 }
 
 export function camelCaseToDash(str: string) {
