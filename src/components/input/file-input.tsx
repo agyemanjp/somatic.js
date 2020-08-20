@@ -7,7 +7,7 @@ import { createElement } from '../../core'
 import { Props, HTMLAttributes, PropsExtended, CSSProperties, Component } from '../../types'
 import { config, mergeProps } from '../../utils'
 import { StackPanel } from '../panels/stack-panel'
-import { TooltipArea } from '../misc/tooltip-area'
+import { TooltipBox } from '../boxes/tooltip-box'
 import { HoverBox } from '../boxes/hover-box'
 import { CommandBox } from '../boxes/command-box'
 
@@ -172,10 +172,10 @@ export const FileInput = function (props: PropsExtended<Props>) {
 					{props.title ? <div style={{ fontSize: "1.5em" }}> {props.title} </div> : null}
 					<span>
 						<b>{"To upload a "}
-							<TooltipArea
+							<TooltipBox
 								explicitTooltip={"Accepted formats: csv, xls, xlsx, json, ods, txt, html, prn, dbf"}>
 								<span>{"data file"}</span>
-							</TooltipArea>
+							</TooltipBox>
 						</b>
 					</span>
 				</div>
