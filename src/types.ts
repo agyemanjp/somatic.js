@@ -5,7 +5,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { RecursivePartial, Obj } from "@agyemanjp/standard"
+import { RecursivePartial } from "@agyemanjp/standard"
 
 //#region Events
 export interface SyntheticEvent<T = Element> {
@@ -1488,16 +1488,17 @@ export const enum Orientation {
 export namespace Props {
 	export type Html = Partial<HTMLAttributes<HTMLElement>>
 
-	export interface Themed { theme: Theme }
+	export type Themed = { theme: Theme }
 
-	export interface Styled { style: CSSProperties }
+	export type Styled = { style: CSSProperties }
 
-	export interface Panel {
+	export type Panel = {
 		itemsAlignH: Alignment,
 		itemsAlignV: Alignment,
 		orientation: | "vertical" | "horizontal"
 	}
-	export interface View<TData = unknown> {
+
+	export type View<TData = unknown> = {
 		sourceData: Iterable<TData>
 		itemTemplate?: Component<{ datum: TData, index: number, style?: CSSProperties }>
 	}

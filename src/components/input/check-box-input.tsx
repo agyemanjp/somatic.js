@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Obj } from "@agyemanjp/standard"
 import { createElement } from '../../core'
-import { PropsExtended, CSSProperties, Renderer } from '../../types'
+import { PropsExtended, CSSProperties, Component } from '../../types'
 // import * as Icons from "./icons"
 
 interface Props {
@@ -23,7 +23,7 @@ const defaultProps = {
 	checkedColor: "#d477b0"
 }
 
-export const CheckBoxInput: Renderer<Props> = (props) => {
+export const CheckBoxInput: Component<Props> = async (props) => {
 	const _props = { ...defaultProps, ...props || {} } as PropsExtended<Props>
 	const icons = _props.icons
 

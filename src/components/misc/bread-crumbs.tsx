@@ -23,7 +23,7 @@ export interface Messages {
 	selection: { type: "selection", data: { index: number } },
 }
 
-interface Props extends Props.Themed {
+type Props = Props.Themed & {
 	crumbs: Array<Crumb>,
 	currentIndex: number,
 	icons: { CrumbLeft: Icon, CrumbMiddle: Icon, CrumbRight: Icon }

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
-import { Component, CSSProperties } from '../../types'
+import { Component, CSSProperties, Theme } from '../../types'
 
-interface Props { theme: Component.Theme, style?: CSSProperties }
+interface Props { theme: Theme, style?: CSSProperties }
 
 export const create = (svgElement: JSX.Element): Component<Props> => {
 	return async (props) => {

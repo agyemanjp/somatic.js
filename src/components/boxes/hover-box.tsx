@@ -1,7 +1,7 @@
 /* eslint-disable fp/no-rest-parameters */
 /* eslint-disable brace-style */
 import cuid from "cuid"
-import { Array } from "@agyemanjp/standard"
+import { first } from "@agyemanjp/standard/collections/iterable"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { createElement, propsToCSS } from "../../core"
 import { Component, Props, CSSProperties } from '../../types'
@@ -9,7 +9,7 @@ import { mergeProps } from '../../utils'
 
 type Messages = { type: "hover-start" } | { type: "hover-stop" }
 
-interface Props extends Props.Html, Props.Themed {
+type Props = Props.Html & Props.Themed & {
 	hoverStyle?: CSSProperties
 }
 
@@ -29,12 +29,13 @@ export const HoverBox: Component<Props, Messages> = async (props) => {
 
 	const className__ = cuid()
 	// eslint-disable-next-line fp/no-let
-	let child = children ? await new Array(children).first() : undefined
+	let child = children ? await first(children) : undefined
 	if (typeof child === "object") {
 		// eslint-disable-next-line fp/no-mutation
 		child = {
 			...child,
 			props: {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				...child.props as any,
 				className: className__,
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any

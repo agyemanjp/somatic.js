@@ -5,17 +5,11 @@
 /* eslint-disable fp/no-loops */
 /* eslint-disable fp/no-mutation */
 
-//@ts-check
 
-/** Get attributes
- * @param { HTMLElement } node
- */
-export function getAttributeNames(node) {
-	let index, rv, attrs
-
-	rv = []
-	attrs = node.attributes
-	for (index = 0; index < attrs.length; ++index) {
+export function getAttributeNames(node: HTMLElement) {
+	const rv = []
+	const attrs = node.attributes
+	for (let index = 0; index < attrs.length; ++index) {
 		rv.push(attrs[index].nodeName)
 	}
 	rv.sort()
@@ -26,12 +20,14 @@ export function getAttributeNames(node) {
  * @param { HTMLElement } elm1
  * @param { HTMLElement } elm2
  */
-export function equivElms(elm1, elm2) {
+export function equivElms(elm1: HTMLElement, elm2: HTMLElement) {
 	// eslint-disable-next-line fp/no-let
 	let attrs1, attrs2, name, node1, node2
 
 	// Compare attributes without order sensitivity
+	// eslint-disable-next-line prefer-const
 	attrs1 = getAttributeNames(elm1)
+	// eslint-disable-next-line prefer-const
 	attrs2 = getAttributeNames(elm2)
 	if (attrs1.join(",") !== attrs2.join(",")) {
 		return false
@@ -52,7 +48,7 @@ export function equivElms(elm1, elm2) {
 			return false
 		}
 		if (_node1.nodeType === 1) { // Element
-			if (!equivElms(/** @type { HTMLElement } */(_node1), /** @type { HTMLElement } */(_node2))) {
+			if (!equivElms(_node1 as HTMLElement, _node2 as HTMLElement)) {
 				return false
 			}
 		}

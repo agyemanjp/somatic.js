@@ -1,21 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable brace-style */
 import cuid from 'cuid'
-import * as Request from "request"
-import { String, Obj, ExtractOptional } from "@agyemanjp/standard"
-import { keys } from "@agyemanjp/standard/collections/Object"
+import { String, Obj } from "@agyemanjp/standard"
+import { getAsync } from "@agyemanjp/standard/web"
+import { keys } from "@agyemanjp/standard/collections/object"
 import { createElement, propsToCSS, render } from '../../core'
-import { Component, Props, Icon, CSSProperties } from '../../types'
+import { Component, Props, Icon, CSSProperties, MouseEvent } from '../../types'
 import { config, mergeProps } from '../../utils'
-
-// type O<V = unknown> = Record<string, V> & {}
-// type X<T extends O> = unknown
-// let x: X<Props>
 
 export type Props = {
 	/** If defined, this will be the content of the tooltip pop-up, rather than a definition from Wikipedia */
 	explicitTooltip?: string
 
-	/** If we know that only the first element have to be tooltiped */
+	/** True if we know that only the first element has to be tool-tipped */
 	noRecursion?: boolean
 
 	/** The dimensions of the tooltip pop-up */
@@ -26,47 +23,48 @@ export type Props = {
 	 * the corresponding value will be the content of the tooltip. 
 	 */
 	definitions?: Obj<string, string>
-	icons: { externalLink: Icon }
 }
 
-const defaultProps /*: Required<ExtractOptional<Props>>*/ = {
-	explicitTooltip: undefined,
+type ReplacementEntry = {
+	position: number,
+	length: number,
+	node: JSX.Element
+}
+
+const defaultProps = {
+	explicitTooltip: "",
 	noRecursion: false,
 	width: "600px",
 	height: "180px",
 	definitions: {}
 }
 
-/** The content of the tooltips will be stored here, so that we don't have to query it from a URL every time a tooltip is hovered */
-const tooltipsStorage: Record<string, string> = {}
+const ExternalLinkIcon: Icon = () => <svg />
+
+/** The content of the tooltips will be stored here, 
+ * so that we don't have to query it from a URL every time a tooltip is hovered 
+ */
+const tooltips: Record<string, string> = {}
 
 export const TooltipBox: Component<Props & Props.Html> = async (props) => {
-	const { postMsgAsync, icons, explicitTooltip, noRecursion, width, height, definitions } = mergeProps(defaultProps, props)
+	const { children, style, explicitTooltip, noRecursion, width, height, definitions } = mergeProps(defaultProps, props)
 	const tooltipId = cuid()
 	// eslint-disable-next-line fp/no-let, init-declarations
-	let hidingTimer: number
+	let hidingTimer: NodeJS.Timeout | number
 
 	const attachToolTipsIfNeeded = async (el: HTMLElement) => {
 		// If the element contains children, we process them
-		[...el.childNodes].forEach((child, index) => {
-			attachToolTipsIfNeeded(child as HTMLElement)
-		})
+		[...el.childNodes].forEach((child, index) => attachToolTipsIfNeeded(child as HTMLElement))
 
 		// Otherwise, we process the element if it's text
 		if (el.nodeName === "#text") {
 			// eslint-disable-next-line fp/no-let
 			let originalStringElem = el.textContent
-			if (originalStringElem === null) {
-				throw new Error(`A text node didn't have a textContent attribute`)
-			}
+			if (originalStringElem === null) throw new Error(`A text node didn't have a textContent attribute`)
 
 			// We find the replacements in the children, or in the case of explicit tooltips, the whole string is replaced
-			const replacements = explicitTooltip !== undefined && typeof explicitTooltip === "string"
-				? [{
-					position: 0,
-					length: explicitTooltip.length,
-					node: createToolTip(originalStringElem)
-				}]
+			const replacements = typeof explicitTooltip === "string"
+				? [{ position: 0, length: explicitTooltip.length, node: createToolTip(originalStringElem) }]
 
 				// eslint-disable-next-line fp/no-mutating-methods
 				: keys(definitions)
@@ -82,7 +80,8 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 						}
 						return accum
 					}, [] as ReplacementEntry[])
-					// We sort the replacements by position: the first in the sentence will be processed first.
+
+					// sort the replacements by position: the first in the sentence will be processed first.
 					.sort((a, b) => a.position - b.position)
 
 			const newElements: unknown[] = []
@@ -91,12 +90,13 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 				const prev: ReplacementEntry | undefined = replacements[i - 1]
 				const positionFromStart = replacement.position - ((prev ? prev.position : 0) + (prev ? prev.length : 0))
 				const previousText = (originalStringElem ?? "").slice(0, positionFromStart)
+
 				// eslint-disable-next-line fp/no-mutation
 				originalStringElem = (originalStringElem ?? "").slice(positionFromStart + replacement.length) // Removing the text before the term + the term itself
 
-				// We push the text that came before
 				// eslint-disable-next-line fp/no-mutating-methods
-				newElements.push(previousText)
+				newElements.push(previousText) // We push the text that came before
+
 				// eslint-disable-next-line fp/no-mutating-methods
 				newElements.push(replacement.node)
 			})
@@ -109,7 +109,6 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 				const node = await render(<span>{newElements}</span>)
 				el.parentNode?.appendChild(span)
 				span.appendChild(node)
-
 
 				// We remove the existing node
 				el.remove()
@@ -132,7 +131,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 		maxHeight: `180px`,
 		width: width,
 		height: height,
-		...props.style
+		...style
 	}
 
 	const handleMouseLeave = async (className: string) => {
@@ -140,12 +139,12 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 		hidingTimer = setTimeout(() => { // We hide the tooltip after half a second
 			[...document.getElementsByClassName(`${className}-tooltip`)]
 				.forEach(item => item.setAttribute("style", propsToCSS({ ...tooltipBoxStyle, display: "none", })))
-		}, 300) as unknown as number
+		}, 300) //as unknown as number
 	}
 
 	const handleMouseEnter = async (ev: MouseEvent, className: string, wordToReplace?: string) => {
 		// We cancel the hiding timer, if any
-		clearTimeout(hidingTimer);
+		clearTimer(hidingTimer);
 
 		// We immediately hide all tooltip boxes (we'll re-show that one immediately)
 		[...document.getElementsByClassName("tooltipBox")]
@@ -174,14 +173,14 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 		if (wordToReplace) {
 			const isUrl = definitions[wordToReplace] && definitions[wordToReplace].slice(0, 4) === "http"
 
-			if (tooltipsStorage[wordToReplace] === undefined && isUrl) { // We only fetch the tooltip if it's not yet stored, and is a URL
-				await getTooltipFromUrl(definitions[wordToReplace]).then(response => {
-					const foundPages = JSON.parse(response).query.pages
+			if (tooltips[wordToReplace] === undefined && isUrl) { // We only fetch the tooltip if it's not yet stored, and is a URL
+				await getAsync({ uri: definitions[wordToReplace] }).then(response => {
+					const foundPages = JSON.parse(response.body).query.pages
 					// eslint-disable-next-line fp/no-mutation
-					tooltipsStorage[wordToReplace] = foundPages[Object.keys(foundPages)[0]].extract
+					tooltips[wordToReplace] = foundPages[Object.keys(foundPages)[0]].extract
 				}).catch(err => {
 					// eslint-disable-next-line fp/no-mutation
-					tooltipsStorage[wordToReplace] = err
+					tooltips[wordToReplace] = err
 				})
 
 			}
@@ -190,9 +189,9 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 			[...document.getElementsByClassName(`tooltip-${wordToReplace}-content`)]
 				.forEach(item => {
 					// eslint-disable-next-line fp/no-mutation
-					item.innerHTML = props.explicitTooltip
-						? props.explicitTooltip
-						: tooltipsStorage[wordToReplace]
+					item.innerHTML = explicitTooltip
+						? explicitTooltip
+						: tooltips[wordToReplace]
 				})
 		}
 	}
@@ -210,25 +209,24 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 				onMouseLeave={() => handleMouseLeave(className__)}>
 				{contentReplaced}
 			</span>
+
 			<div
 				style={tooltipBoxStyle}
 				className={`tooltipBox ${className__}-tooltip`}
 				onClick={e => { e.stopPropagation() }}
-				onMouseEnter={() => { clearTimeout(hidingTimer) }}
+				onMouseEnter={() => { clearTimer(hidingTimer) }}
 				onMouseLeave={() => { handleMouseLeave(className__) }}>
 				{
 					isUrl
 						? <div className="tooltip-title" style={{ marginBottom: "0.5em" }}>
 							<span style={{ fontWeight: 700 }}>
-								{
-									new String(contentReplaced as string).toTitleCase().toString()
-								}
+								{new String(contentReplaced).toTitleCase().toString()}
 							</span>
 							<span style={{ float: "right" }}> From Wikipedia
-							<a style={{ marginLeft: "0.5em" }}
+								<a style={{ marginLeft: "0.5em" }}
 									// eslint-disable-next-line fp/no-mutating-methods
 									target="_blank" href={`https://en.wikipedia.org/wiki/${definitions[lowerCasedWord].split("=").pop()}`}>
-									<icons.externalLink style={{ height: "1em", cursor: "pointer" }} />
+									<ExternalLinkIcon style={{ height: "1em", cursor: "pointer" }} />
 								</a>
 							</span>
 						</div>
@@ -237,8 +235,8 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 				<span className={`tooltip-${lowerCasedWord}-content`} style={{ overflow: "auto", paddingRight: ".5em" }}>
 					{isUrl
 						? "Loading definition..."
-						: props.explicitTooltip !== undefined
-							? props.explicitTooltip
+						: explicitTooltip !== undefined
+							? explicitTooltip
 							: definitions[lowerCasedWord]
 					}
 				</span>
@@ -249,91 +247,46 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 	// Turn the element and its children into elements + tooltips
 	const assignTooltips = async (id: string) => {
 		const elementToProcess = document.getElementById(id)
-		if (elementToProcess === undefined || elementToProcess === null) {
-			return <div />
-		}
-
-		[...elementToProcess.children].forEach((child) => { attachToolTipsIfNeeded(child as HTMLElement) })
+		if (elementToProcess === undefined || elementToProcess === null) { return <div /> }
+		[...elementToProcess.children]
+			.forEach((child) => { attachToolTipsIfNeeded(child as HTMLElement) })
 	}
 
-	if (noRecursion) {
+	if (noRecursion === true) {
 		const className__ = cuid()
 		return <span
 			className={className__}
-			onClick={e => { e.stopPropagation() }}
-			onMouseEnter={ev => {
-				clearTimeout(hidingTimer)
-				handleMouseEnter(ev, className__)
-			}}
-			onMouseLeave={() => { handleMouseLeave(className__) }}
-			style={{
-				...props.style,
-				width: "100%",
-				height: "100%",
-				display: "contents"
-			}}>
-			{props.children}
+			style={{ ...style, width: "100%", height: "100%", display: "contents" }}
+			onClick={e => e.stopPropagation()}
+			onMouseEnter={ev => { clearTimer(hidingTimer); handleMouseEnter(ev, className__) }}
+			onMouseLeave={ev => handleMouseLeave(className__)}>
+
+			{children}
+
 			<div
-				style={{
-					...tooltipBoxStyle,
-					width: "auto",
-					height: "auto"
-				}}
+				style={{ ...tooltipBoxStyle, width: "auto", height: "auto" }}
 				className={`tooltipBox ${className__}-tooltip`}>
-				{props.explicitTooltip}
+				{explicitTooltip}
 			</div>
 		</span>
 	}
 	else { // We indicate that on element load, we need to apply tooltips
-		return <span style={{
-			...props.style,
-			width: "100%",
-			height: "100%",
-			display: "contents"
-		}}
-			id={tooltipId}>
+		return <span id={tooltipId} style={{ ...style, width: "100%", height: "100%", display: "contents" }}>
 			<style onLoad={() => { assignTooltips(tooltipId) }} />
-			{props.children}
+			{children}
 		</span>
 	}
 }
 
-const getTooltipFromUrl = async (url: string): Promise<string> => {
-	return new Promise((resolve, reject) => {
-		Request.get({ uri: url }, (err, response) => {
-			if (err) {
-				reject(err.message)
-			}
-			else {
-				resolve(response.body)
-			}
-		})
-	})
-}
-type ReplacementEntry = {
-	position: number,
-	length: number,
-	node: JSX.Element
-}
 
-/** Indicates if that term is already tolltiped as being part of another term */
-const partOfAnotherTerm = (index: number, replacements: ReplacementEntry[]) => {
+/** Determine if a term is already tool-tipped as being part of another term */
+function partOfAnotherTerm(index: number, replacements: ReplacementEntry[]) {
 	return replacements.some(replacement =>
 		index >= replacement.position && index <= replacement.position + replacement.length
 	)
 }
 
-// function getOffset(el: HTMLElement) {
-// 	// eslint-disable-next-line fp/no-let
-// 	let _x = 0, _y = 0
-// 	// eslint-disable-next-line fp/no-loops
-// 	while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
-// 		// eslint-disable-next-line fp/no-mutation
-// 		_x += el.offsetLeft - el.scrollLeft
-// 		// eslint-disable-next-line fp/no-mutation
-// 		_y += el.offsetTop - el.scrollTop
-// 		// eslint-disable-next-line fp/no-mutation
-// 		el = el.offsetParent as HTMLElement
-// 	}
-// 	return { top: _y, left: _x }
-// }
+function clearTimer(timer: NodeJS.Timeout | number) {
+	// eslint-disable-next-line no-unused-expressions
+	typeof timer === "number" ? clearTimeout(timer) : clearTimeout(timer)
+}

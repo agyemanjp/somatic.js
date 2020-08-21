@@ -7,7 +7,7 @@ import { Component, Props, CSSProperties } from '../../types'
 /** Type that defines the struct we need to send when we want to pass groups of options to this component. */
 export interface OptionsGrouped { label: string, options: (string | number)[] }
 
-interface Props extends Props.Html, Props.Themed {
+type Props = Props.Html & Props.Themed & {
 	selectedIndex: number
 	useOptGroup?: boolean // Used optionally to group related options
 	optionsGrouped?: OptionsGrouped[]
@@ -29,7 +29,17 @@ export const SelectInput: Component<Props> = (props) => {
 		} as CSSProperties
 	}
 
-	const { defaultValue, disabledIndexes, descriptions, postMsgAsync, useOptGroup, optionsGrouped, selectedIndex, children, style } = mergeProps(defaultProps, props)
+	const {
+		defaultValue,
+		disabledIndexes,
+		descriptions,
+		postMsgAsync,
+		useOptGroup,
+		optionsGrouped,
+		selectedIndex,
+		children,
+		style
+	} = mergeProps(defaultProps, props)
 
 
 	const effectiveStyle = { ...defaultProps.style, ...style }

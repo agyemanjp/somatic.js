@@ -2,8 +2,8 @@
 
 import { PropsExtended, Message } from "./types"
 import { eventNames } from "./constants"
-import { deepmerge } from "@agyemanjp/standard/collections/object"
-import { ExtractOptional, Obj } from "@agyemanjp/standard/utility"
+import { deepMerge } from "@agyemanjp/standard/collections/object"
+import { Obj } from "@agyemanjp/standard/utility"
 
 /** Calculates a lighter or darker color of a base color in Hex representation.
  * @param hexColor a hex color value such as “#abc” or “#123456” (the hash is optional)
@@ -36,8 +36,8 @@ export function colorLuminance(hexColor: string, luminosity: number) {
 }
 
 /** Merge default props with actual props of renderer */
-export function mergeProps<P extends Obj<string, unknown>, D extends Partial<P>>(defaults: D, props: P) {
-	return deepmerge(defaults, props) //as PropsExtended<P>
+export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, props: P): D & P & Partial<P> {
+	return deepMerge([defaults, props]) //as PropsExtended<P>
 }
 
 export function setAttribute(dom: HTMLElement | SVGElement, key: string, value: string | ((e: Event) => unknown)) {

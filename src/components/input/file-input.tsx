@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable brace-style */
-import { iterAsync, hasValue } from '@agyemanjp/standard'
+import { hasValue } from '@agyemanjp/standard'
 import * as Request from 'request'
 import { createElement } from '../../core'
-import { Props, HTMLAttributes, PropsExtended, CSSProperties, Component } from '../../types'
+import { Props, Icon, CSSProperties, Component } from '../../types'
 import { config, mergeProps } from '../../utils'
 import { StackPanel } from '../panels/stack-panel'
 import { TooltipBox } from '../boxes/tooltip-box'
 import { HoverBox } from '../boxes/hover-box'
 import { CommandBox } from '../boxes/command-box'
 
-interface InternalProps { showUrlInput?: boolean; uri?: string }
-interface Props extends Props.Html, Props.Themed, InternalProps {
+type InternalProps = { showUrlInput?: boolean; uri?: string }
+type Props = Props.Html & Props.Themed & InternalProps & {
 	onDataLoading?: (fileName: string) => unknown
 	onDataLoaded?: (data: unknown, fileName: string) => unknown
 	fileNameUploaded?: string,
@@ -22,15 +22,12 @@ interface Props extends Props.Html, Props.Themed, InternalProps {
 	content?: JSX.Element
 	labelStyle: CSSProperties
 	onLoadingError?: (err: Error) => void
-	icon?: () => JSX.Element
+	icon?: Icon
 }
+type Messages = ({ type: "SHOW_URL_INPUT" } | { type: "URL_INPUT_CHANGE", data: { uri: string } })
 
-type Messages = (| { type: "SHOW_URL_INPUT" } | { type: "URL_INPUT_CHANGE", data: { uri: string } })
-
-const defaultProps: Props = {
-	onDataLoading: undefined,
-	onDataLoaded: undefined,
-	loadAs: "string",
+const defaultProps = {
+	loadAs: "string" as Props["loadAs"],
 	theme: config.theme,
 	style: {},
 	labelStyle: {},
@@ -38,7 +35,7 @@ const defaultProps: Props = {
 	uri: ""
 }
 
-export const FileInput = function (props: PropsExtended<Props>) {
+export const _: Component<Props> = async (props) => {
 	const { icon, postMsgAsync, onDataLoaded, uri } = mergeProps(defaultProps, props)
 
 	const loadRaw = (file?: File | null | undefined) => {
@@ -256,27 +253,29 @@ export const FileInput = function (props: PropsExtended<Props>) {
 	</div>
 }
 
-// eslint-disable-next-line fp/no-mutation
-FileInput.defaultHandler = function <T>(props: Partial<Props>, msg: Messages): InternalProps {
-	const fullProps = { ...defaultProps, ...props }
-	// eslint-disable-next-line fp/no-let, init-declarations
-	let newProps: Partial<InternalProps>
+// eslint-disable-next-line fp/no-mutating-assign
+export const FileInput = Object.assign(_, {
+	defaultHandler: function <T>(props: Partial<Props>, msg: Messages): InternalProps {
+		const fullProps = { ...defaultProps, ...props }
+		// eslint-disable-next-line fp/no-let, init-declarations
+		let newProps: Partial<InternalProps>
 
-	switch (msg.type) {
-		case "SHOW_URL_INPUT": {
-			// eslint-disable-next-line fp/no-mutation
-			newProps = { showUrlInput: fullProps.showUrlInput ? false : true }
-			break
+		switch (msg.type) {
+			case "SHOW_URL_INPUT": {
+				// eslint-disable-next-line fp/no-mutation
+				newProps = { showUrlInput: fullProps.showUrlInput ? false : true }
+				break
+			}
+			case "URL_INPUT_CHANGE": {
+				// eslint-disable-next-line fp/no-mutation
+				newProps = { uri: msg.data.uri }
+				break
+			}
+			default:
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				throw new Error(`Unknown table view message type: ${(msg as any).type}`)
 		}
-		case "URL_INPUT_CHANGE": {
-			// eslint-disable-next-line fp/no-mutation
-			newProps = { uri: msg.data.uri }
-			break
-		}
-		default:
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			throw new Error(`Unknown table view message type: ${(msg as any).type}`)
+
+		return { ...newProps }
 	}
-
-	return { ...newProps }
-}
+})

@@ -1,15 +1,17 @@
 /* eslint-disable fp/no-rest-parameters */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { } from "@agyemanjp/standard"
+import { Obj } from "@agyemanjp/standard/utility"
 import { createElement } from '../../core'
-import { Component, Props, Orientation, Alignment, CSSProperties } from '../../types'
+import { mergeProps, config } from '../../utils'
+import { Component, Props, Orientation, Alignment, Icon, CSSProperties } from '../../types'
 import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
 
 export const enum BtnMode { Normal = "normal", Selected = "selected", Disabled = "disabled" }
 
-interface Props extends Props.Html, Props.Themed {
-	icon?: () => JSX.Element
+
+type Props = {
+	icon?: Icon
 	iconPlacement?: "before" | "after"
 	iconStyle?: CSSProperties
 	orientation?: Orientation
@@ -21,11 +23,11 @@ interface Props extends Props.Html, Props.Themed {
 }
 type Messages = { type: "click", data?: undefined }
 
-export const CommandBox: Component<Props, Messages> = (props) => {
+export const CommandBox: Component<Props & Props.Html & Props.Themed, Messages> = (props) => {
 	const defaultProps = Object.freeze({
 		orientation: Orientation.horizontal,
 		tooltip: "",
-		hoverEffect: "invert",
+		hoverEffect: "invert" as Props["hoverEffect"],
 		style: {
 			fontSize: "1em",
 			borderColor: "rgba(0,0,0,0.1)",
@@ -36,14 +38,13 @@ export const CommandBox: Component<Props, Messages> = (props) => {
 		},
 
 		iconStyle: { padding: 0 },
-		iconPlacement: "before",
+		iconPlacement: "before" as Props["iconPlacement"],
 
 		mode: BtnMode.Normal,
 
-		// theme: config.theme,
-		children: {},
-		icon: {}
-	})
+		theme: config.theme,
+		icon: undefined
+	} as const)
 
 	const {
 		tooltip,
@@ -58,7 +59,7 @@ export const CommandBox: Component<Props, Messages> = (props) => {
 		hoverEffect,
 		postMsgAsync,
 		...htmlProps
-	} = { ...defaultProps, ...props }
+	} = mergeProps(defaultProps, props)
 
 	const iconContent = props && props.icon ? <props.icon style={iconStyle} /> : undefined
 
