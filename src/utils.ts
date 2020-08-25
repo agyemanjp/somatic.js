@@ -41,12 +41,6 @@ export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, pro
 }
 
 export function setAttribute(dom: HTMLElement | SVGElement, key: string, value: string | ((e: Event) => unknown)) {
-	// if (typeof value === "function") {
-	// 	if (key === "ref") {
-	// 		value(dom)
-	// 	}
-	// }
-	// else
 	if (['checked', 'value', 'htmlFor'].includes(key)) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any, fp/no-mutation
 		(dom as any)[key] = value

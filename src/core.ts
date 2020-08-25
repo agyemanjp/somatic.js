@@ -30,7 +30,7 @@ export async function render<P extends Obj = Obj>(vnode?: { toString(): string }
 
 	const _vnode = await vnode
 	if (typeof _vnode === 'object' && 'type' in _vnode && 'props' in _vnode) {
-		const children = new Array(flatten(_vnode.children || [])) as Array<JSX.Element>
+		const children = new Array([...flatten(_vnode.children || [])]) as Array<JSX.Element>
 		switch (typeof _vnode.type) {
 			case "function": {
 				const _props: PropsExtended<P, Message> = { ..._vnode.props, children: [...children || []] }
@@ -44,12 +44,11 @@ export async function render<P extends Obj = Obj>(vnode?: { toString(): string }
 			case "string": {
 				const dom = svgTags.includes(_vnode.type)
 					? document.createElementNS('http://www.w3.org/2000/svg', _vnode.type)
-					: document.createElement(_vnode.type)
+					: document.createElement(_vnode.type);
 
 				// render and append children in order
-				await Promise
-					.all(children.map(render))
-					.then(renderedChildren => renderedChildren.forEach(dom.appendChild))
+				(await Promise.all([...children].map(render)))
+					.forEach(child => dom.appendChild(child))
 
 				// attach attributes
 				const nodeProps = _vnode.props || {}
@@ -66,7 +65,7 @@ export async function render<P extends Obj = Obj>(vnode?: { toString(): string }
 							// If the vNode had an event, we add it to the document-wide event. 
 							// We keep track of every event and its matching element through the eventId: 
 							// each listener contains one, each DOM element as well
-							document.addEventListener((eventNames)[htmlPropKey], event => {
+							document.addEventListener((eventNames)[htmlPropKey.toUpperCase() as keyof typeof eventNames], event => {
 								const target = event.target as HTMLElement | null
 								if (target !== document.getRootNode()) { // We don't want to do anything when the document itself is the target
 									// We bubble up to the actual target of an event: a <div> with an onClick might be triggered by a click on a <span> inside
