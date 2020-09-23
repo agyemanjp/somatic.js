@@ -1,9 +1,9 @@
 {
-	"name": "@hypothesize/somatic",
+	"name": "@sparkwave/somatic",
 	"version": "0.1.1",
-	"description": "Function, Asynchronous, Component-based UI Library",
-	"main": "index.js",
-	"types": "index.d.ts",
+	"description": "Functional, Asynchronous, Component-based UI Library",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"files": [
 		"dist/*",
 		"!*.tsbuildinfo"
@@ -16,9 +16,7 @@
 		"compile": "tsc",
 		"test": "mocha --require ts-node/register test/*.test.*",
 		"test-report": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test-report.json",
-		"build": "npm run clean && npm run lint && npm run compile && npm run test",
-		"package": "git push --follow-tags && cp package.json README.md dist && cd dist && npm publish --dry-run",
-		"pub": "cd dist && npm publish --access public"
+		"build": "npm run clean && npm run lint && npm run compile && npm run test"
 	},
 	"repository": {
 		"type": "git",
@@ -39,7 +37,6 @@
 		"morphdom": "^2.6.1"
 	},
 	"devDependencies": {
-		"@hutsoninc/flatten-dir-cli": "^1.0.2",
 		"@types/eslint": "^7.2.0",
 		"@types/jsdom": "^16.2.1",
 		"@types/lodash": "^4.14.85",
