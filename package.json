@@ -1,7 +1,7 @@
 {
 	"name": "@sparkwave/somatic",
 	"version": "0.1.1",
-	"description": "Functional, Asynchronous, Component-based UI Library",
+	"description": "Functional, Asynchronous, Component-based UI Library that works with JSX",
 	"main": "index.js",
 	"types": "index.d.ts",
 	"files": [
@@ -24,7 +24,12 @@
 		"type": "git",
 		"url": "git+https://github.com/Hypothesize/somatic.js.git"
 	},
-	"keywords": [],
+	"keywords": [
+		"Functional",
+		"JSX",
+		"Component",
+		"UI"
+	],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
