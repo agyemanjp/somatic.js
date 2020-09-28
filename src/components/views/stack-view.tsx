@@ -5,15 +5,9 @@ import { mergeProps, colorLuminance } from '../../utils'
 import { StackPanel } from '../panels/stack-panel'
 import { HoverBox } from '../boxes/hover-box'
 
-export type Props = Props.Themed & Partial<Props.Panel> & {
+export type Props = Props.Themed & Partial<Props.Panel> & Props.View & {
     /** Enable multiple or single items selection */
     selectionMode?: "single" | "multiple"
-
-    /** List of values that will be rendered according to the template */
-    items: (string | number)[]
-
-    /** Component used to render each item */
-    template: Component<{ item: string | number }>
 
     /** Selected item style */
     selectedStyle: CSSProperties
@@ -27,7 +21,10 @@ export type Props = Props.Themed & Partial<Props.Panel> & {
 
 const defaultProps = {
     selectionMode: "single" as const,
-    appearance: "minimalist" as const
+    appearance: "minimalist" as const,
+    itemTemplate: (async (datum: string, index: number) => {
+        return <span >{datum}</span>
+    }) as Component
 }
 
 type Messages = { type: "ITEM_SELECTION", data: { selectedIndexes: number[] } }
@@ -35,8 +32,8 @@ type Messages = { type: "ITEM_SELECTION", data: { selectedIndexes: number[] } }
 export const StackView: Component<Props, Messages> = async (props) => {
     const {
         selectionMode,
-        items,
-        template,
+        sourceData,
+        itemTemplate,
         selectedStyle,
         appearance,
         selectedItems,
@@ -69,7 +66,7 @@ export const StackView: Component<Props, Messages> = async (props) => {
 
     return <StackPanel {...panelProps}>
         {
-            items.map((item, index) => {
+            [...sourceData].map((item, index) => {
                 const isSelected = selectedItems.includes(index)
                 return <HoverBox
                     theme={theme}
@@ -99,7 +96,7 @@ export const StackView: Component<Props, Messages> = async (props) => {
                             })
                         }
                     }}>
-                    {template({ item })}
+                    {itemTemplate({ datum: item, index: index, style: {} })}
                 </HoverBox>
             })
         }

@@ -66,8 +66,8 @@ describe("Components", () => {
                 selectionMode="single"
                 selectedItems={[0]}
                 selectedStyle={{}}
-                template={(props) => <span>{props.item}</span>}
-                items={['test0', 'test1', 'test2']}
+                itemTemplate={(props) => <span>{props.datum}</span>}
+                sourceData={['test0', 'test1', 'test2']}
                 theme={theme} />
             const renderedNode = await render(node)
 
