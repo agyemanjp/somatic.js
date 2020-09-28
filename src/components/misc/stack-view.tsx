@@ -30,7 +30,7 @@ const defaultProps = {
     appearance: "minimalist" as const
 }
 
-type Messages = { type: "ITEM_SELECTED", data: { selectedIndexes: number[] } }
+type Messages = { type: "ITEM_SELECTION", data: { selectedIndexes: number[] } }
 
 export const StackView: Component<Props, Messages> = async (props) => {
     const {
@@ -92,7 +92,7 @@ export const StackView: Component<Props, Messages> = async (props) => {
                                 ? [index]
                                 : [...selectedItems, index]
                             postMsgAsync({
-                                type: "ITEM_SELECTED",
+                                type: "ITEM_SELECTION",
                                 data: {
                                     selectedIndexes
                                 }
