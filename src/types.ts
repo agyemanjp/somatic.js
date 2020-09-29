@@ -1497,10 +1497,10 @@ export namespace Props {
 		itemsAlignV: Alignment,
 		orientation: | "vertical" | "horizontal"
 	}
-
-	export type View<TData = unknown> = {
+	export type View<TData = {}> = {
 		sourceData: Iterable<TData>
-		itemTemplate?: Component<{ datum: TData, index: number, style?: CSSProperties }>
+		itemTemplate?: (itemInfo: { item: TData, selected: boolean, index: number }) => JSX.Element
+		itemStyle?: CSSProperties
 	}
 }
 
