@@ -8,39 +8,71 @@ import { HoverBox } from "../boxes/hover-box"
 
 export interface PageInstance<P extends string = string> { pageName: P, pageProps: Record<string, unknown> }
 export interface Crumb<PageName extends string = string> {
+	/** Title or label to be displayed on the crumb */
 	title: string | { main: string, prefix?: string | JSX.Element, suffix?: string | JSX.Element }
-	isValid?: boolean
 
 	/** Page with parameter that crumb points to; an undefined or null value means crumb is disabled/inactive */
 	target?: PageInstance<PageName> | (() => unknown)
 
+	/** Icon use to be displayed next to the title or label */
 	icon?: Component<{ style: CSSProperties }>
 
+	/** Disabled the crumb from being clicked/selected */
 	isDisabled?: boolean
 }
 
 export interface Messages {
-	selection: { type: "selection", data: { index: number } },
+	selection: { type: "SELECTION", data: { index: number } },
 }
 
 type Props = Props.Themed & {
+	/** Array of crumb objects, each defined by properties on the Crumb interface */
 	crumbs: Array<Crumb>,
+
+	/** Current selected crumb */
 	currentIndex: number,
-	icons: { CrumbLeft: Icon, CrumbMiddle: Icon, CrumbRight: Icon }
+
+	/** Icons to be used as containers of the crumb, we suggest to use the default ones from this component */
+	icons?: { CrumbLeft: Icon, CrumbMiddle: Icon }
 }
 
+const CrumbLeft = async (props: { style: CSSProperties }) =>
+	<svg viewBox="0 0 200 100" version="1.1" xmlns="http://www.w3.org/2000/svg"
+		preserveAspectRatio="none"
+		style={{ ...props.style }}>
+		<svg viewBox="0 0 200 100" preserveAspectRatio="none">
+			<g>
+				<polygon vectorEffect="non-scaling-stroke" points="2,5 185,5 197,50 185,95 2,95" strokeWidth={1} />
+			</g>
+		</svg>
+	</svg>
+
+const CrumbMiddle = async (props: { style: CSSProperties }) =>
+	<svg viewBox="0 0 200 100" version="1.1" xmlns="http://www.w3.org/2000/svg"
+		preserveAspectRatio="none"
+		style={{ ...props.style }}>
+		<svg viewBox="0 0 200 100" preserveAspectRatio="none">
+			<g>
+				<polygon vectorEffect="non-scaling-stroke" points="2,5 185,5 197,50 185,95 2,95 14,50" strokeWidth={1} />
+			</g>
+		</svg>
+	</svg>
+
 const defaultProps: Partial<Props> = {
-	crumbs: []
+	crumbs: [],
+	icons: {
+		CrumbLeft: CrumbLeft,
+		CrumbMiddle: CrumbMiddle
+	}
 }
 
 export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (props) => {
+	const fullProps = mergeProps(defaultProps, props)
 	const colors = {
 		visited: props.theme.colors.primary.light,
 		selected: props.theme.colors.secondary.light,
 		disabled: props.theme.colors.whitish
 	}
-
-	const { icons } = mergeProps(defaultProps, props)
 
 	return <StackPanel
 		style={{ paddingTop: "0.25em", paddingBottom: "0.25em", width: "100%", maxWidth: "1200px" }}
@@ -48,8 +80,12 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 		orientation={Orientation.horizontal}>
 
 		{props.crumbs.map((crumb, index) => {
-			const isCrumbDisabled = !hasValue(crumb.target)
-			const CrumbBox = index === 0 ? icons.CrumbLeft : icons.CrumbMiddle
+			const isCrumbDisabled = hasValue(crumb.target)
+			const CrumbBox = index === 0
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				? fullProps.icons!.CrumbLeft
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				: fullProps.icons!.CrumbMiddle
 
 			return <div style={{ flex: "1 1 200px" }}>
 				<HoverBox
@@ -89,10 +125,15 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 								crumb.target()
 							}
 							else if (hasValue(crumb.target) && props.postMsgAsync) {
-								props.postMsgAsync({ type: "selection", data: { index: index } })
+								props.postMsgAsync({
+									type: "SELECTION",
+									data: {
+										index: index
+									}
+								})
 							}
-						}}>
-
+						}
+						}>
 						<CrumbBox
 							style={{
 								color: "inherit",
@@ -110,7 +151,7 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 								crumb.icon
 									? <crumb.icon
 										style={{
-											color: isCrumbDisabled ? colorLuminance(props.theme.colors.blackish, 0.8) : `white`,
+											color: isCrumbDisabled ? colorLuminance(props.theme.colors.blackish!, 0.8) : `white`,
 											height: "1.5em",
 											marginRight: ".25rem",
 											verticalAlign: "middle",
@@ -147,3 +188,4 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 	</StackPanel>
 
 }
+

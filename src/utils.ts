@@ -8,7 +8,7 @@ import { default as cuid } from "cuid"
 import { eventNames } from "./constants"
 import { CSSProperties } from "./types"
 import { deepMerge } from "@agyemanjp/standard/collections/object"
-import { Obj, hasValue } from "@agyemanjp/standard/utility"
+import { Obj } from "@agyemanjp/standard/utility"
 
 
 /** Calculates a lighter or darker color of a base color in Hex representation.

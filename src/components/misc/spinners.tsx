@@ -153,10 +153,10 @@ export const Oscilloscope = create(
 	</svg>
 )
 
-export const BouncingBalls: Component<Props> = () => <svg style="vertical-align: middle" height="100%" version="1.1" id="L5"
+export const BouncingBalls: Component<Props> = () => <svg style={{ verticalAlign: "middle" }} height="100 % " version="1.1" id="L5"
 	xmlns="http://www.w3.org/2000/svg"
 	xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+	viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve" >
 	<circle stroke="none" cx="6" cy="50" r="6">
 		<animateTransform
 			attributeName="transform"
@@ -184,7 +184,7 @@ export const BouncingBalls: Component<Props> = () => <svg style="vertical-align:
 			repeatCount="indefinite"
 			begin="0.3" />
 	</circle>
-</svg>
+</svg >
 
 export const Box = create(
 	<svg version="1.1"

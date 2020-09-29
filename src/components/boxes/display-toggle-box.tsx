@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
-import { Component, Props, CSSProperties } from '../../types'
+import { Props, CSSProperties } from '../../types'
 
 export interface Props extends Props.Html {
 	title: string

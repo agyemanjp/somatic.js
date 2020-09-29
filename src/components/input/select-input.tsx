@@ -1,110 +1,100 @@
-/* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
 import { mergeProps } from '../../utils'
-import { Component, Props, CSSProperties } from '../../types'
+import { Component, Props } from '../../types'
 
 /** Type that defines the struct we need to send when we want to pass groups of options to this component. */
 export interface OptionsGrouped { label: string, options: (string | number)[] }
 
 type Props = Props.Html & Props.Themed & {
+	/** Index of selected value by default will be 0 */
 	selectedIndex: number
-	useOptGroup?: boolean // Used optionally to group related options
-	optionsGrouped?: OptionsGrouped[]
+
+	/** Options can be passed as an array of strings or can be passed as an array of objects that group other options */
+	options: string[] | OptionsGrouped[]
+
+	/** Array of the indexes that can't be selected */
 	disabledIndexes?: number[]
+
+	/** Optional info that will be show as a tooltip for each option */
 	descriptions?: string[]
+
+	/** name property for the select html element*/
 	name?: string
 }
 
-export const SelectInput: Component<Props> = (props) => {
-	const defaultProps = {
-		//...componentDefaults.html,
-		//theme: componentDefaults.theme,
-		//postMessage: componentDefaults.postMessage,
-		selectedIndex: 0,
-		useOptGroup: false,
-		style: {
-			backgroundColor: "white !important",
-			background: "white !important"
-		} as CSSProperties
+const defaultProps = {
+	options: [],
+	selectedIndex: 0,
+	style: {
+		backgroundColor: "white !important",
+		background: "white !important"
 	}
+}
 
-	const {
-		defaultValue,
-		disabledIndexes,
-		descriptions,
-		postMsgAsync,
-		useOptGroup,
-		optionsGrouped,
-		selectedIndex,
-		children,
-		style
-	} = mergeProps(defaultProps, props)
+type Messages = { type: "SELECTION", data: number }
 
+export const SelectInput: Component<Props, Messages> = async (props) => {
+	const fullProps = mergeProps(defaultProps, props)
 
-	const effectiveStyle = { ...defaultProps.style, ...style }
-	// eslint-disable-next-line fp/no-let, init-declarations
-	let currentValue: string | number | string[] | undefined
-
-	if (useOptGroup === true) {
-		// eslint-disable-next-line fp/no-let
-		let index = selectedIndex;
-		(optionsGrouped ?? []).every((el, i) => {
-			if (index < el.options.length) {
-				// eslint-disable-next-line fp/no-mutation
-				currentValue = el.options[index]
-				return false
-			}
-			else {
-				// eslint-disable-next-line fp/no-mutation
-				index -= el.options.length
-				return true
-			}
-		})
+	const getCurrentValue = (options: string[] | OptionsGrouped[], selectedIndex: number) => {
+		if (options.length > 0 && typeof options[0] !== "string") {
+			const reducedOptions = (options as OptionsGrouped[]).reduce<(string | number)[]>((arr, curr) => {
+				return [...arr, ...curr.options]
+			}, [])
+			return reducedOptions[selectedIndex]
+		}
+		else {
+			return (options || [])[selectedIndex]
+		}
 	}
-	else {
-		// eslint-disable-next-line fp/no-mutation
-		currentValue = (children || [])[selectedIndex || 0] as any
-	}
+	const currentValue = getCurrentValue(fullProps.options, fullProps.selectedIndex || 0)
 
 	return (
 		<select
-			defaultValue={defaultValue}
-			name={name}
+			defaultValue={props.defaultValue}
+			name={props.name}
 			style={{
 				height: "1.5rem",
-				...effectiveStyle,
+				...fullProps.style,
 				background: "white",
-				color: disabledIndexes && disabledIndexes.indexOf(selectedIndex || 0) !== -1 ? "gray" : "black"
+				color: props.disabledIndexes
+					&& props.disabledIndexes.indexOf(props.selectedIndex || 0) !== -1
+					? "gray"
+					: "black"
 			}}
-			onClick={(e) => { e.stopPropagation() }}
-			onChange={(e) => { if (postMsgAsync) postMsgAsync({ type: "select", data: e.target.selectedIndex, }) }}
+			onClick={(e) => e.stopPropagation()}
+			onChange={(e) => {
+				if (props.postMsgAsync !== undefined) {
+					props.postMsgAsync({
+						type: "SELECTION",
+						data: e.target.selectedIndex,
+					})
+				}
 
-			{...selectedIndex ? { value: currentValue } : {}}>
+			}}
+			{...props.selectedIndex ? { value: currentValue as string } : {}}>
 
-			{useOptGroup ?
-				(optionsGrouped ?? []).map((obj, index) => {
+			{fullProps.options.length > 0 && typeof fullProps.options[0] !== "string"
+				? (fullProps.options as OptionsGrouped[]).map(obj => {
 					return (<optgroup label={obj.label}>
-						{obj.options.map((data) =>
+						{obj.options.map(data =>
 							<option
-								//key={data.toString()}
-								value={data.toString()} /*selected={index === props.selectedIndex}*/>
+								value={data.toString()} >
 								{data}
 							</option>)}
 					</optgroup>)
 				})
-
-				: (children || []).map((child, index) =>
+				: (props.children || fullProps.options).map((child, index) =>
 					<option
-						style={{ color: disabledIndexes && disabledIndexes.indexOf(index) !== -1 ? "gray" : "black" }}
-						disabled={disabledIndexes && disabledIndexes.indexOf(index) !== -1 ? true : undefined}
-						//key={child!.toString()}
-						value={child?.toString()}
-						{...index === selectedIndex ? { selected: true } : {}}>
-						{descriptions !== undefined ? descriptions[index] : child.toString()}
+						style={{ color: props.disabledIndexes && props.disabledIndexes.indexOf(index) !== -1 ? "gray" : "black" }}
+						disabled={props.disabledIndexes && props.disabledIndexes.indexOf(index) !== -1 ? true : undefined}
+						value={child.toString()}
+						{...index === props.selectedIndex ? { selected: true } : {}}>
+						{props.descriptions !== undefined ? props.descriptions[index] : child.toString()}
 					</option>
 				)
 			}
-		</select>
+		</select >
 	)
 }

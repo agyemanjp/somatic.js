@@ -6,7 +6,7 @@ import { first } from "@agyemanjp/standard/collections/iterable"
 import { Component, Props, CSSProperties } from '../../types'
 import { idProvider, mergeProps, stringifyStyle } from '../../utils'
 
-type Messages = { type: "hover-start" } | { type: "hover-stop" }
+type Messages = { type: "HOVER_START" } | { type: "HOVER_STOP" }
 
 type Props = Props.Html & Props.Themed & { hoverStyle?: CSSProperties }
 
@@ -45,9 +45,9 @@ export const HoverBox: Component<Props, Messages> = async (props) => {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				style: (child.props as any)?.style || {},
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				onMouseEnter: (e: unknown) => { if (postMsgAsync) postMsgAsync({ type: "hover-start" }) },
+				onMouseEnter: (e: unknown) => { if (postMsgAsync) postMsgAsync({ type: "HOVER_START" }) },
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-				onMouseLeave: (e: any) => { if (postMsgAsync) postMsgAsync({ type: "hover-stop" }) }
+				onMouseLeave: (e: any) => { if (postMsgAsync) postMsgAsync({ type: "HOVER_STOP" }) }
 			}
 		}
 	}

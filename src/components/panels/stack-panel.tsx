@@ -6,7 +6,6 @@ export type Props = Partial<Props.Panel> & Props.Html & {
 }
 
 export const StackPanel: Component<Props> = async (props) => {
-
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":
@@ -42,9 +41,7 @@ export const StackPanel: Component<Props> = async (props) => {
 			orientation,
 			itemsAlignH,
 			itemsAlignV,
-
 			children,
-
 			style,
 			...htmlProps
 		} = props

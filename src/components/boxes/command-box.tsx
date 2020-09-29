@@ -1,97 +1,104 @@
-/* eslint-disable fp/no-rest-parameters */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Obj } from "@agyemanjp/standard/utility"
 import { createElement } from '../../core'
-import { mergeProps, config } from '../../utils'
-import { Component, Props, Orientation, Alignment, Icon, CSSProperties } from '../../types'
-import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
+import { mergeProps } from '../../utils'
+import { Component, Props as SomaticProps, Orientation, Alignment, CSSProperties } from '../../types'
+import { StackPanel } from '../panels/stack-panel'
 
 export const enum BtnMode { Normal = "normal", Selected = "selected", Disabled = "disabled" }
 
+type Props = SomaticProps.Themed & {
+	/** Icon component to be placed next to the title of the button */
+	icon?: Component<{ style: CSSProperties }>
 
-type Props = {
-	icon?: Icon
+	/** Relative postion of the icon in relationship with the title */
 	iconPlacement?: "before" | "after"
+
+	/** Icon style */
 	iconStyle?: CSSProperties
+
+	/** Style of the component */
+	style?: CSSProperties
+
+	/** Orientation for the container of the children */
 	orientation?: Orientation
+
+	/** Tooltip title to display */
 	tooltip?: string
 
 	/** how colors should change on hover (or selection) */
 	hoverEffect?: "darken" | "invert"
+
+	/** normal disabled or selected */
 	mode?: BtnMode
 }
-type Messages = { type: "click", data?: undefined }
 
-export const CommandBox: Component<Props & Props.Html & Props.Themed, Messages> = (props) => {
-	const defaultProps = Object.freeze({
-		orientation: Orientation.horizontal,
-		tooltip: "",
-		hoverEffect: "invert" as Props["hoverEffect"],
-		style: {
-			fontSize: "1em",
-			borderColor: "rgba(0,0,0,0.1)",
-			borderWidth: "1px",
-			borderStyle: "solid",
-			padding: "0.25em",
-			overflow: "hidden"
-		},
+interface Messages {
+	clicked: { type: "CLICKED", data?: undefined }
+}
 
-		iconStyle: { padding: 0 },
-		iconPlacement: "before" as Props["iconPlacement"],
+const defaultProps = {
+	orientation: Orientation.horizontal,
+	tooltip: "",
+	hoverEffect: "invert" as const,
+	style: {
+		fontSize: "1em",
+		color: "#666",
+		borderColor: "#666",
+		borderWidth: "1px",
+		borderStyle: "solid",
+		padding: "0.25em",
+		overflow: "hidden",
+		borderRadius: "2px",
+		cursor: "pointer"
+	},
 
-		mode: BtnMode.Normal,
+	iconStyle: { padding: 0 },
+	iconPlacement: "before" as const,
 
-		theme: config.theme,
-		icon: undefined
-	} as const)
+	mode: BtnMode.Normal
+}
 
+export const CommandBox: Component<Props, Messages[keyof Messages]> = async (props) => {
 	const {
-		tooltip,
-		children,
-		orientation,
-		iconPlacement,
-		iconStyle,
-		icon,
-		theme,
-		mode,
-		style,
-		hoverEffect,
+		tooltip, children,
+		orientation, iconPlacement, iconStyle, icon,
+		theme, mode, style, hoverEffect,
 		postMsgAsync,
 		...htmlProps
 	} = mergeProps(defaultProps, props)
 
-	const iconContent = props && props.icon ? <props.icon style={iconStyle} /> : undefined
-
+	const iconContent = props.icon ? <props.icon style={iconStyle || {}} /> : <div />
 	const mainContent = (
 		<StackPanel orientation={orientation} itemsAlignV={Alignment.center} style={{ height: "100%" }}>
 			{children}
 		</StackPanel>
 	)
-
-
-	// eslint-disable-next-line fp/no-let, prefer-const
-	let colors: { foreground?: string, background?: string } = ({
+	const colors = {
 		[BtnMode.Normal]: {
-			foreground: theme?.colors.primary.dark,
+			foreground: theme.colors.primary.dark,
 			background: "transparent"
 		},
 		[BtnMode.Selected]: {
 			foreground: "white",
-			background: theme?.colors.primary.dark
+			background: theme.colors.primary.dark
 		},
 		[BtnMode.Disabled]: {
-			foreground: theme?.colors.grayish,
+			foreground: theme.colors.grayish,
 			background: "transparent"
 		}
-	}[mode])
+	}[mode]
 
 	return <button
 		title={tooltip || defaultProps.tooltip}
+		onClick={(e) => {
+			if (props.postMsgAsync) {
+				props.postMsgAsync({ type: "CLICKED" })
+			}
+		}}
 		{...htmlProps}
-		onClick={() => postMsgAsync?.({ type: "click" })}
 		style={{
-			...theme === undefined
+			...props.theme === undefined
 				? {}
 				: {
 					color: colors.foreground,
@@ -102,12 +109,10 @@ export const CommandBox: Component<Props & Props.Html & Props.Themed, Messages> 
 			...defaultProps.style,
 			...style
 		}}>
-
 		<StackPanel
 			itemsAlignV={Alignment.center}
 			orientation={orientation}>
-			{iconPlacement === "after" ? [mainContent, iconContent] : [iconContent, mainContent]}
+			{iconPlacement === "before" ? [iconContent, mainContent] : [mainContent, iconContent]}
 		</StackPanel>
-
 	</button>
 }
