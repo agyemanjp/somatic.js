@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Array } from "@agyemanjp/standard/collections"
+import { Array } from "@sparkwave/standard/collections"
 import { createElement } from '../../core'
 import { mergeProps } from '../../utils'
 import { Component, Props, CSSProperties, Icon, Orientation, Alignment } from '../../types'

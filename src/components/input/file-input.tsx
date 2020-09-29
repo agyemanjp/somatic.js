@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable brace-style */
 import { createElement } from '../../core'
 import { Props, Icon, CSSProperties, Component } from '../../types'
 import { config, mergeProps } from '../../utils'

@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable brace-style */
-import { String, Obj } from "@agyemanjp/standard"
-import { getAsync } from "@agyemanjp/standard/web"
-import { keys } from "@agyemanjp/standard/collections"
-import { isKeyOf } from "@agyemanjp/standard/utility"
-import { createElement, render } from '../../core'
+import { String, Obj } from "@sparkwave/standard"
+import { getAsync } from "@sparkwave/standard/web"
+import { keys } from "@sparkwave/standard/collections"
+import { isKeyOf } from "@sparkwave/standard/utility"
+import { createElement, render, stringifyStyle } from '../../core'
 import { Component, Props, Icon, CSSProperties, MouseEvent } from '../../types'
-import { idProvider, stringifyStyle, mergeProps } from '../../utils'
+import { idProvider, mergeProps, config } from '../../utils'
 
 export type Props = {
-	/** If defined, this will be the content of the tooltip pop-up, rather than a definition from Wikipedia */
-	explicitTooltip?: string
+	/** If defined, this will be the content of the tooltip pop-up, rather than a definition from the "definitions" property */
+	explicitTooltip?: JSX.Element | string
 
 	/** True if we know that only the first element has to be tool-tipped */
 	noRecursion?: boolean
@@ -123,9 +123,10 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 		flexDirection: "column" as const,
 		position: "fixed" as const,
 		padding: "1em",
-		background: "#f0f6ff",
+		background: config.theme.colors.blueish,
 		textAlign: "left" as const,
 		borderRadius: ".25em",
+		border: `solid 1px ${config.theme.colors.blackish}`,
 		zIndex: 1,
 		maxWidth: `600px`,
 		maxHeight: `180px`,

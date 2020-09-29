@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { hasValue } from "@agyemanjp/standard"
+import { hasValue } from "@sparkwave/standard"
 import { createElement } from '../../core'
 import { colorLuminance, mergeProps } from '../../utils'
 import { Component, Icon, CSSProperties, Props, Alignment, Orientation } from "../../types"

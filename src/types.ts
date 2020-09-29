@@ -5,7 +5,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { RecursivePartial } from "@agyemanjp/standard"
+import { RecursivePartial } from "@sparkwave/standard"
 
 //#region Events
 export interface SyntheticEvent<T = Element> {

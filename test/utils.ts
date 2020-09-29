@@ -6,8 +6,8 @@
 /* eslint-disable fp/no-let */
 /* eslint-disable fp/no-loops */
 /* eslint-disable fp/no-mutation */
-import { map, forEach } from "@agyemanjp/standard/collections/iterable"
-import { getComparer, getRanker } from "@agyemanjp/standard/functional"
+import { map, forEach } from "@sparkwave/standard/collections/iterable"
+import { getComparer, getRanker } from "@sparkwave/standard/functional"
 
 
 

@@ -4,15 +4,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import morphdom from 'morphdom'
-import memoize from 'lodash/memoize'
 import fastMemoize from 'fast-memoize'
-import { flatten } from "@agyemanjp/standard/collections/iterable"
-import { Array } from "@agyemanjp/standard/collections"
-import { Obj } from "@agyemanjp/standard"
-import { String as SuperString } from "@agyemanjp/standard/text"
 import { VNode, VNodeType, PropsExtended, Message, CSSProperties } from "./types"
-import { setAttribute, isEventKey, stringifyStyle, encodeHTML } from "./utils"
-import { svgTags, selfClosingTags, eventNames, mouseMvmntEventNames, } from "./constants"
+import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
+import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
+import { Obj } from "@sparkwave/standard"
+import { flatten } from "@sparkwave/standard/collections"
 
 // export const Fragment = (async () => ({})) as Renderer
 export const fnStore: ((evt: Event) => unknown)[] = []
@@ -35,7 +32,7 @@ export async function render<P extends Obj = Obj>(vnode?: { toString(): string }
 	if (typeof _vnode === 'object' && 'type' in _vnode && 'props' in _vnode) {
 		// console.log(`vNode is object with 'type' and 'props' properties`)
 
-		const children = new Array(flatten(_vnode.children || [])) as Array<JSX.Element>
+		const children = [...flatten(_vnode.children || []) as JSX.Element[]]
 		switch (typeof _vnode.type) {
 			case "function": {
 				// console.log(`vNode type is function, rendering as custom component`)
@@ -62,20 +59,50 @@ export async function render<P extends Obj = Obj>(vnode?: { toString(): string }
 				const nodeProps = _vnode.props || {}
 				Object.keys(nodeProps).forEach(propKey => {
 					try {
-						// console.log(`Processing property "${propKey}" of vNode`)
-						const propValue = nodeProps[propKey]
-						const htmlPropKey = propKey.toLowerCase()
+						const propValue: unknown = nodeProps[propKey]
+						if (propValue !== undefined) {
+							const htmlPropKey = propKey.toUpperCase()
+							if (isEventKey(htmlPropKey) && htmlPropKey === "ONLOAD") {
+								// eslint-disable-next-line fp/no-mutating-methods
+								fnStore.push(propValue as (evt: Event) => unknown)
+								node.setAttribute(propKey.toLowerCase(), `${fnStore.length - 1}`)
 
-						if (isEventKey(htmlPropKey) && typeof propValue === "function") {
-							// console.log(`Property "${propKey}" of vNode is event, handler code is:\n${propValue.toString()}`)
-							node.setAttribute(htmlPropKey, `(${(propValue.toString())})(this);`)
-						}
-						else {
-							setAttribute(node, propKey, propValue as string)
+								// const callback: (evt: Event) => void = fnStore[fnStore.length - 1]
+								// node.addEventListener(eventNames[htmlPropKey], { handleEvent: callback })
+
+								node.setAttribute(htmlPropKey, `(${((propValue as (evt: Event) => unknown).toString())})(this);`)
+							}
+							else if (isEventKey(htmlPropKey) && typeof propValue === "function") { // The first condition is here simply to prevent useless searches through the events list.
+								const eventId = idProvider.next()
+								// We attach an eventId per possible event: an element having an onClick and onHover will have 2 such properties.
+								node.setAttribute(`data-${htmlPropKey}-eventId`, eventId)
+								/** If the vNode had an event, we add it to the document-wide event. We keep track of every event and its matching element through the eventId: each listener contains one, each DOM element as well */
+								addListener(document, eventNames[htmlPropKey], (e: Event) => {
+									const target = e.target as HTMLElement | null
+									if (target !== document.getRootNode()) { // We don't want to do anything when the document itself is the target
+										// We bubble up to the actual target of an event: a <div> with an onClick might be triggered by a click on a <span> inside
+										const intendedTarget = target ? target.closest(`[data-${htmlPropKey.toLowerCase()}-eventId="${eventId}"]`) : undefined
+
+										// For events about mouse movements (onmouseenter...), an event triggered by a child should not activate the parents handler (we when leave a span inside a div, we don't activate the onmouseleave of the div)
+										// We also don't call handlers if the bubbling was cancelled in a previous handler (from a child element)
+										const shouldNotTrigger = mouseMvmntEventNames.includes(htmlPropKey) && intendedTarget !== target
+											|| e.cancelBubble
+
+										if (!shouldNotTrigger && intendedTarget) {
+											// Execute the callback with the context set to the found element
+											// jQuery goes way further, it even has it's own event object
+											(propValue as (e: Event) => unknown).call(intendedTarget, e)
+										}
+									}
+								}, true)
+							}
+							else {
+								setAttribute(node, propKey, (propValue as (e: Event) => unknown))
+							}
 						}
 					}
 					catch (e) {
-						console.error(`\nError setting dom attribute "${propKey}" to ${JSON.stringify(nodeProps[propKey])}:\n${e}`)
+						console.error(`Error setting dom attribute ${propKey} to ${JSON.stringify(nodeProps[propKey])}:\n${e}`)
 					}
 				})
 				return node
@@ -163,7 +190,8 @@ export async function renderToString<P extends Obj = Obj>(vnode?: { toString(): 
 		return String(_vnode)
 	}*/
 }
-const memoizedRenderToString = memoize(renderToString, (obj: VNode) => obj.props)
+
+// const memoizedRenderToString = memoize(renderToString, (obj: VNode) => obj.props)
 
 /** Attach event listeners from element to corresponding nodes in container */
 export function hydrate(element: HTMLElement): void {
@@ -197,6 +225,32 @@ export function hydrate(element: HTMLElement): void {
  */
 export function updateDOM(rootElement: Element, node: Node) { morphdom(rootElement, node) }
 
+const _eventHandlers: { [key: string /** The name of a JS event, i.e. onmouseenter */]: { node: Node, handler: (e: Event) => void, capture: boolean }[] } = {} // Global dictionary of events
+const addListener = (node: Node, event: string, handler: (e: Event) => void, capture = false) => {
+	if (_eventHandlers[event] === undefined) {
+		// eslint-disable-next-line fp/no-mutation
+		_eventHandlers[event] = []
+	}
+	// Here we track the events and their nodes (note that we cannot use node as Object keys, as they'd get coerced into a string)
+	// eslint-disable-next-line fp/no-mutating-methods
+	_eventHandlers[event].push({ node: node, handler: handler, capture: capture })
+	node.addEventListener(event, handler, capture)
+}
+
+export const removeAllListeners = (targetNode: Node) => {
+	Object.keys(_eventHandlers).forEach(eventName => {
+		// remove listeners from the matching nodes
+		_eventHandlers[eventName]
+			.filter(({ node }) => node === targetNode)
+			.forEach(({ node, handler, capture }) => node.removeEventListener(eventName, handler, capture))
+
+		// update _eventHandlers global
+		// eslint-disable-next-line fp/no-mutation
+		_eventHandlers[eventName] = _eventHandlers[eventName].filter(
+			({ node }) => node !== targetNode,
+		)
+	})
+}
 
 /*export function difference(object: Obj, base: Obj): Obj {
 	function changes(_object: Obj, _base: Obj) {
@@ -208,3 +262,42 @@ export function updateDOM(rootElement: Element, node: Node) { morphdom(rootEleme
 	}
 	return changes(object, base)
 }*/
+
+
+/** Converts a css props object literal to a string */
+export function stringifyStyle(style: CSSProperties, important = false) {
+	if (typeof style === "object") {
+		return Object.keys(style)
+			.map((key) => `${camelCaseToDash(key)}: ${(style)[key as keyof typeof style]}${important === true ? " !important" : ""}`)
+			.join("; ")
+			.concat(";")
+	}
+	else {
+		console.warn(`Input "${JSON.stringify(style)}" to somatic.stringifyStyle() is of type ${typeof style}, returning empty string`)
+		return ""
+	}
+}
+
+export function stringifyAttribs(props: Obj) {
+	return Object.keys(props)
+		.map(name => {
+			const value = props[name]
+			switch (true) {
+				case name === "style":
+					return (`style="${encodeHTML(stringifyStyle(value as CSSProperties))}"`)
+				case typeof value === "string":
+					return (`${encodeHTML(name)}="${encodeHTML(String(value))}"`)
+				case typeof value === "number":
+					return (`${encodeHTML(name)}="${value}"`)
+				// case typeof value === "function":
+				// 	fnStore.push(value as (e: Event) => unknown)
+				// 	return (`${encodeHTML(name.toLowerCase())}="${fnStore.length - 1}"`)
+				case value === true:
+					return (`${encodeHTML(name)}`)
+				default:
+					return ""
+			}
+		})
+		.filter(attrHTML => attrHTML?.length > 0)
+		.join(" ")
+}

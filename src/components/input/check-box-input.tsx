@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Obj } from "@agyemanjp/standard"
+import { Obj } from "@sparkwave/standard"
 import { createElement } from '../../core'
-import { PropsExtended, CSSProperties, Component } from '../../types'
+import { PropsExtended, CSSProperties, Component, Icon } from '../../types'
 // import * as Icons from "./icons"
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 	checkedColor?: string,
 	useRadio: boolean,
 	iconSize?: string,
-	icons: Obj<() => JSX.Element>
+	icons: { CheckedBox: Icon, UnCheckedBox: Icon, CheckedRadioButton: Icon, UnCheckedRadioButton: Icon }
 }
 
 const defaultProps = {
@@ -39,11 +39,21 @@ export const CheckBoxInput: Component<Props> = async (props) => {
 
 		{!_props.useRadio
 			? _props.isChecked
-				? <icons.CheckedBox color={_props.disabled ? _props.disabledStyle?.color : _props.checkedColor} size={_props.iconSize} />
-				: <icons.UnCheckedBox size={_props.iconSize} />
+				? <icons.CheckedBox style={{
+					color: _props.disabled ? _props.disabledStyle?.color : _props.checkedColor,
+					height: _props.iconSize
+				}} />
+				: <icons.UnCheckedBox style={{
+					height: _props.iconSize
+				}} />
 			: _props.isChecked
-				? <icons.CheckedRadioButton color={_props.disabled ? _props.disabledStyle?.color : _props.checkedColor} size={_props.iconSize} />
-				: <props.icons.UnCheckedRadioButton size={_props.iconSize} />
+				? <icons.CheckedRadioButton style={{
+					color: _props.disabled ? _props.disabledStyle?.color : _props.checkedColor,
+					height: _props.iconSize
+				}} />
+				: <props.icons.UnCheckedRadioButton style={{
+					height: _props.iconSize
+				}} />
 		}
 	</div>
 }

@@ -4,11 +4,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 // import { PropsExtended, Message } from "./types"
-import { default as cuid } from "cuid"
 import { eventNames } from "./constants"
 import { CSSProperties } from "./types"
-import { deepMerge } from "@agyemanjp/standard/collections/object"
-import { Obj } from "@agyemanjp/standard/utility"
+import { deepMerge } from "@sparkwave/standard/collections/object"
+import { Obj } from "@sparkwave/standard/utility"
 
 
 /** Calculates a lighter or darker color of a base color in Hex representation.
@@ -92,44 +91,6 @@ export function camelCaseToDash(str: string) {
 		.toLowerCase()
 }
 
-/** Converts a css props object literal to a string */
-export function stringifyStyle(style: CSSProperties, important = false) {
-	if (typeof style === "object") {
-		return Object.keys(style)
-			.map((key) => `${camelCaseToDash(key)}: ${(style)[key as keyof typeof style]}${important === true ? " !important" : ""}`)
-			.join("; ")
-			.concat(";")
-	}
-	else {
-		console.warn(`Input "${JSON.stringify(style)}" to somatic.stringifyStyle() is of type ${typeof style}, returning empty string`)
-		return ""
-	}
-}
-
-export function stringifyAttribs(props: Obj) {
-	return Object.keys(props)
-		.map(name => {
-			const value = props[name]
-			switch (true) {
-				case name === "style":
-					return (`style="${encodeHTML(stringifyStyle(value as CSSProperties))}"`)
-				case typeof value === "string":
-					return (`${encodeHTML(name)}="${encodeHTML(String(value))}"`)
-				case typeof value === "number":
-					return (`${encodeHTML(name)}="${value}"`)
-				// case typeof value === "function":
-				// 	fnStore.push(value as (e: Event) => unknown)
-				// 	return (`${encodeHTML(name.toLowerCase())}="${fnStore.length - 1}"`)
-				case value === true:
-					return (`${encodeHTML(name)}`)
-				default:
-					return ""
-			}
-		})
-		.filter(attrHTML => attrHTML?.length > 0)
-		.join(" ")
-}
-
 /** Encode html string */
 export function encodeHTML(str: string) {
 	return str.replace(/[&<>"']/g, (match) => {
@@ -159,7 +120,7 @@ class IdProvider {
 	}
 	next() {
 		if (this.pointer >= this.cache.length) {
-			this.cache.push(cuid())
+			this.cache.push(this.cache.length.toString())
 		}
 		return this.cache[this.pointer++]
 	}
@@ -187,7 +148,8 @@ export const config = {
 
 			whitish: "#f5f5f5",
 			blackish: "#555555",
-			grayish: "#808080"
+			grayish: "#808080",
+			blueish: "#f0f6ff"
 		},
 		fonts: {
 			text: "normal normal 12px serif",
@@ -201,4 +163,3 @@ export const config = {
 		thickness: 1
 	}
 }
-

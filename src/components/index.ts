@@ -15,7 +15,7 @@ export { UrlInput } from './input/url-input'
 export { ToggleSwitch } from './input/toggle-switch'
 
 export { Dialog } from './misc/dialog'
-export { BreadCrumbs } from './misc/bread-crumbs'
+export { BreadCrumbs, Crumb } from './misc/bread-crumbs'
 export { Spinners } from './misc/spinners'
 export { TooltipBox } from './boxes/tooltip-box'
 
