@@ -1500,7 +1500,6 @@ export namespace Props {
 	export type View<TData = {}> = {
 		sourceData: Iterable<TData>
 		itemTemplate?: (itemInfo: { item: TData, selected: boolean, index: number }) => JSX.Element
-		selectedItemStyle?: CSSProperties
 		itemStyle?: CSSProperties
 	}
 }

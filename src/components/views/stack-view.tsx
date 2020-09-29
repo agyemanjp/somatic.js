@@ -3,7 +3,7 @@
 import { createElement } from '../../core'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
-import { Component, Props } from '../../types'
+import { Component, Props, CSSProperties } from '../../types'
 import { deepMerge } from '@sparkwave/standard/collections/object'
 
 export type Messages = (
@@ -11,12 +11,14 @@ export type Messages = (
 )
 
 export interface Props<T = unknown> extends StackPanelProps, Props.View<T> {
-	selectedItemIndex: number
+	selectedItemIndex: number,
+	selectedItemStyle?: CSSProperties
 }
 
 export const StackView: Component<Props, Messages> = async (props) => {
 	const defaultProps = {
 		selectedItemIndex: 0,
+		selectedItemStyle: {}
 	}
 
 	try {

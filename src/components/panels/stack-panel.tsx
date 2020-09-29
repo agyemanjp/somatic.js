@@ -69,5 +69,4 @@ export const StackPanel: Component<Props> = async (props) => {
 		console.error(`StackPanel render: ${e}`)
 		throw e
 	}
-
 }
