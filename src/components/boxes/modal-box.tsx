@@ -2,8 +2,7 @@
 import { createElement } from '../../core'
 import { Component, Props, Alignment } from '../../types'
 import { StackPanel } from "../panels/stack-panel"
-import { mergeProps } from '../../utils'
-import { default as cuid } from "cuid"
+import { mergeProps, idProvider } from '../../utils'
 
 type Props = Props.Html & {
 	/** If enabled will trigger a modal closure event in case the escape keyboard is pressed*/
@@ -22,7 +21,7 @@ type Messages = { type: "CLOSURE" }
 
 export const ModalBox: Component<Props, Messages> = (props) => {
 	const fullProps = mergeProps(defaultProps, props)
-	const id = cuid()
+	const id = idProvider.next()
 
 	const handleKeyUp = (e: KeyboardEvent) => {
 		if (e.keyCode === 27) {
