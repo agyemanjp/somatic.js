@@ -80,7 +80,7 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 		orientation={Orientation.horizontal}>
 
 		{props.crumbs.map((crumb, index) => {
-			const isCrumbDisabled = hasValue(crumb.target)
+			const isCrumbDisabled = !hasValue(crumb.target)
 			const CrumbBox = index === 0
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				? fullProps.icons!.CrumbLeft
