@@ -120,7 +120,7 @@ class IdProvider {
 	}
 	next() {
 		if (this.pointer >= this.cache.length) {
-			this.cache.push(this.cache.length.toString())
+			this.cache.push(`id_${this.cache.length.toString()}`)
 		}
 		return this.cache[this.pointer++]
 	}
