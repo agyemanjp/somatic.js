@@ -2,6 +2,7 @@
 import { createElement } from '../../core'
 import { Component, CSSProperties, Props, Icon } from '../../types'
 import { config, mergeProps } from '../../utils'
+import { defaults } from "lodash"
 
 export type AlertType = "warning" | "info" | "error" | "form"
 
@@ -35,7 +36,7 @@ const defaultProps = Object.freeze({
 })
 
 export const Alert: Component<Props> = (props) => {
-	const fullProps = mergeProps(defaultProps, props)
+	const fullProps = defaults(props, defaultProps)
 
 	const getAlertStyle = (): CSSProperties => {
 		switch (fullProps.type) {
