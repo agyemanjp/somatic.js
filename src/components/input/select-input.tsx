@@ -85,7 +85,7 @@ export const SelectInput: Component<Props, Messages> = async (props) => {
 							</option>)}
 					</optgroup>)
 				})
-				: (props.children || fullProps.options).map((child, index) =>
+				: (props.children && props.children.length > 0 ? props.children : fullProps.options).map((child, index) =>
 					<option
 						style={{ color: props.disabledIndexes && props.disabledIndexes.indexOf(index) !== -1 ? "gray" : "black" }}
 						disabled={props.disabledIndexes && props.disabledIndexes.indexOf(index) !== -1 ? true : undefined}
