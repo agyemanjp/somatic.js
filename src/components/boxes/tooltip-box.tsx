@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable brace-style */
-import { String, Obj } from "@sparkwave/standard"
+import { String, Obj, ExtractOptional } from "@sparkwave/standard"
 import { getAsync } from "@sparkwave/standard/web"
 import { keys } from "@sparkwave/standard/collections"
 import { isKeyOf } from "@sparkwave/standard/utility"
@@ -10,7 +10,7 @@ import { idProvider, mergeProps, config } from '../../utils'
 
 export type Props = {
 	/** If defined, this will be the content of the tooltip pop-up, rather than a definition from the "definitions" property */
-	explicitTooltip?: JSX.Element | string
+	explicitTooltip?: JSX.Element | string | undefined
 
 	/** True if we know that only the first element has to be tool-tipped */
 	noRecursion?: boolean
@@ -31,8 +31,8 @@ type ReplacementEntry = {
 	node: JSX.Element
 }
 
-const defaultProps = {
-	explicitTooltip: "",
+const defaultProps: Props = {
+	explicitTooltip: undefined,
 	noRecursion: false,
 	width: "600px",
 	height: "180px",
@@ -48,6 +48,7 @@ const tooltips: Record<string, string> = {}
 
 export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 	const { children, style, explicitTooltip, noRecursion, width, height, definitions } = mergeProps(defaultProps, props)
+
 	const tooltipId = idProvider.next()
 	// eslint-disable-next-line fp/no-let, init-declarations
 	let hidingTimer: NodeJS.Timeout | number
@@ -67,7 +68,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 				? [{ position: 0, length: explicitTooltip.length, node: createToolTip(originalStringElem) }]
 
 				// eslint-disable-next-line fp/no-mutating-methods
-				: Object.keys(definitions)
+				: Object.keys(definitions || {})
 					.reduce((accum, currTerm) => {
 						const position = ((originalStringElem ?? "").toLowerCase()).search(currTerm)
 						// We add that term to the replacement, only if it was found, and not part of another replacement ("range" inside of "interquartile range")
@@ -191,7 +192,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 				.forEach(item => {
 					// eslint-disable-next-line fp/no-mutation
 					item.innerHTML = explicitTooltip
-						? explicitTooltip
+						? explicitTooltip.toString()
 						: tooltips[wordToReplace]
 				})
 		}
@@ -201,7 +202,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 		const className__ = idProvider.next()
 		const lowerCasedWord = contentReplaced.toLowerCase()
 
-		const isUrl = isKeyOf(lowerCasedWord, definitions) && definitions[lowerCasedWord] && definitions[lowerCasedWord].slice(0, 4) === "http"
+		const isUrl = isKeyOf(lowerCasedWord, definitions || {}) && definitions && definitions[lowerCasedWord] && definitions[lowerCasedWord].slice(0, 4) === "http"
 
 		return <span style={{ position: "relative" }}>
 			<span
@@ -227,7 +228,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 							<span style={{ float: "right" }}> From Wikipedia
 								<a style={{ marginLeft: "0.5em" }}
 									// eslint-disable-next-line fp/no-mutating-methods
-									target="_blank" href={`https://en.wikipedia.org/wiki/${definitions[lowerCasedWord].split("=").pop()}`}>
+									target="_blank" href={`https://en.wikipedia.org/wiki/${(definitions || {})[lowerCasedWord].split("=").pop()}`}>
 									<ExternalLinkIcon style={{ height: "1em", cursor: "pointer" }} />
 								</a>
 							</span>
@@ -239,7 +240,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 						? "Loading definition..."
 						: explicitTooltip !== undefined
 							? explicitTooltip
-							: definitions[lowerCasedWord]
+							: (definitions || {})[lowerCasedWord]
 					}
 				</span>
 			</div>
