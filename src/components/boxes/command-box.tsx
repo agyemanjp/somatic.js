@@ -38,7 +38,7 @@ interface Messages {
 }
 
 const defaultProps = {
-	orientation: Orientation.horizontal,
+	orientation: "horizontal" as const,
 	tooltip: "",
 	hoverEffect: "invert" as const,
 	style: {
@@ -70,7 +70,7 @@ export const CommandBox: Component<Props, Messages[keyof Messages]> = async (pro
 
 	const iconContent = props.icon ? <props.icon style={iconStyle || {}} /> : <div />
 	const mainContent = (
-		<StackPanel orientation={orientation} itemsAlignV={Alignment.center} style={{ height: "100%" }}>
+		<StackPanel orientation={orientation} itemsAlignV={"center"} style={{ height: "100%" }}>
 			{children}
 		</StackPanel>
 	)
@@ -110,7 +110,7 @@ export const CommandBox: Component<Props, Messages[keyof Messages]> = async (pro
 			...style
 		}}>
 		<StackPanel
-			itemsAlignV={Alignment.center}
+			itemsAlignV={"center"}
 			orientation={orientation}>
 			{iconPlacement === "before" ? [iconContent, mainContent] : [mainContent, iconContent]}
 		</StackPanel>

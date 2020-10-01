@@ -172,8 +172,8 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 					/>
 					: headerContent}
 				<StackPanel
-					itemsAlignV={Alignment.center}
-					orientation={Orientation.vertical}>
+					itemsAlignV={"center"}
+					orientation={"vertical"}>
 					{isItemSelected === true && fullProps.enableEditing !== false
 						? <div
 							onClick={(e: MouseEvent<HTMLDivElement>) => {
@@ -242,7 +242,7 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 			return (
 				<StackPanel
 					{...htmlProps}
-					orientation={Orientation.vertical}
+					orientation={"vertical"}
 					style={{
 						flexFlow: "column",
 						height: "100%",

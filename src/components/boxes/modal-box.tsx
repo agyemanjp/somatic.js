@@ -66,8 +66,8 @@ export const ModalBox: Component<Props, Messages> = (props) => {
 			backgroundColor: 'rgba(0,0,0,0.3)',
 			zIndex: 10
 		}}
-		itemsAlignH={Alignment.center}
-		itemsAlignV={Alignment.center}>
+		itemsAlignH={"center"}
+		itemsAlignV={"center"}>
 
 		{children}
 

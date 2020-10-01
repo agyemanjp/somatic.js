@@ -1471,19 +1471,15 @@ export interface Theme {
 	thickness: number
 }
 
-export const enum Alignment {
-	start = "start",
-	end = "end",
-	center = "center",
-	stretch = "stretch",
-	uniform = "uniform",
-	dock = "dock"
-}
-
-export const enum Orientation {
-	vertical = "vertical",
-	horizontal = "horizontal"
-}
+export type Alignment = (
+	| "start"
+	| "end"
+	| "center"
+	| "stretch"
+	| "uniform"
+	| "dock"
+)
+export type Orientation = "vertical" | "horizontal"
 
 export namespace Props {
 	export type Html = Partial<HTMLAttributes<HTMLElement>>
@@ -1495,7 +1491,7 @@ export namespace Props {
 	export type Panel = {
 		itemsAlignH: Alignment,
 		itemsAlignV: Alignment,
-		orientation: | "vertical" | "horizontal"
+		orientation: Orientation
 	}
 	export type View<TData = {}> = {
 		sourceData: Iterable<TData>

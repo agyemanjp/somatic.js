@@ -80,7 +80,7 @@ export const Card: Component<Props> = async (props) => {
 				/** Does not requires to pass a default handler since the event doesn't cause any internal effect, its delegated to the parent component */
 				if (postMsgAsync) postMsgAsync({ type: "CARD_SELECTED" })
 			}}
-			orientation={Orientation.horizontal}>
+			orientation={"horizontal"}>
 			<div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", height: "100%" }} >{_props.thumbnail}</div>
 			<div style={{ width: "100%" }}>
 				{

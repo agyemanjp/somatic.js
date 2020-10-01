@@ -62,17 +62,7 @@ export async function render<P extends Obj = Obj>(vnode?: { toString(): string }
 						const propValue: unknown = nodeProps[propKey]
 						if (propValue !== undefined) {
 							const htmlPropKey = propKey.toUpperCase()
-							if (isEventKey(htmlPropKey) && htmlPropKey === "ONLOAD") {
-								// eslint-disable-next-line fp/no-mutating-methods
-								fnStore.push(propValue as (evt: Event) => unknown)
-								node.setAttribute(propKey.toLowerCase(), `${fnStore.length - 1}`)
-
-								// const callback: (evt: Event) => void = fnStore[fnStore.length - 1]
-								// node.addEventListener(eventNames[htmlPropKey], { handleEvent: callback })
-
-								node.setAttribute(htmlPropKey, `(${((propValue as (evt: Event) => unknown).toString())})(this);`)
-							}
-							else if (isEventKey(htmlPropKey) && typeof propValue === "function") { // The first condition is here simply to prevent useless searches through the events list.
+							if (isEventKey(htmlPropKey) && typeof propValue === "function") { // The first condition is here simply to prevent useless searches through the events list.
 								const eventId = idProvider.next()
 								// We attach an eventId per possible event: an element having an onClick and onHover will have 2 such properties.
 								node.setAttribute(`data-${htmlPropKey}-eventId`, eventId)

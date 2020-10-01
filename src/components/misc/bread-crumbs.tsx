@@ -76,11 +76,11 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 
 	return <StackPanel
 		style={{ paddingTop: "0.25em", paddingBottom: "0.25em", width: "100%", maxWidth: "1200px" }}
-		itemsAlignV={Alignment.center}
-		orientation={Orientation.horizontal}>
+		itemsAlignV={"center"}
+		orientation={"horizontal"}>
 
 		{props.crumbs.map((crumb, index) => {
-			const isCrumbDisabled = hasValue(crumb.target)
+			const isCrumbDisabled = !hasValue(crumb.target)
 			const CrumbBox = index === 0
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				? fullProps.icons!.CrumbLeft
