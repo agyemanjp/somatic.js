@@ -53,7 +53,7 @@ export const StackPanel: Component<Props> = async (props) => {
 				style={{
 					display: "flex",
 					...style,
-					flexDirection: orientation === Orientation.vertical ? "column" : "row",
+					flexDirection: orientation === "vertical" ? "column" : "row",
 					justifyContent: justifyContent(),
 					alignItems: alignItems()
 				}}>

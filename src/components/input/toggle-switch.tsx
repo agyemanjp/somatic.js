@@ -12,10 +12,9 @@ export interface Option {
 	icon?: Icon
 	isDisabled?: boolean,
 	customElement?: JSX.Element
-	style?: CSSProperties
 }
 
-type Props = Props.Themed & {
+type Props = Props.Themed & Partial<Props.Styled> & {
 	/** Array of option objects */
 	options: Option[]
 
@@ -29,19 +28,15 @@ type Props = Props.Themed & {
 	type?: "on-off" | "multiple-choices"
 }
 
-export const defaultProps = {
+const defaultProps = {
 	options: [],
 	selectedSwitchIndex: 0,
 	theme: config.theme,
-	style: {
-		height: "40px"
-	},
+	style: { height: "40px" },
 	type: "multiple-choices" as const
 }
 
-type Messages = (
-	{ type: "SWITCH_CHANGE", data: { index: number } }
-)
+type Messages = ({ type: "SWITCH_CHANGE", data: { index: number } })
 
 export const ToggleSwitch: Component<Props, Messages> = (props) => {
 	const fullProps = mergeProps(defaultProps, props)
@@ -116,7 +111,8 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 				</div>
 			</div>
 		</HoverBox>
-		: <StackPanel orientation={Orientation.horizontal} style={{ height: "100%", ...props.style }}>
+
+		: <StackPanel orientation={"horizontal"} style={{ height: "100%", ...props.style }}>
 			{
 				props.options.map((option, index) => {
 					const IconItem = option.icon
@@ -144,7 +140,7 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 
 						<StackPanel
 							title={option.tooltip}
-							itemsAlignV={Alignment.center}
+							itemsAlignV={"center"}
 							style={{
 								cursor: option.isDisabled !== true ? "pointer" : "inherit",
 								borderRight: fullProps.selectedSwitchIndex === index + 1
@@ -178,14 +174,14 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 											width: "100%",
 											margin: "auto"
 										}}
-										itemsAlignV={Alignment.center}
-										itemsAlignH={Alignment.center}>
+										itemsAlignV={"center"}
+										itemsAlignH={"center"}>
 										{option.customElement}
 									</StackPanel>
 									: <StackPanel
 										style={{ height: '100%', width: "100%", margin: "auto", }}
-										itemsAlignV={Alignment.center}
-										itemsAlignH={Alignment.center}>
+										itemsAlignV={"center"}
+										itemsAlignH={"center"}>
 										{IconItem && <IconItem style={{}} />}
 										{option.label}
 									</StackPanel>

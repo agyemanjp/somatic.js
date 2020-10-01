@@ -76,8 +76,8 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 
 	return <StackPanel
 		style={{ paddingTop: "0.25em", paddingBottom: "0.25em", width: "100%", maxWidth: "1200px" }}
-		itemsAlignV={Alignment.center}
-		orientation={Orientation.horizontal}>
+		itemsAlignV={"center"}
+		orientation={"horizontal"}>
 
 		{props.crumbs.map((crumb, index) => {
 			const isCrumbDisabled = !hasValue(crumb.target)

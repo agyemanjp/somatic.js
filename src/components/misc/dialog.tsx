@@ -45,15 +45,15 @@ export const Dialog: Component<Props> = (props) => {
 	}
 	try {
 		const newContent = <StackPanel
-			orientation={Orientation.vertical}
+			orientation={"vertical"}
 			style={{ height: "100%", width: "100%", padding: "1em" }}
-			itemsAlignH={Alignment.center}
-			itemsAlignV={Alignment.center}>
+			itemsAlignH={"center"}
+			itemsAlignV={"center"}>
 
 			{getContent()}
 
 			<StackPanel
-				orientation={Orientation.horizontal}
+				orientation={"horizontal"}
 				style={{ marginTop: "1rem" }}>
 				{[
 					...fullProps.buttons.map((buttonInfo, index) => {
