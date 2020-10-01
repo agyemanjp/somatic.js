@@ -259,7 +259,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 		const className__ = idProvider.next()
 		return <span
 			className={className__}
-			style={{ ...style, width: "100%", height: "100%", display: "contents" }}
+			style={{ ...style }}
 			onClick={e => e.stopPropagation()}
 			onMouseEnter={ev => { clearTimer(hidingTimer); handleMouseEnter(ev, className__) }}
 			onMouseLeave={ev => handleMouseLeave(className__)}>
@@ -274,7 +274,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 		</span>
 	}
 	else { // We indicate that on element load, we need to apply tooltips
-		return <span id={tooltipId} style={{ ...style, width: "100%", height: "100%", display: "contents" }}>
+		return <span id={tooltipId} style={{ ...style }}>
 			<style onLoad={() => { assignTooltips(tooltipId) }} />
 			{children}
 		</span>
