@@ -229,7 +229,7 @@ export const TooltipBox: Component<Props & Props.Html> = async (props) => {
 								<a style={{ marginLeft: "0.5em" }}
 									// eslint-disable-next-line fp/no-mutating-methods
 									target="_blank" href={`https://en.wikipedia.org/wiki/${(definitions || {})[lowerCasedWord].split("=").pop()}`}>
-									<ExternalLinkIcon style={{ height: "1em", cursor: "pointer" }} />
+									{/* {<ExternalLinkIcon style={{ height: "1em", cursor: "pointer" }} />} */}
 								</a>
 							</span>
 						</div>
