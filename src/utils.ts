@@ -5,7 +5,7 @@
 
 // import { PropsExtended, Message } from "./types"
 import { eventNames } from "./constants"
-import { CSSProperties } from "./types"
+import { default as cuid } from "cuid"
 import { deepMerge } from "@sparkwave/standard/collections/object"
 import { Obj } from "@sparkwave/standard/utility"
 
@@ -111,7 +111,7 @@ export function encodeHTML(str: string) {
 	})
 }
 
-class IdProvider {
+/*class IdProvider {
 	private cache: string[]
 	private pointer: number
 	constructor() {
@@ -129,6 +129,27 @@ class IdProvider {
 	}
 }
 export const idProvider = new IdProvider()
+*/
+
+class IdProvider {
+	private cache: string[]
+	private pointer: number
+	constructor() {
+		this.cache = []
+		this.pointer = 0
+	}
+	next() {
+		if (this.pointer >= this.cache.length) {
+			this.cache.push(cuid())
+		}
+		return this.cache[this.pointer++]
+	}
+	reset() {
+		this.pointer = 0
+	}
+}
+export const idProvider = new IdProvider()
+
 
 export const config = {
 	theme: {
