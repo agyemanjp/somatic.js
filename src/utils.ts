@@ -140,6 +140,7 @@ class IdProvider {
 	}
 	next() {
 		if (this.pointer >= this.cache.length) {
+			console.log(`pushing to id provider cache`)
 			this.cache.push(cuid())
 		}
 		return this.cache[this.pointer++]

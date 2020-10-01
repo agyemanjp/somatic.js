@@ -19,19 +19,10 @@ jsdom({ url: 'http://localhost', skipWindowCheck: true })
 
 describe("Somatic", () => {
 	describe("render", () => {
-		// eslint-disable-next-line fp/no-let
-		// let container: HTMLElement | null
-		// beforeEach(() => {
-		// 	container = document.createElement('div')
-		// 	document.body.appendChild(container)
-		// })
-		// afterEach(() => {
-		// 	container?.remove()
-		// 	container = null
-		// })
 
 		it("should return element with same html as renderToString", async () => {
 			try {
+				console.log(`Starting 'should return element with same html as renderToString' test`)
 				const vNode = <FileInput
 					icon={() => <span></span>}
 					theme={config.theme}
@@ -42,13 +33,14 @@ describe("Somatic", () => {
 				</FileInput>
 
 				const renderedHTML = (await render(vNode) as Element).outerHTML
+				console.log(`renderedNodeHTML: ${renderedHTML}`)
+
 				idProvider.reset()
 				const renderedString = await renderToString(vNode)
-
-				// console.log(`renderedNodeHTML: ${renderedHTML}`)
-				// console.log(`renderedString: ${renderedString}`)
+				console.log(`renderedString: ${renderedString}`)
 
 				assert.equal(normalizeHTML(renderedHTML), normalizeHTML(renderedString))
+
 			}
 			catch (e) {
 				console.error(e)

@@ -12,9 +12,10 @@ export interface Option {
 	icon?: Icon
 	isDisabled?: boolean,
 	customElement?: JSX.Element
+	style?: CSSProperties
 }
 
-type Props = Props.Themed & Partial<Props.Styled> & {
+type Props = Props.Themed & {
 	/** Array of option objects */
 	options: Option[]
 
@@ -28,7 +29,7 @@ type Props = Props.Themed & Partial<Props.Styled> & {
 	type?: "on-off" | "multiple-choices"
 }
 
-const defaultProps = {
+export const defaultProps = {
 	options: [],
 	selectedSwitchIndex: 0,
 	theme: config.theme,
@@ -111,7 +112,6 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 				</div>
 			</div>
 		</HoverBox>
-
 		: <StackPanel orientation={"horizontal"} style={{ height: "100%", ...props.style }}>
 			{
 				props.options.map((option, index) => {
