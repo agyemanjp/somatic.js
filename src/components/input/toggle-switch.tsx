@@ -107,7 +107,6 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 				</div>
 			</div>
 		</HoverBox>
-
 		: <StackPanel orientation={"horizontal"} style={{ height: "100%", ...props.style }}>
 			{
 				props.choices.map((option, index) => {

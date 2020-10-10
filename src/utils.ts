@@ -74,25 +74,6 @@ export function encodeHTML(str: string) {
 	})
 }
 
-/*class IdProvider {
-	private cache: string[]
-	private pointer: number
-	constructor() {
-		this.cache = []
-		this.pointer = 0
-	}
-	next() {
-		if (this.pointer >= this.cache.length) {
-			this.cache.push(`id_${this.cache.length.toString()}`)
-		}
-		return this.cache[this.pointer++]
-	}
-	reset() {
-		this.pointer = 0
-	}
-}
-export const idProvider = new IdProvider()
-*/
 
 class IdProvider {
 	private cache: string[]
