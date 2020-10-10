@@ -10,7 +10,7 @@
 import * as assert from "assert"
 import { createElement, render, renderToString, hydrate } from '../dist/index.js'
 import { FileInput } from '../dist/components/index.js'
-import { config, idProvider } from '../dist/utils'
+import { idProvider } from '../dist/utils'
 import { constructElement, normalizeHTML } from './utils'
 const jsdom = require('mocha-jsdom')
 jsdom({ url: 'http://localhost', skipWindowCheck: true })
@@ -22,10 +22,10 @@ describe("Somatic", () => {
 
 		it("should return element with same html as renderToString", async () => {
 			try {
-				console.log(`Starting 'should return element with same html as renderToString' test`)
+				//console.log(`Starting 'should return element with same html as renderToString' test`)
 				const vNode = <FileInput
 					icon={() => <span></span>}
-					theme={config.theme}
+					// theme={config.theme}
 					labelStyle={{}}
 					loadAs="array"
 					style={{ height: "auto", width: "auto", fontSize: "14px" }}
@@ -33,11 +33,11 @@ describe("Somatic", () => {
 				</FileInput>
 
 				const renderedHTML = (await render(vNode) as Element).outerHTML
-				console.log(`renderedNodeHTML: ${renderedHTML}`)
+				//console.log(`renderedNodeHTML: ${renderedHTML}`)
 
 				idProvider.reset()
 				const renderedString = await renderToString(vNode)
-				console.log(`renderedString: ${renderedString}`)
+				//console.log(`renderedString: ${renderedString}`)
 
 				assert.equal(normalizeHTML(renderedHTML), normalizeHTML(renderedString))
 

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
-import { Component, Props, Orientation } from '../../types'
+import { Component, ComponentProps, Orientation } from '../../types'
 
-export type Props = Partial<Props.Panel> & Props.Html & {
+export type Props = Partial<ComponentProps.Panel> & ComponentProps.Html & {
 }
 
 export const StackPanel: Component<Props> = async (props) => {

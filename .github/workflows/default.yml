@@ -1,11 +1,11 @@
 name: Default
 
 on:
-  # push:
+  push:
   #   branches: [ dev ]
   pull_request:
   # branches: [ dev ]
-    # types: ['synchronize']
+    types: ['synchronize']
 
 jobs:
   checks:

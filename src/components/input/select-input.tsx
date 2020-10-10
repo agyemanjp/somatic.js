@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
-import { mergeProps } from '../../utils'
-import { Component, Props } from '../../types'
+import { mergeProps } from '../../core'
+import { Component, ComponentProps } from '../../types'
 
 /** Type that defines the struct we need to send when we want to pass groups of options to this component. */
 export interface OptionsGrouped { label: string, options: (string | number)[] }
 
-type Props = Props.Html & Props.Themed & {
+type Props = ComponentProps.Html & {
 	/** Index of selected value by default will be 0 */
 	selectedIndex: number
 

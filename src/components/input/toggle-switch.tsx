@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Component, Props, Alignment, Orientation, CSSProperties, Icon } from '../../types'
-import { colorLuminance, config, mergeProps } from '../../utils'
-import { createElement } from '../../core'
+import { createElement, mergeProps } from '../../core'
+import { Component, ComponentProps, CSSProperties, Icon } from '../../types'
 import { HoverBox } from '../boxes/hover-box'
 import { StackPanel } from '../panels/stack-panel'
 
@@ -15,9 +14,9 @@ export interface Option {
 	style?: CSSProperties
 }
 
-type Props = Props.Themed & {
+type Props = ComponentProps.Html & {
 	/** Array of option objects */
-	options: Option[]
+	choices: Option[]
 
 	/** Defines the selected option using the index of the array */
 	selectedSwitchIndex: number
@@ -32,7 +31,6 @@ type Props = Props.Themed & {
 export const defaultProps = {
 	options: [],
 	selectedSwitchIndex: 0,
-	theme: config.theme,
 	style: { height: "40px" },
 	type: "multiple-choices" as const
 }
@@ -40,44 +38,41 @@ export const defaultProps = {
 type Messages = ({ type: "SWITCH_CHANGE", data: { index: number } })
 
 export const ToggleSwitch: Component<Props, Messages> = (props) => {
-	const fullProps = mergeProps(defaultProps, props)
-	const sliderWidth = fullProps.style.height
-	const borderColor = colorLuminance(config.theme.colors.whitish, -0.1)
+	const { type, choices, style, selectedSwitchIndex, postMsgAsync } = mergeProps(defaultProps, props)
+	const sliderWidth = style.height
+	// const borderColor = colorLuminance(config.theme.colors.whitish, -0.1)
 
-	return props.options.length == 2
+	return choices.length == 2
 		? <HoverBox
-			theme={config.theme}
+			// theme={config.theme}
 			style={{
 				display: "flex",
-				flexDirection: fullProps.selectedSwitchIndex === 1 ? "row-reverse" : "row",
-				backgroundColor: fullProps.theme.colors.secondary.light,
-				...fullProps.type !== "multiple-choices" && fullProps.selectedSwitchIndex === 0
-					? {
-						backgroundColor: fullProps.theme.colors.primary.dark,
-					}
-					: {},
+				flexDirection: selectedSwitchIndex === 1 ? "row-reverse" : "row",
+				// backgroundColor: theme.colors.secondary.light,
+				// ...type !== "multiple-choices" && selectedSwitchIndex === 0
+				// 	? { backgroundColor: theme.colors.primary.dark, }
+				// 	: {},
 				width: "90px",
 				borderRadius: "20px",
 				margin: "2px",
 				boxShadow: "inset 0px 1px 1px rgba(0,0,0,0.4)",
 				cursor: "pointer",
-				...fullProps.style
+				...style
 			}}
 			hoverStyle={{
 				display: "flex",
-				flexDirection: fullProps.selectedSwitchIndex === 1 ? "row-reverse" : "row",
-				backgroundColor: fullProps.theme.colors.secondary.dark,
-				...fullProps.type !== "multiple-choices" && fullProps.selectedSwitchIndex === 0
-					? {
-						backgroundColor: fullProps.theme.colors.primary.dark
-					}
-					: {},
-				...fullProps.style
+				flexDirection: selectedSwitchIndex === 1 ? "row-reverse" : "row",
+				// backgroundColor: theme.colors.secondary.dark,
+				// ...type !== "multiple-choices" && selectedSwitchIndex === 0
+				// 	? { backgroundColor: theme.colors.primary.dark }
+				// 	: {},
+				...style
 			}}>
+
 			<div
 				onClick={() => {
-					if (fullProps.postMsgAsync) {
-						fullProps.postMsgAsync({
+					if (postMsgAsync) {
+						postMsgAsync({
 							type: "SWITCH_CHANGE",
 							data: {
 								index: props.selectedSwitchIndex === 0 ? 1 : 0
@@ -90,7 +85,7 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 						height: sliderWidth,
 						width: sliderWidth,
 						borderRadius: "30px",
-						backgroundColor: fullProps.theme.colors.whitish,
+						// backgroundColor: theme.colors.whitish,
 						boxShadow: "0px 1px 5px rgba(0,0,0,0.5)",
 						transform: "scale(0.8)"
 					}}>
@@ -108,20 +103,20 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 						height: "100%",
 						textShadow: `0px 1px 2px rgba(0,0,0,0.2)`
 					}}>
-					{props.options[fullProps.selectedSwitchIndex].label}
+					{props.choices[selectedSwitchIndex].label}
 				</div>
 			</div>
 		</HoverBox>
 		: <StackPanel orientation={"horizontal"} style={{ height: "100%", ...props.style }}>
 			{
-				props.options.map((option, index) => {
+				props.choices.map((option, index) => {
 					const IconItem = option.icon
-					const border = fullProps.selectedSwitchIndex === index
-						? `2px solid ${fullProps.theme.colors.primary.dark}`
-						: `thin solid ${borderColor}`
+					const border = selectedSwitchIndex === index
+						? `2px solid`
+						: `thin solid`
 
 					return <HoverBox
-						theme={config.theme}
+						// theme={config.theme}
 						style={{
 							backgroundColor: "white",
 							color: props.selectedSwitchIndex === index
@@ -133,7 +128,7 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 						}}
 						hoverStyle={{
 							backgroundColor: option.isDisabled !== true
-								? config.theme.colors.whitish
+								? "whitesmoke"
 								: "inherit",
 							borderColor: props.style && props.style.borderColor
 						}}>
@@ -143,8 +138,8 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 							itemsAlignV={"center"}
 							style={{
 								cursor: option.isDisabled !== true ? "pointer" : "inherit",
-								borderRight: fullProps.selectedSwitchIndex === index + 1
-									? `2px solid ${fullProps.theme.colors.primary.dark}`
+								borderRight: selectedSwitchIndex === index + 1
+									? `2px solid`
 									: border
 								,
 								borderTop: border,
@@ -152,7 +147,7 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 								// ...props.selectedSwitchIndex === index && { boxShadow: "inset 0 0 2px #333" },
 								...index === 0
 								&& { borderLeft: border, borderRadius: "0.3rem 0 0 0.3rem" },
-								...index === props.options.length - 1
+								...index === props.choices.length - 1
 								&& { borderRadius: "0 0.3rem 0.3rem 0" },
 								...option.style,
 
