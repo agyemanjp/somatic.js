@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement } from '../../core'
-import { Component, CSSProperties, Props, Icon } from '../../types'
-import { config, mergeProps } from '../../utils'
-import { defaults } from "lodash"
+import { createElement, mergeProps } from '../../core'
+import { Component, CSSProperties, ComponentProps, Icon } from '../../types'
 
 export type AlertType = "warning" | "info" | "error" | "form"
 
-type Props = Props.Themed & {
+type Props = {
 	/** Will define the general style of the alert: "warning" | "info" | "error" | "form"  */
 	type: AlertType,
 
@@ -23,39 +21,41 @@ type Props = Props.Themed & {
 	errorIcon?: Icon
 }
 
-const defaultProps = Object.freeze({
-	type: "info" as AlertType,
-	style: {
-		border: "thin solid ",
-		textAlign: "center",
-		margin: "auto",
-		borderRadius: "0.15rem",
-		background: config.theme.colors.whitish,
-		color: config.theme.colors.blackish
-	}
-})
 
 export const Alert: Component<Props> = (props) => {
-	const fullProps = defaults(props, defaultProps)
 
-	const getAlertStyle = (): CSSProperties => {
-		switch (fullProps.type) {
+	const defaultProps = Object.freeze({
+		type: "info" as AlertType,
+		style: {
+			border: "thin solid ",
+			textAlign: "center",
+			margin: "auto",
+
+			borderRadius: "0.15rem",
+			background: `white`,
+			color: `black`
+		}
+	})
+
+	const {
+		type,
+		errorIcon,
+		title,
+		style,
+		headerStyle,
+		children
+	} = mergeProps(defaultProps, props)
+
+	const getAlertTypeDefaultStyle = (): CSSProperties => {
+		switch (type) {
 			case "info":
-				return {
-					borderColor: fullProps.theme.colors.info,
-				}
+				return { borderColor: 'green' }
 			case "warning":
-				return {
-					borderColor: fullProps.theme.colors.warning,
-				}
+				return { borderColor: 'gold' }
 			case "error":
-				return {
-					borderColor: fullProps.theme.colors.error,
-				}
+				return { borderColor: 'red' }
 			default:
-				return {
-					borderColor: fullProps.theme.colors.blackish,
-				}
+				return { borderColor: 'black', }
 		}
 	}
 
@@ -77,30 +77,30 @@ export const Alert: Component<Props> = (props) => {
 		}
 	}
 
-	const getHeaderStyle = (): CSSProperties => {
-		switch (fullProps.type) {
+	const getDefaultHeaderStyle = (): CSSProperties => {
+		switch (type) {
 			case "info":
 				return {
-					backgroundColor: fullProps.theme.colors.info,
-					borderColor: fullProps.theme.colors.info,
-					color: fullProps.theme.colors.blackish
+					backgroundColor: 'green',
+					borderColor: 'green',
+					color: 'black'
 				}
 			case "warning":
 				return {
-					backgroundColor: fullProps.theme.colors.warning,
-					borderColor: fullProps.theme.colors.warning,
+					backgroundColor: 'gold',
+					borderColor: 'gold',
 					color: "#fff"
 				}
 			case "error":
 				return {
-					backgroundColor: fullProps.theme.colors.error,
-					borderColor: fullProps.theme.colors.error,
+					backgroundColor: 'red',
+					borderColor: 'red',
 					color: "#fff"
 				}
 			default:
 				return {
-					backgroundColor: fullProps.theme.colors.primary.dark,
-					borderColor: fullProps.theme.colors.blackish,
+					// backgroundColor: theme.colors.primary.dark,
+					borderColor: 'black',
 					color: "#fff"
 				}
 		}
@@ -119,16 +119,17 @@ export const Alert: Component<Props> = (props) => {
 		}
 	}
 
-	const HeaderIcon = fullProps.type === "error"
-		? fullProps.errorIcon
-		: fullProps.type === "warning"
-			? fullProps.errorIcon
+	const HeaderIcon = (type === "error"
+		? errorIcon
+		: type === "warning"
+			? errorIcon
 			: undefined
+	)
 
 	return <div
 		style={{
-			...fullProps.style,
-			...getAlertStyle(),
+			...getAlertTypeDefaultStyle(),
+			...style,
 			maxWidth: "100%"
 		}}>
 
@@ -138,8 +139,8 @@ export const Alert: Component<Props> = (props) => {
 				fontWeight: 700,
 				padding: "0 1rem 2px",
 				fontVariant: "all-small-caps",
-				...getHeaderStyle(),
-				...fullProps.headerStyle
+				...getDefaultHeaderStyle(),
+				...headerStyle
 			}}>
 			{
 				HeaderIcon !== undefined
@@ -151,10 +152,10 @@ export const Alert: Component<Props> = (props) => {
 					: undefined
 			}
 
-			<span > {fullProps.title || getAlertTitle()} </span>
+			<span > {title || getAlertTitle()} </span>
 		</div>
 		{
-			fullProps.children === undefined
+			children === undefined
 				? <div />
 				: getContent()
 		}

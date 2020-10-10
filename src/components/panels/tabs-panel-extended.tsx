@@ -1,12 +1,18 @@
+/* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { createElement } from '../../core'
-import { Component, Props, Alignment, Orientation, CSSProperties, KeyboardEvent, FormEvent, MouseEvent } from '../../types'
+import { createElement, mergeProps } from '../../core'
+import { Component, ComponentProps, CSSProperties, KeyboardEvent, FormEvent, MouseEvent } from '../../types'
 import { StackPanel } from './stack-panel'
-import { mergeProps } from '../../utils'
 import { HoverBox } from "../boxes/hover-box"
 
-type Props = Props.Panel & Props.Html & Props.Themed & {
+export type Messages = (
+	| { type: "SELECTION", data: { key: string } }
+	| { type: "DELETION", data: { key: string } }
+	| { type: "EDITING", data: { key: string, newName: string } }
+)
+
+export type Props = ComponentProps.Panel & ComponentProps.Html & {
 	/** Key of the currently selected tab, it defines which content to show from the headerItems */
 	selectedTabKey: string | undefined,
 
@@ -18,7 +24,7 @@ type Props = Props.Panel & Props.Html & Props.Themed & {
 
 	/** Properties for the header Panel */
 	headerPanel: {
-		component?: Component<Props.Panel>,
+		component?: Component<ComponentProps.Panel>,
 		placement?: "top" | "right" | "bottom" | "left"
 		style?: CSSProperties
 	}
@@ -42,11 +48,7 @@ type Props = Props.Panel & Props.Html & Props.Themed & {
 	/** Name of the tab being edited */
 	editingTabName: string
 }
-export interface Messages {
-	selection: { type: "SELECTION", data: { key: string } },
-	deletion: { type: "DELETION", data: { key: string } },
-	editing: { type: "EDITING", data: { key: string, newName: string } }
-}
+
 const defaultProps = Object.freeze({
 	enableEditing: false,
 	enableDeletion: false,
@@ -62,67 +64,51 @@ const defaultProps = Object.freeze({
 	selection: undefined,
 })
 
-export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (props) => {
+export const TabsPanelExtended: Component<Props, Messages> = (props) => {
 	const {
 		children,
 		headerPanel,
 		headerItems,
-		theme,
+		// theme,
 		style,
 		orientation,
 		itemsAlignH,
 		itemsAlignV,
 		selectedTabKey,
+		editingTabKey,
+		editingTabName,
+		enableDeletion,
+		enableEditing,
 		postMsgAsync,
 		...htmlProps
-	} = props
+	} = mergeProps(defaultProps, props)
 
-	const fullProps = mergeProps(defaultProps, props)
-	const HeaderPanelComponent = fullProps.headerPanel.component
-	const headersJSX = fullProps.headerItems.data.map((header, index) => {
+	const HeaderPanelComponent = headerPanel.component
+	const headersJSX = headerItems.data.map((header, index) => {
 		const headerKey = header.key
 		const headerContent = header.content === undefined ? header.tabName : header.content
 		const isItemSelected = headerKey === selectedTabKey
 
 		return <HoverBox
-			theme={fullProps.theme}
+			// theme={theme}
 			style={{
-				...fullProps.headerItems.style,
+				...headerItems.style,
 				...isItemSelected === true
 					? {
-						color: fullProps.theme.colors.secondary.light,
-						...fullProps.headerItems.selectedStyle
+						// color: theme.colors.secondary.light,
+						...headerItems.selectedStyle
 					}
 					: {}
 			}}
 			// If we have only one header item, the hover style is similar to the regular style: no hover effect
-			hoverStyle={fullProps.headerItems.data.length > 1 && isItemSelected === false
-				?
-				{
-					...fullProps.headerItems.hoverStyle
-				}
-				:
-				{
-					...fullProps.headerItems.selectedStyle,
-					...fullProps.headerItems.selectedHoverStyle
-				}
+			hoverStyle={headerItems.data.length > 1 && isItemSelected === false
+				? { ...headerItems.hoverStyle }
+				: { ...headerItems.selectedStyle, ...headerItems.selectedHoverStyle }
 			}>
 
-			<StackPanel onClick={e => {
-				if (fullProps.postMsgAsync) {
-					fullProps.postMsgAsync({
-						type: "SELECTION",
-						data: {
-							key: headerKey
-						}
-					})
-				}
-				// TODO: Check this, if still nescessary
-				// if (!isItemSelected){
-				// 	this.setState({ editingTabKey: undefined })
-				// }
-			}}>
-				{fullProps.editingTabKey === headerKey
+			<StackPanel
+				onClick={e => { if (postMsgAsync) postMsgAsync({ type: "SELECTION", data: { key: headerKey } }) }}>
+				{editingTabKey === headerKey
 					? <input
 						type="text"
 						autoFocus
@@ -137,11 +123,11 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 						onKeyPress={(e: KeyboardEvent<HTMLInputElement>) => {
 							const code = e.keyCode || e.which
 							if (code === 13) {
-								const newTabName = fullProps.editingTabName === ""
+								const newTabName = editingTabName === ""
 									? header.tabName
-									: fullProps.editingTabName
-								if (fullProps.postMsgAsync) {
-									fullProps.postMsgAsync({
+									: editingTabName
+								if (postMsgAsync) {
+									postMsgAsync({
 										type: "EDITING",
 										data: {
 											key: headerKey,
@@ -174,26 +160,16 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 				<StackPanel
 					itemsAlignV={"center"}
 					orientation={"vertical"}>
-					{isItemSelected === true && fullProps.enableEditing !== false
+					{isItemSelected === true && enableEditing !== false
 						? <div
-							onClick={(e: MouseEvent<HTMLDivElement>) => {
-								e.stopPropagation()
-								const editingTabKey = fullProps.editingTabKey
-								// TODO: Deal with this click
-
-								// this.setState({
-								// 	editingTabKey: editingTabKey !== undefined
-								// 		? undefined
-								// 		: header.key
-								// })
-							}}
+							onClick={(e: MouseEvent<HTMLDivElement>) => { e.stopPropagation() }}
 							onMouseDown={(e: MouseEvent<HTMLDivElement>) => {
-								const newTabName = fullProps.editingTabName === ""
+								const newTabName = editingTabName === ""
 									? header.tabName
-									: fullProps.editingTabName
-								if (fullProps.editingTabKey !== undefined) {
-									if (fullProps.postMsgAsync) {
-										fullProps.postMsgAsync({
+									: editingTabName
+								if (editingTabKey !== undefined) {
+									if (postMsgAsync) {
+										postMsgAsync({
 											type: "EDITING",
 											data: {
 												key: headerKey,
@@ -205,7 +181,7 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 							}}
 							style={{ cursor: "pointer", paddingLeft: "0.25em" }}>
 
-							{/* {fullProps.editingTabKey === headerKey
+							{/* {editingTabKey === headerKey
 								? <Icons.CheckmarkBold size="1em" />
 								: <Icons.EditPencil size="1em" />} */}
 
@@ -213,12 +189,12 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 
 						: <div />
 					}
-					{isItemSelected === true && fullProps.editingTabKey === undefined && fullProps.enableDeletion !== false
+					{isItemSelected === true && editingTabKey === undefined && enableDeletion !== false
 						? <div
 							onClick={e => {
 								e.stopPropagation()
-								if (fullProps.postMsgAsync) {
-									fullProps.postMsgAsync({
+								if (postMsgAsync) {
+									postMsgAsync({
 										type: "DELETION",
 										data: {
 											key: headerKey
@@ -237,7 +213,7 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 		</HoverBox>
 	})
 
-	switch (fullProps.headerPanel.placement || defaultProps.headerPanel.placement) {
+	switch (headerPanel.placement || defaultProps.headerPanel.placement) {
 		case "top":
 			return (
 				<StackPanel
@@ -252,7 +228,7 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 					<HeaderPanelComponent
 						style={{
 							...defaultProps.headerPanel.style,
-							...fullProps.headerPanel.style
+							...headerPanel.style
 						}}
 						orientation={orientation}>
 
@@ -272,6 +248,6 @@ export const TabsPanelExtended: Component<Props, Messages[keyof Messages]> = (pr
 			)
 
 		default:
-			throw new Error(`Unknown header panel placement: ${fullProps.headerPanel.placement}`)
+			throw new Error(`Unknown header panel placement: ${headerPanel.placement}`)
 	}
 }

@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
-import { Component, Props, Alignment } from '../../types'
+import { Component, ComponentProps, Alignment } from '../../types'
 import { StackPanel } from "../panels/stack-panel"
-import { mergeProps, idProvider } from '../../utils'
+import { idProvider } from '../../utils'
+import { mergeProps } from '../../core'
 
-type Props = Props.Html & {
+
+type Props = ComponentProps.Html & {
 	/** If enabled will trigger a modal closure event in case the escape keyboard is pressed*/
 	closeOnEscape?: boolean,
 

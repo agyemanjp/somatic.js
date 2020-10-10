@@ -6,7 +6,7 @@ import { RecursivePartial } from '@sparkwave/standard'
 
 import { StackView, Props as StackViewProps } from '../views/stack-view'
 import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
-import { Component, Props, CSSProperties } from '../../types'
+import { Component, ComponentProps, CSSProperties } from '../../types'
 import { HoverBox } from "./../boxes/hover-box"
 
 
@@ -14,8 +14,8 @@ export type Messages = (
 	{ type: "selection", data: string }
 )
 
-export type Props = Props.Html & {
-	headers: Props.View<string>
+export type Props = ComponentProps.Html & {
+	headers: ComponentProps.View<string>
 	selectedIndex?: number
 }
 

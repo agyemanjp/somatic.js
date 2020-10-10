@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { hasValue } from "@sparkwave/standard"
-import { createElement } from '../../core'
-import { colorLuminance, mergeProps } from '../../utils'
-import { Component, Icon, CSSProperties, Props, Alignment, Orientation } from "../../types"
+import { hasValue, Obj } from "@sparkwave/standard"
+import { createElement, mergeProps } from '../../core'
+import { Component, Icon, CSSProperties, ComponentProps } from "../../types"
 import { StackPanel } from "../panels/stack-panel"
 import { HoverBox } from "../boxes/hover-box"
 
-export interface PageInstance<P extends string = string> { pageName: P, pageProps: Record<string, unknown> }
+
 export interface Crumb<PageName extends string = string> {
 	/** Title or label to be displayed on the crumb */
 	title: string | { main: string, prefix?: string | JSX.Element, suffix?: string | JSX.Element }
 
 	/** Page with parameter that crumb points to; an undefined or null value means crumb is disabled/inactive */
-	target?: PageInstance<PageName> | (() => unknown)
+	target?: { pageName: PageName, pageProps: Obj<unknown> } | (() => unknown)
 
 	/** Icon use to be displayed next to the title or label */
 	icon?: Component<{ style: CSSProperties }>
@@ -21,13 +20,22 @@ export interface Crumb<PageName extends string = string> {
 	isDisabled?: boolean
 }
 
-export interface Messages {
-	selection: { type: "SELECTION", data: { index: number } },
-}
+export interface Messages { type: "SELECTION", data: { index: number } }
 
-type Props = Props.Themed & {
+export type Props = {
 	/** Array of crumb objects, each defined by properties on the Crumb interface */
 	crumbs: Array<Crumb>,
+
+	/** template used for creating visual crumbs */
+	// crumbTemplate?: Component<Crumb>
+
+	crumbStyle?: CSSProperties
+
+	hoverCrumbStyle?: CSSProperties
+
+	selectedCrumbStyle?: CSSProperties
+
+	disabledCrumbStyle?: CSSProperties
 
 	/** Current selected crumb */
 	currentIndex: number,
@@ -58,21 +66,29 @@ const CrumbMiddle = async (props: { style: CSSProperties }) =>
 		</svg>
 	</svg>
 
-const defaultProps: Partial<Props> = {
+const defaultProps = {
 	crumbs: [],
+	crumbStyle: {},
+	selectedCrumbStyle: {},
+	hoverCrumbStyle: {},
+	disabledCrumbStyle: {},
 	icons: {
 		CrumbLeft: CrumbLeft,
 		CrumbMiddle: CrumbMiddle
 	}
 }
 
-export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (props) => {
-	const fullProps = mergeProps(defaultProps, props)
-	const colors = {
-		visited: props.theme.colors.primary.light,
-		selected: props.theme.colors.secondary.light,
-		disabled: props.theme.colors.whitish
-	}
+export const BreadCrumbs: Component<Props, Messages> = async (props) => {
+	const {
+		icons,
+		crumbs,
+		currentIndex,
+		crumbStyle,
+		hoverCrumbStyle,
+		selectedCrumbStyle,
+		disabledCrumbStyle
+	} = mergeProps(defaultProps, props)
+
 
 	return <StackPanel
 		style={{ paddingTop: "0.25em", paddingBottom: "0.25em", width: "100%", maxWidth: "1200px" }}
@@ -81,37 +97,30 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 
 		{props.crumbs.map((crumb, index) => {
 			const isCrumbDisabled = !hasValue(crumb.target)
-			const CrumbBox = index === 0
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				? fullProps.icons!.CrumbLeft
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				: fullProps.icons!.CrumbMiddle
+			const CrumbBox = index === 0 ? icons?.CrumbLeft : icons?.CrumbMiddle
 
 			return <div style={{ flex: "1 1 200px" }}>
 				<HoverBox
-					theme={props.theme}
 					style={{
-						color: index === props.currentIndex
-							? colors.selected
-							: isCrumbDisabled
-								? colors.disabled
-								: colors.visited,
-						stroke: index === props.currentIndex
-							? colors.selected
-							: isCrumbDisabled
-								? colors.disabled
-								: colors.visited,
+						...crumbStyle,
+						...(index === props.currentIndex ? selectedCrumbStyle : {}),
+						...(isCrumbDisabled ? disabledCrumbStyle : {}),
+						stroke: {
+							...crumbStyle,
+							...(index === props.currentIndex ? selectedCrumbStyle : {}),
+							...(isCrumbDisabled ? disabledCrumbStyle : {})
+						}.color,
 						overflow: "none",
 					}}
 					hoverStyle={{
 						cursor: isCrumbDisabled ? "default" : "pointer",
-						color: index === props.currentIndex
-							? colorLuminance(colors.selected, -0.1)
-							: isCrumbDisabled
-								? colors.disabled
-								: colorLuminance(colors.visited, -0.1),
 						backgroundColor: "transparent",
+						...crumbStyle,
+						...(index === props.currentIndex ? selectedCrumbStyle : {}),
+						...hoverCrumbStyle,
+						...(isCrumbDisabled ? disabledCrumbStyle : {})
 					}}>
+
 					<div
 						// ref={(divElement: HTMLDivElement) => this.crumbContainers.push(divElement)}
 						style={{
@@ -125,33 +134,17 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 								crumb.target()
 							}
 							else if (hasValue(crumb.target) && props.postMsgAsync) {
-								props.postMsgAsync({
-									type: "SELECTION",
-									data: {
-										index: index
-									}
-								})
+								props.postMsgAsync({ type: "SELECTION", data: { index: index } })
 							}
-						}
-						}>
-						<CrumbBox
-							style={{
-								color: "inherit",
-								stroke: "inherit",
-								width: "100%",
-								height: "2.5em"
-							}} />
-						<div
-							style={{
-								position: "absolute",
-								top: "10%",
-								left: "10%",
-							}}>
+						}}>
+
+						<CrumbBox style={{ color: "inherit", stroke: "inherit", width: "100%", height: "2.5em" }} />
+						<div style={{ position: "absolute", top: "10%", left: "10%", }}>
 							{
 								crumb.icon
 									? <crumb.icon
 										style={{
-											color: isCrumbDisabled ? colorLuminance(props.theme.colors.blackish!, 0.8) : `white`,
+											// color: isCrumbDisabled ? colorLuminance(props.theme.colors.blackish!, 0.8) : `white`,
 											height: "1.5em",
 											marginRight: ".25rem",
 											verticalAlign: "middle",
@@ -162,6 +155,7 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 									: null
 							}
 						</div>
+
 						<div
 							style={{
 								position: "absolute",
@@ -175,7 +169,7 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 								// maxWidth: this.state.crumbWidth > 150 ? "70%" : "calc(90% - 2.8em)",
 								maxWidth: "70%",
 								textTransform: "capitalize",
-								color: isCrumbDisabled ? colorLuminance(props.theme.colors.blackish, 0.8) : `white`,
+								color: "inherit",
 								textShadow: isCrumbDisabled ? `0px` : `0px 1px 2px rgba(0,0,0,0.2)`
 							}}>
 							{/* {this.state.crumbWidth > 60 ? crumb.title.main : ``}  */}
@@ -185,7 +179,7 @@ export const BreadCrumbs: Component<Props, Messages[keyof Messages]> = async (pr
 				</HoverBox>
 			</div>
 		})}
-	</StackPanel>
+	</StackPanel >
 
 }
 

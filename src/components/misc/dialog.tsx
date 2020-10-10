@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Array } from "@sparkwave/standard/collections"
-import { createElement } from '../../core'
-import { mergeProps } from '../../utils'
-import { Component, Props, CSSProperties, Icon, Orientation, Alignment } from '../../types'
+import { createElement, mergeProps } from '../../core'
+import { Component, ComponentProps, CSSProperties, Icon, Orientation, Alignment } from '../../types'
 import { AlertType, Alert } from './alert'
 import { StackPanel } from '../panels/stack-panel'
 import { HoverBox } from '../boxes/hover-box'
 import { CommandBox } from '../boxes/command-box'
 
-type Props = Props.Themed & Props.Html & {
+type Props = ComponentProps.Html & {
 	/** Type of the Dialog, using the Alert component types: "warning" | "info" | "error" | "form"  */
 	type?: AlertType
 
@@ -62,7 +61,7 @@ export const Dialog: Component<Props> = (props) => {
 						const isLastButton = button === fullProps.buttons.last()
 
 						return <HoverBox
-							theme={fullProps.theme}
+							// theme={fullProps.theme}
 							style={{
 								flex: "0 1 120px",
 								display: "flex",
@@ -70,7 +69,7 @@ export const Dialog: Component<Props> = (props) => {
 								marginLeft: "0.5em"
 							}}>
 							<CommandBox
-								theme={fullProps.theme}
+								// theme={fullProps.theme}
 								iconPlacement={button.placement}
 								icon={button.icon}
 								iconStyle={{
@@ -107,8 +106,7 @@ export const Dialog: Component<Props> = (props) => {
 			style={fullProps.style}
 			headerStyle={fullProps.headerStyle}
 			type={fullProps.type}
-			title={fullProps.title}
-			theme={fullProps.theme}>
+			title={fullProps.title}>
 			{newContent}
 		</Alert>
 	}

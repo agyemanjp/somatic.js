@@ -10,6 +10,7 @@ import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } fro
 import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
 import { Obj } from "@sparkwave/standard"
 import { flatten } from "@sparkwave/standard/collections"
+import { deepMerge } from "@sparkwave/standard/collections/object"
 
 // export const Fragment = (async () => ({})) as Renderer
 export const fnStore: ((evt: Event) => unknown)[] = []
@@ -181,7 +182,6 @@ export async function renderToString<P extends Obj = Obj>(vnode?: { toString(): 
 	}*/
 }
 
-// const memoizedRenderToString = memoize(renderToString, (obj: VNode) => obj.props)
 
 /** Attach event listeners from element to corresponding nodes in container */
 export function hydrate(element: HTMLElement): void {
@@ -242,17 +242,6 @@ export const removeAllListeners = (targetNode: Node) => {
 	})
 }
 
-/*export function difference(object: Obj, base: Obj): Obj {
-	function changes(_object: Obj, _base: Obj) {
-		return transform(_object, function (result: Obj, value, key) {
-			if (!isEqual(value, _base[key])) {
-				result[key] = (isObject(value) && isObject(_base[key])) ? changes(value, _base[key]) : value
-			}
-		})
-	}
-	return changes(object, base)
-}*/
-
 
 /** Converts a css props object literal to a string */
 export function stringifyStyle(style: CSSProperties, important = false) {
@@ -290,4 +279,9 @@ export function stringifyAttribs(props: Obj) {
 		})
 		.filter(attrHTML => attrHTML?.length > 0)
 		.join(" ")
+}
+
+/** Merge default props with actual props of renderer */
+export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, props: P): D & P & Partial<P> {
+	return deepMerge(defaults, props) as D & P & Partial<P>
 }

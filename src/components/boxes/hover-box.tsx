@@ -3,12 +3,15 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { createElement, stringifyStyle } from "../../core"
 import { first } from "@sparkwave/standard/collections/iterable"
-import { Component, Props, CSSProperties } from '../../types'
-import { idProvider, mergeProps, config } from '../../utils'
+import { Component, ComponentProps, CSSProperties } from '../../types'
+import { mergeProps } from '../../core'
+import { idProvider } from '../../utils'
 
 type Messages = { type: "HOVER_START" } | { type: "HOVER_STOP" }
 
-type Props = Props.Html & Props.Themed & { hoverStyle?: CSSProperties }
+type Props = ComponentProps.Html & {
+	hoverStyle?: CSSProperties
+}
 
 export const HoverBox: Component<Props, Messages> = async (props) => {
 	const defaultProps = Object.freeze({
@@ -23,7 +26,6 @@ export const HoverBox: Component<Props, Messages> = async (props) => {
 
 	const {
 		children,
-		theme,
 		postMsgAsync,
 		hoverStyle,
 		style,
@@ -55,23 +57,22 @@ export const HoverBox: Component<Props, Messages> = async (props) => {
 		child = await (<div {...htmlProps} className={className__}>{child}</div>)
 	}
 
-	const html = `
-		.${className__} {${stringifyStyle({ ...style }, true)}
-
-		}
-        .${className__}:hover {${stringifyStyle({
-		color: config.theme.colors.blackish,
-		...defaultProps.hoverStyle,
-		...hoverStyle
-	}, true)}}
-                
-        input[type="text"].${className__} {${stringifyStyle({
-		backgroundColor: "#fff",
-	}, true)}}
-    `
 
 	return <div style={{ display: "inline" }}>
-		<style>{html}</style>
+		<style>
+			{`
+				.${className__} {
+					${stringifyStyle({ ...style }, true)}
+				}
+				.${className__}:hover {
+					${stringifyStyle({ color: 'black', ...hoverStyle }, true)}
+				}					
+				input[type="text"].${className__} {
+					${stringifyStyle({ backgroundColor: "#fff", }, true)}
+				}
+			`}
+		</style>
+
 		{child}
 	</div>
 }

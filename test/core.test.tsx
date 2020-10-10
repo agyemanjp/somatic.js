@@ -10,7 +10,7 @@
 import * as assert from "assert"
 import { createElement, render, renderToString, hydrate } from '../dist/index.js'
 import { FileInput } from '../dist/components/index.js'
-import { config, idProvider } from '../dist/utils'
+import { idProvider } from '../dist/utils'
 import { constructElement, normalizeHTML } from './utils'
 const jsdom = require('mocha-jsdom')
 jsdom({ url: 'http://localhost', skipWindowCheck: true })
@@ -25,7 +25,7 @@ describe("Somatic", () => {
 				console.log(`Starting 'should return element with same html as renderToString' test`)
 				const vNode = <FileInput
 					icon={() => <span></span>}
-					theme={config.theme}
+					// theme={config.theme}
 					labelStyle={{}}
 					loadAs="array"
 					style={{ height: "auto", width: "auto", fontSize: "14px" }}

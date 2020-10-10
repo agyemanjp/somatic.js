@@ -1424,7 +1424,7 @@ export interface Message {
  * is to update an external props store for the component with the change, 
  * so that the next invocation of the component can use the updated data
  */
-interface InternalPropsChangeMsg<P> extends Message { type: "internal-state-change", data: { delta: RecursivePartial<P> } }
+export interface InternalPropsChangeMsg<P> extends Message { type: "internal-state-change", data: { delta: RecursivePartial<P> } }
 
 /** Props (including state) passed to renderer, as args, on each invocation */
 export type PropsExtended<PropsCore extends unknown, Msg extends Message = Message> = PropsCore & {
@@ -1481,10 +1481,8 @@ export type Alignment = (
 )
 export type Orientation = "vertical" | "horizontal"
 
-export namespace Props {
+export namespace ComponentProps {
 	export type Html = Partial<HTMLAttributes<HTMLElement>>
-
-	export type Themed = { theme: Theme }
 
 	export type Styled = { style: CSSProperties }
 
@@ -1500,7 +1498,7 @@ export namespace Props {
 	}
 }
 
-export type Panel = Props.Panel
+export type Panel = ComponentProps.Panel
 
 
-export type Icon = Component<Props.Styled>
+export type Icon = Component<ComponentProps.Styled>
