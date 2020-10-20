@@ -3,7 +3,7 @@
 /* eslint-disable brace-style */
 import { createElement, mergeProps } from '../../core'
 import { HtmlProps, Icon, CSSProperties, Component } from '../../types'
-import { InternalPropsCache } from "../types"
+import { InternalPropsCache, ComponentFactory } from "../types"
 import { TooltipBox } from '../boxes/tooltip-box'
 import { HoverBox } from '../boxes/hover-box'
 import { UrlInput } from './url-input'
@@ -61,7 +61,7 @@ const defaultProps = {
 	postMsgAsync: async () => { }
 }
 
-export const makeFileInput: (args: { internalPropsCache: InternalPropsCache<InternalProps> }) => Component<Props, Messages> = (args) => async (props) => {
+export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (args) => async (props) => {
 	const {
 		key,
 
@@ -77,11 +77,10 @@ export const makeFileInput: (args: { internalPropsCache: InternalPropsCache<Inte
 		postMsgAsync
 	} = mergeProps(defaultProps, props)
 
-	const internalProps = {
+	const internalProps = mergeProps({
 		uri: "", // default
 		showUrlInput: false, // default
-		...args.internalPropsCache.get(key!)
-	} as InternalProps
+	}, args.internalPropsCache.get(key!))
 
 	const loadRaw = (file: File) => {
 		try {
