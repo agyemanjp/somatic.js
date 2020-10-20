@@ -1,26 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { createElement, mergeProps } from '../../core'
-import { Component, ComponentProps, ButtonHTMLAttributes, Orientation, Alignment, CSSProperties } from '../../types'
+import { Component, HtmlProps, PanelProps, ButtonHTMLAttributes, CSSProperties } from '../../types'
 import { StackPanel } from '../panels/stack-panel'
 
 export const enum BtnMode { Normal = "normal", Selected = "selected", Disabled = "disabled" }
-type HTMLButtonProps = {
-	autoFocus?: boolean;
-	disabled?: boolean;
-	form?: string;
-	formAction?: string;
-	formEncType?: string;
-	formMethod?: string;
-	formNoValidate?: boolean;
-	formTarget?: string;
-	name?: string;
-	type?: string;
-	value?: string | string[] | number;
-}
 
-type Props = ComponentProps.Html & HTMLButtonProps & {
+type Props = HtmlProps & ButtonHTMLAttributes<any> & {
 	/** Icon component to be placed next to the title of the button */
 	icon?: Component<{ style: CSSProperties }>
 
@@ -34,7 +22,7 @@ type Props = ComponentProps.Html & HTMLButtonProps & {
 	style?: CSSProperties
 
 	/** Orientation for the container of the children */
-	orientation?: Orientation
+	orientation?: PanelProps["orientation"]
 
 	/** Tooltip title to display */
 	tooltip?: string
@@ -82,12 +70,13 @@ export const CommandBox: Component<Props, Messages> = async (props) => {
 		...htmlProps
 	} = mergeProps(defaultProps, props)
 
-	const iconContent = props.icon ? <props.icon style={iconStyle || {}} /> : <div />
-	const mainContent = (
-		<StackPanel orientation={orientation} itemsAlignV={"center"} style={{ height: "100%" }}>
-			{children}
-		</StackPanel>
-	)
+	const iconContent = props.icon ? <props.icon key="icon-content" style={iconStyle || {}} /> : <div />
+	const mainContent = <StackPanel key="main-content"
+		orientation={orientation}
+		itemsAlignV={"center"}
+		style={{ height: "100%" }}>
+		{children}
+	</StackPanel>
 
 	return <button
 		title={tooltip}
@@ -101,7 +90,8 @@ export const CommandBox: Component<Props, Messages> = async (props) => {
 			...defaultProps.style,
 			...style
 		}}>
-		<StackPanel
+
+		<StackPanel key="container"
 			itemsAlignV={"center"}
 			orientation={orientation}>
 			{iconPlacement === "before" ? [iconContent, mainContent] : [mainContent, iconContent]}

@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable brace-style */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { createElement } from '../../core'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
-import { Component, ComponentProps, CSSProperties } from '../../types'
+import { Component, ViewProps, CSSProperties } from '../../types'
 import { deepMerge } from '@sparkwave/standard/collections/object'
 
 export type Messages = (
 	{ type: "selection", data: number }
 )
 
-export interface Props<T = unknown> extends StackPanelProps, ComponentProps.View<T> {
+export type Props<T = unknown> = StackPanelProps & ViewProps<T> & {
 	selectedItemIndex: number,
 	selectedItemStyle?: CSSProperties
 }
@@ -18,7 +19,8 @@ export interface Props<T = unknown> extends StackPanelProps, ComponentProps.View
 export const StackView: Component<Props, Messages> = async (props) => {
 	const defaultProps = {
 		selectedItemIndex: 0,
-		selectedItemStyle: {}
+		selectedItemStyle: {},
+		postMsgAsync: async (msg: Messages) => { }
 	}
 
 	try {
@@ -40,7 +42,7 @@ export const StackView: Component<Props, Messages> = async (props) => {
 				.map((item, index) =>
 					<div
 						style={{ ...itemStyle, ...index === selectedItemIndex ? selectedItemStyle : {} }}
-						onClick={(e) => { postMsgAsync!({ type: "selection", data: index }) }}>
+						onClick={(e) => { postMsgAsync({ type: "selection", data: index }) }}>
 
 						{itemTemplate
 							? itemTemplate({ item, index, selected: index === selectedItemIndex })

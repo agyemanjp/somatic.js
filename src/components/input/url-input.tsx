@@ -1,11 +1,12 @@
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as Request from 'request'
+import { getAsync } from '@sparkwave/standard/web'
 import { createElement } from '../../core'
-import { ComponentProps, Component } from '../../types'
+import { Component } from '../../types'
 import { StackPanel } from '../panels/stack-panel'
 import { HoverBox } from '../boxes/hover-box'
+
 
 export type Messages = (
 	| { type: "DATA_LOADED", data: { data: ArrayBuffer, fileName: string } }
@@ -13,8 +14,7 @@ export type Messages = (
 )
 
 export const UrlInput: Component<{}, Messages> = (props) => {
-	return <StackPanel
-		style={{ fontSize: "1rem" }}>
+	return <StackPanel style={{ fontSize: "1rem" }}>
 		<textarea
 			name="dataset_url"
 			onClick={ev => { ev.stopPropagation() }}
@@ -29,20 +29,22 @@ export const UrlInput: Component<{}, Messages> = (props) => {
 
 		</textarea>
 
-		<HoverBox
-			// theme={props.theme}
-			hoverStyle={{ backgroundColor: "rgba(0,0,0,0.1)" }}
-			style={{ height: "2rem", marginLeft: "0.5em" }}>
-			<button
-				style={{ height: "2rem", padding: "0 0.5em", width: "60px" }}
+		<HoverBox hoverStyle={{ backgroundColor: "rgba(0,0,0,0.1)" }} style={{ height: "2rem", marginLeft: "0.5em" }}>
+			<button style={{ height: "2rem", padding: "0 0.5em", width: "60px" }}
 				onClick={(ev) => {
 					ev.preventDefault()
 					ev.stopPropagation()
 					const url = (document.querySelector(`textarea[name="dataset_url"]`) as HTMLInputElement).value
 
-					Request.get(
-						{ uri: url, encoding: null },
-						(err: Error, response: Request.Response, body) => {
+					getAsync({ uri: url }, { badHttpCodeAsError: true })
+						.then((response) => {
+							if (props.postMsgAsync)
+								props.postMsgAsync({
+									type: "DATA_LOADED",
+									data: { data: response.body.buffer, fileName: url }
+								})
+						})
+						.catch(err => {
 							if (err) {
 								if (props.postMsgAsync)
 									props.postMsgAsync({
@@ -52,17 +54,10 @@ export const UrlInput: Component<{}, Messages> = (props) => {
 										}
 									})
 							}
-							else {
-								if (props.postMsgAsync)
-									props.postMsgAsync({
-										type: "DATA_LOADED",
-										data: { data: body.buffer, fileName: url }
-									})
-							}
-
 						})
-				}}> Submit
-					</button>
+				}}>
+				Submit
+			</button>
 		</HoverBox>
 	</StackPanel>
 }

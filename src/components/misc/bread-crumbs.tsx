@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { hasValue, Obj } from "@sparkwave/standard"
 import { createElement, mergeProps } from '../../core'
-import { Component, Icon, CSSProperties, ComponentProps } from "../../types"
+import { Component, Icon, CSSProperties } from "../../types"
 import { StackPanel } from "../panels/stack-panel"
 import { HoverBox } from "../boxes/hover-box"
 
@@ -44,34 +44,37 @@ export type Props = {
 	icons?: { CrumbLeft: Icon, CrumbMiddle: Icon }
 }
 
-const CrumbLeft = async (props: { style: CSSProperties }) =>
-	<svg viewBox="0 0 200 100" version="1.1" xmlns="http://www.w3.org/2000/svg"
-		preserveAspectRatio="none"
-		style={{ ...props.style }}>
-		<svg viewBox="0 0 200 100" preserveAspectRatio="none">
-			<g>
-				<polygon vectorEffect="non-scaling-stroke" points="2,5 185,5 197,50 185,95 2,95" strokeWidth={1} />
-			</g>
-		</svg>
+const CrumbLeft: Icon = async (props) => <svg
+	viewBox="0 0 200 100"
+	version="1.1"
+	xmlns="http://www.w3.org/2000/svg"
+	preserveAspectRatio="none"
+	style={{ ...props.style }}>
+	<svg viewBox="0 0 200 100" preserveAspectRatio="none">
+		<g>
+			<polygon vectorEffect="non-scaling-stroke" points="2,5 185,5 197,50 185,95 2,95" strokeWidth={1} />
+		</g>
 	</svg>
+</svg>
 
-const CrumbMiddle = async (props: { style: CSSProperties }) =>
-	<svg viewBox="0 0 200 100" version="1.1" xmlns="http://www.w3.org/2000/svg"
-		preserveAspectRatio="none"
-		style={{ ...props.style }}>
-		<svg viewBox="0 0 200 100" preserveAspectRatio="none">
-			<g>
-				<polygon vectorEffect="non-scaling-stroke" points="2,5 185,5 197,50 185,95 2,95 14,50" strokeWidth={1} />
-			</g>
-		</svg>
+const CrumbMiddle: Icon = async (props) => <svg
+	viewBox="0 0 200 100" version="1.1"
+	xmlns="http://www.w3.org/2000/svg"
+	preserveAspectRatio="none"
+	style={{ ...props.style }}>
+	<svg viewBox="0 0 200 100" preserveAspectRatio="none">
+		<g>
+			<polygon vectorEffect="non-scaling-stroke" points="2,5 185,5 197,50 185,95 2,95 14,50" strokeWidth={1} />
+		</g>
 	</svg>
+</svg>
 
 const defaultProps = {
-	crumbs: [],
-	crumbStyle: {},
-	selectedCrumbStyle: {},
-	hoverCrumbStyle: {},
-	disabledCrumbStyle: {},
+	crumbs: [] as Array<Crumb>,
+	crumbStyle: {} as CSSProperties,
+	selectedCrumbStyle: {} as CSSProperties,
+	hoverCrumbStyle: {} as CSSProperties,
+	disabledCrumbStyle: {} as CSSProperties,
 	icons: {
 		CrumbLeft: CrumbLeft,
 		CrumbMiddle: CrumbMiddle
@@ -138,7 +141,12 @@ export const BreadCrumbs: Component<Props, Messages> = async (props) => {
 							}
 						}}>
 
-						<CrumbBox style={{ color: "inherit", stroke: "inherit", width: "100%", height: "2.5em" }} />
+						{
+							CrumbBox
+								? <CrumbBox style={{ color: "inherit", stroke: "inherit", width: "100%", height: "2.5em" }} />
+								: undefined
+						}
+
 						<div style={{ position: "absolute", top: "10%", left: "10%", }}>
 							{
 								crumb.icon
@@ -180,6 +188,5 @@ export const BreadCrumbs: Component<Props, Messages> = async (props) => {
 			</div>
 		})}
 	</StackPanel >
-
 }
 

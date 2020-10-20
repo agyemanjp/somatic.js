@@ -9,13 +9,25 @@
 
 import * as assert from "assert"
 import { createElement, render, renderToString, hydrate } from '../dist/index.js'
-import { FileInput } from '../dist/components/index.js'
+import { makeFileInput } from '../dist/components'
 import { idProvider } from '../dist/utils'
 import { constructElement, normalizeHTML } from './utils'
 const jsdom = require('mocha-jsdom')
 jsdom({ url: 'http://localhost', skipWindowCheck: true })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+const internalPropsCache = {
+	storage: {} as Record<string, any>,
+	get: function (key: string) { return this.storage[key] },
+	set: function (key: string, payload: any) {
+		this.storage[key] = {
+			...this.storage[key],
+			payload
+		}
+	},
+}
+const FileInput = makeFileInput({ internalPropsCache })
 
 describe("Somatic", () => {
 	describe("render", () => {
@@ -25,7 +37,6 @@ describe("Somatic", () => {
 				//console.log(`Starting 'should return element with same html as renderToString' test`)
 				const vNode = <FileInput
 					icon={() => <span></span>}
-					// theme={config.theme}
 					labelStyle={{}}
 					loadAs="array"
 					style={{ height: "auto", width: "auto", fontSize: "14px" }}

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement, mergeProps } from '../../core'
-import { Component, ComponentProps, CSSProperties, Icon } from '../../types'
+import { Component, HtmlProps, CSSProperties, Icon } from '../../types'
 import { HoverBox } from '../boxes/hover-box'
 import { StackPanel } from '../panels/stack-panel'
 
@@ -14,7 +16,7 @@ export interface Option {
 	style?: CSSProperties
 }
 
-type Props = ComponentProps.Html & {
+type Props = HtmlProps & {
 	/** Array of option objects */
 	choices: Option[]
 
@@ -29,22 +31,22 @@ type Props = ComponentProps.Html & {
 }
 
 export const defaultProps = {
-	options: [],
+	options: [] as Option[],
 	selectedSwitchIndex: 0,
-	style: { height: "40px" },
-	type: "multiple-choices" as const
+	style: {},
+	type: "multiple-choices" as const,
+	postMsgAsync: async () => { }
 }
 
 type Messages = ({ type: "SWITCH_CHANGE", data: { index: number } })
 
 export const ToggleSwitch: Component<Props, Messages> = (props) => {
-	const { type, choices, style, selectedSwitchIndex, postMsgAsync } = mergeProps(defaultProps, props)
+	const { choices, style, selectedSwitchIndex, postMsgAsync } = mergeProps(defaultProps, props)
 	const sliderWidth = style.height
 	// const borderColor = colorLuminance(config.theme.colors.whitish, -0.1)
 
 	return choices.length == 2
 		? <HoverBox
-			// theme={config.theme}
 			style={{
 				display: "flex",
 				flexDirection: selectedSwitchIndex === 1 ? "row-reverse" : "row",
@@ -71,15 +73,12 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 
 			<div
 				onClick={() => {
-					if (postMsgAsync) {
-						postMsgAsync({
-							type: "SWITCH_CHANGE",
-							data: {
-								index: props.selectedSwitchIndex === 0 ? 1 : 0
-							}
-						})
-					}
+					postMsgAsync({
+						type: "SWITCH_CHANGE",
+						data: { index: props.selectedSwitchIndex === 0 ? 1 : 0 }
+					})
 				}}>
+
 				<div
 					style={{
 						height: sliderWidth,
@@ -90,6 +89,7 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 						transform: "scale(0.8)"
 					}}>
 				</div>
+
 				<div
 					style={{
 						width: "calc(100% - 40px)",
@@ -106,30 +106,27 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 					{props.choices[selectedSwitchIndex].label}
 				</div>
 			</div>
-		</HoverBox>
-		: <StackPanel orientation={"horizontal"} style={{ height: "100%", ...props.style }}>
+		</HoverBox >
+
+		: <StackPanel
+			orientation={"horizontal"}
+			style={{ height: "100%", ...style }}>
+
 			{
-				props.choices.map((option, index) => {
-					const IconItem = option.icon
-					const border = selectedSwitchIndex === index
-						? `2px solid`
-						: `thin solid`
+				choices.map((option, index) => {
+					const border = selectedSwitchIndex === index ? `2px solid` : `thin solid`
 
 					return <HoverBox
-						// theme={config.theme}
 						style={{
 							backgroundColor: "white",
 							color: props.selectedSwitchIndex === index
 								? 'white'
 								: "black",
-							// userSelect: "none",
 							height: "100%",
 							flex: "1"
 						}}
 						hoverStyle={{
-							backgroundColor: option.isDisabled !== true
-								? "whitesmoke"
-								: "inherit",
+							backgroundColor: option.isDisabled !== true ? "whitesmoke" : "inherit",
 							borderColor: props.style && props.style.borderColor
 						}}>
 
@@ -153,31 +150,23 @@ export const ToggleSwitch: Component<Props, Messages> = (props) => {
 
 							}}
 							onClick={() => {
-								if (props.postMsgAsync && option.isDisabled !== true)
-									props.postMsgAsync({
-										type: "SWITCH_CHANGE",
-										data: {
-											index: index
-										}
-									})
+								if (option.isDisabled !== true)
+									postMsgAsync({ type: "SWITCH_CHANGE", data: { index } })
 							}}>
 							{
 								option.customElement
 									? <StackPanel
-										style={{
-											height: '100%',
-											width: "100%",
-											margin: "auto"
-										}}
+										style={{ height: '100%', width: "100%", margin: "auto" }}
 										itemsAlignV={"center"}
 										itemsAlignH={"center"}>
 										{option.customElement}
 									</StackPanel>
+
 									: <StackPanel
 										style={{ height: '100%', width: "100%", margin: "auto", }}
 										itemsAlignV={"center"}
 										itemsAlignH={"center"}>
-										{IconItem && <IconItem style={{}} />}
+										{option.icon ? <option.icon key={`option-icon-${index}`} style={{}} /> : undefined}
 										{option.label}
 									</StackPanel>
 							}

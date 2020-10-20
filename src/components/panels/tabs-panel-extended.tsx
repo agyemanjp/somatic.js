@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { createElement, mergeProps } from '../../core'
-import { Component, ComponentProps, CSSProperties, KeyboardEvent, FormEvent, MouseEvent } from '../../types'
+import { Component, PanelProps, HtmlProps, CSSProperties, KeyboardEvent, FormEvent, MouseEvent } from '../../types'
 import { StackPanel } from './stack-panel'
 import { HoverBox } from "../boxes/hover-box"
 
@@ -12,7 +12,7 @@ export type Messages = (
 	| { type: "EDITING", data: { key: string, newName: string } }
 )
 
-export type Props = ComponentProps.Panel & ComponentProps.Html & {
+export type Props = PanelProps & HtmlProps & {
 	/** Key of the currently selected tab, it defines which content to show from the headerItems */
 	selectedTabKey: string | undefined,
 
@@ -24,7 +24,7 @@ export type Props = ComponentProps.Panel & ComponentProps.Html & {
 
 	/** Properties for the header Panel */
 	headerPanel: {
-		component?: Component<ComponentProps.Panel>,
+		component?: Component<PanelProps>,
 		placement?: "top" | "right" | "bottom" | "left"
 		style?: CSSProperties
 	}

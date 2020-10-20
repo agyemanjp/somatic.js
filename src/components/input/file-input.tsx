@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable brace-style */
 import { createElement, mergeProps } from '../../core'
-import { ComponentProps, Icon, CSSProperties, Component } from '../../types'
+import { HtmlProps, Icon, CSSProperties, Component } from '../../types'
+import { InternalPropsCache } from "../types"
 import { TooltipBox } from '../boxes/tooltip-box'
 import { HoverBox } from '../boxes/hover-box'
 import { UrlInput } from './url-input'
+
 
 type InternalProps = {
 	/** If enabled it will show the url input */
@@ -14,28 +17,31 @@ type InternalProps = {
 	uri?: string
 }
 
-type Props = ComponentProps.Html & InternalProps & {
-	/** Title to be shown in the file input box */
-	uploadTitle?: string,
+type Props = HtmlProps & {
+	/** Click upload prompt text */
+	clickPrompt?: string,
 
-	/** Title to be show as the drag and drop description */
-	dragTitle?: string,
+	/** Drag/drop upload prompt text */
+	dragPrompt?: string,
 
-	/** Option to enable if we want to receive the data as a string or an array of bytes */
+	/** URL upload prompt text */
+	urlPrompt?: string,
+
+	/** Whether to receive the data as a string or an array of bytes */
 	loadAs?: "array" | "string"
 
 	/** Style for the label */
-	labelStyle: CSSProperties
+	labelStyle?: CSSProperties
 
-	/** Icon to be shown next to the label */
-	icon: Icon
+	/** File upload icon */
+	icon?: Icon
 
-	/** Enable the input to support loading of multiple files */
+	/** Enable loading of multiple files */
 	multiple?: boolean
 }
 
 type Messages = (
-	{ type: "SHOW_URL_INPUT", defaultHandler: (props: Partial<Props>) => InternalProps }
+	| { type: "SHOW_URL_INPUT", defaultHandler: (props: Partial<Props>) => InternalProps }
 	| { type: "ON_DATA_LOADING", data: { fileName: string } }
 	| { type: "ON_DATA_LOADED", data: { data: unknown, fileName: string } }
 	| { type: "ON_LOADING_ERROR", data: { err: Error } }
@@ -43,23 +49,39 @@ type Messages = (
 )
 
 const defaultProps = {
+	clickPrompt: "Click in this box",
+	dragPrompt: "Drag the file into this box",
+	urlPrompt: "Enter a URL",
+
+	multiple: false,
 	loadAs: "string" as Props["loadAs"],
-	// theme: config.theme,
-	style: {},
-	labelStyle: {},
-	showUrlInput: false,
-	uri: ""
+	style: {} as CSSProperties,
+	labelStyle: {} as CSSProperties,
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	postMsgAsync: async () => { }
 }
 
-export const FileInput: Component<Props, Messages> = async (props) => {
+export const makeFileInput: (args: { internalPropsCache: InternalPropsCache<InternalProps> }) => Component<Props, Messages> = (args) => async (props) => {
 	const {
-		showUrlInput,
+		key,
+
+		clickPrompt,
+		dragPrompt,
+		urlPrompt,
+
 		multiple,
 		title,
 		style,
 		labelStyle,
+		children,
 		postMsgAsync
 	} = mergeProps(defaultProps, props)
+
+	const internalProps = {
+		uri: "", // default
+		showUrlInput: false, // default
+		...args.internalPropsCache.get(key!)
+	} as InternalProps
 
 	const loadRaw = (file: File) => {
 		try {
@@ -69,26 +91,16 @@ export const FileInput: Component<Props, Messages> = async (props) => {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				const bytes = (loadInfo.target as any).result as ArrayBuffer
 				// if (!loadAs || loadAs === "array") {
-				if (postMsgAsync) {
-					postMsgAsync({
-						type: "ON_DATA_LOADED",
-						data: {
-							data: bytes,
-							fileName: file.name.toLowerCase()
-						}
-					})
-				}
-
-			}
-
-			if (postMsgAsync) {
 				postMsgAsync({
-					type: "ON_DATA_LOADING",
+					type: "ON_DATA_LOADED",
 					data: {
-						fileName: file.name
+						data: bytes,
+						fileName: file.name.toLowerCase()
 					}
 				})
 			}
+
+			postMsgAsync({ type: "ON_DATA_LOADING", data: { fileName: file.name } })
 
 			console.log(`Reading file "${file.name}" ...`)
 			reader.readAsArrayBuffer(file)
@@ -172,7 +184,7 @@ export const FileInput: Component<Props, Messages> = async (props) => {
 					...labelStyle
 				}}>
 
-				<div
+				<div /* icon */
 					style={{
 						border: "solid 3px currentColor",
 						borderRadius: "2.5em",
@@ -184,7 +196,10 @@ export const FileInput: Component<Props, Messages> = async (props) => {
 						color: "rgb(200,200,200)"
 					}}>
 
-					<props.icon style={{ height: "80%", width: "80%", position: "absolute", left: "10%", top: "5%", }} />
+					{props.icon
+						? <props.icon style={{ height: "80%", width: "80%", position: "absolute", left: "10%", top: "5%", }} />
+						: undefined
+					}
 				</div>
 
 				<div style={{ display: "flex", flexDirection: "row", alignItems: "center", textAlign: "left" }}>
@@ -203,32 +218,27 @@ export const FileInput: Component<Props, Messages> = async (props) => {
 					</span>
 				</div>
 
-				<div style={{ textAlign: "left", width: "100%" }}>
-					<p>• {"Click in this box,"}</p>
-					<p>• {"Drag the file into this box, OR"}</p>
+				<div /* prompts */ style={{ textAlign: "left", width: "100%" }}>
+					<p>• {`${clickPrompt}, OR`}</p>
+					<p>• {`${dragPrompt}, OR`}</p>
 					<p style={{ marginBottom: "0.5em" }}>• <HoverBox
-						// theme={theme}
 						style={{ textDecoration: "underline" }}>
 						<div style={{ display: "inline" }}
 							onMouseEnter={() => { /*console.log("Mouse enter") */ }}
 							onClick={e => {
 								e.preventDefault()
 								e.stopPropagation()
-								if (postMsgAsync)
-									postMsgAsync({
-										type: "SHOW_URL_INPUT",
-										defaultHandler: () => ({
-											showUrlInput: showUrlInput ? false : true
-										})
-									})
-							}}
-						>{"Enter a URL"}</div>
-					</HoverBox>
+								// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+								args.internalPropsCache.set(key!, {
+									showUrlInput: !internalProps.showUrlInput
+								})
+							}}>
+							{`${urlPrompt}`}
+						</div></HoverBox>
 					</p>
 					{
-						showUrlInput
+						internalProps.showUrlInput
 							? <UrlInput
-								// theme={config.theme}
 								postMsgAsync={async msg => {
 									switch (msg.type) {
 										case "LOADING_ERROR":
@@ -254,8 +264,9 @@ export const FileInput: Component<Props, Messages> = async (props) => {
 											break
 										default:
 									}
-								}}
-							/>
+								}}>
+							</UrlInput>
+
 							: undefined
 					}
 				</div>

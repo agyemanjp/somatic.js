@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
-import { Component, ComponentProps, Alignment } from '../../types'
+import { Component, HtmlProps } from '../../types'
 import { StackPanel } from "../panels/stack-panel"
 import { idProvider } from '../../utils'
 import { mergeProps } from '../../core'
 
 
-type Props = ComponentProps.Html & {
+type Props = HtmlProps & {
 	/** If enabled will trigger a modal closure event in case the escape keyboard is pressed*/
 	closeOnEscape?: boolean,
 
@@ -22,13 +22,13 @@ const defaultProps = {
 type Messages = { type: "CLOSURE" }
 
 export const ModalBox: Component<Props, Messages> = (props) => {
-	const fullProps = mergeProps(defaultProps, props)
+	const { postMsgAsync, style, children, closeOnEscape, closeOnClickOutside, ...htmlProps } = mergeProps(defaultProps, props)
 	const id = idProvider.next()
 
 	const handleKeyUp = (e: KeyboardEvent) => {
 		if (e.keyCode === 27) {
-			if (fullProps.postMsgAsync)
-				fullProps.postMsgAsync({
+			if (postMsgAsync)
+				postMsgAsync({
 					type: "CLOSURE"
 				})
 		}
@@ -38,28 +38,27 @@ export const ModalBox: Component<Props, Messages> = (props) => {
 		const clickOnBackground = (e.target as Element).matches(`#${id}`)
 
 		if (clickOnBackground) {
-			if (fullProps.postMsgAsync) {
-				fullProps.postMsgAsync({
+			if (postMsgAsync) {
+				postMsgAsync({
 					type: "CLOSURE"
 				})
 			}
 		}
 	}
 
-	if (fullProps.closeOnEscape === true) {
+	if (closeOnEscape === true) {
 		window.addEventListener('keyup', handleKeyUp, false)
 	}
 
-	if (fullProps.closeOnClickOutside === true) {
+	if (closeOnClickOutside === true) {
 		window.addEventListener('click', handleOutsideClick, false)
 	}
-	const { children, postMsgAsync, ...htmlProps } = props
 
 	return <StackPanel /* backdrop */
 		{...htmlProps}
 		id={id}
 		style={{
-			...fullProps.style,
+			...style,
 			position: 'fixed',
 			top: 0,
 			bottom: 0,

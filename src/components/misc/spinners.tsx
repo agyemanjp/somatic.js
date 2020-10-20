@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../../core'
-import { Component, CSSProperties, Theme } from '../../types'
+import { Component, CSSProperties } from '../../types'
 
-interface Props { theme: Theme, style?: CSSProperties }
+type Props = { style?: CSSProperties }
 
 export const create = (svgElement: JSX.Element): Component<Props> => {
 	return async (props) => {
@@ -11,11 +11,11 @@ export const create = (svgElement: JSX.Element): Component<Props> => {
 			{...elt.props}
 
 			preserveAspectRatio='xMidYMid meet'
-			fill={props.theme.colors.primary.dark}
-			stroke={props.theme.colors.primary.dark}
+			fill={props.style?.background ?? "black"}
+			stroke={props.style?.background ?? "black"}
 			style={{
-				color: props.theme.colors.primary.dark,
-				backgroundColor: props.theme.colors.primary.light,
+				color: props.style?.background ?? "black",
+				backgroundColor: props.style?.background ?? "transparent",
 				...props.style
 			}}>
 

@@ -5,11 +5,11 @@ import { getAsync } from "@sparkwave/standard/web"
 import { keys } from "@sparkwave/standard/collections"
 import { isKeyOf } from "@sparkwave/standard/utility"
 import { createElement, render, stringifyStyle } from '../../core'
-import { Component, ComponentProps, Icon, CSSProperties, MouseEvent } from '../../types'
+import { Component, HtmlProps, Icon, CSSProperties, MouseEvent } from '../../types'
 import { idProvider } from '../../utils'
 import { mergeProps } from '../../core'
 
-export type Props = {
+export type Props = HtmlProps & {
 	/** If defined, this will be the content of the tooltip pop-up, rather than a definition from the "definitions" property */
 	explicitTooltip?: JSX.Element | string | undefined
 
@@ -40,14 +40,14 @@ const defaultProps: Props = {
 	definitions: {}
 }
 
-const ExternalLinkIcon: Icon = () => <svg />
+// const ExternalLinkIcon: Icon = () => <svg />
 
 /** The content of the tooltips will be stored here, 
  * so that we don't have to query it from a URL every time a tooltip is hovered 
  */
 const tooltips: Record<string, string> = {}
 
-export const TooltipBox: Component<Props & ComponentProps.Html> = async (props) => {
+export const TooltipBox: Component<Props> = async (props) => {
 	const { children, style, explicitTooltip, noRecursion, width, height, definitions } = mergeProps(defaultProps, props)
 
 	const tooltipId = idProvider.next()

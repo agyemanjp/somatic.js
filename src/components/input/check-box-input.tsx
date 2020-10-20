@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement, mergeProps } from '../../core'
-import { ComponentProps, CSSProperties, Component, Icon } from '../../types'
+import { StyleProps, CSSProperties, Component, Icon } from '../../types'
 
-type Props = Partial<ComponentProps.Styled> & {
+export type Props = StyleProps & {
 	isChecked: boolean,
 	checkedColor?: string,
 
@@ -21,7 +22,8 @@ const defaultProps = {
 	isChecked: false,
 	isDisabled: false,
 	disabledStyle: { color: "#ebebe0" },
-	checkedColor: "#d477b0"
+	checkedColor: "#d477b0",
+	postMsgAsync: async () => { }
 }
 
 export const CheckBoxInput: Component<Props> = async (props) => {
@@ -41,11 +43,11 @@ export const CheckBoxInput: Component<Props> = async (props) => {
 
 	return <div
 		style={{ ...checkBoxStyle }}
-		onClick={e => { if (!isDisabled && postMsgAsync) postMsgAsync({ type: "ON_CLICK" }) }}>
+		onClick={e => { if (!isDisabled) postMsgAsync({ type: "ON_CLICK" }) }}>
 
 		{isChecked
-			? <icons.checked style={{ color: isDisabled ? disabledStyle?.color : checkedColor, height: iconSize }} />
-			: <icons.unchecked style={{ height: iconSize }} />
+			? <icons.checked key="checked-icon" style={{ color: isDisabled ? disabledStyle?.color : checkedColor, height: iconSize }} />
+			: <icons.unchecked key="unchecked-icon" style={{ height: iconSize }} />
 		}
 	</div>
 }
