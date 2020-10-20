@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement, mergeProps } from '../../core'
 import { Component, CSSProperties, Icon } from '../../types'
-import { Obj, Primitive, isString } from "@sparkwave/standard/utility"
 
 export type AlertType = "warning" | "info" | "error" | "form"
 
@@ -22,23 +21,20 @@ type Props = {
 	errorIcon?: Icon
 }
 
+const defaultProps = Object.freeze({
+	type: "info" as AlertType,
+	style: {
+		border: "thin solid ",
+		textAlign: "center",
+		margin: "auto",
 
-export const Alert: Component<Props> = async (props) => {
+		borderRadius: "0.15rem",
+		background: `white`,
+		color: `black`
+	}
+})
 
-	const defaultProps = Object.freeze({
-		children: [] as unknown[],
-		type: "info" as AlertType,
-		style: {
-			border: "thin solid ",
-			textAlign: "center",
-			margin: "auto",
-
-			borderRadius: "0.15rem",
-			background: `white`,
-			color: `black`
-		}
-	})
-
+export const Alert: Component<Props> = (props) => {
 	const {
 		type,
 		errorIcon,
@@ -109,7 +105,7 @@ export const Alert: Component<Props> = async (props) => {
 	}
 
 	const getContent = () => {
-		return children.map(child => {
+		return children && children.map(child => {
 			switch (typeof child) {
 				case "undefined":
 					return <p>""</p>

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { map, first, last } from "@sparkwave/standard/collections"
 import { createElement, mergeProps } from '../../core'
+import { AlertType, Alert } from '../misc/alert'
 import { Component, HtmlProps, CSSProperties, Icon } from '../../types'
-import { AlertType, Alert } from './alert'
 import { StackPanel } from '../panels/stack-panel'
 import { HoverBox } from '../boxes/hover-box'
 import { CommandBox } from '../boxes/command-box'
 
-export type ButtonInfo = { label: string, icon?: Icon, action: () => void, placement?: "before" | "after" }
+export type ButtonInfo = { label: string, icon?: Icon, action: () => void, placement?: "before" | "after", style?: CSSProperties }
 
 export type Props = HtmlProps & {
 	/** Type of the Dialog, using the Alert component types: "warning" | "info" | "error" | "form"  */
@@ -29,7 +29,7 @@ const defaultProps = {
 	buttons: [] as ButtonInfo[]
 }
 
-export const Dialog: Component<Props> = async (props) => {
+export const DialogBox: Component<Props> = async (props) => {
 	const { buttons, type, headerStyle, style, title, postMsgAsync } = mergeProps(defaultProps, props)
 
 	const getContent = () => {
@@ -69,7 +69,8 @@ export const Dialog: Component<Props> = async (props) => {
 								flex: "0 1 120px",
 								display: "flex",
 								justifyContent: "center",
-								marginLeft: "0.5em"
+								marginLeft: "0.5em",
+								padding: "0.5rem"
 							}}>
 							<CommandBox
 								// theme={theme}
@@ -85,9 +86,9 @@ export const Dialog: Component<Props> = async (props) => {
 									marginLeft: 0
 								}}
 								style={{
-									padding: "0.5rem",
 									fontWeight: isLastButton ? "bold" : "normal",
-									fontVariant: "all-small-caps"
+									fontVariant: "all-small-caps",
+									...buttonInfo.style
 								}}
 								postMsgAsync={async () => button.action()}>
 								<div

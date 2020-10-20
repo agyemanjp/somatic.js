@@ -41,7 +41,7 @@ export async function render<P extends Obj = Obj>(vnode?: Primitive | Object | V
 				const _props: PropsExtended<P, Message> = {
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
 					..._vnode.props,
-					key: _vnode.props.key
+					key: _vnode.props?.key
 						? parentKey
 							? parentKey + "__" + _vnode.props.key
 							: _vnode.props.key
