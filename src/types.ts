@@ -1447,9 +1447,9 @@ export type PanelProps = Partial<{
 	itemsAlignV: "start" | "end" | "center" | "stretch" | "uniform" | "dock",
 	orientation: "vertical" | "horizontal"
 }>
-export type ViewProps<TData = {}> = {
+export type ViewProps<TData = Obj> = {
 	sourceData: Iterable<TData>
-	itemTemplate?: (itemInfo: { item: TData, selected: boolean, index: number }) => JSX.Element
+	itemTemplate?: (itemInfo: { item: TData/*, selected: boolean*/, index: number }) => JSX.Element
 	itemStyle?: CSSProperties
 }
 export type Icon = Component<StyleProps>

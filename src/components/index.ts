@@ -1,5 +1,4 @@
 export { StackPanel } from './panels/stack-panel'
-export { FormFieldsPanel } from './panels/form-fields-panel'
 export { TabsPanelExtended } from './panels/tabs-panel-extended'
 export { TabsPanel } from './panels/tabs-panel'
 
@@ -18,6 +17,6 @@ export { SelectInput } from './input/select-input'
 export { ToggleSwitch } from './input/toggle-switch'
 
 export { Alert } from './misc/alert'
-// export { Spinners } from './misc/spinners'
+export * from './misc/form'
 
 export * from "./types"

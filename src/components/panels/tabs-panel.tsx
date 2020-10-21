@@ -23,7 +23,7 @@ export const TabsPanel: Component<Props, Messages> = (props) => {
 	const defaultProps/*: RecursivePartial<Props>*/ = {
 		selectedIndex: 0,
 		headers: {
-			itemTemplate: (headerInfo: { item: unknown, selected: boolean, index: number }) => <div>{headerInfo.item}</div>,
+			itemTemplate: (headerInfo: { item: unknown, index: number }) => <div>{headerInfo.item}</div>,
 			selectedItemStyle: {
 				fontWeight: "bold"
 			}

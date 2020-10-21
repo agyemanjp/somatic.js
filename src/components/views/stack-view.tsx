@@ -45,7 +45,7 @@ export const StackView: Component<Props, Messages> = async (props) => {
 						onClick={(e) => { postMsgAsync({ type: "selection", data: index }) }}>
 
 						{itemTemplate
-							? itemTemplate({ item, index, selected: index === selectedItemIndex })
+							? itemTemplate({ item, index })
 							: item
 						}
 					</div>

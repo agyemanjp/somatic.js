@@ -139,13 +139,7 @@ export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (
 				const fileInput = (document.querySelector("input#files") as HTMLInputElement)
 				fileInput.click()
 			}}
-			style={{
-				padding: "0.5em",
-				cursor: "pointer",
-				display: "flex",
-				height: "100%",
-				width: "100%"
-			}}
+			style={{ padding: "0.5em", cursor: "pointer", display: "flex", height: "100%", width: "100%" }}
 			onDragOver={(ev) => {
 				ev.preventDefault()
 				ev.stopPropagation();
@@ -202,10 +196,9 @@ export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (
 				</div>
 
 				<div style={{ display: "flex", flexDirection: "row", alignItems: "center", textAlign: "left" }}>
-					{
-						title
-							? <div style={{ fontSize: "1.5em" }}> {title} </div>
-							: null
+					{title
+						? <div style={{ fontSize: "1.5em" }}> {title} </div>
+						: null
 					}
 					<span>
 						<b>{"To upload a "}
@@ -220,20 +213,22 @@ export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (
 				<div /* prompts */ style={{ textAlign: "left", width: "100%" }}>
 					<p>• {`${clickPrompt}, OR`}</p>
 					<p>• {`${dragPrompt}, OR`}</p>
-					<p style={{ marginBottom: "0.5em" }}>• <HoverBox
-						style={{ textDecoration: "underline" }}>
-						<div style={{ display: "inline" }}
-							onMouseEnter={() => { /*console.log("Mouse enter") */ }}
-							onClick={e => {
-								e.preventDefault()
-								e.stopPropagation()
-								// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-								args.internalPropsCache.set(key!, {
-									showUrlInput: !internalProps.showUrlInput
-								})
-							}}>
-							{`${urlPrompt}`}
-						</div></HoverBox>
+					<p style={{ marginBottom: "0.5em" }}>•
+						<HoverBox
+							style={{ textDecoration: "underline" }}>
+							<div style={{ display: "inline" }}
+								onMouseEnter={() => { /*console.log("Mouse enter") */ }}
+								onClick={e => {
+									e.preventDefault()
+									e.stopPropagation()
+									// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+									args.internalPropsCache.set(key!, {
+										showUrlInput: !internalProps.showUrlInput
+									})
+								}}>
+								{`${urlPrompt}`}
+							</div>
+						</HoverBox>
 					</p>
 					{
 						internalProps.showUrlInput

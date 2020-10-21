@@ -43,8 +43,8 @@ export async function render<P extends Obj = Obj>(vnode?: Primitive | Object | V
 					..._vnode.props,
 					key: _vnode.props?.key
 						? parentKey
-							? parentKey + "__" + _vnode.props.key
-							: _vnode.props.key
+							? parentKey + "__" + _vnode.props?.key
+							: _vnode.props?.key
 						: undefined,
 					children: [...children]
 				}
