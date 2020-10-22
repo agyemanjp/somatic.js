@@ -14,8 +14,8 @@ export { UrlInput } from './input/url-input'
 export { CheckBoxInput } from './input/check-box-input'
 export { makeFileInput } from './input/file-input'
 export { SelectInput } from './input/select-input'
-export { ToggleSwitch } from './misc/toggle-switch'
 
+export { ToggleSwitch } from './misc/toggle-switch'
 export { Alert } from './misc/alert'
 export * from './misc/form'
 

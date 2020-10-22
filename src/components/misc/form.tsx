@@ -1,6 +1,7 @@
+/* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Dictionary, Obj, deepMerge } from "@sparkwave/standard"
+import { Dictionary, Obj, keys, deepMerge } from "@sparkwave/standard"
 
 import { createElement, mergeProps } from "../../core"
 import { Component, CSSProperties, PropsExtended } from "../../types"
@@ -18,16 +19,15 @@ export interface FormField<E extends Obj = Obj> {
 	defaultValue?: string | boolean
 }
 
-export type InternalProps = {
+type InternalProps = {
 	validationErrors: Obj<string>
 }
 
-export type Props = {
+export type InputFieldGroupProps = {
 	fields: FormField[]
 	labelsPosition?: "left" | "top"
 }
-
-export type Messages = (
+export type InputFieldGroupMessages = (
 	| {
 		type: "FIELD_UPDATED",
 		data: { name: string, value: string | boolean }
@@ -44,7 +44,7 @@ const defaultProps = ({
 	labelsPosition: "top" as "left" | "top"
 })
 
-export const Form: Component<Props, Messages> = async (props) => {
+export const InputFieldGroup: Component<InputFieldGroupProps, InputFieldGroupMessages> = async (props) => {
 	// const fieldInputs: { [key: string]: HTMLInputElement | undefined } = {}
 
 	const { fields, validationErrors, labelsPosition, postMsgAsync, key } = mergeProps(defaultProps, props)
@@ -215,5 +215,52 @@ export const Form: Component<Props, Messages> = async (props) => {
 			})
 		}
 	</div>
+}
 
+/** Form validator
+ * @param requiredFieldsState object that maps field with their current content
+ * @param validationErrorsState object that maps fields with their errors. Empty string if not
+ * @param fieldsToEvaluate array with the fields to evaluate. If undefined, all fields are evaluated. 
+ */
+export const validateForm = <T extends Obj>(args:
+	{
+		requiredFieldsState: { [key in keyof T]: string },
+		validationErrorsState: { [key in keyof T]: string },
+		fieldsToEvaluate?: (keyof T)[],
+		emailValidator: (email: string) => string | undefined
+		pwdValidator: (email: string) => string | undefined
+	}) => {
+	const { requiredFieldsState, validationErrorsState, fieldsToEvaluate, pwdValidator, emailValidator } = args
+
+	const requiredFields = { ...requiredFieldsState }
+	const validationErrors = { ...validationErrorsState }
+
+	keys(requiredFields).forEach(field => {
+		if (fieldsToEvaluate === undefined || fieldsToEvaluate.includes(field as any)) {
+			requiredFields[field] = requiredFields[field].trim()
+
+			const emailValidation = emailValidator(requiredFields[field])
+			const pwdValidation = pwdValidator(requiredFields[field])
+
+			if (requiredFields[field] === "") {
+				validationErrors[field] = `Fields should not be empty`
+			}
+			else if (field === "emailAddress" && emailValidation) {
+				validationErrors[field] = emailValidation
+			}
+			else if (field === "password" && pwdValidation) {
+				validationErrors[field] = pwdValidation
+			}
+			else
+				validationErrors[field] = ""
+		}
+		else {
+			validationErrors[field] = ""
+		}
+	})
+
+	return {
+		validationErrors,
+		requiredFields
+	}
 }
