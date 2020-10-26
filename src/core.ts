@@ -17,12 +17,12 @@ import { deepMerge } from "@sparkwave/standard/collections/object"
 export const fnStore: ((evt: Event) => unknown)[] = []
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createElement<P extends Obj = Obj, T extends VNodeType<P> = VNodeType<P>>(type: T, props: P, ...children: any[]): VNode<P, T> {
+export function createElement<P extends Obj, T extends VNodeType<P>>(type: T, props: P, ...children: any[]): VNode<P, T> {
 	return { type, props, children }
 }
 
 /** Render virtual node to DOM node */
-export async function render<P extends Obj = Obj>(vnode?: Primitive | Object | VNode<PropsExtended<P>> | Promise<VNode<PropsExtended<P>>>, parentKey?: string): Promise<Node> {
+export async function render<Props extends Obj, State>(vnode?: Primitive | Object | VNode<PropsExtended<Props, Message, State>> | Promise<VNode<PropsExtended<Props, Message, State>>>, parentKey?: string): Promise<Node> {
 	// console.log(`Starting render of vnode: ${JSON.stringify(vnode)}`)
 
 	if (vnode === null || vnode === undefined) {
@@ -38,7 +38,7 @@ export async function render<P extends Obj = Obj>(vnode?: Primitive | Object | V
 		switch (typeof _vnode.type) {
 			case "function": {
 				// console.log(`vNode type is function, rendering as custom component`)
-				const _props: PropsExtended<P, Message> = {
+				const _props: PropsExtended<Props, Message, State> = {
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
 					..._vnode.props,
 					key: _vnode.props?.key
@@ -70,17 +70,22 @@ export async function render<P extends Obj = Obj>(vnode?: Primitive | Object | V
 				const nodeProps = _vnode.props || {}
 				Object.keys(nodeProps).forEach(propKey => {
 					try {
-						const propValue: unknown = nodeProps[propKey]
+						const propValue = nodeProps[propKey]
 						if (propValue !== undefined) {
 							const htmlPropKey = propKey.toUpperCase()
-							if (isEventKey(htmlPropKey) && typeof propValue === "function") { // The first condition is here simply to prevent useless searches through the events list.
+							if (isEventKey(htmlPropKey) && typeof propValue === "function") {
+								// The first condition above is to prevent useless searches through the events list.
 								const eventId = idProvider.next()
 								// We attach an eventId per possible event: an element having an onClick and onHover will have 2 such properties.
 								node.setAttribute(`data-${htmlPropKey}-eventId`, eventId)
-								/** If the vNode had an event, we add it to the document-wide event. We keep track of every event and its matching element through the eventId: each listener contains one, each DOM element as well */
+
+								// If the vNode had an event, we add it to the document-wide event. 
+								// We keep track of every event and its matching element through the eventId:
+								// each listener contains one, each DOM element as well
 								addListener(document, eventNames[htmlPropKey], (e: Event) => {
 									const target = e.target as HTMLElement | null
-									if (target !== document.getRootNode()) { // We don't want to do anything when the document itself is the target
+									if (target !== document.getRootNode()) {
+										// We don't want to do anything when the document itself is the target
 										// We bubble up to the actual target of an event: a <div> with an onClick might be triggered by a click on a <span> inside
 										const intendedTarget = target ? target.closest(`[data-${htmlPropKey.toLowerCase()}-eventId="${eventId}"]`) : undefined
 
@@ -191,7 +196,6 @@ export async function renderToString<P extends Obj = Obj>(vnode?: { toString(): 
 		return String(_vnode)
 	}*/
 }
-
 
 /** Attach event listeners from element to corresponding nodes in container */
 export function hydrate(element: HTMLElement): void {

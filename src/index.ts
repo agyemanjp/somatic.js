@@ -12,6 +12,7 @@ declare global {
 
 		interface IntrinsicElements {
 			html: Somatic.HtmlHTMLAttributes<HTMLHeadingElement>,
+			form: Somatic.HTMLAttributes<HTMLFormElement>;
 			div: Somatic.HTMLAttributes<HTMLDivElement>;
 			h1: Somatic.HTMLAttributes<HTMLHeadingElement>,
 			h2: Somatic.HTMLAttributes<HTMLHeadingElement>,
