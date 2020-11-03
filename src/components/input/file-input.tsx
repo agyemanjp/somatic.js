@@ -3,7 +3,7 @@
 /* eslint-disable brace-style */
 import { createElement, mergeProps } from '../../core'
 import { HtmlProps, Icon, CSSProperties, Component } from '../../types'
-import { InternalPropsCache, ComponentFactory } from "../types"
+import { StateCache, ComponentFactory } from "../types"
 import { TooltipBox } from '../boxes/tooltip-box'
 import { HoverBox } from '../boxes/hover-box'
 import { UrlInput } from './url-input'
@@ -80,7 +80,7 @@ export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (
 	const internalProps = mergeProps({
 		uri: "", // default
 		showUrlInput: false, // default
-	}, args.internalPropsCache.get(key!))
+	}, args.internalPropsCache.get(key || ""))
 
 	const loadRaw = (file: File) => {
 		try {
