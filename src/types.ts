@@ -1415,7 +1415,7 @@ export interface Message {
 // type Children =  ({ toString(): string } | VNode<any> | Children)[]
 
 /** Full props exposed to component consumers */
-export type PropsExtended<Props extends Obj, Msg extends Message = Message, State = {}> = Props & {
+export type PropsExtended<Props, Msg extends Message = Message, State = {}> = Props & {
 	/** Child content of the renderer */
 	children?: any[],
 
