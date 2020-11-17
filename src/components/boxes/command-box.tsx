@@ -46,7 +46,8 @@ const defaultProps = {
 		borderColor: "#666",
 		borderWidth: "1px",
 		borderStyle: "solid",
-		padding: "0.25em",
+		padding: "0",
+		margin: "0",
 		overflow: "hidden",
 		borderRadius: "2px",
 		cursor: "pointer"

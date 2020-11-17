@@ -7,7 +7,19 @@ import { StackPanel } from '../panels/stack-panel'
 import { HoverBox } from '../boxes/hover-box'
 import { CommandBox } from '../boxes/command-box'
 
-export type ButtonInfo = { label: string, icon?: Icon, action: () => void, placement?: "before" | "after", style?: CSSProperties }
+export type ButtonInfo = {
+	/** Button label */
+	label: string, icon?: Icon,
+
+	/** Function triggered when the button is clicked */
+	action: () => void,
+
+	/** Icon position relative to the label */
+	iconPlacement?: "before" | "after",
+
+	/** Style for the button */
+	style?: CSSProperties
+}
 
 export type Props = HtmlProps & {
 	/** Type of the Dialog, using the Alert component types: "warning" | "info" | "error" | "form"  */
@@ -26,7 +38,7 @@ export type Props = HtmlProps & {
 const defaultProps = {
 	headerStyle: { padding: "0.5em 1em" } as Props["headerStyle"],
 	type: "info" as const,
-	buttons: [] as ButtonInfo[]
+	buttons: [] as Iterable<ButtonInfo>
 }
 
 export const DialogBox: Component<Props> = async (props) => {
@@ -48,15 +60,14 @@ export const DialogBox: Component<Props> = async (props) => {
 	try {
 		const newContent = <StackPanel
 			orientation={"vertical"}
-			style={{ height: "100%", width: "100%", padding: "1em" }}
-			itemsAlignH={"center"}
-			itemsAlignV={"center"}>
+			style={{ height: "100%", width: "100%", padding: "1em", overflow: "hidden" }}>
 
 			{getContent()}
 
 			<StackPanel
 				orientation={"horizontal"}
-				style={{ marginTop: "1rem" }}>
+				itemsAlignH={"center"}
+				style={{ marginTop: "1rem", width: "100%" }}>
 				{[
 					...map(buttons, (buttonInfo, index) => {
 						const button = buttonInfo
@@ -73,8 +84,7 @@ export const DialogBox: Component<Props> = async (props) => {
 								padding: "0.5rem"
 							}}>
 							<CommandBox
-								// theme={theme}
-								iconPlacement={button.placement}
+								iconPlacement={button.iconPlacement}
 								icon={button.icon}
 								iconStyle={{
 									left: "0",
