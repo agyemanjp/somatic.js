@@ -2,7 +2,7 @@
 import { map, first, last } from "@sparkwave/standard/collections"
 import { createElement, mergeProps } from '../../core'
 import { AlertType, Alert } from '../misc/alert'
-import { Component, HtmlProps, CSSProperties, Icon } from '../../types'
+import { Component, StyleProps, CSSProperties, Icon } from '../../types'
 import { StackPanel } from '../panels/stack-panel'
 import { HoverBox } from '../boxes/hover-box'
 import { CommandBox } from '../boxes/command-box'
@@ -21,7 +21,7 @@ export type ButtonInfo = {
 	style?: CSSProperties
 }
 
-export type Props = HtmlProps & {
+export type Props = StyleProps & {
 	/** Type of the Dialog, using the Alert component types: "warning" | "info" | "error" | "form"  */
 	type?: AlertType
 
@@ -48,15 +48,20 @@ export const DialogBox: Component<Props> = async (props) => {
 		switch (typeof (props.children)) {
 			case "undefined":
 				return <p>""</p>
+
 			case "string":
-				return <div>{(props.children as string).split("\n").map((item, i) => {
-					return <p>{item}</p>
-				})}</div>
+				return <div>
+					{(props.children as string).split("\n").map((item, i) => {
+						return <p>{item}</p>
+					})}
+				</div>
+
 			case "object":
 			default:
 				return props.children
 		}
 	}
+
 	try {
 		const newContent = <StackPanel
 			orientation={"vertical"}
@@ -75,7 +80,6 @@ export const DialogBox: Component<Props> = async (props) => {
 						const isLastButton = button === last(buttons)
 
 						return <HoverBox
-							// theme={theme}
 							style={{
 								flex: "0 1 120px",
 								display: "flex",
@@ -125,7 +129,7 @@ export const DialogBox: Component<Props> = async (props) => {
 		</Alert>
 	}
 	catch (e) {
-		console.error(`DialogPanel render: ${e}`)
+		console.error(`DialogBox render\n${e}`)
 		throw e
 	}
 }
