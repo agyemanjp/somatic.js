@@ -16,7 +16,7 @@ export { makeFileInput } from './input/file-input'
 export { SelectInput } from './input/select-input'
 
 export { ToggleSwitch } from './misc/toggle-switch'
-export { Alert } from './misc/alert'
-export * from './misc/form'
+export * from './misc/alert'
+export * from './misc/input-field-group'
 
 export * from "./types"
