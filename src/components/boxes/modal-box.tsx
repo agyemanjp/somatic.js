@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement } from '../../core'
+import { createElement, mergeProps } from '../../core'
 import { Component, HtmlProps } from '../../types'
-import { StackPanel } from "../panels/stack-panel"
 import { idProvider } from '../../utils'
-import { mergeProps } from '../../core'
 
 
 type Props = HtmlProps & {
@@ -28,9 +26,7 @@ export const ModalBox: Component<Props, Messages> = (props) => {
 	const handleKeyUp = (e: KeyboardEvent) => {
 		if (e.keyCode === 27) {
 			if (postMsgAsync)
-				postMsgAsync({
-					type: "CLOSURE"
-				})
+				postMsgAsync({ type: "CLOSURE" })
 		}
 	}
 
@@ -54,24 +50,17 @@ export const ModalBox: Component<Props, Messages> = (props) => {
 		window.addEventListener('click', handleOutsideClick, false)
 	}
 
-	return <StackPanel /* backdrop */
-		{...htmlProps}
+	return <div /* backdrop */
 		id={id}
 		style={{
-			...style,
 			position: 'fixed',
-			top: 0,
-			bottom: 0,
-			left: 0,
-			right: 0,
+			top: 0, bottom: 0, left: 0, right: 0,
 			backgroundColor: 'rgba(0,0,0,0.3)',
 			zIndex: 10
-		}}
-		itemsAlignH={"center"}
-		itemsAlignV={"center"}>
+		}}>
 
-		{children}
+		<div style={{ ...style, ...htmlProps }}>{children}</div>
 
-	</StackPanel>
+	</div>
 
 }
