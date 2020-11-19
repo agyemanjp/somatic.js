@@ -203,7 +203,7 @@ export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (
 					<span>
 						<b>{"To upload a "}
 							<TooltipBox
-								explicitTooltip={"Accepted formats: csv, xls, xlsx, json, ods, txt, html, prn, dbf"}>
+								explicitContent={"Accepted formats: csv, xls, xlsx, json, ods, txt, html, prn, dbf"}>
 								<span>{"data file"}</span>
 							</TooltipBox>
 						</b>
