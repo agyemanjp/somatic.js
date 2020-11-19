@@ -248,7 +248,7 @@ export async function TooltipBox<T>(props: PropsExtended<Props<T>>): JSX.Element
 		</span>
 	}
 	else { // We indicate that on element load, we need to apply tooltips
-		return <span id={tooltipId} style={{ ...style }}>
+		return <span id={tooltipId}>
 			<style onLoad={() => { assignTooltips(tooltipId) }} />
 			{children}
 		</span>
