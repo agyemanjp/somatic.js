@@ -9,7 +9,7 @@
 
 import * as assert from "assert"
 import { createElement, render, renderToString, hydrate } from '../dist/index.js'
-import { makeFileInput } from '../dist/components'
+import { FileInput } from '../dist/components'
 import { idProvider } from '../dist/utils'
 import { constructElement, normalizeHTML } from './utils'
 const jsdom = require('mocha-jsdom')
@@ -17,17 +17,16 @@ jsdom({ url: 'http://localhost', skipWindowCheck: true })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-const internalPropsCache = {
+const stateCache = {
 	storage: {} as Record<string, any>,
-	get: function (key: string) { return this.storage[key] },
-	set: function (key: string, payload: any) {
+	getAsync: async function (key: string) { return this.storage[key] },
+	setAsync: async function (key: string, payload: any) {
 		this.storage[key] = {
 			...this.storage[key],
 			payload
 		}
-	},
+	}
 }
-const FileInput = makeFileInput({ internalPropsCache })
 
 describe("Somatic", () => {
 	describe("render", () => {
@@ -36,6 +35,7 @@ describe("Somatic", () => {
 			try {
 				//console.log(`Starting 'should return element with same html as renderToString' test`)
 				const vNode = <FileInput
+					stateCache={stateCache}
 					icon={() => <span></span>}
 					labelStyle={{}}
 					loadAs="array"

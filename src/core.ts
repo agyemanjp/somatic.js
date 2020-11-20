@@ -299,3 +299,21 @@ export function stringifyAttribs(props: Obj) {
 export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, props: P): D & P & Partial<P> {
 	return deepMerge(defaults, props) as D & P & Partial<P>
 }
+
+
+export function getSimpleStateCache<Props, State>(props: PropsExtended<Props, any, State>, defaultState: State) {
+	const stateCache = props.stateCache
+	const key = props.key
+
+	const setAsync = async (delta: Partial<State>) => {
+		if (stateCache && key) {
+			stateCache.setAsync(key, delta)
+		}
+	}
+	const getAsync = async () => {
+		const cachedState = stateCache ? await stateCache.getAsync(key ?? "") : undefined
+		return mergeProps(defaultState, cachedState ?? {}) as State
+	}
+
+	return { getAsync, setAsync }
+}

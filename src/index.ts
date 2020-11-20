@@ -2,7 +2,6 @@
 export * from './types'
 export * from './core'
 export * from './components'
-export * from './components/types'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as Somatic from "./types"

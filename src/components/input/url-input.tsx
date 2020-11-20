@@ -8,7 +8,7 @@ import { StackPanel } from '../panels/stack-panel'
 import { HoverBox } from '../boxes/hover-box'
 
 
-export type Messages = (
+type Messages = (
 	| { type: "DATA_LOADED", data: { data: ArrayBuffer, fileName: string } }
 	| { type: "LOADING_ERROR", data: { error: Error } }
 )

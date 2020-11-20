@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable brace-style */
-import { createElement, mergeProps } from '../../core'
-import { HtmlProps, Icon, CSSProperties, Component } from '../../types'
-import { StateCache, ComponentFactory } from "../types"
+import { createElement, mergeProps, getSimpleStateCache } from '../../core'
+import { HtmlProps, Icon, CSSProperties, Component, PropsExtended } from '../../types'
+import { objectCurry, noop } from "@sparkwave/standard/functional"
 import { TooltipBox } from '../boxes/tooltip-box'
 import { HoverBox } from '../boxes/hover-box'
 import { UrlInput } from './url-input'
 
 
-type InternalProps = {
+type State = {
 	/** If enabled it will show the url input */
 	showUrlInput?: boolean
 
@@ -41,7 +42,7 @@ type Props = HtmlProps & {
 }
 
 type Messages = (
-	| { type: "SHOW_URL_INPUT", defaultHandler: (props: Partial<Props>) => InternalProps }
+	| { type: "SHOW_URL_INPUT", defaultHandler: (props: Partial<Props>) => State }
 	| { type: "ON_DATA_LOADING", data: { fileName: string } }
 	| { type: "ON_DATA_LOADED", data: { data: unknown, fileName: string } }
 	| { type: "ON_LOADING_ERROR", data: { err: Error } }
@@ -61,7 +62,7 @@ const defaultProps = {
 	postMsgAsync: async () => { }
 }
 
-export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (args) => async (props) => {
+export async function FileInput(props: PropsExtended<Props, Messages, State>) {
 	const {
 		key,
 
@@ -77,10 +78,8 @@ export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (
 		postMsgAsync
 	} = mergeProps(defaultProps, props)
 
-	const internalProps = mergeProps({
-		uri: "", // default
-		showUrlInput: false, // default
-	}, args.internalPropsCache.get(key || ""))
+	const stateCache = getSimpleStateCache(props, { uri: "", showUrlInput: false })
+	const { showUrlInput, uri } = await stateCache.getAsync()
 
 	const loadRaw = (file: File) => {
 		try {
@@ -222,16 +221,14 @@ export const makeFileInput: ComponentFactory<Props, InternalProps, Messages> = (
 									e.preventDefault()
 									e.stopPropagation()
 									// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-									args.internalPropsCache.set(key!, {
-										showUrlInput: !internalProps.showUrlInput
-									})
+									stateCache.setAsync({ showUrlInput: !showUrlInput })
 								}}>
 								{`${urlPrompt}`}
 							</div>
 						</HoverBox>
 					</p>
 					{
-						internalProps.showUrlInput
+						showUrlInput
 							? <UrlInput
 								postMsgAsync={async msg => {
 									switch (msg.type) {

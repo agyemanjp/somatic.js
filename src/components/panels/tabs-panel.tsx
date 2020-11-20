@@ -6,7 +6,7 @@ import { RecursivePartial } from '@sparkwave/standard'
 
 import { StackView, Props as StackViewProps } from '../views/stack-view'
 import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
-import { Component, HtmlProps, ViewProps, CSSProperties } from '../../types'
+import { Component, CSSProperties, HtmlProps, ViewProps } from '../../types'
 
 
 export type Messages = (

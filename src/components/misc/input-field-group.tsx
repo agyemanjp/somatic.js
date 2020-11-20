@@ -5,7 +5,7 @@ import { Dictionary, Obj, keys, deepMerge } from "@sparkwave/standard"
 
 import { createElement, mergeProps } from "../../core"
 import { Component, CSSProperties, PropsExtended } from "../../types"
-import { StackPanel, HoverBox, CheckBoxInput } from "../index"
+import { StackPanel, HoverBox, ToggleInput } from "../index"
 
 
 export interface FormField<E extends Obj = Obj> {
@@ -99,13 +99,10 @@ export const InputFieldGroup: Component<InputFieldGroupProps, InputFieldGroupMes
 									}
 								}}>
 
-								<CheckBoxInput
-									icons={{ checked: () => <svg />, unchecked: () => <svg /> }}
-									iconSize="1.5em"
+								<ToggleInput
 									style={{ display: "inline-block", verticalAlign: "middle" }}
-									isChecked={fields.find(f => f.name === field.name)?.defaultValue as boolean || false}
-									isDisabled={false}>
-								</CheckBoxInput>
+									toggleState={(fields.find(f => f.name === field.name)?.defaultValue as boolean || false) === true ? "on" : "off"}>
+								</ToggleInput>
 
 								<input
 									onKeyPress={(e) => {
