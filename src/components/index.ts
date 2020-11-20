@@ -8,7 +8,7 @@ export { CommandBox } from './boxes/command-box'
 export { HoverBox } from './boxes/hover-box'
 export { ModalBox } from './boxes/modal-box'
 export { DialogBox } from './boxes/dialog-box'
-export { TooltipBox } from './boxes/tooltip-box'
+// export { TooltipBox } from './boxes/tooltip-box'
 
 export * from './input/url-input'
 export * from './input/toggle-input'
