@@ -1,20 +1,16 @@
-export { StackPanel } from './panels/stack-panel'
-export { TabsPanelExtended } from './panels/tabs-panel-extended'
-export { TabsPanel } from './panels/tabs-panel'
 
-export { StackView } from './views/stack-view'
+export { StackPanel } from './stack-panel'
+export { TabsPanel } from './tabs-panel'
 
-export { CommandBox } from './boxes/command-box'
-export { HoverBox } from './boxes/hover-box'
-export { ModalBox } from './boxes/modal-box'
-export { DialogBox } from './boxes/dialog-box'
-// export { TooltipBox } from './boxes/tooltip-box'
+export { StackView } from './stack-view'
 
-export * from './input/url-input'
-export * from './input/toggle-input'
-export * from './input/file-input'
-export * from './input/select-input'
+export { CommandBox } from './command-box'
+export { HoverBox } from './hover-box'
+export { ModalBox } from './modal-box'
 
-export * from './misc/input-field-group'
+export { DialogBox } from './dialog-box'
+
+export * from './toggle-input'
+export * from './select-input'
 
 export * from './utils'

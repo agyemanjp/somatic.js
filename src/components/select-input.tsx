@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement } from '../../core'
-import { mergeProps } from '../../core'
-import { Component, HtmlProps } from '../../types'
+import { createElement, mergeProps } from '../core'
+import { Component, HtmlProps } from '../types'
 
 /** Type that defines the struct we need to send when we want to pass groups of options to this component. */
 export interface OptionsGrouped { label: string, options: (string | number)[] }

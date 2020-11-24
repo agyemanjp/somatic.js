@@ -5,9 +5,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { deepMerge } from '@sparkwave/standard/collections/object'
 
-import { createElement, mergeProps } from '../../core'
-import { CSSProperties, PropsExtended, ViewProps } from '../../types'
-import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
+import { createElement, mergeProps } from '../core'
+import { CSSProperties, PropsExtended, ViewProps } from '../types'
+import { StackPanel, Props as StackPanelProps } from './stack-panel'
 
 export type Messages = (
 	{ type: "selection", data: number }

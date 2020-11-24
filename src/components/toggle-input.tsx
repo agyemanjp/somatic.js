@@ -2,9 +2,9 @@
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { createElement, mergeProps, getSimpleStateCache } from '../../core'
-import { Component, StyleProps, Icon, } from '../../types'
-import { makeIcon } from '../utils'
+import { createElement, mergeProps, getSimpleStateCache } from '../core'
+import { Component, StyleProps, Icon, } from '../types'
+import { makeIcon } from './utils'
 
 type Messages = ({ type: "TOGGLE", data: { toggleState: "on" | "off" } })
 

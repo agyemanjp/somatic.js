@@ -2,9 +2,9 @@
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { createElement, mergeProps } from '../../core'
-import { Component, HtmlProps, PanelProps, ButtonHTMLAttributes, CSSProperties } from '../../types'
-import { StackPanel } from '../panels/stack-panel'
+import { createElement, mergeProps } from '../core'
+import { Component, HtmlProps, PanelProps, ButtonHTMLAttributes, CSSProperties } from '../types'
+import { StackPanel } from './stack-panel'
 
 export const enum BtnMode { Normal = "normal", Selected = "selected", Disabled = "disabled" }
 

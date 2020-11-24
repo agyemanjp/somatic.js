@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement, mergeProps } from '../../core'
-import { Component, HtmlProps } from '../../types'
-import { idProvider } from '../../utils'
+import { createElement, mergeProps } from '../core'
+import { Component, HtmlProps } from '../types'
+import { idProvider } from '../utils'
 
 
 type Props = HtmlProps & {

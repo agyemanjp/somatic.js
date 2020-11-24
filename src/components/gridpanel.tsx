@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement } from '../../core'
-import { Component, PanelProps, HtmlProps } from '../../types'
+import { createElement } from '../core'
+import { Component, PanelProps, HtmlProps } from '../types'
 
 export type Props = PanelProps & HtmlProps & {
 }
 
-export const StackPanel: Component<Props> = async (props) => {
+export const GridPanel: Component<Props> = async (props) => {
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":
@@ -51,7 +51,7 @@ export const StackPanel: Component<Props> = async (props) => {
 				{...htmlProps}
 
 				style={{
-					display: "flex",
+					display: "grid",
 					...style,
 					flexDirection: orientation === "vertical" ? "column" : "row",
 					justifyContent: justifyContent(),
@@ -63,7 +63,7 @@ export const StackPanel: Component<Props> = async (props) => {
 			</div>)
 	}
 	catch (e) {
-		console.error(`StackPanel render: ${e}`)
+		console.error(`GridPanel render: ${e}`)
 		throw e
 	}
 }

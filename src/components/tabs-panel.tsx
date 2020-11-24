@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { createElement } from '../../core'
 import { deepMerge } from '@sparkwave/standard/collections/object'
 import { RecursivePartial } from '@sparkwave/standard'
 
-import { StackView, Props as StackViewProps } from '../views/stack-view'
-import { StackPanel, Props as StackPanelProps } from '../panels/stack-panel'
-import { Component, CSSProperties, HtmlProps, ViewProps } from '../../types'
+import { StackView, Props as StackViewProps } from './stack-view'
+import { StackPanel, Props as StackPanelProps } from './stack-panel'
+import { Component, CSSProperties, HtmlProps, ViewProps } from '../types'
+import { createElement } from '../core'
 
 
 export type Messages = (
@@ -58,9 +58,3 @@ export const TabsPanel: Component<Props, Messages> = (props) => {
 	</StackPanel>
 }
 
-
-// export function renderChildren(children: JSX.Element[] | undefined) {
-// 	return children?.map((child, index) => {
-// 		return child
-// 	})
-// }

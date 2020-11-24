@@ -9,7 +9,7 @@
 
 import * as assert from "assert"
 import { createElement, render, renderToString, hydrate } from '../dist/index.js'
-import { FileInput } from '../dist/components'
+// import { FileInput } from '../dist/components'
 import { idProvider } from '../dist/utils'
 import { constructElement, normalizeHTML } from './utils'
 const jsdom = require('mocha-jsdom')
@@ -31,7 +31,7 @@ const stateCache = {
 describe("Somatic", () => {
 	describe("render", () => {
 
-		it("should return element with same html as renderToString", async () => {
+		/*it("should return element with same html as renderToString", async () => {
 			try {
 				//console.log(`Starting 'should return element with same html as renderToString' test`)
 				const vNode = <FileInput
@@ -56,7 +56,7 @@ describe("Somatic", () => {
 			catch (e) {
 				console.error(e)
 			}
-		})
+		})*/
 
 		/*it("should render element with the same text content", async () => {
 			// We create a small div element with className and background color and pass it to the render function

@@ -39,13 +39,8 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 			case "function": {
 				// console.log(`vNode type is function, rendering as custom component`)
 				const _props: PropsExtended<Props, Message, State> = {
-					// eslint-disable-next-line @typescript-eslint/no-empty-function
 					..._vnode.props,
-					key: _vnode.props?.key
-						? parentKey
-							? parentKey + "__" + _vnode.props?.key
-							: _vnode.props?.key
-						: undefined,
+					key: `${parentKey ?? ""}__${(vnode as any).props?.key ?? ""}`,
 					children: [...children]
 				}
 				const element = await _vnode.type(_props)
@@ -63,7 +58,7 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 
 				// render and append children in order
 				await Promise
-					.all(children.map(c => render(c, parentKey)))
+					.all(children.map((c, i) => render(c, `${i}_${parentKey ?? ""}`)))
 					.then(rendered => rendered.forEach(child => node.appendChild(child)))
 
 				// attach attributes
@@ -300,8 +295,8 @@ export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, pro
 	return deepMerge(defaults, props) as D & P & Partial<P>
 }
 
-
-export function getSimpleStateCache<Props, State>(props: PropsExtended<Props, any, State>, defaultState: State) {
+/** Get curried form of state cache that does not require key argument */
+export function getSimpleStateCache<Props, State extends Obj, D extends Partial<State>>(props: PropsExtended<Props, any, State>, defaultState: D) {
 	const stateCache = props.stateCache
 	const key = props.key
 
@@ -312,7 +307,7 @@ export function getSimpleStateCache<Props, State>(props: PropsExtended<Props, an
 	}
 	const getAsync = async () => {
 		const cachedState = stateCache ? await stateCache.getAsync(key ?? "") : undefined
-		return mergeProps(defaultState, cachedState ?? {}) as State
+		return mergeProps(defaultState, cachedState ?? {}) as D & State & Partial<State>
 	}
 
 	return { getAsync, setAsync }
