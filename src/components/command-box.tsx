@@ -8,24 +8,15 @@ import { StackPanel } from './stack-panel'
 
 export const enum BtnMode { Normal = "normal", Selected = "selected", Disabled = "disabled" }
 
-type Props = HtmlProps & ButtonHTMLAttributes<any> & {
-	/** Icon component to be placed next to the title of the button */
-	icon?: Component<{ style: CSSProperties }>
+type Props = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
+	/** Icon component to be placed next/before the title of the button */
+	icon?: JSX.Element
 
 	/** Relative postion of the icon in relationship with the title */
 	iconPlacement?: "before" | "after"
 
-	/** Icon style */
-	iconStyle?: CSSProperties
-
-	/** Style of the component */
-	style?: CSSProperties
-
 	/** Orientation for the container of the children */
 	orientation?: PanelProps["orientation"]
-
-	/** Tooltip title to display */
-	tooltip?: string
 
 	/** how colors should change on hover (or selection) */
 	hoverEffect?: "darken" | "invert"
@@ -53,7 +44,6 @@ const defaultProps = {
 		cursor: "pointer"
 	},
 
-	iconStyle: { padding: 0 },
 	iconPlacement: "before" as const,
 
 	mode: BtnMode.Normal
@@ -63,7 +53,7 @@ export const CommandBox: Component<Props, Messages> = async (props) => {
 	const {
 		tooltip,
 		orientation,
-		iconPlacement, iconStyle, icon,
+		iconPlacement, icon,
 		style, hoverEffect,
 		mode,
 		postMsgAsync,
@@ -71,7 +61,10 @@ export const CommandBox: Component<Props, Messages> = async (props) => {
 		...htmlProps
 	} = mergeProps(defaultProps, props)
 
-	const iconContent = props.icon ? <props.icon key="icon-content" style={iconStyle || {}} /> : <div />
+	const iconContent = props.icon
+		? <div style={{ padding: 0 }}>{props.icon} </div>
+		: <div />
+
 	const mainContent = <StackPanel key="main-content"
 		orientation={orientation}
 		itemsAlignV={"center"}

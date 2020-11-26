@@ -40,7 +40,7 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 				// console.log(`vNode type is function, rendering as custom component`)
 				const _props: PropsExtended<Props, Message, State> = {
 					..._vnode.props,
-					key: `${parentKey ?? ""}__${(vnode as any).props?.key ?? ""}`,
+					key: `${parentKey ?? ""}_${(vnode as any).props?.key ?? ""}`,
 					children: [...children]
 				}
 				const element = await _vnode.type(_props)
