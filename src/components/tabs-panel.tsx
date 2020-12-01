@@ -16,26 +16,29 @@ export type Messages = (
 export type Props = HtmlProps & {
 	headers: ViewProps<string>
 	selectedIndex?: number
+	selectedItemStyle: CSSProperties
 }
 
 export const TabsPanel: Component<Props, Messages> = (props) => {
 
 	const defaultProps/*: RecursivePartial<Props>*/ = {
 		selectedIndex: 0,
+		selectedItemStyle: {
+			fontWeight: "bold"
+		},
 		headers: {
-			itemTemplate: (headerInfo: { item: unknown, index: number }) => <div>{headerInfo.item}</div>,
-			selectedItemStyle: {
-				fontWeight: "bold"
-			}
-		}
+			itemTemplate: (headerInfo: { item: unknown, index: number }) => <div>{headerInfo.item}</div>
+		},
+		postMsgAsync: async (msg: Messages) => ""
 	}
 
 	const {
 		headers,
 		selectedIndex,
+		selectedItemStyle,
 
 		children,
-
+		postMsgAsync,
 		style,
 		...htmlProps
 	} = deepMerge(defaultProps, props)
@@ -46,8 +49,14 @@ export const TabsPanel: Component<Props, Messages> = (props) => {
 			orientation={"horizontal"}
 			sourceData={headers.sourceData}
 			itemStyle={headers.itemStyle}
-			selectedItemStyle={headers.selectedItemStyle}
+			selectedItemStyle={selectedItemStyle}
 			itemTemplate={headers.itemTemplate}
+			postMsgAsync={async msg => {
+				postMsgAsync({
+					type: "selection",
+					data: [...headers.sourceData][msg.data]
+				})
+			}}
 			selectedItemIndex={selectedIndex}>
 
 		</StackView>
