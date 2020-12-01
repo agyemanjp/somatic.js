@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { deepMerge } from '@sparkwave/standard/collections/object'
-import { RecursivePartial } from '@sparkwave/standard'
+import { deepMerge, } from '@sparkwave/standard/collections/object'
 
 import { StackView, Props as StackViewProps } from './stack-view'
 import { StackPanel, Props as StackPanelProps } from './stack-panel'
 import { Component, CSSProperties, HtmlProps, ViewProps } from '../types'
-import { createElement } from '../core'
+import { createElement, makeComponent } from '../core'
 
 
 export type Messages = (
@@ -19,7 +18,7 @@ export type Props = HtmlProps & {
 	selectedItemStyle: CSSProperties
 }
 
-export const TabsPanel: Component<Props, Messages> = (props) => {
+export const TabsPanel = makeComponent({})<Props>(async (props) => {
 
 	const defaultProps/*: RecursivePartial<Props>*/ = {
 		selectedIndex: 0,
@@ -65,5 +64,5 @@ export const TabsPanel: Component<Props, Messages> = (props) => {
 			{(children ?? [])[selectedIndex]}
 		</div>
 	</StackPanel>
-}
+})
 

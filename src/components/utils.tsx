@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement } from "../core"
-import { Icon } from "../types"
+import { createElement, makeComponent } from "../core"
+import { ComponentRegular, IconProps } from "../types"
 
 
-export const makeIcon = (svgElement: JSX.Element): Icon => {
-	return (props) => Promise.resolve(svgElement).then(elt => <svg
+export const makeIcon = (svgElement: JSX.Element): ComponentRegular<IconProps> => {
+	return async (props) => Promise.resolve(svgElement).then(elt => <svg
 		preserveAspectRatio='xMidYMid meet'
 		fill='currentColor'
 		{...elt.props /*as SVGAttributes<SVGElement>*/}

@@ -9,39 +9,23 @@
 
 import * as assert from "assert"
 import { createElement, render, renderToString, hydrate } from '../dist/index.js'
-// import { FileInput } from '../dist/components'
+import { ToggleInput } from '../dist/components'
 import { idProvider } from '../dist/utils'
 import { constructElement, normalizeHTML } from './utils'
 const jsdom = require('mocha-jsdom')
 jsdom({ url: 'http://localhost', skipWindowCheck: true })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-
-const stateCache = {
-	storage: {} as Record<string, any>,
-	getAsync: async function (key: string) { return this.storage[key] },
-	setAsync: async function (key: string, payload: any) {
-		this.storage[key] = {
-			...this.storage[key],
-			payload
-		}
-	}
-}
 
 describe("Somatic", () => {
 	describe("render", () => {
-
-		/*it("should return element with same html as renderToString", async () => {
+		it("should return element with same html as renderToString", async () => {
 			try {
 				//console.log(`Starting 'should return element with same html as renderToString' test`)
-				const vNode = <FileInput
-					stateCache={stateCache}
-					icon={() => <span></span>}
-					labelStyle={{}}
-					loadAs="array"
+				const vNode = <ToggleInput
+					icons={{ on: <span>On</span>, off: <span>Off</span> }}
 					style={{ height: "auto", width: "auto", fontSize: "14px" }}
 					postMsgAsync={async (msg) => { console.log('Message received' + msg.type) }}>
-				</FileInput>
+				</ToggleInput>
 
 				const renderedHTML = (await render(vNode) as Element).outerHTML
 				//console.log(`renderedNodeHTML: ${renderedHTML}`)
@@ -56,7 +40,7 @@ describe("Somatic", () => {
 			catch (e) {
 				console.error(e)
 			}
-		})*/
+		})
 
 		/*it("should render element with the same text content", async () => {
 			// We create a small div element with className and background color and pass it to the render function

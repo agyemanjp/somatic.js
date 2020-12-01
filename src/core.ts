@@ -1,3 +1,4 @@
+/* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable fp/no-rest-parameters */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -6,12 +7,11 @@
 
 import morphdom from 'morphdom'
 import fastMemoize from 'fast-memoize'
-import { VNode, VNodeType, PropsExtended, Message, CSSProperties } from "./types"
+import * as objectHash from 'object-hash'
+import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties } from "./types"
 import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
 import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
-import { Obj, Primitive } from "@sparkwave/standard/utility"
-import { flatten } from "@sparkwave/standard/collections"
-import { deepMerge } from "@sparkwave/standard/collections/object"
+import { Obj, Primitive, flatten, deepMerge, noop } from "@sparkwave/standard"
 
 // export const Fragment = (async () => ({})) as Renderer
 export const fnStore: ((evt: Event) => unknown)[] = []
@@ -21,8 +21,10 @@ export function createElement<P extends Obj, T extends VNodeType<P>>(type: T, pr
 	return { type, props, children }
 }
 
+const _stateCache: Obj<Obj> = {}
+
 /** Render virtual node to DOM node */
-export async function render<Props extends Obj, State>(vnode?: Primitive | Object | VNode<PropsExtended<Props, Message, State>> | Promise<VNode<PropsExtended<Props, Message, State>>>, parentKey?: string): Promise<Node> {
+export async function render<Props extends Obj, State>(vnode?: Primitive | Object | VNode<PropsExtended<Props, Message>> | Promise<VNode<PropsExtended<Props, Message>>>, parentKey?: string): Promise<Node> {
 	// console.log(`Starting render of vnode: ${JSON.stringify(vnode)}`)
 
 	if (vnode === null || vnode === undefined) {
@@ -38,12 +40,36 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 		switch (typeof _vnode.type) {
 			case "function": {
 				// console.log(`vNode type is function, rendering as custom component`)
-				const _props: PropsExtended<Props, Message, State> = {
+				const vnodeType = _vnode.type
+
+				const _props: PropsExtended<Props, Message> = {
 					..._vnode.props,
-					key: `${parentKey ?? ""}_${(vnode as any).props?.key ?? ""}`,
+					key: `${parentKey ?? ""}_${(vnode as any).props?.key ?? ""} ${"hashProps" in vnodeType && vnodeType.hashProps
+						? vnodeType.hashProps(_vnode.props)
+						: objectHash.sha1(_vnode.props)}`,
 					children: [...children]
 				}
-				const element = await _vnode.type(_props)
+
+				const fullProps = mergeProps("defaultProps" in vnodeType && vnodeType.defaultProps
+					? vnodeType.defaultProps()
+					: {},
+					_props
+				)
+				const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
+					? vnodeType.defaultState(fullProps)
+					: {},
+					_stateCache[_props.key ?? ""]
+				)
+
+				const element = await _vnode.type(_props, fullProps, {
+					...fullState,
+					setState: (delta: Partial<State>) => {
+						if (_props.key) {
+							// eslint-disable-next-line fp/no-mutation
+							_stateCache[_props.key] = { ..._stateCache[_props.key], ...delta }
+						}
+					}
+				})
 
 				return element.children === undefined
 					? await memoizedRender(element)
@@ -224,7 +250,8 @@ export function hydrate(element: HTMLElement): void {
  */
 export function updateDOM(rootElement: Element, node: Node) { morphdom(rootElement, node) }
 
-const _eventHandlers: { [key: string /** The name of a JS event, i.e. onmouseenter */]: { node: Node, handler: (e: Event) => void, capture: boolean }[] } = {} // Global dictionary of events
+/** Global dictionary of events indexed by their names e.g., onmouseenter */
+const _eventHandlers: Obj<{ node: Node, handler: (e: Event) => void, capture: boolean }[]> = {}
 const addListener = (node: Node, event: string, handler: (e: Event) => void, capture = false) => {
 	if (_eventHandlers[event] === undefined) {
 		// eslint-disable-next-line fp/no-mutation
@@ -295,20 +322,16 @@ export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, pro
 	return deepMerge(defaults, props) as D & P & Partial<P>
 }
 
-/** Get curried form of state cache that does not require key argument */
-export function getSimpleStateCache<Props, State extends Obj, D extends Partial<State>>(props: PropsExtended<Props, any, State>, defaultState: D) {
-	const stateCache = props.stateCache
-	const key = props.key
 
-	const setAsync = async (delta: Partial<State>) => {
-		if (stateCache && key) {
-			stateCache.setAsync(key, delta)
-		}
-	}
-	const getAsync = async () => {
-		const cachedState = stateCache ? await stateCache.getAsync(key ?? "") : undefined
-		return mergeProps(defaultState, cachedState ?? {}) as D & State & Partial<State>
-	}
+export const makeComponent = <DP, DS>(args: { defaultProps?: () => DP, defaultState?: (props: DP) => DS }) => {
+	return <P extends Obj = Obj, M extends Message = Message, S = {}>(
+		comp: (
+			props: PropsExtended<P, M>,
+			mergedProps: MergedPropsExt<P, M, DP>,
+			stateCache: DS & S & Partial<S> & { setState: (delta: Partial<S>) => void }
+		) => JSX.Element) => {
 
-	return { getAsync, setAsync }
+		return Object.assign(comp, { ...args })
+	}
 }
+

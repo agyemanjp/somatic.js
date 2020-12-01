@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement, mergeProps } from '../core'
+import { createElement, mergeProps, makeComponent } from '../core'
 import { Component, HtmlProps } from '../types'
 
 /** Type that defines the struct we need to send when we want to pass groups of options to this component. */
@@ -35,7 +35,7 @@ const defaultProps = {
 
 type Messages = { type: "SELECTION", data: number }
 
-export const SelectInput: Component<Props, Messages> = async (props) => {
+export const SelectInput = makeComponent({})<Props>(async (props) => {
 	const {
 		options,
 		selectedIndex,
@@ -104,4 +104,4 @@ export const SelectInput: Component<Props, Messages> = async (props) => {
 			}
 		</select >
 	)
-}
+})

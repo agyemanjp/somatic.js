@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement, mergeProps } from '../core'
+import { createElement, mergeProps, makeComponent } from '../core'
 import { Component, HtmlProps } from '../types'
 import { idProvider } from '../utils'
 
@@ -19,7 +19,7 @@ const defaultProps = {
 
 type Messages = { type: "CLOSURE" }
 
-export const ModalBox: Component<Props, Messages> = (props) => {
+export const ModalBox = makeComponent({})<Props, Messages>(async (props) => {
 	const { postMsgAsync, style, children, closeOnEscape, closeOnClickOutside, ...htmlProps } = mergeProps(defaultProps, props)
 	const id = idProvider.next()
 
@@ -63,4 +63,4 @@ export const ModalBox: Component<Props, Messages> = (props) => {
 
 	</div>
 
-}
+})

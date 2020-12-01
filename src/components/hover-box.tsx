@@ -1,7 +1,7 @@
 /* eslint-disable fp/no-rest-parameters */
 /* eslint-disable brace-style */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { createElement, stringifyStyle, mergeProps } from "../core"
+import { createElement, makeComponent, stringifyStyle, mergeProps } from "../core"
 import { first } from "@sparkwave/standard/collections/iterable"
 import { Component, HtmlProps, CSSProperties } from '../types'
 import { idProvider } from '../utils'
@@ -12,7 +12,7 @@ type Props = HtmlProps & {
 	hoverStyle?: CSSProperties
 }
 
-export const HoverBox: Component<Props> = async (props) => {
+export const HoverBox = makeComponent({})<Props>(async (props) => {
 	const defaultProps = Object.freeze({
 		style: {
 			height: "auto",
@@ -74,4 +74,4 @@ export const HoverBox: Component<Props> = async (props) => {
 
 		{child}
 	</div>
-}
+})

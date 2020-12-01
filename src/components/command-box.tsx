@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { createElement, mergeProps } from '../core'
+import { createElement, mergeProps, makeComponent } from '../core'
 import { Component, HtmlProps, PanelProps, ButtonHTMLAttributes, CSSProperties } from '../types'
 import { StackPanel } from './stack-panel'
 
@@ -24,34 +25,37 @@ type Props = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
 	/** normal disabled or selected */
 	mode?: BtnMode
 }
+// eslint-disable-next-line @typescript-eslint/ban-types
+type State = {}
+
 interface Messages { type: "CLICKED" }
 
-const defaultProps = {
-	orientation: "horizontal" as const,
-	tooltip: "",
-	hoverEffect: "invert" as const,
 
-	style: {
-		fontSize: "1em",
-		color: "#666",
-		borderColor: "#666",
-		borderWidth: "1px",
-		borderStyle: "solid",
-		padding: "0",
-		margin: "0",
-		overflow: "hidden",
-		borderRadius: "2px",
-		cursor: "pointer"
-	},
+export const CommandBox = makeComponent({
+	defaultProps: () => ({
+		orientation: "horizontal" as const,
+		hoverEffect: "invert" as const,
 
-	iconPlacement: "before" as const,
+		style: {
+			fontSize: "1em",
+			color: "#666",
+			borderColor: "#666",
+			borderWidth: "1px",
+			borderStyle: "solid",
+			padding: "0",
+			margin: "0",
+			overflow: "hidden",
+			borderRadius: "2px",
+			cursor: "pointer"
+		},
 
-	mode: BtnMode.Normal
-}
-
-export const CommandBox: Component<Props, Messages> = async (props) => {
+		iconPlacement: "before" as const,
+		mode: BtnMode.Normal,
+		postMsgAsync: () => { }
+	}),
+	defaultState: (props) => ({})
+})<Props, Messages, State>(async (_, props, state) => {
 	const {
-		tooltip,
 		orientation,
 		iconPlacement, icon,
 		style, hoverEffect,
@@ -59,10 +63,10 @@ export const CommandBox: Component<Props, Messages> = async (props) => {
 		postMsgAsync,
 		children,
 		...htmlProps
-	} = mergeProps(defaultProps, props)
+	} = props
 
 	const iconContent = props.icon
-		? <div style={{ padding: 0 }}>{props.icon} </div>
+		? props.icon
 		: <div />
 
 	const mainContent = <StackPanel key="main-content"
@@ -73,15 +77,13 @@ export const CommandBox: Component<Props, Messages> = async (props) => {
 	</StackPanel>
 
 	return <button
-		title={tooltip}
-		onClick={(e) => { if (postMsgAsync) { postMsgAsync({ type: "CLICKED" }) } }}
+		onClick={(e) => { postMsgAsync({ type: "CLICKED" }) }}
 		{...htmlProps}
 		style={{
 			...htmlProps.disabled !== undefined
 				? { color: 'gray', borderColor: `gray` }
 				: {},
 
-			...defaultProps.style,
 			...style
 		}}>
 
@@ -91,4 +93,4 @@ export const CommandBox: Component<Props, Messages> = async (props) => {
 			{iconPlacement === "before" ? [iconContent, mainContent] : [mainContent, iconContent]}
 		</StackPanel>
 	</button>
-}
+})
