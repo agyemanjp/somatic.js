@@ -7,7 +7,7 @@
 
 import morphdom from 'morphdom'
 import fastMemoize from 'fast-memoize'
-import * as objectHash from 'object-hash'
+import { default as hash } from 'hash-sum'
 import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties } from "./types"
 import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
 import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
@@ -46,7 +46,7 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 					..._vnode.props,
 					key: `${parentKey ?? ""}_${(vnode as any).props?.key ?? ""} ${"hashProps" in vnodeType && vnodeType.hashProps
 						? vnodeType.hashProps(_vnode.props)
-						: objectHash.sha1(_vnode.props)}`,
+						: hash(_vnode.props)}`,
 					children: [...children]
 				}
 
@@ -339,8 +339,12 @@ export const makeComponent = <DP, DS>(args: {
 }
 
 export function makeComponent1<P extends Obj, M extends Message, S>() {
-	return function <DP, DS>(
-		comp: (_: PropsExtended<P, M>, props: MergedPropsExt<P, M, DP>, state: DS & S & Partial<S> & { setState: (delta: Partial<S>) => void }) => JSX.Element,
+	return function <DP extends Partial<P>, DS extends Partial<S>>(
+		comp: (
+			_: PropsExtended<P, M>,
+			props: MergedPropsExt<P, M, DP>,
+			state: DS & S & Partial<S> & { setState: (delta: Partial<S>) => void }
+		) => JSX.Element,
 		opts: {
 			defaultProps?: () => DP,
 			defaultState?: (props: P) => DS,

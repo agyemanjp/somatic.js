@@ -25,8 +25,10 @@ type Props<T = unknown> = StyleProps & PanelProps & {
 		select: () => void,
 		delete: () => void
 	}) => JSX.Element
+
 	itemStyle?: CSSProperties,
 	selectedItemStyle?: CSSProperties
+
 	extraFeatures?: {
 		selection?: boolean
 		arrangement?: boolean

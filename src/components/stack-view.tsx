@@ -15,7 +15,8 @@ export type Messages = (
 
 export type Props<T = unknown> = PanelProps & ViewProps<T> & {
 	selectedItemIndex: number,
-	selectedItemStyle?: CSSProperties
+	selectedItemStyle?: CSSProperties,
+	style?: CSSProperties
 }
 
 export async function StackView<T>(props: PropsExtended<Props<T>, Messages>) {
