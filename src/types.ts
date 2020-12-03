@@ -37,7 +37,8 @@ export type MergedPropsExt<P, M extends Message, DP extends Partial<P>> = (
 export type ComponentRegular<P extends Obj = Obj, M extends Message = Message, S = {}> = (
 	| ((props: PropsExtended<P, M>) => JSX.Element) & // Regular component
 	{
-		hashProps?: (props: P) => string
+		hashProps?: (props: P) => string,
+		stateChangeCallback?: (delta: Partial<S>) => Promise<void>
 	}
 )
 /** Async function that defines a component with defaults */
@@ -49,7 +50,9 @@ export type ComponentExtended<P extends Obj, M extends Message, S, DP extends Pa
 	) => JSX.Element) &
 	{
 		defaultProps: () => DP;
-		defaultState: (props?: P) => DS
+		defaultState: (props?: P) => DS,
+		hashProps?: (props: P) => string,
+		stateChangeCallback?: (delta: Partial<S>) => Promise<void>
 	}
 )
 

@@ -1,3 +1,4 @@
+/* eslint-disable fp/no-mutation */
 /* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable fp/no-rest-parameters */
@@ -8,7 +9,7 @@
 import morphdom from 'morphdom'
 import fastMemoize from 'fast-memoize'
 import { default as hash } from 'hash-sum'
-import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties } from "./types"
+import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties, ComponentExtended } from "./types"
 import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
 import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
 import { Obj, Primitive, flatten, deepMerge, hasValue } from "@sparkwave/standard"
@@ -68,8 +69,12 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 					...fullState,
 					setState: (delta: Partial<State>) => {
 						if (_props.key) {
-							// eslint-disable-next-line fp/no-mutation
-							_stateCache[_props.key] = { ..._stateCache[_props.key], ...delta }
+							console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta)}`)
+							_stateCache[_props.key] = { ..._stateCache[_props.key] ?? {}, ...delta }
+						}
+
+						if ("stateChangeCallback" in vnodeType && vnodeType.stateChangeCallback !== undefined && typeof vnodeType.stateChangeCallback === "function") {
+							vnodeType.stateChangeCallback(delta)
 						}
 					}
 				})
@@ -342,19 +347,22 @@ export const makeComponent = <DP, DS>(args: {
 }
 
 export function makeComponent1<P extends Obj, M extends Message, S>() {
-	return function <DP extends Partial<P>, DS extends Partial<S>>(
+	return <DP extends Partial<P>, DS extends Partial<S>>(
 		comp: (
 			_: PropsExtended<P, M>,
 			props: MergedPropsExt<P, M, DP>,
 			state: DS & S & Partial<S> & { setState: (delta: Partial<S>) => void }
 		) => JSX.Element,
 		opts: {
-			defaultProps?: () => DP,
-			defaultState?: (props: P) => DS,
-			hashProps?: (props: P) => string
-		}) {
+			defaultProps: () => DP,
+			defaultState: (props?: P) => DS,
+			hashProps?: (props: P) => string,
+			stateChangeCallback?: (delta: Partial<S>) => Promise<void>
 
-		return Object.assign(comp, { ...opts })
+		}) => {
+
+		const r: ComponentExtended<P, M, S, DP, DS> = Object.assign(comp, { ...opts })
+		return r
 	}
 }
 
