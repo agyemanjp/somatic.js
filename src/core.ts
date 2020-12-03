@@ -11,7 +11,7 @@ import { default as hash } from 'hash-sum'
 import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties } from "./types"
 import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
 import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
-import { Obj, Primitive, flatten, deepMerge, noop } from "@sparkwave/standard"
+import { Obj, Primitive, flatten, deepMerge, hasValue } from "@sparkwave/standard"
 
 // export const Fragment = (async () => ({})) as Renderer
 export const fnStore: ((evt: Event) => unknown)[] = []
@@ -50,7 +50,10 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 					children: [...children]
 				}
 
-				const fullProps = mergeProps("defaultProps" in vnodeType && vnodeType.defaultProps
+				// if ("defaultProps" in vnodeType && hasValue(vnodeType.defaultProps))
+				// 	console.log(`vnodeType.defaultProps = ${vnodeType.defaultProps}, type=${typeof vnodeType.defaultProps}`)
+
+				const fullProps = mergeProps("defaultProps" in vnodeType && vnodeType.defaultProps && typeof vnodeType.defaultProps === "function"
 					? vnodeType.defaultProps()
 					: {},
 					_props
@@ -58,7 +61,7 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 				const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
 					? vnodeType.defaultState(fullProps)
 					: {},
-					_stateCache[_props.key ?? ""]
+					_stateCache[_props.key ?? ""] ?? {}
 				)
 
 				const element = await _vnode.type(_props, fullProps, {
