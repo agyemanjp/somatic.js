@@ -23,8 +23,7 @@ export function createElement<P extends Obj, T extends VNodeType<P>>(type: T, pr
 	return { type, props, children }
 }
 
-const _stateCache = window as any
-// const _stateCache: Obj<Obj> = {}
+const _stateCache = global as any //Obj<Obj>
 
 /** Render virtual node to DOM node */
 export async function render<Props extends Obj, State>(vnode?: Primitive | Object | VNode<PropsExtended<Props, Message>> | Promise<VNode<PropsExtended<Props, Message>>>, parentKey?: string): Promise<Node> {
