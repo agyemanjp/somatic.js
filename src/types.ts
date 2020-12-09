@@ -56,12 +56,6 @@ export type ComponentExtended<P extends Obj, M extends Message, S, DP extends Pa
 	}
 )
 
-// /** Async function that defines a stateless component */
-// export type Component<P extends Obj = Obj, M extends Msg = Msg, S = {}, DP extends Prt<P> = Prt<P>, DS extends Prt<S> = Prt<S>> = (
-// 	| ((props: PropsExtended<P, M, S>) => JSX.Element) // Regular component
-// 	| ((props: PropsExtended<P, M, S>, mergedProps: MergedPropsExt<P, M, S, DP>, mergedState: DS & S & Prt<S>) => JSX.Element)
-// 	& { defaultProps: () => DP; defaultState: (props?: P) => DS } // Component with defaults
-// )
 
 export type Component<P extends Obj = Obj, M extends Message = Message, S = {}, DP extends Partial<P> = Partial<P>, DS extends Partial<S> = Partial<S>> = (
 	| ComponentRegular<P, M, S>

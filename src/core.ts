@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable fp/no-mutation */
 /* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -22,7 +23,8 @@ export function createElement<P extends Obj, T extends VNodeType<P>>(type: T, pr
 	return { type, props, children }
 }
 
-const _stateCache: Obj<Obj> = {}
+const _stateCache = window as any
+// const _stateCache: Obj<Obj> = {}
 
 /** Render virtual node to DOM node */
 export async function render<Props extends Obj, State>(vnode?: Primitive | Object | VNode<PropsExtended<Props, Message>> | Promise<VNode<PropsExtended<Props, Message>>>, parentKey?: string): Promise<Node> {
@@ -45,9 +47,6 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 
 				const _props: PropsExtended<Props, Message> = {
 					..._vnode.props,
-					key: `${parentKey ?? ""}_${(vnode as any).props?.key ?? ""} ${"hashProps" in vnodeType && vnodeType.hashProps
-						? vnodeType.hashProps(_vnode.props)
-						: hash(_vnode.props)}`,
 					children: [...children]
 				}
 
@@ -59,18 +58,26 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 					: {},
 					_props
 				)
+				const propsHash = ("hashProps" in vnodeType && vnodeType.hashProps)
+					? vnodeType.hashProps(fullProps)
+					: hash(fullProps);
+				// console.log(`propsHash for ${JSON.stringify(_vnode.props, undefined, 2)} is ${propsHash}`)
+
+				(fullProps as Obj).key = `${parentKey ?? ""}_${_props?.key ?? ""}_${propsHash}`
+
+
 				const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
 					? vnodeType.defaultState(fullProps)
 					: {},
-					_stateCache[_props.key ?? ""] ?? {}
+					_stateCache[fullProps.key ?? ""] ?? {}
 				)
 
 				const element = await _vnode.type(_props, fullProps, {
 					...fullState,
 					setState: (delta: Partial<State>) => {
-						if (_props.key) {
-							console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta)}`)
-							_stateCache[_props.key] = { ..._stateCache[_props.key] ?? {}, ...delta }
+						if (fullProps.key) {
+							// console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta, undefined, 2)}`)
+							_stateCache[fullProps.key] = { ..._stateCache[fullProps.key] ?? {}, ...delta }
 						}
 
 						if ("stateChangeCallback" in vnodeType && vnodeType.stateChangeCallback !== undefined && typeof vnodeType.stateChangeCallback === "function") {
