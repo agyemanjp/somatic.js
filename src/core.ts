@@ -59,10 +59,10 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 				)
 				const propsHash = ("hashProps" in vnodeType && vnodeType.hashProps)
 					? vnodeType.hashProps(fullProps)
-					: hash(fullProps);
+					: undefined; //hash(fullProps);
 				// console.log(`propsHash for ${JSON.stringify(_vnode.props, undefined, 2)} is ${propsHash}`)
 
-				(fullProps as Obj).key = `${parentKey ?? ""}_${_props?.key ?? ""}_${propsHash}`
+				(fullProps as Obj).key = `${parentKey ?? ""}_${_props?.key ?? ""}_${propsHash ?? ""}`
 
 
 				const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
