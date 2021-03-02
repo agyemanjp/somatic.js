@@ -1,6 +1,6 @@
 {
 	"name": "@sparkwave/somatic",
-	"version": "1.4.5",
+	"version": "1.4.6",
 	"description": "Functional, Asynchronous, Component-based UI Library that works with JSX",
 	"main": "index.js",
 	"types": "index.d.ts",
