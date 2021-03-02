@@ -9,11 +9,10 @@
 
 import morphdom from 'morphdom'
 import fastMemoize from 'fast-memoize'
-import { default as hash } from 'hash-sum'
 import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties, ComponentExtended } from "./types"
 import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
 import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
-import { Obj, Primitive, flatten, deepMerge, hasValue } from "@sparkwave/standard"
+import { Obj, Primitive, flatten, deepMerge } from "@sparkwave/standard"
 
 // export const Fragment = (async () => ({})) as Renderer
 export const fnStore: ((evt: Event) => unknown)[] = []
@@ -262,7 +261,7 @@ export function hydrate(element: HTMLElement): void {
  * @param rootElement An HTML element that will be updated
  * @param node A node obtained by rendering a VNode
  */
-export function updateDOM(rootElement: Element, node: Node) { morphdom(rootElement, node) }
+export function updateDOM(rootElement: Element, node: Node) { morphdom(rootElement, node, { getNodeKey: () => undefined }) }
 
 /** Global dictionary of events indexed by their names e.g., onmouseenter */
 const _eventHandlers: Obj<{ node: Node, handler: (e: Event) => void, capture: boolean }[]> = {}

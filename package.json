@@ -39,7 +39,6 @@
 		"@sparkwave/standard": "^2.23.0",
 		"cuid": "^2.1.8",
 		"fast-memoize": "^2.5.2",
-		"hash-sum": "^2.0.0",
 		"morphdom": "^2.6.1"
 	},
 	"devDependencies": {
