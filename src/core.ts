@@ -9,7 +9,7 @@
 
 import morphdom from 'morphdom'
 import fastMemoize from 'fast-memoize'
-import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties, ComponentExtended } from "./types"
+import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties, ComponentExtended, Component } from "./types"
 import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
 import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
 import { Obj, Primitive, flatten, deepMerge } from "@sparkwave/standard"
@@ -64,29 +64,45 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 				(fullProps as Obj).key = `${parentKey ?? ""}_${_props?.key ?? ""}_${propsHash ?? ""}`
 
 
-				const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
-					? vnodeType.defaultState(fullProps)
-					: {},
-					_stateCache[fullProps.key ?? ""] ?? {}
-				)
+				/** Turns a vNode representing a component into a vNode representing an intrisic (HTML) element */
+				const getIntrinsicEltFromComponent = async (vNode: VNode<PropsExtended<Props, Message>, Component<PropsExtended<Props, Message>>>) => {
+					const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
+						? vnodeType.defaultState(fullProps)
+						: {},
+						_stateCache[fullProps.key ?? ""] ?? {}
+					)
 
-				const element = await _vnode.type(_props, fullProps, {
-					...fullState,
-					setState: (delta: Partial<State>) => {
-						if (fullProps.key) {
-							// console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta, undefined, 2)}`)
-							_stateCache[fullProps.key] = { ..._stateCache[fullProps.key] ?? {}, ...delta }
+					return await (vNode).type(_props, fullProps, {
+						...fullState,
+						setState: async (delta: Partial<State>) => {
+							if (fullProps.key) {
+								// console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta, undefined, 2)}`)
+								_stateCache[fullProps.key] = { ..._stateCache[fullProps.key] ?? {}, ...delta }
+							}
+
+							// We re-render the element
+							const newElem = await getIntrinsicEltFromComponent(vNode)
+							const renderedElem = await render(newElem, _props.key) // If element has children, we don't use the cache system (yet)
+							const el = document.querySelector(`[key="${_props.key}"]`)
+							if (el !== null) {
+								updateDOM(el, renderedElem)
+							}
+							else {
+								console.error(`Cannot update an element after setState: key '${_props.key}' not found in the document`)
+							}
+
+							if ("stateChangeCallback" in vnodeType && vnodeType.stateChangeCallback !== undefined && typeof vnodeType.stateChangeCallback === "function") {
+								vnodeType.stateChangeCallback(delta)
+							}
 						}
+					})
+				}
 
-						if ("stateChangeCallback" in vnodeType && vnodeType.stateChangeCallback !== undefined && typeof vnodeType.stateChangeCallback === "function") {
-							vnodeType.stateChangeCallback(delta)
-						}
-					}
-				})
+				const intrinsicNode = await getIntrinsicEltFromComponent(_vnode as VNode<PropsExtended<Props, Message>, Component<PropsExtended<Props, Message>>>)
 
-				return element.children === undefined
-					? await memoizedRender(element)
-					: await render(element, _props.key) // If element has children, we don't use the cache system (yet)
+				return intrinsicNode.children === undefined
+					? await memoizedRender(intrinsicNode)
+					: await render(intrinsicNode, _props.key) // If element has children, we don't use the cache system (yet)
 			}
 
 			case "string": {
@@ -145,6 +161,9 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 						console.error(`Error setting dom attribute ${propKey} to ${JSON.stringify(nodeProps[propKey])}:\n${e}`)
 					}
 				})
+				if (parentKey) {
+					setAttribute(node, "key", parentKey)
+				}
 				return node
 			}
 
