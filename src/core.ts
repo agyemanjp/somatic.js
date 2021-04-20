@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable fp/no-mutation */
 /* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -8,24 +9,22 @@
 
 import morphdom from 'morphdom'
 import fastMemoize from 'fast-memoize'
-import { default as hash } from 'hash-sum'
-import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties, ComponentExtended } from "./types"
-import { setAttribute, isEventKey, camelCaseToDash, encodeHTML, idProvider } from "./utils"
-import { svgTags, eventNames, mouseMvmntEventNames, } from "./constants"
-import { Obj, Primitive, flatten, deepMerge, hasValue } from "@sparkwave/standard"
+import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties, ComponentExtended, Component } from "./types"
+import { addListener, stringifyStyle, setAttribute, isEventKey, encodeHTML, idProvider } from "./utils"
+import { svgTags, eventNames, selfClosingTags, mouseMvmntEventNames, } from "./constants"
+import { Obj, String, Primitive, flatten, deepMerge } from "@sparkwave/standard"
 
-// export const Fragment = (async () => ({})) as Renderer
-export const fnStore: ((evt: Event) => unknown)[] = []
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createElement<P extends Obj, T extends VNodeType<P>>(type: T, props: P, ...children: any[]): VNode<P, T> {
 	return { type, props, children }
 }
 
-const _stateCache: Obj<Obj> = {}
+const _stateCache: Obj<Obj> = (global as any).__SOMATIC_CACHE__ = {}
+export const fnStore: ((evt: Event) => unknown)[] = []
 
 /** Render virtual node to DOM node */
-export async function render<Props extends Obj, State>(vnode?: Primitive | Object | VNode<PropsExtended<Props, Message>> | Promise<VNode<PropsExtended<Props, Message>>>, parentKey?: string): Promise<Node> {
+export async function render<P extends Obj, S>(vnode?: Primitive | Object | VNode<PropsExtended<P>> | Promise<VNode<PropsExtended<P>>>, parentKey?: string): Promise<Node> {
 	// console.log(`Starting render of vnode: ${JSON.stringify(vnode)}`)
 
 	if (vnode === null || vnode === undefined) {
@@ -35,53 +34,64 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 
 	const _vnode = await vnode
 	if (typeof _vnode === 'object' && 'type' in _vnode && 'props' in _vnode) {
-		// console.log(`vNode is object with 'type' and 'props' properties`)
 
 		const children = [...flatten([_vnode.children]) as JSX.Element[]]
 		switch (typeof _vnode.type) {
 			case "function": {
 				// console.log(`vNode type is function, rendering as custom component`)
 				const vnodeType = _vnode.type
-
-				const _props: PropsExtended<Props, Message> = {
-					..._vnode.props,
-					key: `${parentKey ?? ""}_${(vnode as any).props?.key ?? ""} ${"hashProps" in vnodeType && vnodeType.hashProps
-						? vnodeType.hashProps(_vnode.props)
-						: hash(_vnode.props)}`,
-					children: [...children]
-				}
-
-				// if ("defaultProps" in vnodeType && hasValue(vnodeType.defaultProps))
-				// 	console.log(`vnodeType.defaultProps = ${vnodeType.defaultProps}, type=${typeof vnodeType.defaultProps}`)
+				const _props: PropsExtended<P, Message> = { ..._vnode.props, children: [...children] }
 
 				const fullProps = mergeProps("defaultProps" in vnodeType && vnodeType.defaultProps && typeof vnodeType.defaultProps === "function"
 					? vnodeType.defaultProps()
 					: {},
 					_props
 				)
-				const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
-					? vnodeType.defaultState(fullProps)
-					: {},
-					_stateCache[_props.key ?? ""] ?? {}
-				)
+				const propsHash = ("hashProps" in vnodeType && vnodeType.hashProps)
+					? vnodeType.hashProps(fullProps)
+					: undefined
 
-				const element = await _vnode.type(_props, fullProps, {
-					...fullState,
-					setState: (delta: Partial<State>) => {
-						if (_props.key) {
-							console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta)}`)
-							_stateCache[_props.key] = { ..._stateCache[_props.key] ?? {}, ...delta }
+				fullProps.key = `${parentKey ?? ""}_${_props?.key ?? ""}_${propsHash ?? ""}` as any
+
+				/** Turns a vNode representing a component into a vNode representing an intrinsic (HTML) element */
+				const compToInstrinsic = async (vNode: VNode<PropsExtended<P>, Component<PropsExtended<P>>>) => {
+					const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
+						? vnodeType.defaultState(fullProps)
+						: {},
+						_stateCache[fullProps.key ?? ""] ?? {}
+					)
+
+					return await vnodeType(_props, fullProps, {
+						...fullState,
+						setState: async (delta: Partial<S>) => {
+							if (fullProps.key) {
+								// console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta, undefined, 2)}`)
+								_stateCache[fullProps.key] = { ..._stateCache[fullProps.key] ?? {}, ...delta }
+							}
+
+							// We re-render the element
+							const newElem = await compToInstrinsic(vNode)
+							const renderedElem = await render(newElem, _props.key) // If element has children, we don't use the cache system (yet)
+							const el = document.querySelector(`[key="${_props.key}"]`)
+							if (el !== null) {
+								updateDOM(el, renderedElem)
+							}
+							else {
+								console.error(`Cannot update an element after setState: key '${_props.key}' not found in the document`)
+							}
+
+							if ("stateChangeCallback" in vnodeType && vnodeType.stateChangeCallback !== undefined && typeof vnodeType.stateChangeCallback === "function") {
+								vnodeType.stateChangeCallback(delta)
+							}
 						}
+					})
+				}
 
-						if ("stateChangeCallback" in vnodeType && vnodeType.stateChangeCallback !== undefined && typeof vnodeType.stateChangeCallback === "function") {
-							vnodeType.stateChangeCallback(delta)
-						}
-					}
-				})
+				const intrinsicNode = await compToInstrinsic(_vnode as VNode<PropsExtended<P>, Component<PropsExtended<P>>>)
 
-				return element.children === undefined
-					? await memoizedRender(element)
-					: await render(element, _props.key) // If element has children, we don't use the cache system (yet)
+				return intrinsicNode.children === undefined
+					? await memoizedRender(intrinsicNode)
+					: await render(intrinsicNode, _props.key) // If element has children, we don't use the cache system (yet)
 			}
 
 			case "string": {
@@ -140,46 +150,88 @@ export async function render<Props extends Obj, State>(vnode?: Primitive | Objec
 						console.error(`Error setting dom attribute ${propKey} to ${JSON.stringify(nodeProps[propKey])}:\n${e}`)
 					}
 				})
+				if (parentKey) {
+					setAttribute(node, "key", parentKey)
+				}
 				return node
 			}
 
 			default: {
 				console.error(`Somatic render(): invalid vnode "${JSON.stringify(_vnode)}" of type "${typeof _vnode}"; `)
-				return document.createTextNode(String(_vnode))
+				return document.createTextNode(globalThis.String(_vnode))
 			}
 		}
 	}
 	else {
-		return document.createTextNode(String(_vnode))
+		return document.createTextNode(globalThis.String(_vnode))
 	}
 }
 const memoizedRender = fastMemoize(render, {})
 
 /** Render virtual node to HTML string */
-export async function renderToString<P extends Obj = Obj>(vnode?: { toString(): string } | VNode<P> | Promise<VNode<P>>): Promise<string> {
-	const elt = (await render(vnode)) as Node | Element
-	const result = ('outerHTML' in elt)
-		? elt.outerHTML
-		: (elt.textContent ?? elt.nodeValue ?? "")
-
-	// console.log(`renderToString output: ${result}`)
-	return result
-
-	/*if (vnode === null || vnode === undefined) {
+export async function renderToString<P extends Obj, S>(vnode?: Primitive | Object | VNode<PropsExtended<P>> | Promise<VNode<PropsExtended<P>>>, parentKey?: string): Promise<string> {
+	if (vnode === null || vnode === undefined) {
 		return ""
 	}
 	const _vnode = await vnode
 
 	if (typeof _vnode === 'object' && 'type' in _vnode) {
-		const children = new Array(flatten(_vnode.children || [])) as Array<JSX.Element>
+		const children = [...flatten([_vnode.children]) as JSX.Element[]]
 		switch (typeof _vnode.type) {
 			case "function": {
-				const _props: PropsExtended<P, Message> = { ..._vnode.props, children: [...children || []] }
+				const vnodeType = _vnode.type
+				const _props: PropsExtended<P> = { ..._vnode.props, children: [...children] }
+				const fullProps = mergeProps("defaultProps" in vnodeType && vnodeType.defaultProps && typeof vnodeType.defaultProps === "function"
+					? vnodeType.defaultProps()
+					: {},
+					_props
+				)
 
-				const resolvedVNode = await _vnode.type(_props)
-				return typeof resolvedVNode.type === "function" && children.length === 0
-					? await memoizedRenderToString(resolvedVNode)
-					: await renderToString(resolvedVNode) // If elem have children, we don't use the cache system (yet).
+				const propsHash = ("hashProps" in vnodeType && vnodeType.hashProps)
+					? vnodeType.hashProps(fullProps)
+					: undefined
+
+				fullProps.key = `${parentKey ?? ""}_${_props?.key ?? ""}_${propsHash ?? ""}` as any
+
+				/** Turns a vNode representing a component into a vNode representing an intrisic (HTML) element */
+				const compToInstrinsic = async (vNode: VNode<PropsExtended<P, Message>, Component<PropsExtended<P, Message>>>) => {
+					const fullState = mergeProps("defaultState" in vnodeType && vnodeType.defaultState
+						? vnodeType.defaultState(fullProps)
+						: {},
+						_stateCache[fullProps.key ?? ""] ?? {}
+					)
+
+					return await (vNode).type(_props, fullProps, {
+						...fullState,
+						setState: async (delta: Partial<S>) => {
+							if (fullProps.key) {
+								// console.log(`Setting state for key "${_props.key}" to ${JSON.stringify(delta, undefined, 2)}`)
+								_stateCache[fullProps.key] = { ..._stateCache[fullProps.key] ?? {}, ...delta }
+							}
+
+							// We re-render the element
+							const newElem = await compToInstrinsic(vNode)
+							const renderedElem = await render(newElem, _props.key) // If element has children, we don't use the cache system (yet)
+							const el = document.querySelector(`[key="${_props.key}"]`)
+							if (el !== null) {
+								updateDOM(el, renderedElem)
+							}
+							else {
+								console.error(`Cannot update an element after setState: key '${_props.key}' not found in the document`)
+							}
+
+							if ("stateChangeCallback" in vnodeType && vnodeType.stateChangeCallback !== undefined && typeof vnodeType.stateChangeCallback === "function") {
+								vnodeType.stateChangeCallback(delta)
+							}
+						}
+					})
+				}
+
+				const intrinsicNode = await compToInstrinsic(_vnode as VNode<PropsExtended<P, Message>, Component<PropsExtended<P, Message>>>)
+
+				return intrinsicNode.children === undefined
+					? await renderToString(intrinsicNode)
+					: await renderToString(intrinsicNode, _props.key) // If element has children, we don't use the cache system (yet)
 			}
 
 			case "string": {
@@ -191,7 +243,7 @@ export async function renderToString<P extends Obj = Obj>(vnode?: { toString(): 
 					: ""
 
 				const nodeProps = _vnode.props || {}
-				const attributesHtml = new SuperString(Object.keys(nodeProps)
+				const attributesHtml = new String(Object.keys(nodeProps)
 					.map(propName => {
 						const propValue = nodeProps[propName]
 						switch (propName) {
@@ -218,12 +270,12 @@ export async function renderToString<P extends Obj = Obj>(vnode?: { toString(): 
 
 			default:
 				console.error(`\nrender(): invalid vnode type "${typeof _vnode}"; `)
-				return String(_vnode)
+				return globalThis.String(_vnode)
 		}
 	}
 	else {
-		return String(_vnode)
-	}*/
+		return globalThis.String(_vnode)
+	}
 }
 
 /** Attach event listeners from element to corresponding nodes in container */
@@ -256,85 +308,19 @@ export function hydrate(element: HTMLElement): void {
  * @param rootElement An HTML element that will be updated
  * @param node A node obtained by rendering a VNode
  */
-export function updateDOM(rootElement: Element, node: Node) { morphdom(rootElement, node) }
+export function updateDOM(rootElement: Element, node: Node) { morphdom(rootElement, node, { getNodeKey: () => undefined }) }
 
-/** Global dictionary of events indexed by their names e.g., onmouseenter */
-const _eventHandlers: Obj<{ node: Node, handler: (e: Event) => void, capture: boolean }[]> = {}
-const addListener = (node: Node, event: string, handler: (e: Event) => void, capture = false) => {
-	if (_eventHandlers[event] === undefined) {
-		// eslint-disable-next-line fp/no-mutation
-		_eventHandlers[event] = []
-	}
-	// Here we track the events and their nodes (note that we cannot use node as Object keys, as they'd get coerced into a string)
-	// eslint-disable-next-line fp/no-mutating-methods
-	_eventHandlers[event].push({ node: node, handler: handler, capture: capture })
-	node.addEventListener(event, handler, capture)
-}
-
-/** Remove all event listeners */
-export const removeAllListeners = (targetNode: Node) => {
-	Object.keys(_eventHandlers).forEach(eventName => {
-		// remove listeners from the matching nodes
-		_eventHandlers[eventName]
-			.filter(({ node }) => node === targetNode)
-			.forEach(({ node, handler, capture }) => node.removeEventListener(eventName, handler, capture))
-
-		// update _eventHandlers global
-		// eslint-disable-next-line fp/no-mutation
-		_eventHandlers[eventName] = _eventHandlers[eventName].filter(
-			({ node }) => node !== targetNode,
-		)
-	})
-}
-
-/** Converts a css props object literal to a string */
-export function stringifyStyle(style: CSSProperties, important = false) {
-	if (typeof style === "object") {
-		return Object.keys(style)
-			.map((key) => `${camelCaseToDash(key)}: ${(style)[key as keyof typeof style]}${important === true ? " !important" : ""}`)
-			.join("; ")
-			.concat(";")
-	}
-	else {
-		console.warn(`Input "${JSON.stringify(style)}" to somatic.stringifyStyle() is of type ${typeof style}, returning empty string`)
-		return ""
-	}
-}
-
-export function stringifyAttribs(props: Obj) {
-	return Object.keys(props)
-		.map(name => {
-			const value = props[name]
-			switch (true) {
-				case name === "style":
-					return (`style="${encodeHTML(stringifyStyle(value as CSSProperties))}"`)
-				case typeof value === "string":
-					return (`${encodeHTML(name)}="${encodeHTML(String(value))}"`)
-				case typeof value === "number":
-					return (`${encodeHTML(name)}="${value}"`)
-				// case typeof value === "function":
-				// 	fnStore.push(value as (e: Event) => unknown)
-				// 	return (`${encodeHTML(name.toLowerCase())}="${fnStore.length - 1}"`)
-				case value === true:
-					return (`${encodeHTML(name)}`)
-				default:
-					return ""
-			}
-		})
-		.filter(attrHTML => attrHTML?.length > 0)
-		.join(" ")
-}
-
-/** Merge default props with actual props of renderer */
+/** Merge default props with actual props of component */
 export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, props: P): D & P & Partial<P> {
 	return deepMerge(defaults, props) as D & P & Partial<P>
 }
 
-
-export const makeComponent = <DP, DS>(args: {
-	defaultProps?: () => DP,
-	defaultState?: (props: DP) => DS
-}) => {
+/** Utility function to help in writing a component */
+export const makeComponent = <DP, DS>(args:
+	{
+		defaultProps?: () => DP,
+		defaultState?: (props: DP) => DS
+	}) => {
 	return <P extends Obj = Obj, M extends Message = Message, S = {}>(
 		comp: (
 			props: PropsExtended<P, M>,
@@ -345,14 +331,15 @@ export const makeComponent = <DP, DS>(args: {
 		return Object.assign(comp, { ...args })
 	}
 }
-
-export function makeComponent1<P extends Obj, M extends Message, S>() {
+/** Utility function to help in writing a component */
+export function makeComponent1<P extends Obj, M extends Message = Message, S = unknown>() {
 	return <DP extends Partial<P>, DS extends Partial<S>>(
 		comp: (
 			_: PropsExtended<P, M>,
 			props: MergedPropsExt<P, M, DP>,
 			state: DS & S & Partial<S> & { setState: (delta: Partial<S>) => void }
 		) => JSX.Element,
+
 		opts: {
 			defaultProps: () => DP,
 			defaultState: (props?: P) => DS,
@@ -366,3 +353,5 @@ export function makeComponent1<P extends Obj, M extends Message, S>() {
 	}
 }
 
+
+// export const Fragment = (async () => ({})) as Renderer

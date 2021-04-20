@@ -1,6 +1,6 @@
 {
-	"name": "@sparkwave/somatic",
-	"version": "1.4.0",
+	"name": "@agyemanjp/somatic",
+	"version": "1.6.1",
 	"description": "Functional, Asynchronous, Component-based UI Library that works with JSX",
 	"main": "index.js",
 	"types": "index.d.ts",
@@ -21,7 +21,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Hypothesize/somatic.js.git"
+		"url": "git+https://github.com/agyemanjp/somatic.js.git"
 	},
 	"keywords": [
 		"Functional",
@@ -29,17 +29,16 @@
 		"Component",
 		"UI"
 	],
-	"author": "",
+	"author": "James A. Prempeh",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/Hypothesize/somatic.js/issues"
+		"url": "https://github.com/agyemanjp/somatic.js/issues"
 	},
-	"homepage": "https://github.com/Hypothesize/somatic.js#readme",
+	"homepage": "https://github.com/agyemanjp/somatic.js#readme",
 	"dependencies": {
 		"@sparkwave/standard": "^2.23.0",
 		"cuid": "^2.1.8",
 		"fast-memoize": "^2.5.2",
-		"hash-sum": "^2.0.0",
 		"morphdom": "^2.6.1"
 	},
 	"devDependencies": {

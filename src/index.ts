@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 export * from './types'
 export * from './core'
+export { removeListeners, stringifyAttribs, stringifyStyle, } from './utils'
 export * from './components'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -10,12 +11,23 @@ declare global {
 		type Element = Promise<Somatic.VNode>
 
 		interface IntrinsicElements {
-			html: Somatic.HtmlHTMLAttributes<HTMLHeadingElement>,
+			html: Somatic.HtmlHTMLAttributes<HTMLHtmlElement>,
+			head: Somatic.HtmlHTMLAttributes<HTMLHeadElement>,
+			body: Somatic.HtmlHTMLAttributes<HTMLBodyElement>,
+			meta: Somatic.MetaHTMLAttributes<HTMLMetaElement>,
+			style: Somatic.StyleHTMLAttributes<HTMLStyleElement>,
+			title: Somatic.HtmlHTMLAttributes<HTMLTitleElement>,
+			link: Somatic.LinkHTMLAttributes<HTMLLinkElement>,
+			script: Somatic.ScriptHTMLAttributes<HTMLScriptElement>,
+			noscript: Somatic.HtmlHTMLAttributes<HTMLElement>,
 			form: Somatic.FormHTMLAttributes<HTMLFormElement>;
 			div: Somatic.HTMLAttributes<HTMLDivElement>;
 			h1: Somatic.HTMLAttributes<HTMLHeadingElement>,
 			h2: Somatic.HTMLAttributes<HTMLHeadingElement>,
 			h3: Somatic.HTMLAttributes<HTMLHeadingElement>,
+			h4: Somatic.HTMLAttributes<HTMLHeadingElement>,
+			h5: Somatic.HTMLAttributes<HTMLHeadingElement>,
+			h6: Somatic.HTMLAttributes<HTMLHeadingElement>,
 			br: Somatic.HtmlHTMLAttributes<HTMLBRElement>,
 			i: Somatic.HtmlHTMLAttributes<HTMLElement>,
 			b: Somatic.HtmlHTMLAttributes<HTMLElement>,
@@ -31,8 +43,16 @@ declare global {
 			span: Somatic.HTMLAttributes<HTMLSpanElement>;
 			optgroup: Somatic.OptgroupHTMLAttributes<HTMLOptGroupElement>,
 			option: Somatic.OptionHTMLAttributes<HTMLOptionElement>;
-			style: Somatic.StyleHTMLAttributes<HTMLStyleElement>;
-			textarea: Somatic.TextareaHTMLAttributes<HTMLInputElement>;
+			textarea: Somatic.TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+			table: Somatic.TableHTMLAttributes<HTMLTableElement>,
+			th: Somatic.ThHTMLAttributes<HTMLTableHeaderCellElement>,
+			tr: Somatic.HTMLAttributes<HTMLTableRowElement>,
+			td: Somatic.TdHTMLAttributes<HTMLTableDataCellElement>,
+			frame: Somatic.HTMLAttributes<HTMLFrameElement>,
+			audio: Somatic.AudioHTMLAttributes<HTMLAudioElement>,
+			img: Somatic.ImgHTMLAttributes<HTMLImageElement>,
+			canvas: Somatic.CanvasHTMLAttributes<HTMLCanvasElement>,
 
 			/* svg */
 			svg: Somatic.SVGAttributes<SVGSVGElement>,
@@ -45,17 +65,16 @@ declare global {
 			polyline: Somatic.SVGAttributes<SVGPolylineElement>,
 			path: Somatic.SVGAttributes<SVGPathElement>,
 			polygon: Somatic.SVGAttributes<SVGPolygonElement>,
-			title: Somatic.SVGAttributes<SVGTitleElement>,
 			switch: Somatic.SVGAttributes<SVGSwitchElement>,
 			desc: Somatic.SVGAttributes<SVGDescElement>,
 			foreignObject: Somatic.SVGAttributes<SVGForeignObjectElement>,
 			text: Somatic.SVGAttributes<SVGTextElement>,
-			defs: Somatic.SVGAttributes<SVGSVGElement>,
-			linearGradient: Somatic.SVGAttributes<SVGSVGElement>,
-			stop: Somatic.SVGAttributes<SVGSVGElement>,
-			filter: Somatic.SVGAttributes<SVGSVGElement>,
-			clipPath: Somatic.SVGAttributes<SVGSVGElement>,
-			use: Somatic.SVGAttributes<SVGSVGElement>,
+			defs: Somatic.SVGAttributes<SVGDefsElement>,
+			linearGradient: Somatic.SVGAttributes<SVGLinearGradientElement>,
+			stop: Somatic.SVGAttributes<SVGStopElement>,
+			filter: Somatic.SVGAttributes<SVGFilterElement>,
+			clipPath: Somatic.SVGAttributes<SVGClipPathElement>,
+			use: Somatic.SVGAttributes<SVGUseElement>,
 		}
 	}
 }

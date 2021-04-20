@@ -64,7 +64,7 @@ export const HoverBox = makeComponent({})<Props>(async (props) => {
 					${stringifyStyle({ ...style }, true)}
 				}
 				.${className__}:hover {
-					${stringifyStyle({ color: 'black', ...hoverStyle }, true)}
+					${stringifyStyle({ ...hoverStyle }, true)}
 				}					
 				input[type="text"].${className__} {
 					${stringifyStyle({ backgroundColor: "#fff", }, true)}
