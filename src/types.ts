@@ -42,25 +42,30 @@ export type ComponentRegular<P extends Obj = Obj, M extends Message = Message, S
 	}
 )
 /** Async function that defines a component with defaults */
-export type ComponentExtended<P extends Obj, M extends Message, S, DP extends Partial<P>, DS extends Partial<S> = Partial<S>> = (
-	((
-		props: PropsExtended<P, M>,
-		mergedProps: MergedPropsExt<P, M, DP>,
-		stateCache: DS & S & Partial<S> & { setState: (delta: Partial<S>) => void }
-	) => JSX.Element) &
-	{
-		defaultProps: () => DP;
-		defaultState: (props?: P) => DS,
-		hashProps?: (props: P) => string,
-		stateChangeCallback?: (delta: Partial<S>) => Promise<void>
-	}
-)
+export type ComponentExtended<
+	P extends Obj,
+	M extends Message,
+	S extends Obj = {},
+	DP extends Partial<P> = Partial<P>,
+	DS extends Partial<S> = Partial<S>> = (
+		((
+			props: PropsExtended<P, M>,
+			mergedProps: MergedPropsExt<P, M, DP>,
+			stateCache: DS & S & Partial<S> & { setState: (delta: Partial<S>) => void }
+		) => JSX.Element) &
+		{
+			defaultProps: () => DP;
+			defaultState: (props?: P) => DS,
+			hashProps?: (props: P) => string,
+			stateChangeCallback?: (delta: Partial<S>) => Promise<void>
+		}
+	)
 
 
 export type Component<
 	P extends Obj = Obj,
 	M extends Message = Message,
-	S = {},
+	S extends Obj = {},
 	DefaultProps extends Partial<P> = Partial<P>,
 	DefaultState extends Partial<S> = Partial<S>
 	> = (

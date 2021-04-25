@@ -1,10 +1,10 @@
 /* eslint-disable fp/no-rest-parameters */
 /* eslint-disable brace-style */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { createElement, makeComponent, stringifyStyle, mergeProps } from "../core"
+import { createElement, makeComponent, mergeProps } from "../core"
 import { first } from "@sparkwave/standard/collections/iterable"
 import { Component, HtmlProps, CSSProperties } from '../types'
-import { idProvider } from '../utils'
+import { idProvider, stringifyStyle } from '../utils'
 
 // type Messages = { type: "HOVER_START" } | { type: "HOVER_STOP" }
 

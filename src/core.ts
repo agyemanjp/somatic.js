@@ -251,14 +251,13 @@ export async function renderToString<P extends Obj, S>(vnode?: Primitive | Objec
 								return `${propName}="${stringifyStyle(propValue as CSSProperties)}"`
 
 							default:
+								// if prop is function, will not be added (will be hydrated later on client)
 								return typeof propValue === "string"
 									? `${propName}="${encodeHTML(propValue)}"`
-									: typeof propValue === "function"
-										? `${propName.toLowerCase()}="(${escape(propValue.toString())})(this);"`
-										: ""
+									: `${propName}="${JSON.stringify(propValue)}"`
 						}
 					})
-					.filter(attrHTML => attrHTML?.length > 0)
+					.filter(attrHTML => attrHTML?.length ?? 0 > 0)
 					.join(" ")
 				).prependSpaceIfNotEmpty().toString()
 
@@ -332,7 +331,7 @@ export const makeComponent = <DP, DS>(args:
 	}
 }
 /** Utility function to help in writing a component */
-export function makeComponent1<P extends Obj, M extends Message = Message, S = unknown>() {
+export function makeComponent1<P extends Obj, M extends Message = Message, S extends Obj = {}>() {
 	return <DP extends Partial<P>, DS extends Partial<S>>(
 		comp: (
 			_: PropsExtended<P, M>,
