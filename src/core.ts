@@ -10,7 +10,7 @@
 import morphdom from 'morphdom'
 import fastMemoize from 'fast-memoize'
 import { VNode, VNodeType, PropsExtended, Message, MergedPropsExt, CSSProperties, ComponentExtended, Component } from "./types"
-import { addListener, stringifyStyle, setAttribute, isEventKey, encodeHTML, idProvider } from "./utils"
+import { removeListeners, addListener, stringifyStyle, setAttribute, isEventKey, encodeHTML, idProvider } from "./utils"
 import { svgTags, eventNames, selfClosingTags, mouseMvmntEventNames, } from "./constants"
 import { Obj, String, Primitive, flatten, deepMerge } from "@sparkwave/standard"
 
@@ -307,7 +307,15 @@ export function hydrate(element: HTMLElement): void {
  * @param rootElement An HTML element that will be updated
  * @param node A node obtained by rendering a VNode
  */
-export function updateDOM(rootElement: Element, node: Node) { morphdom(rootElement, node, { getNodeKey: () => undefined }) }
+export function updateDOM(rootElement: Node, node: Node) {
+	morphdom(rootElement, node, { getNodeKey: () => undefined })
+}
+
+/** Convenience method to mount the entry point vnode of a client app */
+export async function mountDOM(vNode: VNode, container: Node) {
+	removeListeners(container)
+	updateDOM(container, await render(vNode))
+}
 
 /** Merge default props with actual props of component */
 export function mergeProps<P extends Obj, D extends Partial<P>>(defaults: D, props: P): D & P & Partial<P> {
@@ -343,8 +351,8 @@ export function makeComponent1<P extends Obj, M extends Message = Message, S ext
 			defaultProps: () => DP,
 			defaultState: (props?: P) => DS,
 			hashProps?: (props: P) => string,
-			stateChangeCallback?: (delta: Partial<S>) => Promise<void>
-
+			stateChangeCallback?: (delta: Partial<S>) => Promise<void>,
+			name?: string
 		}) => {
 
 		const r: ComponentExtended<P, M, S, DP, DS> = Object.assign(comp, { ...opts })
