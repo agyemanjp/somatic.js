@@ -312,7 +312,7 @@ export function updateDOM(rootElement: Node, node: Node) {
 }
 
 /** Convenience method to mount the entry point vnode of a client app */
-export async function mountDOM(vNode: VNode, container: Node) {
+export async function mountDOM(vNode: VNode | Promise<VNode>, container: Node) {
 	removeListeners(container)
 	updateDOM(container, await render(vNode))
 }
