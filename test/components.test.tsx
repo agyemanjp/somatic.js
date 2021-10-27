@@ -5,12 +5,13 @@
 /* eslint-disable init-declarations */
 
 import * as assert from "assert"
-import { Component, createElement, render } from '../dist/index.js'
-import { PanelProps, CSSProperties } from '../dist/types.js'
-import { StackPanel, DialogBox, StackView, ToggleInput, CommandBox } from '../dist/components/index.js'
-import { describe, it, beforeEach, afterEach } from 'mocha'
-const jsdom = require('mocha-jsdom')
-jsdom({ url: 'http://localhost', skipWindowCheck: true })
+// import { describe, it, beforeEach, afterEach } from 'mocha'
+
+import '../dist/index.js'
+import { Component, createElement, renderAsync } from '../dist/core/index.js'
+// import { StackPanel, DialogBox, StackView, ToggleInput, CommandBox } from '../dist/components/index.js'
+
+const cleanup = require('jsdom-global')()
 
 const theme = {
 	colors: {
@@ -156,3 +157,9 @@ describe("Components", () => {
 		})
 	})*/
 })
+
+
+const x = <div></div>
+
+
+// cleanup()

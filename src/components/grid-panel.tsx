@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement, makeComponent } from '../core'
-import { Component, PanelProps, HtmlProps } from '../types'
 
+import { createElement, Component, ButtonHTMLAttributes, CSSProperties } from '../core'
+import { HtmlProps, PanelProps } from './types'
 export type Props = PanelProps & HtmlProps & {
 }
 
-export const GridPanel = makeComponent({})<Props>(async (props) => {
+export const GridPanel: Component<Props> = async function* (props) {
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":
@@ -35,19 +35,19 @@ export const GridPanel = makeComponent({})<Props>(async (props) => {
 				return "initial"
 		}
 	}
+	// eslint-disable-next-line fp/no-loops
+	while (true) {
+		try {
+			const {
+				orientation,
+				itemsAlignH,
+				itemsAlignV,
+				children,
+				style,
+				...htmlProps
+			} = props
 
-	try {
-		const {
-			orientation,
-			itemsAlignH,
-			itemsAlignV,
-			children,
-			style,
-			...htmlProps
-		} = props
-
-		return (
-			<div
+			yield <div
 				{...htmlProps}
 
 				style={{
@@ -60,10 +60,14 @@ export const GridPanel = makeComponent({})<Props>(async (props) => {
 
 				{children}
 
-			</div>)
+			</div>
+		}
+		catch (e) {
+			console.error(`GridPanel render: ${e}`)
+			throw e
+		}
 	}
-	catch (e) {
-		console.error(`GridPanel render: ${e}`)
-		throw e
-	}
-})
+}
+
+GridPanel.isPure = true
+

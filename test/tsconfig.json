@@ -4,6 +4,7 @@
 		"module": "commonjs",
 		"jsx": "react",
 		"jsxFactory": "createElement",
+		// "esModuleInterop": true,
 		"strict": true
 	}
 }

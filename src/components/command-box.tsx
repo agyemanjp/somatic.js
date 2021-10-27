@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { createElement, mergeProps, makeComponent, makeComponent1 } from '../core'
-import { Component, HtmlProps, PanelProps, ButtonHTMLAttributes, CSSProperties } from '../types'
+/* eslint-disable fp/no-mutation */
+import { createElement, Component, ButtonHTMLAttributes } from '../core'
+import { HtmlProps, PanelProps } from './types'
 import { StackPanel } from './stack-panel'
 
 export const enum BtnMode { Normal = "normal", Selected = "selected", Disabled = "disabled" }
@@ -25,51 +25,20 @@ type Props = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
 	/** normal disabled or selected */
 	mode?: BtnMode
 }
-// eslint-disable-next-line @typescript-eslint/ban-types
-type State = {}
 
-interface Messages { type: "CLICKED" }
-
-
-export const CommandBox = makeComponent({
-	defaultProps: () => ({
-		orientation: "horizontal" as const,
-		hoverEffect: "invert" as const,
-
-		style: {
-			fontSize: "1em",
-			color: "#666",
-			borderColor: "#666",
-			borderWidth: "1px",
-			borderStyle: "solid",
-			padding: "0",
-			margin: "0",
-			overflow: "hidden",
-			borderRadius: "2px",
-			cursor: "pointer"
-		},
-
-		iconPlacement: "before" as const,
-		mode: BtnMode.Normal,
-		postMsgAsync: () => { }
-	}),
-	defaultState: (props) => ({})
-})<Props, Messages, State>(async (_, props, state) => {
+export const CommandBox: Component<Props> = (props) => {
 	const {
 		orientation,
 		iconPlacement, icon,
 		style, hoverEffect,
 		mode,
-		postMsgAsync,
 		children,
 		...htmlProps
 	} = props
 
-	const iconContent = props.icon
-		? props.icon
-		: <div />
+	const iconContent = props.icon ? props.icon : <div />
 
-	const mainContent = <StackPanel key="main-content"
+	const mainContent = <StackPanel
 		orientation={orientation}
 		itemsAlignV={"center"}
 		style={{ height: "100%" }}>
@@ -77,21 +46,39 @@ export const CommandBox = makeComponent({
 	</StackPanel>
 
 	return <button
-		onClick={(e) => { postMsgAsync({ type: "CLICKED" }) }}
 		{...htmlProps}
 		style={{
 			...htmlProps.disabled !== undefined
 				? { color: 'gray', borderColor: `gray` }
 				: {},
-
 			...style
 		}}>
 
-		<StackPanel key="container"
+		<StackPanel
 			itemsAlignV={"center"}
 			orientation={orientation}>
 			{iconPlacement === "before" ? [iconContent, mainContent] : [mainContent, iconContent]}
 		</StackPanel>
 	</button>
-})
+}
+
+CommandBox.isPure = true
+CommandBox.defaultProps = {
+	orientation: "horizontal" as const,
+	hoverEffect: "invert" as const,
+	style: {
+		fontSize: "1em",
+		color: "#666",
+		borderColor: "#666",
+		borderWidth: "1px",
+		borderStyle: "solid",
+		padding: "0",
+		margin: "0",
+		overflow: "hidden",
+		borderRadius: "2px",
+		cursor: "pointer"
+	},
+	iconPlacement: "before" as const,
+	mode: BtnMode.Normal
+}
 

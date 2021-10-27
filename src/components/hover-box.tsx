@@ -1,10 +1,11 @@
+/* eslint-disable fp/no-mutation */
 /* eslint-disable fp/no-rest-parameters */
 /* eslint-disable brace-style */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { createElement, makeComponent, mergeProps } from "../core"
+import { createElement, Component, CSSProperties, stringifyStyle, UIElement } from "../core"
 import { first } from "@sparkwave/standard/collections/iterable"
-import { Component, HtmlProps, CSSProperties } from '../types'
-import { idProvider, stringifyStyle } from '../utils'
+import { idProvider } from './utils'
+import { HtmlProps } from './types'
 
 // type Messages = { type: "HOVER_START" } | { type: "HOVER_STOP" }
 
@@ -12,30 +13,20 @@ type Props = HtmlProps & {
 	hoverStyle?: CSSProperties
 }
 
-export const HoverBox = makeComponent({})<Props>(async (props) => {
-	const defaultProps = Object.freeze({
-		style: {
-			height: "auto",
-			width: "auto",
-			padding: 0,
-			margin: 0
-		} as CSSProperties,
-		hoverStyle: {}
-	})
+export const HoverBox: Component<Props> = (props) => {
 
 	const {
 		children,
-		postMsgAsync,
 		hoverStyle,
 		style,
 		...htmlProps
-	} = mergeProps(defaultProps, props) //as PropsExtended<Props>
+	} = props
 
 	const className__ = idProvider.next()
 	// eslint-disable-next-line fp/no-let
-	let child = children ? await first(children) : undefined
+
+	let child = (children ? first(children) : undefined) as any
 	if (child && "props" in child) {
-		// eslint-disable-next-line fp/no-mutation
 		child = {
 			...child,
 			props: {
@@ -45,15 +36,21 @@ export const HoverBox = makeComponent({})<Props>(async (props) => {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				style: child.props?.style ?? {},
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				onMouseEnter: (e: unknown) => { if (postMsgAsync) postMsgAsync({ type: "HOVER_START" }) },
+				onMouseEnter: (e: unknown) => {
+					// if (postMsgAsync)
+					// 	postMsgAsync({ type: "HOVER_START" })
+				},
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-				onMouseLeave: (e: any) => { if (postMsgAsync) postMsgAsync({ type: "HOVER_STOP" }) }
+				onMouseLeave: (e: any) => {
+					// if (postMsgAsync)
+					// 	postMsgAsync({ type: "HOVER_STOP" })
+				}
 			}
 		}
 	}
 	else {
 		// eslint-disable-next-line fp/no-mutation
-		child = await (<div {...htmlProps} className={className__}>{child}</div>)
+		child = <div {...htmlProps} className={className__}>{child}</div>
 	}
 
 
@@ -74,4 +71,16 @@ export const HoverBox = makeComponent({})<Props>(async (props) => {
 
 		{child}
 	</div>
-})
+}
+
+// HoverBox.stateful = false
+HoverBox.isPure = true
+HoverBox.defaultProps = {
+	style: {
+		height: "auto",
+		width: "auto",
+		padding: 0,
+		margin: 0
+	} as CSSProperties,
+	hoverStyle: {}
+}

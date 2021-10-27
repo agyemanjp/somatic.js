@@ -9,25 +9,27 @@
 		"!*.tsbuildinfo"
 	],
 	"scripts": {
-		"setup": "rm -rf ./node_modules package-lock.json && npm install",
-		"clean": "rm -rf dist/* .eslintcache *-report.json",
-		"lint": "eslint --ext ts --cache src/*",
-		"lint-report": "eslint --ext ts --output-file .lint-report.json --format json-standard --cache src/*",
+		"deps": "rm -rf ./node_modules package-lock.json && npm install",
+		"clean": "rm -rf dist/* .eslintcache *.run.json",
+		"lint": "eslint --ext ts --cache 'src/**'",
+		"lintci": "eslint --ext ts --output-file .lint-report.json --format json-standard --cache 'src/**'",
 		"compile": "tsc",
 		"test": "mocha --require ts-node/register test/*.test.*",
-		"test-report": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test-report.json",
-		"build": "npm run clean && npm run lint && npm run compile && npm run test",
-		"package": "npm run build && git push --follow-tags && cp package.json LICENSE README.md dist && cd dist && npm publish --dry-run"
+		"testci": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
+		"build": "npm run lint && npm run compile && npm run test",
+		"package": "git push --follow-tags && cp package.json LICENSE README.md dist && cd dist && npm publish --dry-run",
+		"pub": "cd dist && npm publish --access public && cd .."
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/agyemanjp/somatic.js.git"
 	},
 	"keywords": [
-		"Functional",
+		"ui",
+		"functional",
 		"JSX",
-		"Component",
-		"UI"
+		"component",
+		"generator"
 	],
 	"author": "James A. Prempeh",
 	"license": "MIT",
@@ -36,30 +38,36 @@
 	},
 	"homepage": "https://github.com/agyemanjp/somatic.js#readme",
 	"dependencies": {
+		"@agyemanjp/standard": "^3.2.0",
 		"@sparkwave/standard": "^2.23.0",
 		"cuid": "^2.1.8",
 		"fast-memoize": "^2.5.2",
 		"morphdom": "^2.6.1"
 	},
 	"devDependencies": {
+		"@types/chai": "^4.2.22",
+		"@types/chai-html": "^1.3.0",
 		"@types/eslint": "^7.2.0",
 		"@types/hash-sum": "^1.0.0",
 		"@types/jsdom": "^16.2.1",
+		"@types/jsdom-global": "^3.0.2",
 		"@types/mocha": "^7.0.2",
 		"@types/morphdom": "^2.4.2",
 		"@types/node": "^14.0.4",
 		"@types/source-map-support": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "3.4.0",
 		"@typescript-eslint/parser": "3.4.0",
+		"chai": "^4.3.4",
+		"chai-html": "^2.0.1",
 		"eslint": "^7.3.1",
 		"eslint-formatter-json-standard": "^1.0.0",
 		"eslint-plugin-fp": "2.3.0",
-		"jsdom": "^16.2.2",
-		"mocha": "^7.1.1",
-		"mocha-jsdom": "^2.0.0",
+		"jsdom": "16.7.0",
+		"jsdom-global": "3.0.2",
+		"mocha": "^9.1.2",
 		"mocha-reporter-json-standard": "^1.0.0",
 		"source-map-support": "^0.5.19",
-		"ts-node": "^8.10.2",
-		"typescript": "^4.0.5"
+		"ts-node": "^10.2.1",
+		"typescript": "^4.4.3"
 	}
 }
