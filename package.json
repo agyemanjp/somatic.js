@@ -23,7 +23,8 @@
 		"version:minor": "npm version minor && git push --follow-tags",
 		"version:major": "npm version major && git push --follow-tags",
 		"publish:patch": "run-s build version:patch pubstage && cd dist && npm publish --access public && cd ..",
-		"publish:minor": "run-s build version:minor pubstage && cd dist && npm publish --access public && cd .."
+		"publish:minor": "run-s build version:minor pubstage && cd dist && npm publish --access public && cd ..",
+		"publish:major": "run-s build version:major pubstage && cd dist && npm publish --access public && cd .."
 	},
 	"repository": {
 		"type": "git",
