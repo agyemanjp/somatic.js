@@ -439,6 +439,16 @@ declare global {
 	}
 }
 
-export { Component, ComponentOptions, createElement, renderAsync, updateAsync, mountElement } from './core'
+export {
+	Component,
+	ComponentOptions,
+	createElement,
+	renderAsync,
+	renderToStringAsync,
+	updateAsync,
+	mountElement,
+	stringifyAttributes,
+	stringifyStyle
+} from './core'
 export * from './core/types'
 export * from './components'

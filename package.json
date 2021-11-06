@@ -17,8 +17,13 @@
 		"test": "mocha --require ts-node/register test/*.test.*",
 		"testci": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
 		"build": "npm run lint && npm run compile && npm run test",
-		"package": "git push --follow-tags && cp package.json LICENSE README.md dist && cd dist && npm publish --dry-run",
-		"pub": "cd dist && npm publish --access public && cd .."
+		"pubstage": "cp package.json LICENSE README.md dist",
+		"package": "npm run pubstage && cd dist && npm publish --dry-run && cd ..",
+		"version:patch": "npm version patch && git push --follow-tags",
+		"version:minor": "npm version minor && git push --follow-tags",
+		"version:major": "npm version major && git push --follow-tags",
+		"publish:patch": "run-s build version:patch pubstage && cd dist && npm publish --access public && cd ..",
+		"publish:minor": "run-s build version:minor pubstage && cd dist && npm publish --access public && cd .."
 	},
 	"repository": {
 		"type": "git",

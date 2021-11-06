@@ -11,7 +11,7 @@ import { IntrinsicElement, ComponentElement } from '../dist/core/types'
 import {
 	createElement,
 	renderAsync, renderToStringAsync,
-	isAugmentedDOM, isTextDOM,
+	isAugmentedDOM, isTextDOM, DOMAugmented,
 	createDOMShallow, updateDomShallow,
 	updateChildrenAsync,
 	traceToLeafAsync
@@ -113,7 +113,7 @@ describe("Core", () => {
 			const dom = await renderAsync(<div className={'test-class'} style={{ backgroundColor: "blue" }}>{`test`}</div>)
 
 			assert(isAugmentedDOM(dom))
-			assert.strictEqual(dom.getAttribute("class"), 'test-class')
+			assert.strictEqual((dom as DOMAugmented).getAttribute("class"), 'test-class')
 		})
 
 		it('should render a value element correctly', async () => {

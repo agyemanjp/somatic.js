@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { Sequence, hasValue } from "@agyemanjp/standard"
+import { skip, hasValue } from "@agyemanjp/standard"
 import { DOMAugmented, IntrinsicElement } from "./types"
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
@@ -105,10 +105,12 @@ export function setAttribute(element: HTMLElement | SVGElement, key: string, val
 	}
 }
 
+/** Remove child nodes beyond a certain index */
 export function truncateChildNodes(node: Node, newLength: number) {
-	new Sequence(node.childNodes).skip(newLength).forEach(child => node.removeChild(child))
+	[...skip([...node.childNodes], newLength)].forEach(child => node.removeChild(child))
 }
 
+/** Empty a node of child nodes */
 export function emptyContainer(container: Node) {
 	// eslint-disable-next-line fp/no-loops
 	while (container.lastChild) {
