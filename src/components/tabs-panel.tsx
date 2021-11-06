@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { deepMerge, } from '@sparkwave/standard/collections/object'
+import { deepMerge } from '@agyemanjp/standard'
 
 import { View } from './view'
 import { StackPanel } from './stack-panel'

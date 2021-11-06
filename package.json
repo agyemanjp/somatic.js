@@ -45,7 +45,6 @@
 	"homepage": "https://github.com/agyemanjp/somatic.js#readme",
 	"dependencies": {
 		"@agyemanjp/standard": "^3.2.0",
-		"@sparkwave/standard": "^2.23.0",
 		"cuid": "^2.1.8",
 		"fast-memoize": "^2.5.2",
 		"morphdom": "^2.6.1"

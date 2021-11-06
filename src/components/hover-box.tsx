@@ -3,7 +3,7 @@
 /* eslint-disable brace-style */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { createElement, Component, CSSProperties, stringifyStyle, UIElement } from "../core"
-import { first } from "@sparkwave/standard/collections/iterable"
+import { first } from "@agyemanjp/standard/collections"
 import { idProvider } from './utils'
 import { HtmlProps } from './types'
 
@@ -25,6 +25,7 @@ export const HoverBox: Component<Props> = (props) => {
 	const className__ = idProvider.next()
 	// eslint-disable-next-line fp/no-let
 
+	// eslint-disable-next-line fp/no-let
 	let child = (children ? first(children) : undefined) as any
 	if (child && "props" in child) {
 		child = {

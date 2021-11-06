@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable brace-style */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { deepMerge, noop, promisify } from '@sparkwave/standard'
+import { deepMerge, noop, promisify } from '@agyemanjp/standard'
 
 import { createElement, Component, CSSProperties, } from '../core'
 import { PanelProps, StyleProps, ViewProps } from './types'

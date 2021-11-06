@@ -5,7 +5,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Obj } from "@sparkwave/standard/utility"
+import { Obj } from "@agyemanjp/standard/utility"
 
 export interface ComponentOptions {
 	name?: string

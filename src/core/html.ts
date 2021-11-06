@@ -1,4 +1,4 @@
-import { Obj } from "@sparkwave/standard"
+import { Obj } from "@agyemanjp/standard"
 import { CSSProperties } from "./types"
 import { camelCaseToDash } from "./common"
 
