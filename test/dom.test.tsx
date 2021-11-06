@@ -109,7 +109,7 @@ describe("truncateChildNodes", () => {
 		assert.doesNotThrow(() => { truncateChildNodes(node, 1) })
 		assert.strictEqual(isTextDOM(node), true)
 	})
-	it("should remove the correct position and number of child nodes from DOM element with nested children", async () => {
+	it("should remove correct position and number of child nodes from a DOM element", async () => {
 		const elt = document.createElement("div")
 		elt.style.backgroundColor = "gray"
 		elt.title = "title"
