@@ -1,60 +1,19 @@
+/* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { skip, hasValue } from "@agyemanjp/standard"
-import { DOMAugmented, IntrinsicElement } from "./types"
+import { skip, hasValue, toCamelCase } from "@agyemanjp/standard"
+import { DOMAugmented, IntrinsicElement, ValueElement } from "./types"
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
-import { svgTags, isEventKey, eventNames } from "./common"
+import { svgTags, isEventKey, eventNames, booleanAttributes } from "./common"
 
 export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
 
-export function createDOMShallow(eltUI?: IntrinsicElement | {}) {
-	if (hasValue(eltUI) && isEltProper(eltUI)) {
-		const dom = svgTags.includes(eltUI.type.toUpperCase())
-			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
-			: document.createElement(eltUI.type)
-
-		Object.keys(eltUI.props)
-			.forEach(key => setAttribute(dom, key, eltUI.props[key]))
-
-		return dom
-	}
-	else {
-		return document.createTextNode(globalThis.String(eltUI ?? ""))
-	}
-}
-export function updateDomShallow(eltDOM: DOMAugmented, eltUI: IntrinsicElement | {}) {
-	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
-		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
-		Object.keys(eltUI.props).forEach(key => setAttribute(eltDOM, key, eltUI.props[key]))
-	}
-	else {
-		eltDOM.replaceWith(createDOMShallow(eltUI))
-	}
-	return eltDOM
-}
-
-/** Get ids of peak DOM elements among a list of elements in a tree */
-export function getApexElementIds(elementIds: string[]): string[] {
-	return elementIds.filter(id => {
-		// eslint-disable-next-line fp/no-let
-		let parent = document.getElementById(id)?.parentElement
-		// eslint-disable-next-line fp/no-loops
-		while (parent) {
-			if (elementIds.includes(parent.id))
-				return false
-			// eslint-disable-next-line fp/no-mutation
-			parent = parent.parentElement
-		}
-		return true
-	})
-}
-
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way */
-export function setAttribute(element: HTMLElement | SVGElement, key: string, value: unknown) {
+export function setAttribute(element: HTMLElement | SVGElement, key: string, value: any) {
 	try {
-		if (key.toUpperCase() === 'CLASSNAME') {
+		if (["CLASSNAME", "CLASS"].includes(key.toUpperCase())) {
 			if (typeof value === "string") {
 				// The class attribute is set with setAttribute(). This approach:
 				// avoids manipulating classList, which is cumbersome to reset, and not fully supported in all browsers
@@ -71,7 +30,7 @@ export function setAttribute(element: HTMLElement | SVGElement, key: string, val
 		}
 		else if (key.toUpperCase() === 'STYLE') {
 			if (typeof value === 'object') {
-				// The style (replaced with {} is null) is set with setAttribute(). This approach:
+				// The style (replaced with {} if null) is set with setAttribute(). This approach:
 				// avoids a type error with setting style directly, since Typescript (incorrectly) types style as a read-only 
 				// avoids updating individual style properties directly, since the value argument should entirely replace any previous styles, and it is cumbersome to remove existing syle properties 
 				// avoids merging the incoming value with existing styles, since the value argument should entirely replace any previous styles
@@ -82,26 +41,73 @@ export function setAttribute(element: HTMLElement | SVGElement, key: string, val
 				console.warn(`Ignored setting style on <${element.tagName}> to non-object value ${value}`)
 			}
 		}
-		else if (typeof value === 'function' && isEventKey(key.toUpperCase())) {
+		else if (typeof value === 'function' && isEventKey(key)) {
 			const eventName = eventNames[key.toUpperCase() as keyof typeof eventNames]
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			element.addEventListener(eventName, value as any)
+			element.addEventListener("unload", () => {
+				console.warn(`onloading element ${element}...`)
+				element.removeEventListener(eventName, value)
+			})
 		}
 		else {
-			// The <key> property on the element is directly to the <value> argument. This approach works:
+			const effectiveVal = booleanAttributes.includes(key.toUpperCase())
+				? [undefined, null, false].includes(value)
+					? false
+					: true
+				: value;
+
+			// The camelcase of <key> property on the element is set directly to <effectiveVal>. This approach works:
 			// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
-			// for setting the property to a vlaue of <null>; and
+			// for setting the property to a value of <null>; and
 			// for setting function values with are not event handlers.
 			// It also avoids using setAttribute to set the property to a string form of the value
 
 			// eslint-disable-next-line fp/no-mutation, @typescript-eslint/no-explicit-any
-			(element as any)[key] = value
+			(element as any)[key.toUpperCase() === "READONLY" ? "readOnly" : toCamelCase(key)] = effectiveVal
 			// console.log(`Set "${key}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}`)
 			// console.log(`Style property on <${element.tagName}> set to '${stringifyStyle(value ?? {})}'`)
 		}
 	}
 	catch (e) {
 		console.error(`Error setting "${key}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}:\n${e}`)
+	}
+}
+
+/** Create a shallow DOM element based on the passed intrinsic element or primitive value.
+ * @returns A non-text DOM element (without children) when passed an intrinsic element (that possibly has children)
+ * @returns A text DOM element when passed a primitive value
+ */
+export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): HTMLElement | SVGElement | Text {
+	if (hasValue(eltUI) && isEltProper(eltUI)) {
+		const dom = svgTags.includes(eltUI.type.toUpperCase())
+			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
+			: document.createElement(eltUI.type)
+		Object.keys(eltUI.props).forEach(key => setAttribute(dom, key, eltUI.props[key]))
+
+		return dom
+	}
+	else {
+		return document.createTextNode(globalThis.String(eltUI ?? ""))
+	}
+}
+
+/** Update or create a DOM element based on the passed intrinsic element or primitive value. 
+ * If passed an intrinsic element with the same tag as the existing DOM, the DOM is updated to match the intrinsic element
+ * Else the existing DOM is replaced (with respect ot its parent) with a new shallow DOM based on the intrinsic element
+ * If passed a primitive value, the original DOM is replaced with a new text element with content set to the value
+ * @returns: The original or new DOM element according to the above rules
+ */
+export function updateDomShallow(eltDOM: HTMLElement | SVGElement, eltUI: IntrinsicElement | ValueElement) {
+	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
+		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
+		Object.keys(eltUI.props).forEach(key => setAttribute(eltDOM, key, eltUI.props[key]))
+		return eltDOM
+	}
+	else {
+		const newDom = createDOMShallow(eltUI)
+		eltDOM.replaceWith(newDom)
+		return newDom
 	}
 }
 
@@ -121,4 +127,34 @@ export function emptyContainer(container: Node) {
 	// 	console.log(`Removing container's first child...`)
 	// 	container.firstChild.remove()
 	// }
+}
+
+/** Get ids of peak DOM elements among a list of elements in a tree */
+export function getApexElementIds(elementIds: string[]): string[] {
+	return elementIds.filter(id => {
+		// eslint-disable-next-line fp/no-let
+		let parent = document.getElementById(id)?.parentElement
+		// eslint-disable-next-line fp/no-loops
+		while (parent) {
+			if (elementIds.includes(parent.id))
+				return false
+			// eslint-disable-next-line fp/no-mutation
+			parent = parent.parentElement
+		}
+		return true
+	})
+}
+export function getApexElements(elements: (HTMLElement | SVGElement)[]): (HTMLElement | SVGElement)[] {
+	return elements.filter(elt => {
+		// eslint-disable-next-line fp/no-let
+		let parent = elt.parentElement
+		// eslint-disable-next-line fp/no-loops
+		while (parent) {
+			if (elements.includes(parent))
+				return false
+			// eslint-disable-next-line fp/no-mutation
+			parent = parent.parentElement
+		}
+		return true
+	})
 }

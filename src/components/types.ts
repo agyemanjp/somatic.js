@@ -7,11 +7,7 @@ export type PanelProps = Partial<{
 	itemsAlignV: "start" | "end" | "center" | "stretch" | "uniform" | "dock",
 	orientation: "vertical" | "horizontal"
 }>
-export type ViewProps<TData = unknown> = {
-	sourceData: Iterable<TData>
-	itemTemplate?: Component<{ item: TData, index: number }>
-	itemStyle?: CSSProperties
-}
+
 export type IconProps = Partial<{
 	color: string | null | undefined;
 	size: string | number;

@@ -7,7 +7,7 @@ import { expect, use } from "chai"
 import * as chaiHTML from "chai-html"
 const cleanup = require('jsdom-global')()
 
-import { IntrinsicElement, ComponentElement } from '../dist/core/types'
+import { IntrinsicElement, Component, ComponentElt, CSSProperties } from '../dist/core/types'
 import {
 	createElement,
 	renderAsync, renderToStringAsync,
@@ -20,26 +20,8 @@ import { StackPanel, CommandBox } from '../dist/components'
 import { idProvider } from '../dist/components/utils'
 import { constructElement, normalizeHTML } from './utils'
 
-describe("Core", () => {
+describe("CORE MODULE", () => {
 	use(chaiHTML)
-
-	describe("createDOMShallow", () => {
-		it("should return the proper augmented DOM element when passed an intrinsic element", async () => {
-			const dom = createDOMShallow({
-				type: "div",
-				props: { className: "clss", style: { backgroundColor: "blue" } },
-				children: ["val"]
-			} as IntrinsicElement)
-
-			assert(!isTextDOM(dom))
-			assert.strictEqual(dom.tagName.toUpperCase(), "DIV")
-			assert.strictEqual(String(dom.className).toUpperCase(), "CLSS")
-			assert.deepStrictEqual(dom.getAttribute("style"), `background-color: blue;`)
-
-			// children should not have been attached yet
-			assert.strictEqual(dom.childNodes.length, 0)
-		})
-	})
 
 	describe("updateChildren", () => {
 		it("should work for a single value child", async () => {
@@ -332,7 +314,7 @@ describe("Core", () => {
 		})
 		it("should work for intrinsic elements with properties and a child", async () => {
 			const actual = await renderToStringAsync(<div style={{ position: "static" }}>Splash page</div>)
-			const expected = `<div style="position: static;">Splash page</div>`
+			const expected = `<div style="position: static">Splash page</div>`
 			expect(expected).html.to.equal(actual)
 		})
 		it("should work for component elements with properties and a child", async () => {
@@ -343,7 +325,7 @@ describe("Core", () => {
 			)
 
 			const expected = `
-				<div style="display: flex; flex-direction: row; justify-content: initial; align-items: initial;">
+				<div style="display: flex; flex-direction: row; justify-content: initial; align-items: initial">
 					<input type="text"/>
 				</div>
 			`
@@ -354,25 +336,119 @@ describe("Core", () => {
 		})
 
 
+		it("should return a string representation of a complex page component", async () => {
+			type FontIcon = Component<Partial<{ color: string | null | undefined; size: string | number; style: CSSProperties }>>
+			const MakeIcon = (svgElement: JSX.Element): FontIcon => {
+				return function (props) {
+					const elt = svgElement as any
+					return <svg
+						preserveAspectRatio='xMidYMid meet'
+						{...elt.props}
+						style={props.style}
+						// width={props.size || (props.style || {}).width || undefined}
+						// height={props.size || (props.style || {}).height || undefined}
 
-		// it("should work for home page ", async () => {
-		// 	const str = await renderToStringAsync(<HomePage
-		// 		user={{
-		// 			id: "userid",
-		// 			displayName: "User",
-		// 			refreshToken: "",
-		// 			accessToken: "",
-		// 			provider: "google"
-		// 		}} />
-		// 	)
-		// 	// assert.throws(() => { parseValue([] as any) }, Error, "Error thrown")
-		// })
+						color={props.color || (props.style || {}).color || undefined}
+						stroke={props.color || (props.style || {}).color || undefined}
+						fill='currentColor'>
 
-		// it(`should parse 'N/A' as undefined and type missing`, () => {
-		// 	const result = parseValue("N/A  ")
-		// 	assert.ok(result.valueType === ValueType.missing && result.effective === undefined)
-		// })
+						{elt.children}
+					</svg>
+				}
+			}
+			const VytalsLogo = MakeIcon(
+				<svg
+					id="Layer_1"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 122.88 78.97">
+					<title>logo</title>
+					<path
+						fillRule="evenodd"
+						d="M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z" />
+				</svg>
+			)
+
+			interface User {
+				id: string
+				displayName: string
+				emailAddress?: string
+				imageUrl?: string
+				provider: "google" | "microsoft" | "dropbox" | "amazon" | "facebook" | "twitter",
+				refreshToken: string
+				accessToken: string
+			}
+			// eslint-disable-next-line @typescript-eslint/ban-types
+			const SplashPage: Component<any> = async function* (props) {
+				console.log(`Starting splash page render`)
+				yield <div>Splash page</div>
+			}
+			const Layout: Component<{ user: User | undefined }> = async function* (props) {
+				// console.log(`Starting layout component render`)
+				const { user, children } = props
+
+				yield <StackPanel id="root"
+					orientation="vertical"
+					style={{ padding: 0, margin: 0 }}>
+
+					<StackPanel id="header"
+						itemsAlignH="uniform"
+						itemsAlignV="center"
+						style={{ backgroundColor: "purple", width: "100vw", height: "10vh" }}>
+
+						<VytalsLogo style={{ stroke: "white", fill: "transparent", height: "7vh" }} />
+
+						<StackPanel id="user-info" style={{ padding: "0.25em", color: "whitesmoke" }}>
+							{user
+								? <StackPanel style={{ gap: "10%" } as any}>
+									<span>Welcome, {user.displayName}</span>
+									<a href="/logout">LOGOUT</a>
+								</StackPanel>
+								: <a href="/auth/google">LOGIN</a>
+							}
+						</StackPanel>
+
+					</StackPanel>
+
+					<StackPanel id="content"
+						style={{ backgroundColor: "whitesmoke", height: "75vh" }}>
+						{children}
+					</StackPanel>
+
+					<StackPanel id="footer"
+						style={{ height: "10vh" }}>
+
+					</StackPanel>
+
+				</StackPanel>
+			}
+			const str = await renderToStringAsync(<Layout user={/*injectedInfo.user*/ undefined}>
+				<SplashPage user={undefined} objectId={undefined} />
+			</Layout>)
+			console.warn(`renderToStringAsync of layout result (in test): ${str}`)
+
+			assert(str.length > 0)
+			// assert.throws(() => { parseValue([] as any) }, Error, "Error thrown")
+		})
 	})
+
+	// applyTraceAsync
+	// updateAsync
+	// mountElement
+	// createElement
+
 })
+
+
+// TYPE CHECKS
+
+// these should fail type-checking
+// const elt = createElement(StackPanel, { itemsAlignH: "stretch", x: 1 }, createElement("div", {}))
+// const elt1 = createElement(StackPanel, { itemsAlignHX: "stretch" }, createElement("div", {}))
+
+// this should pass type-checking
+// const elt = createElement(StackPanel, { itemsAlignH: "stretch" }, createElement("div", {}))
+
+// this should pass type-checking when children of elements are required
+// const stack = <StackPanel itemsAlignH="start"><div /></StackPanel>
 
 // cleanup()

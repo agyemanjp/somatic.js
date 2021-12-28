@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import {
+	Children,
 	HTMLAttributes,
 	MetaHTMLAttributes,
 	StyleHTMLAttributes,
@@ -34,9 +36,19 @@ declare global {
 		type Element = (
 			| AsyncGenerator<Element, Element>
 			| Generator<Element, Element>
-			// | Promise<Element>
 			| UIElement
+			// | Promise<Element>
 		)
+
+		/** This interface declaration is important for type-checking JSX children properly */
+		interface ElementChildrenAttribute {
+			children: {}; // specify children name to use
+		}
+
+		type Intrinsic<T> = T & {
+			children?: Children
+		}
+
 
 		/** Elements that are intrinsic to the runtime
 		 * Descriptions from https://developer.mozilla.org/en-US/docs/Web/HTML/Element#forms
@@ -45,15 +57,15 @@ declare global {
 			/** Represents the root (top-level element) of an HTML document, so it is also referred to as the root element. 
 			 * All other elements must be descendants of this element.
 			 * */
-			html: HtmlHTMLAttributes<HTMLHtmlElement>
+			html: Intrinsic<HtmlHTMLAttributes<HTMLHtmlElement>>
 			/** Represents the content of an HTML document. There can be only one <body> element in a document. */
-			body: HTMLAttributes<HTMLBodyElement>
+			body: Intrinsic<HTMLAttributes<HTMLBodyElement>>
 
 			//#region Document metadata
 			/** Specifies the base URL to use for all relative URLs in a document. There can be only one <base> element in a document. */
 			base: HTMLAttributes<HTMLBaseElement>
 			/** Contains machine-readable information (metadata) about the document, like its title, scripts, and style sheets. */
-			head: HtmlHTMLAttributes<HTMLHeadElement>
+			head: Intrinsic<HtmlHTMLAttributes<HTMLHeadElement>>
 			/** Specifies relationships between the current document and an external resource. 
 			 * This element is most commonly used to link to CSS, but is also used to establish site icons 
 			 * (both "favicon" style icons and icons for the home screen and apps on mobile devices) among other things. 
@@ -68,7 +80,7 @@ declare global {
 			/** Defines the document's title that is shown in a Browser's title bar or a page's tab. 
 			 * It only contains text; tags within the element are ignored. 
 			 */
-			title: HTMLAttributes<HTMLTitleElement>
+			title: Intrinsic<HTMLAttributes<HTMLTitleElement>>
 			//#endregion
 
 			//#region Content sectioning
@@ -134,7 +146,7 @@ declare global {
 			/** Generic container for flow content. 
 			 * It has no effect on the content or layout until styled in some way using CSS (e.g. styling is directly applied to it, or some kind of layout model like Flexbox is applied to its parent element).
 			 */
-			div: HTMLAttributes<HTMLDivElement>
+			div: Intrinsic<HTMLAttributes<HTMLDivElement>>
 			/** Represents a description list. 
 			 * The element encloses a list of groups of terms (specified using the dt element) and descriptions (provided by dd elements). 
 			 * Common uses for this element are to implement a glossary or to display metadata (a list of key-value pairs).
@@ -174,7 +186,7 @@ declare global {
 
 			//#region Inline text semantics
 			/** Creates a hyperlink to web pages, files, email addresses, locations in the same page, or anything else a URL can address. */
-			a: AnchorHTMLAttributes<HTMLAnchorElement>
+			a: Intrinsic<AnchorHTMLAttributes<HTMLAnchorElement>>
 			/** Represents an abbreviation or acronym; the optional title attribute can provide an expansion or description for the abbreviation. 
 			 * If present, title must contain this full description and nothing else.
 			 */
@@ -182,12 +194,12 @@ declare global {
 			/** Represents a range of text that is set off from the normal text for some reason, such as idiomatic text, technical terms, taxonomical designations, among others. 
 			 * Historically, these have been presented using italicized type, which is the original source of the <i> naming of this element.
 			 */
-			i: HtmlHTMLAttributes<HTMLElement>
+			i: Intrinsic<HtmlHTMLAttributes<HTMLElement>>
 			/** Used to draw the reader's attention to the element's contents, which are not otherwise granted special importance. 
 			 * This was formerly known as the Boldface element, and most browsers still draw the text in boldface. 
 			 * However, you should not use <b> for styling text; instead, you should use the CSS font-weight property to create boldface text, or the strong element to indicate that text is of special importance.
 			 */
-			b: HtmlHTMLAttributes<HTMLElement>
+			b: Intrinsic<HtmlHTMLAttributes<HTMLElement>>
 			/** produces a line break in text (carriage-return). 
 			 * It is useful for writing a poem or an address, where the division of lines is significant. 
 			 */
@@ -258,7 +270,7 @@ declare global {
 			 * It should be used only when no other semantic element is appropriate. 
 			 * <span> is very much like a div element, but div is a block-level element whereas a <span> is an inline element.
 			 */
-			span: HTMLAttributes<HTMLSpanElement>
+			span: Intrinsic<HTMLAttributes<HTMLSpanElement>>
 			/** Indicates that its contents have strong importance, seriousness, or urgency. 
 			 * Browsers typically render the contents in bold type. 
 			 */
@@ -366,17 +378,17 @@ declare global {
 
 			//#region Forms
 			/** Represents a document section containing interactive controls for submitting information. */
-			form: FormHTMLAttributes<HTMLFormElement>
+			form: Intrinsic<FormHTMLAttributes<HTMLFormElement>>
 			/** Represents a control that provides a menu of options */
 			select: SelectHTMLAttributes<HTMLSelectElement>
 			/** Represents a clickable button, used to submit forms or anywhere in a document for accessible, standard button functionality. */
-			button: ButtonHTMLAttributes<HTMLButtonElement>
+			button: Intrinsic<ButtonHTMLAttributes<HTMLButtonElement>>
 			/** Used to create interactive controls for web-based forms in order to accept data from the user.
 			 * A wide variety of types of input data and control widgets are available, depending on the device and user agent. 
 			 * The <input> element is one of the most powerful and complex in all of HTML due to the sheer number of combinations of input types and attributes. 
 			 */
-			input: InputHTMLAttributes<HTMLInputElement>
-			label: LabelHTMLAttributes<HTMLLabelElement>
+			input: Intrinsic<InputHTMLAttributes<HTMLInputElement>>
+			label: Intrinsic<LabelHTMLAttributes<HTMLLabelElement>>
 			/** Used to group several controls as well as labels (label) within a web form. */
 			fieldset: HTMLAttributes<HTMLFieldSetElement>
 			/** Represents a caption for the content of its parent fieldset. */
@@ -414,8 +426,8 @@ declare global {
 			//#endregion
 
 			//#region SVG
-			svg: SVGAttributes<SVGSVGElement>,
-			g: SVGAttributes<SVGGElement>,
+			svg: Intrinsic<SVGAttributes<SVGSVGElement>>,
+			g: Intrinsic<SVGAttributes<SVGGElement>>,
 			circle: SVGAttributes<SVGCircleElement>,
 			animate: SVGAttributes<SVGAnimateElement>,
 			animateTransform: SVGAttributes<SVGAnimateTransformElement>,

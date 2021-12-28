@@ -1,109 +1,125 @@
+/* eslint-disable prefer-const */
+/* eslint-disable fp/no-let */
+/* eslint-disable fp/no-mutation */
+/* eslint-disable fp/no-loops */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable brace-style */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { deepMerge, noop, promisify } from '@agyemanjp/standard'
 
-import { createElement, Component, CSSProperties, } from '../core'
-import { PanelProps, StyleProps, ViewProps } from './types'
+// import { deepMerge, noop, promisify } from '@agyemanjp/standard'
 
-export type Messages = (
-	| { type: "ITEM-SELECTED", data: { index: number } }
-	| { type: "ITEM-DELETED", data: { index: number } }
-)
+import { createElement, Component, CSSProperties, EventHandler, SyntheticEvent } from '../core'
+import { PanelProps, HtmlProps } from './types'
+import { StackPanel } from './stack-panel'
 
-type Props<T = unknown> = StyleProps & PanelProps & {
+// interface SelectionEvent extends SyntheticEvent { selectedIndex: number }
+// const event = new CustomEvent('build', { detail: elem.dataset.time })
+
+// ToDo: Implement deletion and rearrangement
+
+export type Props<T = unknown> = HtmlProps & PanelProps & {
 	sourceData: Iterable<T>
-	itemsPanel: Component<PanelProps>,
-
 	selectedIndex?: number,
-	itemTemplate?: Component<{
-		item: T,
-		index: number,
-		selected: boolean,
-		select: () => void,
-		delete: () => void
-	}>
 
+	itemsPanel: Component<HtmlProps & PanelProps>,
+	itemTemplate?: Component<{ item: T, index: number, selected?: boolean/*, children?: never[]*/ }>
 	itemStyle?: CSSProperties,
 	selectedItemStyle?: CSSProperties
 
-	extraFeatures?: {
-		selection?: boolean
-		arrangement?: boolean
-		deletion?: boolean
+	selectionEnabled?: boolean
+	arrangementEnabled?: boolean
+	deletionEnabled?: boolean
+
+	onSelect?: (eventData: { selectedIndex: number }) => void
+	// onDelete?: (eventData: { deletedIndex: number }) => void
+	// onArrange?: (eventData: { oldIndex: number, newIndex: number }) => void
+}
+
+export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncGenerator<JSX.Element, JSX.Element, typeof props> {
+	const defaultProps = () => ({
+		selectedIndex: 0,
+		itemsPanel: StackPanel,
+		itemTemplate: (p => <div>{p.item}</div>) as Required<Props<T>>["itemTemplate"],
+		itemStyle: {} as CSSProperties,
+		selectedItemStyle: {} as CSSProperties,
+		selectionEnabled: true,
+		// deletionEnabled: true,
+		// arrangementEnabled: true,
+	})
+
+	try {
+		let {
+			sourceData,
+			itemTemplate,
+			itemsPanel: ItemsPanel,
+			itemStyle,
+			selectedItemStyle,
+			selectedIndex,
+			children, // children will be ignored, should be undefined
+			style,
+			selectionEnabled,
+			deletionEnabled,
+			arrangementEnabled,
+			onSelect,
+			// onDelete,
+			// onArrange,
+			...restOfProps
+		} = { ...defaultProps(), ...props }
+
+		while (true) {
+			const newProps = yield <ItemsPanel style={style} {...restOfProps}>
+				{
+					[...sourceData].map((item, index) =>
+						<div //key={`item-container-${index}`}
+							style={{ ...itemStyle, ...index === selectedIndex ? selectedItemStyle : {} }}
+							onClick={(ev) => {
+								if (selectionEnabled) {
+									selectedIndex = index
+									if (onSelect)
+										onSelect({ selectedIndex: 1 })
+								}
+							}}>
+
+							{itemTemplate({ item, index, selected: index === selectedIndex })}
+						</div>
+					)
+				}
+			</ItemsPanel>
+
+			// Update props in case new values have been injected via the yield 
+			// eslint-disable-next-line require-atomic-updates
+			({
+				sourceData,
+				itemTemplate,
+				itemsPanel: ItemsPanel,
+				itemStyle,
+				selectedItemStyle,
+				selectedIndex,
+				children, // children will be ignored, should be undefined
+				style,
+				selectionEnabled,
+				deletionEnabled,
+				arrangementEnabled,
+				onSelect,
+				// onDelete,
+				// onArrange,
+				...restOfProps
+			} = { ...defaultProps(), ...newProps })
+		}
+	}
+	catch (e) {
+		console.error(`View render: ${e}`)
+		throw e
 	}
 }
-type State = {
-}
 
-const defaultProps = () => ({
-	selectedIndex: 0,
-	itemStyle: {} as CSSProperties,
-	selectedItemStyle: {} as CSSProperties,
-	extraFeatures: {},
-	postMsgAsync: promisify(noop)
-})
 
-const defaultState = function <T>(props?: Props<T>) {
-	return {
-		selectedIndex: props?.selectedIndex ?? 0
-	}
-}
+// this should succeed type-checking
+// const elt1 = <View sourceData={[1, 2, 3]} itemsPanel={StackPanel}></View>
 
-export async function View<T>(props: Props<T> & { children?: any[] }) {
-	// try {
-	// const {
-	// 	sourceData,
-	// 	itemTemplate,
-	// 	itemsPanel,
-	// 	itemStyle,
-	// 	selectedItemStyle,
-	// 	postMsgAsync,
-	// 	children,
-	// 	style,
+// this should fail type-checking
+// const elt2 = <View sourceData={[1, 2, 3]} itemsPanel={StackPanel}><div /></View>
 
-	// 	...restOfProps
-	// } = props
 
-	// const { selectedIndex, setState } = {}
-
-	return <div />
-
-	// return <props.itemsPanel {...restOfProps}>
-	// 	{[...sourceData].map((item, index) =>
-	// 		<div /*key={`item-container-${index}`}*/
-	// 			style={{ ...itemStyle, ...index === selectedIndex ? selectedItemStyle : {} }}
-	// 			onClick={(e) => {
-	// 				if (!itemTemplate) {
-	// 					setState({ selectedIndex: index })
-	// 					postMsgAsync({ type: "ITEM-SELECTED", data: { index } })
-	// 				}
-	// 			}}>
-
-	// 			{itemTemplate
-	// 				? itemTemplate({
-	// 					item,
-	// 					index,
-	// 					selected: index === selectedIndex,
-	// 					select: () => {
-	// 						setState({ selectedIndex: index })
-	// 						postMsgAsync({ type: "ITEM-SELECTED", data: { index } })
-	// 					},
-	// 					delete: () => {
-	// 						postMsgAsync({ type: "ITEM-DELETED", data: { index } })
-	// 					}
-	// 				})
-	// 				: String(item)
-	// 			}
-	// 		</div>
-	// 	)}
-
-	// </props.itemsPanel>
-	// }
-	// catch (e) {
-	// 	console.error(`View render: ${e}`)
-	// 	throw e
-	// }
-}

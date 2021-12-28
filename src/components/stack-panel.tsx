@@ -7,8 +7,7 @@ import { PanelProps, HtmlProps } from './types'
 export type Props = PanelProps & HtmlProps & {
 }
 
-
-export const StackPanel: Component<Props> = async function* (props) {
+export const StackPanel: Component<Props> = function (props) {
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":
@@ -48,29 +47,28 @@ export const StackPanel: Component<Props> = async function* (props) {
 		...htmlProps
 	} = props
 
-	while (true) {
-		yield <div
-			{...htmlProps}
+	return <div {...htmlProps}
+		style={{
+			display: "flex",
+			...style,
+			flexDirection: orientation === "vertical" ? "column" : "row",
+			justifyContent: justifyContent(),
+			alignItems: alignItems()
+		}}>
 
-			style={{
-				display: "flex",
-				...style,
-				flexDirection: orientation === "vertical" ? "column" : "row",
-				justifyContent: justifyContent(),
-				alignItems: alignItems()
-			}}>
+		{children}
 
-			{children}
+	</div>
 
-		</div>
-	}
 
-	// return <div />
 }
 
 StackPanel.isPure = true
 
 
+// const elt = createElement(StackPanel, { itemsAlignH: "stretch", x: 1 }, createElement("div", {}))
+// const elt1 = createElement(StackPanel, { itemsAlignHX: "stretch" }, createElement("div", {}))
+
 // const x = <div />
 
-// const y = <StackPanel />
+const y = <StackPanel />

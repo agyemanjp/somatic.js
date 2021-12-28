@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -7,38 +6,49 @@
 
 import { Obj } from "@agyemanjp/standard/utility"
 
-export interface ComponentOptions {
+
+export interface ComponentOptions<P extends Obj = Obj> {
 	name?: string
 	isPure?: boolean
-	defaultProps?: Obj
+	defaultProps?: Partial<P>
 }
 
-export type Component<P extends Obj = Obj> = ((props: P & { children?: UIElement[] }) =>
-	| AsyncGenerator<UIElement, UIElement>
-	| Generator<UIElement, UIElement>
-	| Promise<UIElement>
-	| UIElement
-) & ComponentOptions
+/** Main component type */
+export type Component<P extends Obj = Obj> = (
+	(props: P & { children?: Children }) =>
+		// UIElements below should not have a generic type since we don't know their props in advance
+		| AsyncGenerator<UIElement, UIElement, typeof props>
+		| Generator<UIElement, UIElement, typeof props>
+		| Promise<UIElement>
+		| UIElement
+) & ComponentOptions<P>
 
-export interface UIElementBase<P = unknown> { props: P, children: UIElement[] }
-export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string, }
-export interface ComponentElement<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P> }
+export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a generic type them
+export interface UIElementBase<P = unknown> { props: P, children?: Children }
+export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
+export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P>, result?: ComponentResult }
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type ValueElement = | null | string | number | boolean | Object
+
 /** An UI element is, basically, information for a future (component) function invocation,
  * I.e., the component function plus the arguments with which to call it
  * A component element produces another component element, recursively,
  * until an intrinsic element is obtained, at which point we can generate an actual node from it
  */
-export type UIElement<P extends Obj = Obj> = ComponentElement<P> | IntrinsicElement<P> | {}
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | ValueElement
 
-export interface ComponentElementAugmented<P extends Obj = Obj> extends ComponentElement<P> {
-	result?:
-	| { generator: AsyncGenerator<UIElement, UIElement>, next: UIElement }
-	| { generator: Generator<UIElement, UIElement>, next: UIElement }
-
-	| Promise<UIElement>
-	| UIElement
+export type ComponentResult = {
+	element: UIElement,
+	generator?: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>
 }
-export interface RenderingTrace { componentElts: ComponentElement[], leafElement: IntrinsicElement | {} }
+
+export interface ComponentEltAugmented<P extends Obj = Obj> extends ComponentElt<P> {
+	result: ComponentResult
+}
+
+export interface RenderingTrace { componentElts: ComponentEltAugmented[], leafElement: IntrinsicElement | ValueElement }
 export type DOMAugmented = (HTMLElement | SVGElement) & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
@@ -382,9 +392,9 @@ export interface Attributes { key?: string | number | symbol }
 export interface ClassAttributes<T> extends Attributes { }
 export type DOMAttributes<T> = {
 	//childrenx?: Somatic.VNode[];
-	dangerouslySetInnerHTML?: {
-		__html: string;
-	}
+	// dangerouslySetInnerHTML?: {
+	// 	__html: string;
+	// }
 
 	// Clipboard Events
 	onCopy?: ClipboardEventHandler<T>;
@@ -1406,7 +1416,7 @@ export interface TransitionEvent<T = Element> extends SyntheticEvent<T> {
 	pseudoElement: string;
 }
 
-type EventHandler<E extends SyntheticEvent<any>> = { bivarianceHack(event: E): void }["bivarianceHack"];
+export type EventHandler<E extends SyntheticEvent<any>> = { bivarianceHack(event: E): void }["bivarianceHack"];
 
 export type SomaticEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>;
 

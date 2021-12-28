@@ -1,14 +1,6 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { Children } from "./types"
 
-
-/** Checks if a string corresponds to one of the (uppercase) event names keys */
-export function isEventKey(key: string): key is keyof typeof eventNames {
-	const keyUpper = key.toUpperCase()
-	return keyUpper.startsWith("ON") // this condition is simply to prevent useless searches through the events list.
-		&& Object.keys(eventNames).includes(keyUpper)
-}
-
-/** Special attributes that map to DOM events. */
+/** Names of DOM events. */
 export const eventNames = {
 	ONABORT: "abort",
 	ONANIMATIONSTART: "animationstart",
@@ -74,19 +66,10 @@ export const eventNames = {
 	ONTOUCHSTART: "touchstart",
 	ONVOLUMECHANGE: "volumechange",
 	ONWAITING: "waiting",
-	ONWHEEL: "wheel"
+	ONWHEEL: "wheel",
 }
 
-/** Mouse event names */
-export const mouseMvmntEventNames = [
-	"ONMOUSEENTER",
-	"ONMOUSELEAVE",
-	"ONMOUSEMOVE",
-	"ONMOUSEOUT",
-	"ONMOUSEOVER",
-	"ONMOUSEUP"
-]
-
+/** SVG-specific tags. */
 export const svgTags = [
 	"ANIMATE",
 	"ANIMATEMOTION",
@@ -177,6 +160,7 @@ export const svgTags = [
 	"VIEW"
 ]
 
+/** Self-closing HTML tags. */
 export const selfClosingTags = [
 	"AREA",
 	"BASE",
@@ -196,10 +180,34 @@ export const selfClosingTags = [
 	"WBR"
 ]
 
+/** HTML (boolean) attributes set by their presence irrespective of their value. */
+export const booleanAttributes = [
+	"REQUIRED",
+	"DISABLED",
+	"CHECKED",
+	"READONLY"
+]
+
+/** Library-specific DOM update/refresh interval */
 export const UPDATE_INTERVAL_MILLISECONDS = 250
 
 
-export function camelCaseToDash(str: string) {
+/** Checks if a string corresponds to one of the (uppercase) event names keys */
+export function isEventKey(key: string): key is keyof typeof eventNames {
+	const keyUpper = key.toUpperCase()
+	return keyUpper.startsWith("ON") // this condition is simply to prevent useless searches through the events list.
+		&& Object.keys(eventNames).includes(keyUpper)
+}
+
+export function normalizeChildren(children?: Children) {
+	return children
+		? Array.isArray(children)
+			? children.flat()
+			: [children]
+		: []
+}
+
+export function camelCaseToDash(str: string): string {
 	return str
 		.replace(/[^a-zA-Z0-9]+/g, '-')
 		.replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
@@ -210,6 +218,17 @@ export function camelCaseToDash(str: string) {
 		.toLowerCase()
 }
 
-export function stringify(x: any) {
+export function stringify(x: any): string {
 	return JSON.stringify(x, (key, val) => typeof val === "function" ? `[Function ${val.name}]` : val, 2)
 }
+
+
+/** Mouse event names */
+/*export const mouseMvmntEventNames = [
+	"ONMOUSEENTER",
+	"ONMOUSELEAVE",
+	"ONMOUSEMOVE",
+	"ONMOUSEOUT",
+	"ONMOUSEOVER",
+	"ONMOUSEUP"
+]*/

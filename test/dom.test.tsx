@@ -5,9 +5,10 @@
 require('jsdom-global')()
 import * as assert from "assert"
 import {
+	IntrinsicElement,
 	createDOMShallow,
 	updateDomShallow,
-	getApexElementIds,
+	getApexElements,
 	setAttribute,
 	truncateChildNodes,
 	emptyContainer,
@@ -15,7 +16,8 @@ import {
 	isTextDOM,
 
 } from '../dist/core/index'
-// import { StackPanel } from '../dist/components'
+
+import { Set, except } from '@agyemanjp/standard'
 
 
 /*describe("isAugmentedDOM", () => {
@@ -37,107 +39,380 @@ import {
 	})
 })*/
 
+// type MarkupElt = HTMLElement | SVGElement | Text
 
-describe("isTextDOM", () => {
-	it("should return true for a text DOM node", async () => {
-		assert.strictEqual(isTextDOM(document.createTextNode("")), true)
-	})
-	it("should be false for a DOM element", async () => {
-		assert.strictEqual(isTextDOM(document.createElement("div")), false)
-	})
-	it("should be false for an SVG Text element", async () => {
-		assert.strictEqual(isTextDOM(document.createElementNS('http://www.w3.org/2000/svg', "text")), false)
-	})
-	it("should be false for a DOM element with attributes", async () => {
-		const elt = document.createElement("div")
-		elt.style.backgroundColor = "gray"
-		elt.title = "title"
-		assert.strictEqual(isTextDOM(elt), false)
-	})
-})
-
-describe("emptyContainer", () => {
-	it("should leave a non-container DOM element empty", async () => {
-		const elt = document.createElement("input")
-		elt.type = "email"
-		emptyContainer(elt)
-		assert.strictEqual(elt.childNodes.length, 0)
-	})
-	it("should leave an empty DOM element empty", async () => {
-		const elt = document.createElement("span")
-		emptyContainer(elt)
-		assert.strictEqual(elt.childNodes.length, 0)
-	})
-	it("should work for a DOM text node", async () => {
-		const node = document.createTextNode("")
-		assert.doesNotThrow(() => {
-			emptyContainer(node)
+describe("DOM MODULE", () => {
+	describe("isTextDOM", () => {
+		it("should return true for a text DOM node", async () => {
+			assert.strictEqual(isTextDOM(document.createTextNode("")), true)
 		})
-		assert.strictEqual(isTextDOM(node), true)
+		it("should be false for a DOM element", async () => {
+			assert.strictEqual(isTextDOM(document.createElement("div")), false)
+		})
+		it("should be false for an SVG Text element", async () => {
+			assert.strictEqual(isTextDOM(document.createElementNS('http://www.w3.org/2000/svg', "text")), false)
+		})
+		it("should be false for a DOM element with attributes", async () => {
+			const elt = document.createElement("div")
+			elt.style.backgroundColor = "gray"
+			elt.title = "title"
+			assert.strictEqual(isTextDOM(elt), false)
+		})
 	})
-	it("should empty a DOM element with nested children", async () => {
-		const elt = document.createElement("div")
-		elt.style.backgroundColor = "gray"
-		elt.title = "title"
-		const child = document.createElement("table")
-		child.appendChild(document.createElement("tr"))
 
-		elt.appendChild(child)
-		elt.appendChild(document.createTextNode("ahoy"))
+	describe("isAugmentedDOM", () => {
+		it("should return false for a text DOM node", async () => {
+			assert.strictEqual(isAugmentedDOM(document.createTextNode("")), false)
+		})
+		it("should be false for a basic DOM element", async () => {
+			assert.strictEqual(isAugmentedDOM(document.createElement("div")), false)
+		})
+		it("should be false for an SVG Text element", async () => {
+			assert.strictEqual(isAugmentedDOM(document.createElementNS('http://www.w3.org/2000/svg', "text")), false)
+		})
+		it("should be false for a DOM element with attributes", async () => {
+			const elt = document.createElement("div")
+			elt.style.backgroundColor = "gray"
+			elt.title = "title"
+			assert.strictEqual(isAugmentedDOM(elt), false)
+		})
+		it("should be true for a DOM element augmented with the 'renderTrace' property", async () => {
+			assert.strictEqual(isAugmentedDOM(Object.assign(document.createElement("div"), { renderTrace: { componentElts: [] } })), true)
+		})
+	})
 
-		assert.strictEqual(elt.childNodes.length, 2)
+	describe("setAttribute", () => {
+		it("should set style attribute properly", () => {
+			const elt = document.createElement("div")
+			setAttribute(elt, "style", { position: "absolute", backgroundColor: "blue" })
+			assert.strictEqual(elt.getAttribute("style"), "position: absolute; background-color: blue")
 
-		emptyContainer(elt)
-		assert.strictEqual(elt.childNodes.length, 0)
+			setAttribute(elt, "style", {})
+			assert.strictEqual(elt.getAttribute("style"), "")
+
+		})
+
+		it("should set class/classname attribute properly", () => {
+			const div = document.createElement("div")
+			setAttribute(div, "class", "class1 class2")
+			assert(div.classList.contains("class2"))
+
+			setAttribute(div, "className", "")
+			assert(!div.classList.contains("class2"))
+		})
+
+		it("should convert camel-cased attributes to their dash-case html equivalents in the output", () => {
+			const form = document.createElement("form")
+			setAttribute(form, "acceptCharset", "utf-8")
+			assert.strictEqual(form.getAttribute("accept-charset"), "utf-8")
+			assert.strictEqual(form.acceptCharset, "utf-8")
+
+			const meta = document.createElement("meta")
+			setAttribute(meta, "httpEquiv", "refresh")
+			assert.strictEqual(meta.getAttribute("http-equiv"), "refresh")
+			assert.strictEqual(meta.httpEquiv, "refresh")
+		})
+
+		it("should set boolean/no-value attributes properly", async () => {
+			const input = document.createElement("input")
+			setAttribute(input, "type", "radio")
+
+			setAttribute(input, "DISABLED", "disabled")
+			assert(input.disabled)
+
+			setAttribute(input, "disabled", "")
+			assert(input.disabled, "Boolean attribute removed by setting to empty string")
+
+			setAttribute(input, "disabled", false)
+			assert(!input.disabled, "Boolean attribute not removed by setting to false")
+
+			setAttribute(input, "checked", "")
+			assert(input.checked, "Boolean attribute removed by setting to empty string")
+
+			setAttribute(input, "checked", undefined)
+			assert(!input.checked, "Boolean attribute not removed by setting to undefined")
+
+			const select = document.createElement("select")
+			setAttribute(select, "required", true)
+			assert(select.required)
+			setAttribute(select, "required", false)
+			assert(!select.required)
+			setAttribute(select, "required", "required")
+			assert(select.required)
+
+			const textArea = document.createElement("textarea")
+			setAttribute(textArea, "readonly", true)
+			assert(textArea.readOnly)
+		})
+	})
+
+	describe("createDOMShallow", () => {
+		it("should return a DOM element matching the input intrinsic element", async () => {
+			const dom = createDOMShallow({
+				type: "div",
+				props: { className: "clss", style: { backgroundColor: "blue" } },
+				children: ["val"]
+			} as IntrinsicElement)
+
+			assert(!isTextDOM(dom))
+			assert.strictEqual(dom.tagName.toUpperCase(), "DIV")
+			assert.strictEqual(String(dom.className).toUpperCase(), "CLSS")
+			assert.deepStrictEqual(dom.getAttribute("style"), `background-color: blue`)
+
+			// children should not have been attached yet
+			assert.strictEqual(dom.childNodes.length, 0)
+		})
+		it("should return an SVG element matching the input intrinsic element", async () => {
+			// <g transform="matrix(0.660991,0,0,0.655918,524.665,744.892)" >
+			// 	<rect x="690.935" y="975.898" width="967.715" height="859.801" fill="none" ></rect>
+			// </g >
+
+			const dom = createDOMShallow({
+				type: "g",
+				props: { transform: "matrix(0.660991,0,0,0.655918,524.665,744.892)" },
+				children: [{
+					type: "rect",
+					props: { x: "690.935", y: "975.898", width: "967.715", height: "859.801", fill: "none" },
+					children: ["val"]
+				}]
+			} as IntrinsicElement) as SVGGElement
+
+			assert(!isTextDOM(dom))
+			assert.strictEqual(dom.tagName.toUpperCase(), "G")
+			// assert.strictEqual(String(dom.className).toUpperCase(), "CLSS")
+
+			console.log(dom.transform)
+			assert.deepStrictEqual(dom.transform, `matrix(0.660991,0,0,0.655918,524.665,744.892)`)
+			assert.strictEqual(dom.childNodes.length, 0)
+		})
+		it("should return a text DOM element with content set to the input primitive value", async () => {
+			const text = createDOMShallow(1)
+			assert(isTextDOM(text))
+			assert.strictEqual(text.textContent, "1")
+			assert.strictEqual(text.childNodes.length, 0) // text should not have any children
+		})
+		it("should return a text DOM element with empty content when passed null or undefined", async () => {
+			const text = createDOMShallow(undefined)
+			assert(isTextDOM(text))
+			assert.strictEqual(text.textContent, "")
+			assert.strictEqual(text.childNodes.length, 0)
+		})
+	})
+
+	describe("updateDOMShallow", () => {
+		it("should update original DOM to match input intrinsic with matching tag", async () => {
+			const dom1 = createDOMShallow({
+				type: "div",
+				props: { className: "clss", style: { backgroundColor: "blue" } },
+				children: ["val"]
+			} as IntrinsicElement)
+			assert(!isTextDOM(dom1))
+			assert.strictEqual(dom1.tagName.toUpperCase(), "DIV")
+			assert(dom1.classList.contains("clss"))
+			assert.deepStrictEqual(dom1.getAttribute("style"), `background-color: blue`)
+			assert.strictEqual(dom1.childNodes.length, 0)
+
+			const dom2 = updateDomShallow(dom1, {
+				type: "div",
+				props: { style: { backgroundColor: "yellow" }, title: "hello" },
+				children: []
+			} as IntrinsicElement)
+
+			assert(dom1 === dom2)
+			assert(!isTextDOM(dom2))
+			assert.strictEqual(dom2.tagName.toUpperCase(), "DIV")
+			assert(!dom2.classList.contains("clss"))
+			assert.deepStrictEqual(dom2.getAttribute("style"), `background-color: yellow`)
+			assert.deepStrictEqual(dom2.getAttribute("title"), `hello`)
+			assert.strictEqual(dom2.childNodes.length, 0)
+		})
+
+		it("should create new DOM to match input intrinsic without matching tag", async () => {
+			const div = createDOMShallow({
+				type: "div",
+				props: { className: "clss", style: { backgroundColor: "blue" } },
+				children: ["val"]
+			} as IntrinsicElement)
+			assert(!isTextDOM(div))
+			assert.strictEqual(div.tagName.toUpperCase(), "DIV")
+			assert(div.classList.contains("clss"))
+			assert.deepStrictEqual(div.getAttribute("style"), `background-color: blue`)
+			assert.strictEqual(div.childNodes.length, 0)
+
+			const span = updateDomShallow(div, {
+				type: "span",
+				props: { style: { backgroundColor: "yellow", display: "inline-block" } },
+				children: []
+			} as IntrinsicElement)
+
+			assert(div !== span)
+			assert(!isTextDOM(span))
+			assert.strictEqual(span.tagName.toUpperCase(), "SPAN")
+			assert(!span.classList.contains("clss"))
+			assert.deepStrictEqual(span.getAttribute("style"), `background-color: yellow; display: inline-block`)
+			assert.strictEqual(span.childNodes.length, 0)
+		})
+
+		it("should create a text DOM with content set to input primitive value", async () => {
+			const span = createDOMShallow({
+				type: "span",
+				props: { style: { backgroundColor: "yellow", display: "inline-block" } },
+				children: []
+			} as IntrinsicElement)
+			assert(!isTextDOM(span))
+
+			const text = updateDomShallow(span, 1)
+			assert(span !== text)
+			assert(isTextDOM(text))
+			assert.strictEqual(text.textContent, "1")
+			assert.strictEqual(text.childNodes.length, 0) // text should not have any children
+		})
+	})
+
+	describe("emptyContainer", () => {
+		it("should leave a non-container DOM element empty", async () => {
+			const elt = document.createElement("input")
+			elt.type = "email"
+			emptyContainer(elt)
+			assert.strictEqual(elt.childNodes.length, 0)
+		})
+		it("should leave an empty DOM element empty", async () => {
+			const elt = document.createElement("span")
+			emptyContainer(elt)
+			assert.strictEqual(elt.childNodes.length, 0)
+		})
+		it("should work for a DOM text node", async () => {
+			const node = document.createTextNode("")
+			assert.doesNotThrow(() => {
+				emptyContainer(node)
+			})
+			assert.strictEqual(isTextDOM(node), true)
+		})
+		it("should empty a DOM element with nested children", async () => {
+			const elt = document.createElement("div")
+			elt.style.backgroundColor = "gray"
+			elt.title = "title"
+			const child = document.createElement("table")
+			child.appendChild(document.createElement("tr"))
+
+			elt.appendChild(child)
+			elt.appendChild(document.createTextNode("ahoy"))
+
+			assert.strictEqual(elt.childNodes.length, 2)
+
+			emptyContainer(elt)
+			assert.strictEqual(elt.childNodes.length, 0)
+		})
+	})
+
+	describe("truncateChildNodes", () => {
+		it("should leave a non-container DOM element empty", async () => {
+			const elt = document.createElement("input")
+			elt.type = "email"
+			truncateChildNodes(elt, 7)
+			assert.strictEqual(elt.childNodes.length, 0)
+		})
+		it("should leave an empty DOM element empty", async () => {
+			const elt = document.createElement("span")
+			truncateChildNodes(elt, 4)
+			assert.strictEqual(elt.childNodes.length, 0)
+		})
+		it("should work for a DOM text node", async () => {
+			const node = document.createTextNode("")
+			assert.doesNotThrow(() => { truncateChildNodes(node, 1) })
+			assert.strictEqual(isTextDOM(node), true)
+		})
+		it("should remove correct position and number of child nodes from a DOM element", async () => {
+			const elt = document.createElement("div")
+			elt.style.backgroundColor = "gray"
+			elt.title = "title"
+			const child = document.createElement("table")
+			child.appendChild(document.createElement("tr"))
+
+			elt.appendChild(child)
+			elt.appendChild(document.createTextNode("ahoy"))
+
+			assert.strictEqual(elt.childNodes.length, 2)
+
+			truncateChildNodes(elt, 1)
+			assert.strictEqual(elt.childNodes.length, 1)
+			assert.strictEqual((elt.childNodes.item(0) as Element).tagName.toUpperCase(), "TABLE")
+		})
+		it("should empty a DOM element if the new children length passed is zero", async () => {
+			const elt = document.createElement("div")
+			elt.style.backgroundColor = "gray"
+			elt.title = "title"
+			const child = document.createElement("table")
+			child.appendChild(document.createElement("tr"))
+
+			elt.appendChild(child)
+			elt.appendChild(document.createTextNode("ahoy"))
+
+			assert.strictEqual(elt.childNodes.length, 2)
+
+			truncateChildNodes(elt, 0)
+			assert.strictEqual(elt.childNodes.length, 0)
+		})
+	})
+
+	describe("getApexElements", () => {
+		it("should return empty array when passed no element", () => {
+			assert.deepStrictEqual(getApexElements([]), [])
+		})
+		it("should return the single element passed to it", () => {
+			const div = document.createElement("div")
+			assert.deepStrictEqual(getApexElements([div]), [div])
+		})
+		it("should return the single element passed to it", () => {
+			const rootDiv1 = document.createElement("div")
+
+			const rootDiv1Span1 = document.createElement("span")
+			rootDiv1.appendChild(rootDiv1Span1)
+			const rootDiv1Img1 = document.createElement("img")
+			rootDiv1.appendChild(rootDiv1Img1)
+
+			const childDiv = document.createElement("div")
+			const para = document.createElement("p")
+			para.appendChild(document.createElement("span"))
+			para.appendChild(document.createElement("span"))
+
+			childDiv.appendChild(para)
+			childDiv.appendChild(document.createElement("button"))
+
+			rootDiv1.appendChild(childDiv)
+
+			const rootPara = document.createElement("p")
+
+			const rootDiv2 = document.createElement("div")
+			rootDiv2.appendChild(document.createElement("label"))
+			rootDiv2.appendChild(document.createElement("input"))
+			rootDiv2.appendChild(document.createElement("button"))
+
+			const expected = [rootPara, rootDiv1, rootDiv2]
+			assert(Set.equals(getApexElements(
+				[
+					rootDiv1,
+					childDiv,
+					rootPara,
+					para,
+					rootDiv2
+				]
+			), expected))
+
+			assert(Set.equals(getApexElements(
+				[
+					rootDiv1Img1,
+					rootDiv1,
+					childDiv,
+					rootPara,
+					rootDiv1Span1,
+					para,
+					rootDiv2
+				]
+			), expected))
+
+		})
 	})
 })
 
-describe("truncateChildNodes", () => {
-	it("should leave a non-container DOM element empty", async () => {
-		const elt = document.createElement("input")
-		elt.type = "email"
-		truncateChildNodes(elt, 7)
-		assert.strictEqual(elt.childNodes.length, 0)
-	})
-	it("should leave an empty DOM element empty", async () => {
-		const elt = document.createElement("span")
-		truncateChildNodes(elt, 4)
-		assert.strictEqual(elt.childNodes.length, 0)
-	})
-	it("should work for a DOM text node", async () => {
-		const node = document.createTextNode("")
-		assert.doesNotThrow(() => { truncateChildNodes(node, 1) })
-		assert.strictEqual(isTextDOM(node), true)
-	})
-	it("should remove correct position and number of child nodes from a DOM element", async () => {
-		const elt = document.createElement("div")
-		elt.style.backgroundColor = "gray"
-		elt.title = "title"
-		const child = document.createElement("table")
-		child.appendChild(document.createElement("tr"))
 
-		elt.appendChild(child)
-		elt.appendChild(document.createTextNode("ahoy"))
-
-		assert.strictEqual(elt.childNodes.length, 2)
-
-		truncateChildNodes(elt, 1)
-		assert.strictEqual(elt.childNodes.length, 1)
-		assert.strictEqual((elt.childNodes.item(0) as Element).tagName.toUpperCase(), "TABLE")
-	})
-	it("should empty a DOM element if the new children length passed is zero", async () => {
-		const elt = document.createElement("div")
-		elt.style.backgroundColor = "gray"
-		elt.title = "title"
-		const child = document.createElement("table")
-		child.appendChild(document.createElement("tr"))
-
-		elt.appendChild(child)
-		elt.appendChild(document.createTextNode("ahoy"))
-
-		assert.strictEqual(elt.childNodes.length, 2)
-
-		truncateChildNodes(elt, 0)
-		assert.strictEqual(elt.childNodes.length, 0)
-	})
-})
