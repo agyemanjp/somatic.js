@@ -9,8 +9,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 // import { deepMerge, noop, promisify } from '@agyemanjp/standard'
-
-import { createElement, Component, CSSProperties, EventHandler, SyntheticEvent } from '../core'
+import * as cuid from "cuid"
+import { createElement, Component, CSSProperties, emitCustomEvent } from '../core'
 import { PanelProps, HtmlProps } from './types'
 import { StackPanel } from './stack-panel'
 
@@ -29,56 +29,65 @@ export type Props<T = unknown> = HtmlProps & PanelProps & {
 	selectedItemStyle?: CSSProperties
 
 	selectionEnabled?: boolean
-	arrangementEnabled?: boolean
-	deletionEnabled?: boolean
+	// arrangementEnabled?: boolean
+	// deletionEnabled?: boolean
 
+	// Custom event handler callback
 	onSelect?: (eventData: { selectedIndex: number }) => void
 	// onDelete?: (eventData: { deletedIndex: number }) => void
 	// onArrange?: (eventData: { oldIndex: number, newIndex: number }) => void
 }
 
 export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncGenerator<JSX.Element, JSX.Element, typeof props> {
-	const defaultProps = () => ({
+	const defaultProps = {
+		id: cuid(),
 		selectedIndex: 0,
 		itemsPanel: StackPanel,
 		itemTemplate: (p => <div>{p.item}</div>) as Required<Props<T>>["itemTemplate"],
 		itemStyle: {} as CSSProperties,
 		selectedItemStyle: {} as CSSProperties,
-		selectionEnabled: true,
-		// deletionEnabled: true,
-		// arrangementEnabled: true,
-	})
+		selectionEnabled: true
+	}
 
 	try {
-		let {
-			sourceData,
-			itemTemplate,
-			itemsPanel: ItemsPanel,
-			itemStyle,
-			selectedItemStyle,
-			selectedIndex,
-			children, // children will be ignored, should be undefined
-			style,
-			selectionEnabled,
-			deletionEnabled,
-			arrangementEnabled,
-			onSelect,
-			// onDelete,
-			// onArrange,
-			...restOfProps
-		} = { ...defaultProps(), ...props }
-
 		while (true) {
-			const newProps = yield <ItemsPanel style={style} {...restOfProps}>
+			// Update props in case new values have been injected via the yield 
+			// eslint-disable-next-line require-atomic-updates
+			let {
+				id,
+				style,
+				children, // children will be ignored, should be undefined
+				sourceData,
+				itemTemplate,
+				itemsPanel: ItemsPanel,
+				itemStyle,
+				selectedItemStyle,
+				selectedIndex,
+				selectionEnabled,
+				onSelect,
+				...restOfProps
+			} = { ...defaultProps, ...props }
+
+			props = yield <ItemsPanel id={id} style={style} {...restOfProps}>
 				{
 					[...sourceData].map((item, index) =>
-						<div //key={`item-container-${index}`}
+						<div id={`${id}_item_container_${index}`} // Pre-pend parent id so that child ids are globally unique
 							style={{ ...itemStyle, ...index === selectedIndex ? selectedItemStyle : {} }}
 							onClick={(ev) => {
 								if (selectionEnabled) {
+									const oldSelectedIndex = selectedIndex
 									selectedIndex = index
-									if (onSelect)
-										onSelect({ selectedIndex: 1 })
+
+									// Always use emitCustomEvent function to raise events for standardized handling
+									emitCustomEvent({
+										event: onSelect ? { handler: onSelect, data: { selectedIndex } } : undefined,
+
+										// specify elements whose UI need updating as a result of the event
+										invalidatedElementIds: [
+											`${id}_item_container_${oldSelectedIndex}`,
+											`${id}_item_container_${selectedIndex}`
+										]
+									})
 								}
 							}}>
 
@@ -87,26 +96,6 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 					)
 				}
 			</ItemsPanel>
-
-			// Update props in case new values have been injected via the yield 
-			// eslint-disable-next-line require-atomic-updates
-			({
-				sourceData,
-				itemTemplate,
-				itemsPanel: ItemsPanel,
-				itemStyle,
-				selectedItemStyle,
-				selectedIndex,
-				children, // children will be ignored, should be undefined
-				style,
-				selectionEnabled,
-				deletionEnabled,
-				arrangementEnabled,
-				onSelect,
-				// onDelete,
-				// onArrange,
-				...restOfProps
-			} = { ...defaultProps(), ...newProps })
 		}
 	}
 	catch (e) {

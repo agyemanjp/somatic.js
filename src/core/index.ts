@@ -7,7 +7,7 @@ import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, RenderingTrace, UIElement, DOMAugmented } from "./types"
-import { normalizeChildren, selfClosingTags, UPDATE_INTERVAL_MILLISECONDS } from "./common"
+import { normalizeChildren, stringify, selfClosingTags, UPDATE_INTERVAL_MILLISECONDS } from "./common"
 
 
 /** Render a UI element into a DOM node (which is augmented with information used for subsequent updates) */
@@ -60,6 +60,26 @@ export async function renderToStringAsync(elt?: JSX.Element): Promise<string> {
 	}
 }
 
+export async function emitCustomEvent<E>(info:
+	{
+		event?: { handler: (eventData: E) => void, data: E },
+		invalidatedElementIds: string[]
+	}) {
+
+	const { event, invalidatedElementIds } = info
+	// const { handler, eventData } = event
+	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
+	if (event)
+		try {
+			event.handler(event.data)
+		}
+		// eslint-disable-next-line no-empty
+		catch (err) { // do not let 
+			console.error(`Error occured handling event "${event.handler.name}": ${err}`)
+		}
+
+}
+
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Node) {
 	emptyContainer(container)
@@ -70,6 +90,7 @@ export async function mountElement(element: UIElement, container: Node) {
 	let daemon: NodeJS.Timeout | undefined = undefined
 
 	document.addEventListener('UIInvalidated', async (eventInfo) => {
+		console.log(`UIInvalidated fired with data: ${stringify(eventInfo)}`)
 		// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
 		invalidatedElementIds.push(...(eventInfo as any).detail.invalidatedElementIds as string[])
 		// eslint-disable-next-line fp/no-mutation
