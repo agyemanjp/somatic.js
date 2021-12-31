@@ -2,7 +2,7 @@
 /* eslint-disable fp/no-loops */
 /* eslint-disable @typescript-eslint/ban-types */
 // import * as chalk from "chalk"
-import { String, hasValue, take, skip } from "@agyemanjp/standard"
+import { String, hasValue, take, skip, sleep } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, traceToLeafAsync, updateTraceAsync } from "./element"
@@ -60,16 +60,11 @@ export async function renderToStringAsync(elt?: JSX.Element): Promise<string> {
 	}
 }
 
-export async function emitCustomEvent<E>(info:
-	{
-		event?: { handler: (eventData: E) => void, data: E },
-		invalidatedElementIds: string[]
-	}) {
-
+/** Invalidate UI after emitting input event (if present) */
+export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, data: E }, invalidatedElementIds: string[] }) {
 	const { event, invalidatedElementIds } = info
-	// const { handler, eventData } = event
 	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
-	if (event)
+	if (event) {
 		try {
 			event.handler(event.data)
 		}
@@ -77,36 +72,45 @@ export async function emitCustomEvent<E>(info:
 		catch (err) { // do not let 
 			console.error(`Error occured handling event "${event.handler.name}": ${err}`)
 		}
-
+	}
 }
 
+type UpdateMode = "continuous-from-top" | "on-event-from-invalidated"
 /** Convenience method to mount the entry point dom node of a client app */
-export async function mountElement(element: UIElement, container: Node) {
+export async function mountElement(element: UIElement, container: Node, mode: UpdateMode = "on-event-from-invalidated") {
 	emptyContainer(container)
-	container.appendChild(await renderAsync(element))
+	const dom = await renderAsync(element)
+	container.appendChild(dom)
 
-	const invalidatedElementIds: string[] = []
-	// eslint-disable-next-line fp/no-let
-	let daemon: NodeJS.Timeout | undefined = undefined
-
-	document.addEventListener('UIInvalidated', async (eventInfo) => {
-		console.log(`UIInvalidated fired with data: ${stringify(eventInfo)}`)
-		// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
-		invalidatedElementIds.push(...(eventInfo as any).detail.invalidatedElementIds as string[])
-		// eslint-disable-next-line fp/no-mutation
-		if (daemon === undefined) daemon = setInterval(async () => {
-			if (invalidatedElementIds.length === 0 && daemon) {
-				clearInterval(daemon)
-				// eslint-disable-next-line fp/no-mutation
-				daemon = undefined
-			}
-			// eslint-disable-next-line fp/no-mutating-methods
-			const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
-			const topmostElementIds = getApexElementIds(idsToProcess)
-			await Promise.all(topmostElementIds.map(id => updateAsync(document.getElementById(id) as DOMAugmented)))
-
+	if (mode === "continuous-from-top") {
+		setInterval(async () => {
+			await updateAsync(dom)
 		}, UPDATE_INTERVAL_MILLISECONDS)
-	})
+	}
+	else {
+		const invalidatedElementIds: string[] = []
+		// eslint-disable-next-line fp/no-let
+		let daemon: NodeJS.Timeout | undefined = undefined
+
+		document.addEventListener('UIInvalidated', async (eventInfo) => {
+			console.log(`UIInvalidated fired with data: ${stringify(eventInfo)}`)
+			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
+			invalidatedElementIds.push(...(eventInfo as any).detail.invalidatedElementIds as string[])
+			// eslint-disable-next-line fp/no-mutation
+			if (daemon === undefined) daemon = setInterval(async () => {
+				if (invalidatedElementIds.length === 0 && daemon) {
+					clearInterval(daemon)
+					// eslint-disable-next-line fp/no-mutation
+					daemon = undefined
+				}
+				// eslint-disable-next-line fp/no-mutating-methods
+				const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
+				const topmostElementIds = getApexElementIds(idsToProcess)
+				await Promise.all(topmostElementIds.map(id => updateAsync(document.getElementById(id) as DOMAugmented)))
+
+			}, UPDATE_INTERVAL_MILLISECONDS)
+		})
+	}
 }
 
 /** JSX is transformed into calls of this function */

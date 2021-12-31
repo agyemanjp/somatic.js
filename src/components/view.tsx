@@ -10,7 +10,7 @@
 
 // import { deepMerge, noop, promisify } from '@agyemanjp/standard'
 import * as cuid from "cuid"
-import { createElement, emitCustomEvent } from '../core'
+import { createElement, emitEvent } from '../core'
 import { PanelProps, HtmlProps, Component, CSSProperties, } from '../types'
 import { StackPanel } from './stack-panel'
 
@@ -78,7 +78,7 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 									selectedIndex = index
 
 									// Always use emitCustomEvent function to raise events for standardized handling
-									emitCustomEvent({
+									emitEvent({
 										event: onSelect ? { handler: onSelect, data: { selectedIndex } } : undefined,
 
 										// specify elements whose UI need updating as a result of the event
