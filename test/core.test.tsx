@@ -7,18 +7,19 @@ import { expect, use } from "chai"
 import * as chaiHTML from "chai-html"
 const cleanup = require('jsdom-global')()
 
-import { IntrinsicElement, Component, ComponentElt, CSSProperties } from '../dist/core/types'
+import { IntrinsicElement, Component, ComponentElt, CSSProperties } from '../dist/types'
 import {
 	createElement,
 	renderAsync, renderToStringAsync,
 	isAugmentedDOM, isTextDOM, DOMAugmented,
+	isComponentElt, isEltProper, isIntrinsicElt,
 	createDOMShallow, updateDomShallow,
-	updateChildrenAsync,
+	updateChildrenAsync, applyTraceAsync, updateAsync, mountElement,
 	traceToLeafAsync
-} from '../dist/core/index'
-import { StackPanel, CommandBox } from '../dist/components'
+} from '../dist/core'
+import { StackPanel, CommandBox, View } from '../dist/components'
 import { idProvider } from '../dist/components/utils'
-import { constructElement, normalizeHTML } from './utils'
+import { normalizeHTML } from './utils'
 
 describe("CORE MODULE", () => {
 	use(chaiHTML)
@@ -38,6 +39,46 @@ describe("CORE MODULE", () => {
 
 			const updatedDom = await updateChildrenAsync(Object.assign(dom, { renderTrace: trace }))
 			assert.strictEqual(updatedDom.childNodes.length, 1)
+		})
+		it("should work for with multiple intrinsic children", async () => {
+			const intrinsic: IntrinsicElement = {
+				type: "div",
+				props: { className: "clss", style: { backgroundColor: "blue" } },
+				children: [{ type: "span", props: { style: { display: "inline-block" } } }, "val"]
+			}
+			const trace = await traceToLeafAsync(intrinsic)
+			assert.deepStrictEqual(trace.leafElement, intrinsic, "intrinsic element's trace's leaf element is not equal itself")
+
+			const dom = createDOMShallow(intrinsic)
+			assert(!isTextDOM(dom))
+
+			const updatedDom = await updateChildrenAsync(Object.assign(dom, { renderTrace: trace }))
+			assert.strictEqual(updatedDom.childNodes.length, 2)
+
+			const firstChild = updatedDom.childNodes.item(0) as HTMLElement
+			assert.strictEqual(firstChild.tagName.toUpperCase(), "SPAN")
+			assert.strictEqual(firstChild.style.display, "inline-block")
+		})
+		it("should work for component children", async () => {
+			const intrinsic: IntrinsicElement = {
+				type: "div",
+				props: {},
+				children: [
+					{ type: View, props: { sourceData: [], orientation: "vertical" } },
+					{ type: StackPanel, children: ["Hello"] },
+					{ type: CommandBox, children: ["Hello"] }
+				]
+			}
+			const trace = await traceToLeafAsync(intrinsic)
+			const dom = createDOMShallow(intrinsic)
+			assert(!isTextDOM(dom))
+			// eslint-disable-next-line fp/no-mutating-assign
+			const updatedDom = await updateChildrenAsync(Object.assign(dom, { renderTrace: trace }))
+			assert.strictEqual(updatedDom.childNodes.length, 3)
+
+			const firstChild = updatedDom.childNodes.item(0) as HTMLElement
+			assert.strictEqual(firstChild.tagName.toUpperCase(), "DIV")
+			assert.strictEqual(firstChild.style.flexDirection, "column")
 		})
 	})
 
@@ -424,17 +465,93 @@ describe("CORE MODULE", () => {
 			const str = await renderToStringAsync(<Layout user={/*injectedInfo.user*/ undefined}>
 				<SplashPage user={undefined} objectId={undefined} />
 			</Layout>)
-			console.warn(`renderToStringAsync of layout result (in test): ${str}`)
+			// console.warn(`renderToStringAsync of layout result (in test): ${str}`)
 
 			assert(str.length > 0)
 			// assert.throws(() => { parseValue([] as any) }, Error, "Error thrown")
 		})
 	})
 
-	// applyTraceAsync
-	// updateAsync
-	// mountElement
-	// createElement
+	describe("applyTraceAsync", () => {
+		it("should work for an intrinsic element with component", async () => {
+			const elt = {
+				type: StackPanel,
+				props: { orientation: "horizontal" },
+				children: [
+					{ type: View, props: { sourceData: [], orientation: "vertical" } },
+					{ type: CommandBox, children: ["Hello"] },
+					{ type: "a" },
+				]
+			}
+			const trace = await traceToLeafAsync(elt)
+			assert(isIntrinsicElt(trace.leafElement))
+			assert.strictEqual(trace.leafElement.type.toUpperCase(), "DIV")
+
+			const dom = document.createElement("span") as HTMLSpanElement
+			assert(!isTextDOM(dom))
+
+			// eslint-disable-next-line fp/no-mutating-assign
+			const updatedDom = await applyTraceAsync(dom, trace)
+
+			assert(isAugmentedDOM(updatedDom))
+			assert.notStrictEqual(updatedDom, dom)
+			assert.strictEqual(updatedDom.tagName.toUpperCase(), "DIV")
+			assert.strictEqual(updatedDom.style.flexDirection, "row")
+
+			assert.strictEqual(updatedDom.childNodes.length, 3)
+
+			const firstChild = updatedDom.childNodes.item(0) as HTMLElement
+			assert.strictEqual(firstChild.tagName.toUpperCase(), "DIV")
+			assert.strictEqual(firstChild.style.flexDirection, "column")
+		})
+	})
+
+	describe("updateAsync", async () => {
+		it("should update while maintaining the element type, if no overriding element is passed", async () => {
+			const dom = await renderAsync(<View<string>
+				id={"test_view"}
+				sourceData={["a", "b", "c"]}
+				itemsPanel={StackPanel}
+				itemTemplate={item => <i style={{ width: "7em", border: "thin solid orange" }}>{item.value}</i>}
+			/>)
+
+			const updatedDom = await updateAsync(dom)
+
+			assert(!isTextDOM(updatedDom))
+			// assert.strictEqual(updatedDom.)
+		})
+
+	})
+
+	describe("mountElement", async () => {
+		it("should work", async () => {
+			const div = document.createElement("div")
+			await mountElement(<View<string>
+				id={"test_view"}
+				sourceData={["a", "b", "c"]}
+				itemsPanel={StackPanel}
+				itemTemplate={item => <i style={{ width: "7em", border: "thin solid orange" }}>{item.value}</i>}
+			/>, div)
+
+			assert(true)
+		})
+
+	})
+
+	describe("createElement", async () => {
+		it("should create a element with props and children corresponsing to the arguments passed", async () => {
+			const elt = createElement(View as Component, { sourceData: [], itemsPanel: StackPanel })
+
+			assert.deepStrictEqual(elt.props, { sourceData: [], itemsPanel: StackPanel })
+			assert.deepStrictEqual(elt.children, [])
+		})
+		it("should convert missing props and chiildren arguments into empty object and array, respectively", async () => {
+			const elt = createElement("div", undefined)
+
+			assert.deepStrictEqual(elt.props, {})
+			assert.deepStrictEqual(elt.children, [])
+		})
+	})
 
 })
 

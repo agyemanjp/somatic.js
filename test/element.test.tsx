@@ -7,10 +7,10 @@ import {
 	UIElement, ComponentElt, Component, IntrinsicElement,
 	isEltProper, isIntrinsicElt, isComponentElt,
 	updateResultAsync, traceToLeafAsync, updateTraceAsync
-} from '../dist/core/index'
+} from '../dist/core'
 import { StackPanel } from '../dist/components'
-import { stringify, normalizeChildren } from '../dist/core/common'
-import { CSSProperties } from '../dist/core/types'
+import { stringify, normalizeChildren } from '../dist/common'
+import { CSSProperties } from '../dist/types'
 
 interface User {
 	id: string

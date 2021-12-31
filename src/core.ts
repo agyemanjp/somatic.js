@@ -188,13 +188,17 @@ export async function updateChildrenAsync(eltDOM: DOMAugmented): Promise<DOMAugm
 }
 
 /** Update a DOM node to reflect an existing (already updated) render trace
- * Mutates the passed node
+ * Posibly mutates the input node
  */
-export async function applyTraceAsync(nodeDOM: HTMLElement | SVGElement, trace: RenderingTrace): Promise<DOMAugmented> {
+export async function applyTraceAsync(nodeDOM: HTMLElement | SVGElement, trace: RenderingTrace): Promise<DOMAugmented | Text> {
 	// eslint-disable-next-line fp/no-mutating-assign
-	const augmentedNode = Object.assign(nodeDOM, { renderTrace: trace })
-	updateDomShallow(augmentedNode, trace.leafElement)
-	return updateChildrenAsync(augmentedNode)
+	// const augmentedNode = Object.assign(nodeDOM, { renderTrace: trace })
+	const updatedDOM = updateDomShallow(nodeDOM, trace.leafElement)
+
+	return isTextDOM(updatedDOM)
+		? updatedDOM
+		// eslint-disable-next-line fp/no-mutating-assign
+		: updateChildrenAsync(Object.assign(updatedDOM, { renderTrace: trace }))
 }
 
 

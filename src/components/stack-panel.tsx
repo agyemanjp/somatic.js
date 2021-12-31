@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement, Component } from '../core/index'
+import { createElement, Component } from '../index'
 import { PanelProps, HtmlProps } from './types'
 
 export type Props = PanelProps & HtmlProps & {

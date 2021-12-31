@@ -24,7 +24,7 @@ export type Props<T = unknown> = HtmlProps & PanelProps & {
 	selectedIndex?: number,
 
 	itemsPanel: Component<HtmlProps & PanelProps>,
-	itemTemplate?: Component<{ item: T, index: number, selected?: boolean/*, children?: never[]*/ }>
+	itemTemplate?: Component<{ value: T, index: number, selected?: boolean/*, children?: never[]*/ }>
 	itemStyle?: CSSProperties,
 	selectedItemStyle?: CSSProperties
 
@@ -43,16 +43,14 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 		id: cuid(),
 		selectedIndex: 0,
 		itemsPanel: StackPanel,
-		itemTemplate: (p => <div>{p.item}</div>) as Required<Props<T>>["itemTemplate"],
+		itemTemplate: (p => <div>{p.value}</div>) as Required<Props<T>>["itemTemplate"],
 		itemStyle: {} as CSSProperties,
 		selectedItemStyle: {} as CSSProperties,
-		selectionEnabled: true
+		selectionEnabled: true,
 	}
 
 	try {
 		while (true) {
-			// Update props in case new values have been injected via the yield 
-			// eslint-disable-next-line require-atomic-updates
 			let {
 				id,
 				style,
@@ -68,7 +66,8 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 				...restOfProps
 			} = { ...defaultProps, ...props }
 
-			props = yield <ItemsPanel id={id} style={style} {...restOfProps}>
+			// Yield the current UI, and also updating props with any new injected props
+			props = (yield <ItemsPanel id={id} style={style} {...restOfProps}>
 				{
 					[...sourceData].map((item, index) =>
 						<div id={`${id}_item_container_${index}`} // Pre-pend parent id so that child ids are globally unique
@@ -91,11 +90,11 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 								}
 							}}>
 
-							{itemTemplate({ item, index, selected: index === selectedIndex })}
+							{itemTemplate({ value: item, index, selected: index === selectedIndex })}
 						</div>
 					)
 				}
-			</ItemsPanel>
+			</ItemsPanel>) ?? props // So that props is not overwritten with undefined in case none were injected
 		}
 	}
 	catch (e) {
@@ -108,7 +107,7 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 // this should succeed type-checking
 // const elt1 = <View sourceData={[1, 2, 3]} itemsPanel={StackPanel}></View>
 
-// this should fail type-checking
+// this should fail type-checking because the View component does not accept children
 // const elt2 = <View sourceData={[1, 2, 3]} itemsPanel={StackPanel}><div /></View>
 
 

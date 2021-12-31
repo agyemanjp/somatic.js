@@ -28,7 +28,7 @@ import {
 	TdHTMLAttributes,
 	TextareaHTMLAttributes,
 	ThHTMLAttributes
-} from "./core/types"
+} from "./types"
 import { UIElement } from './core'
 
 declare global {
@@ -48,7 +48,6 @@ declare global {
 		type Intrinsic<T> = T & {
 			children?: Children
 		}
-
 
 		/** Elements that are intrinsic to the runtime
 		 * Descriptions from https://developer.mozilla.org/en-US/docs/Web/HTML/Element#forms
@@ -462,5 +461,5 @@ export {
 	stringifyAttributes,
 	stringifyStyle
 } from './core'
-export * from './core/types'
+export * from './types'
 export * from './components'

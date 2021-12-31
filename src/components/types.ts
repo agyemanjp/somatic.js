@@ -1,4 +1,4 @@
-import { Component, HTMLAttributes, CSSProperties } from "../core/types"
+import { Component, HTMLAttributes, CSSProperties } from "../types"
 
 export type HtmlProps = Partial<HTMLAttributes<HTMLElement>>
 export type StyleProps = { style?: CSSProperties }

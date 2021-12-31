@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import { stringifyAttributes, stringifyStyle, encodeHTML, FormHTMLAttributes } from '../dist/core/index'
+import { stringifyAttributes, stringifyStyle, encodeHTML, FormHTMLAttributes } from '../dist/core'
 
 // const SplashPage: Component = () => <div>Splash page</div>
 

@@ -83,7 +83,8 @@ export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): HTMLE
 		const dom = svgTags.includes(eltUI.type.toUpperCase())
 			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
 			: document.createElement(eltUI.type)
-		Object.keys(eltUI.props).forEach(key => setAttribute(dom, key, eltUI.props[key]))
+		const props = eltUI.props ?? {}
+		Object.keys(props).forEach(key => setAttribute(dom, key, props[key]))
 
 		return dom
 	}
@@ -101,10 +102,14 @@ export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): HTMLE
 export function updateDomShallow(eltDOM: HTMLElement | SVGElement, eltUI: IntrinsicElement | ValueElement) {
 	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
 		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
-		Object.keys(eltUI.props).forEach(key => setAttribute(eltDOM, key, eltUI.props[key]))
+		const props = eltUI.props ?? {}
+		Object.keys(props).forEach(key => setAttribute(eltDOM, key, props[key]))
 		return eltDOM
 	}
 	else {
+		if (isIntrinsicElt(eltUI))
+			console.log(`updateDOMShallow: ${eltUI.type.toUpperCase()} not compatible with ${eltDOM.tagName.toUpperCase()}, so creating new DOM`)
+
 		const newDom = createDOMShallow(eltUI)
 		eltDOM.replaceWith(newDom)
 		return newDom

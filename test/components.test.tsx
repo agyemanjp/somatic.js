@@ -12,8 +12,8 @@ import * as assert from "assert"
 // import { describe, it, beforeEach, afterEach } from 'mocha'
 
 import '../dist/index.js'
-import { Component, createElement, renderAsync } from '../dist/core/index.js'
-import { normalizeChildren } from '../dist/core/common.js'
+import { Component, createElement, renderAsync } from '../dist/index.js'
+import { normalizeChildren } from '../dist/common.js'
 // import { StackPanel, DialogBox, StackView, ToggleInput, CommandBox } from '../dist/components/index.js'
 
 const cleanup = require('jsdom-global')()

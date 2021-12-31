@@ -4,8 +4,8 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('jsdom-global')()
 import * as assert from "assert"
+import { IntrinsicElement } from "../dist/types"
 import {
-	IntrinsicElement,
 	createDOMShallow,
 	updateDomShallow,
 	getApexElements,
@@ -13,9 +13,11 @@ import {
 	truncateChildNodes,
 	emptyContainer,
 	isAugmentedDOM,
-	isTextDOM,
+	isTextDOM
+} from '../dist/dom'
+import { traceToLeafAsync, isIntrinsicElt } from "../dist/element"
+import { StackPanel, CommandBox, View } from "../dist/components"
 
-} from '../dist/core/index'
 
 import { Set, except } from '@agyemanjp/standard'
 
@@ -251,6 +253,23 @@ describe("DOM MODULE", () => {
 			assert(!span.classList.contains("clss"))
 			assert.deepStrictEqual(span.getAttribute("style"), `background-color: yellow; display: inline-block`)
 			assert.strictEqual(span.childNodes.length, 0)
+
+
+			const trace = await traceToLeafAsync({
+				type: StackPanel,
+				props: { orientation: "horizontal" },
+				children: [
+					{ type: View, props: { sourceData: [], orientation: "vertical" } },
+					{ type: CommandBox, children: ["Hello"] },
+					{ type: "a" },
+				]
+			})
+			assert(isIntrinsicElt(trace.leafElement))
+			assert.strictEqual(trace.leafElement.type.toUpperCase(), "DIV")
+			const divNew = updateDomShallow(span, trace.leafElement) as HTMLElement
+
+			assert.strictEqual(divNew.tagName.toUpperCase(), "DIV")
+			assert.strictEqual(divNew.style.flexDirection, "row")
 		})
 
 		it("should create a text DOM with content set to input primitive value", async () => {
