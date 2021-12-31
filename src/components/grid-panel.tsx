@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { createElement, Component, ButtonHTMLAttributes, CSSProperties } from '../core'
-import { HtmlProps, PanelProps } from './types'
+import { createElement } from '../core'
+import { Component, HtmlProps, PanelProps, ButtonHTMLAttributes, CSSProperties } from '../types'
 export type Props = PanelProps & HtmlProps & {
 }
 
-export const GridPanel: Component<Props> = async function* (props) {
+export const GridPanel: Component<Props> = function (props) {
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":
@@ -35,37 +35,35 @@ export const GridPanel: Component<Props> = async function* (props) {
 				return "initial"
 		}
 	}
-	// eslint-disable-next-line fp/no-loops
-	while (true) {
-		try {
-			const {
-				orientation,
-				itemsAlignH,
-				itemsAlignV,
-				children,
-				style,
-				...htmlProps
-			} = props
 
-			yield <div
-				{...htmlProps}
+	try {
+		const {
+			orientation,
+			itemsAlignH,
+			itemsAlignV,
+			children,
+			style,
+			...htmlProps
+		} = props
 
-				style={{
-					display: "grid",
-					...style,
-					flexDirection: orientation === "vertical" ? "column" : "row",
-					justifyContent: justifyContent(),
-					alignItems: alignItems()
-				}}>
+		return <div
+			{...htmlProps}
 
-				{children}
+			style={{
+				display: "grid",
+				...style,
+				flexDirection: orientation === "vertical" ? "column" : "row",
+				justifyContent: justifyContent(),
+				alignItems: alignItems()
+			}}>
 
-			</div>
-		}
-		catch (e) {
-			console.error(`GridPanel render: ${e}`)
-			throw e
-		}
+			{children}
+
+		</div>
+	}
+	catch (e) {
+		console.error(`GridPanel render: ${e}`)
+		throw e
 	}
 }
 

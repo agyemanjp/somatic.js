@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import {
+	UIElement,
 	Children,
 	HTMLAttributes,
 	MetaHTMLAttributes,
@@ -29,7 +30,6 @@ import {
 	TextareaHTMLAttributes,
 	ThHTMLAttributes
 } from "./types"
-import { UIElement } from './core'
 
 declare global {
 	namespace JSX {
@@ -450,16 +450,7 @@ declare global {
 	}
 }
 
-export {
-	Component,
-	ComponentOptions,
-	createElement,
-	renderAsync,
-	renderToStringAsync,
-	updateAsync,
-	mountElement,
-	stringifyAttributes,
-	stringifyStyle
-} from './core'
-export * from './types'
+export { createElement, renderAsync, renderToStringAsync, updateAsync, mountElement, } from './core'
+export { stringifyAttributes, stringifyStyle } from "./html"
 export * from './components'
+export * from './types'

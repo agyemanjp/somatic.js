@@ -200,9 +200,3 @@ export async function applyTraceAsync(nodeDOM: HTMLElement | SVGElement, trace: 
 		// eslint-disable-next-line fp/no-mutating-assign
 		: updateChildrenAsync(Object.assign(updatedDOM, { renderTrace: trace }))
 }
-
-
-export * from "./types"
-export * from "./element"
-export * from "./html"
-export * from "./dom"

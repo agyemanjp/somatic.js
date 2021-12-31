@@ -10,8 +10,8 @@
 
 // import { deepMerge, noop, promisify } from '@agyemanjp/standard'
 import * as cuid from "cuid"
-import { createElement, Component, CSSProperties, emitCustomEvent } from '../core'
-import { PanelProps, HtmlProps } from './types'
+import { createElement, emitCustomEvent } from '../core'
+import { PanelProps, HtmlProps, Component, CSSProperties, } from '../types'
 import { StackPanel } from './stack-panel'
 
 // interface SelectionEvent extends SyntheticEvent { selectedIndex: number }

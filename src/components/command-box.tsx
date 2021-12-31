@@ -3,8 +3,8 @@
 /* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable fp/no-mutation */
-import { createElement, Component, ButtonHTMLAttributes } from '../core'
-import { HtmlProps, PanelProps } from './types'
+import { createElement } from '../core'
+import { Component, ButtonHTMLAttributes, HtmlProps, PanelProps } from '../types'
 import { StackPanel } from './stack-panel'
 
 export const enum BtnMode { Normal = "normal", Selected = "selected", Disabled = "disabled" }

@@ -2,15 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert"
 import { isAsyncGenerator, isGenerator, pick, unique } from "@agyemanjp/standard"
-import {
-	createElement,
-	UIElement, ComponentElt, Component, IntrinsicElement,
-	isEltProper, isIntrinsicElt, isComponentElt,
-	updateResultAsync, traceToLeafAsync, updateTraceAsync
-} from '../dist/core'
-import { StackPanel } from '../dist/components'
+import { UIElement, ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/types'
+import { isEltProper, isIntrinsicElt, isComponentElt, updateResultAsync, traceToLeafAsync, updateTraceAsync } from '../dist/element'
 import { stringify, normalizeChildren } from '../dist/common'
-import { CSSProperties } from '../dist/types'
+import { createElement } from '../dist/core'
+import { StackPanel } from '../dist/components'
 
 interface User {
 	id: string

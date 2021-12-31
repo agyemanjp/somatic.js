@@ -6,13 +6,6 @@
 
 import { Obj } from "@agyemanjp/standard/utility"
 
-
-export interface ComponentOptions<P extends Obj = Obj> {
-	name?: string
-	isPure?: boolean
-	defaultProps?: Partial<P>
-}
-
 /** Main component type */
 export type Component<P extends Obj = Obj> = (
 	(props: P & { children?: Children }) =>
@@ -22,6 +15,12 @@ export type Component<P extends Obj = Obj> = (
 		| Promise<UIElement>
 		| UIElement
 ) & ComponentOptions<P>
+
+export interface ComponentOptions<P extends Obj = Obj> {
+	name?: string
+	isPure?: boolean
+	defaultProps?: Partial<P>
+}
 
 export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a generic type them
 export interface UIElementBase<P = unknown> { props: P, children?: Children }
@@ -43,12 +42,14 @@ export type ComponentResult = {
 	element: UIElement,
 	generator?: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>
 }
-
 export interface ComponentEltAugmented<P extends Obj = Obj> extends ComponentElt<P> {
 	result: ComponentResult
 }
 
-export interface RenderingTrace { componentElts: ComponentEltAugmented[], leafElement: IntrinsicElement | ValueElement }
+export interface RenderingTrace {
+	componentElts: ComponentEltAugmented[],
+	leafElement: IntrinsicElement | ValueElement
+}
 export type DOMAugmented = (HTMLElement | SVGElement) & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
@@ -385,6 +386,20 @@ export interface CSSProperties {
 	zIndex?: string | number | null;
 	zoom?: string | null;
 }
+
+export type HtmlProps = Partial<HTMLAttributes<HTMLElement>>
+export type StyleProps = { style?: CSSProperties }
+export type PanelProps = Partial<{
+	itemsAlignH: "start" | "end" | "center" | "stretch" | "uniform" | "dock",
+	itemsAlignV: "start" | "end" | "center" | "stretch" | "uniform" | "dock",
+	orientation: "vertical" | "horizontal"
+}>
+
+export type IconProps = Partial<{
+	color: string | null | undefined;
+	size: string | number;
+	style: CSSProperties
+}>
 
 //#region Attributes
 export interface Attributes { key?: string | number | symbol }
@@ -1437,7 +1452,6 @@ type TransitionEventHandler<T = Element> = EventHandler<TransitionEvent<T>>;
 
 //#endregion
 
-
 /* export interface DOMElement<Attr extends HTMLAttributes<Elt> | SVGAttributes<Elt>, Elt extends Element> extends VNode<Attr, string> {
 	  //type: string
 }*/
@@ -1448,17 +1462,4 @@ type TransitionEventHandler<T = Element> = EventHandler<TransitionEvent<T>>;
 ) => DOMElement<Attr, Elt>
 */
 
-// export interface Message {
-// 	type: string,
 
-// 	/** Data content of the message */
-// 	data?: unknown,
-
-// 	/** Does this message require a re-render after handling? */
-// 	needsRender?: boolean
-// }
-
-// export type Child = undefined | null | Primitive | Object | VNode
-// export type Children = Child | (Child | Children)[]
-// export type Children = Child[]
-// type Children =  ({ toString(): string } | VNode<any> | Children)[]

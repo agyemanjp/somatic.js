@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createElement, Component } from '../index'
-import { PanelProps, HtmlProps } from './types'
+import { createElement } from '../core'
+import { Component, PanelProps, HtmlProps } from '../types'
 
 export type Props = PanelProps & HtmlProps & {
 }
@@ -71,4 +71,4 @@ StackPanel.isPure = true
 
 // const x = <div />
 
-const y = <StackPanel />
+// const y = <StackPanel />
