@@ -82,14 +82,18 @@ type MountOptions = {
 }
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
+	console.log(`Mounting element ${element} on container ${container}...`)
+
 	emptyContainer(container)
 	let dom = await renderAsync(element)
+	console.log(`Initial rendering of element resulted in ${dom};\nAppending as child of container ${container}`)
+
 	// requestAnimationFrame(() => { container.appendChild(dom) })
 	container.appendChild(dom)
 
 	if (options?.updateMode === "continuous-from-top") {
 		setInterval(async () => {
-			console.log(`Updating mounted dom element...`)
+			console.log(`Updating mounted dom element ${dom}...`)
 			// eslint-disable-next-line fp/no-mutation, require-atomic-updates
 			dom = await updateAsync(dom)
 		}, options.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
@@ -99,6 +103,7 @@ export async function mountElement(element: UIElement, container: Node, options?
 		// eslint-disable-next-line fp/no-let
 		let daemon: NodeJS.Timeout | undefined = undefined
 
+		console.log(`Setting up UIInvalidated event listener on document`)
 		document.addEventListener('UIInvalidated', async (eventInfo) => {
 			console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
 			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any

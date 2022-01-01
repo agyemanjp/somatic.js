@@ -10,8 +10,13 @@ import { svgTags, isEventKey, eventNames, booleanAttributes } from "./common"
 export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
 
-/** Set a property on a DOM element to a value, in a DOM-idiomatic way */
+/** Set a property on a DOM element to a value, in a DOM-idiomatic way.
+ * The input property key must already be in the correct case 
+ */
 export function setAttribute(element: HTMLElement | SVGElement, key: string, value: any) {
+	if (["preserveaspectratio", "viewbox"].includes(key.toLowerCase()))
+		console.log(`SetAttribute starting for "${key}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}`)
+
 	try {
 		if (["CLASSNAME", "CLASS"].includes(key.toUpperCase())) {
 			if (typeof value === "string") {
@@ -55,7 +60,7 @@ export function setAttribute(element: HTMLElement | SVGElement, key: string, val
 				? [undefined, null, false].includes(value)
 					? false
 					: true
-				: value;
+				: value
 
 			// The camelcase of <key> property on the element is set directly to <effectiveVal>. This approach works:
 			// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
@@ -63,9 +68,17 @@ export function setAttribute(element: HTMLElement | SVGElement, key: string, val
 			// for setting function values with are not event handlers.
 			// It also avoids using setAttribute to set the property to a string form of the value
 
+			const effectiveKey = key.toUpperCase() === "READONLY" ? "readOnly" : toCamelCase(key)
 			// eslint-disable-next-line fp/no-mutation, @typescript-eslint/no-explicit-any
-			(element as any)[key.toUpperCase() === "READONLY" ? "readOnly" : toCamelCase(key)] = effectiveVal
-			// console.log(`Set "${key}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}`)
+			if (["preserveaspectratio", "viewbox"].includes(effectiveKey.toLowerCase()))
+				console.log(`Set "${effectiveKey}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}`)
+
+			try {
+				(element as any)[effectiveKey] = effectiveVal
+			}
+			catch (err) {
+				element.setAttribute(effectiveKey, effectiveVal)
+			}
 			// console.log(`Style property on <${element.tagName}> set to '${stringifyStyle(value ?? {})}'`)
 		}
 	}

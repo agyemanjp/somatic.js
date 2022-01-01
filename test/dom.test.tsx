@@ -94,6 +94,17 @@ describe("DOM MODULE", () => {
 
 		})
 
+		it("should set SVG attributes properly", () => {
+			const svg = createDOMShallow({ type: "svg" }) as SVGSVGElement
+			assert(svg.tagName.toUpperCase() === "SVG")
+
+			setAttribute(svg, "preserveAspectRatio", 'xMidYMid meet')
+			assert.strictEqual(svg.preserveAspectRatio, 'xMidYMid meet')
+
+			setAttribute(svg, "viewBox", "0 0 122.88 78.97")
+			assert.strictEqual(svg.viewBox, "0 0 122.88 78.97")
+		})
+
 		it("should set class/classname attribute properly", () => {
 			const div = document.createElement("div")
 			setAttribute(div, "class", "class1 class2")
