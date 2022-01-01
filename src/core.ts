@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable fp/no-loops */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -7,7 +8,7 @@ import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, RenderingTrace, UIElement, DOMAugmented } from "./types"
-import { normalizeChildren, stringify, selfClosingTags, UPDATE_INTERVAL_MILLISECONDS } from "./common"
+import { normalizeChildren, stringify, selfClosingTags, DEFAULT_UPDATE_INTERVAL_MILLISECONDS } from "./common"
 
 
 /** Render a UI element into a DOM node (which is augmented with information used for subsequent updates) */
@@ -75,17 +76,23 @@ export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, 
 	}
 }
 
-type UpdateMode = "continuous-from-top" | "on-event-from-invalidated"
+type MountOptions = {
+	updateMode?: "continuous-from-top" | "on-event-from-invalidated",
+	updateInterval?: number
+}
 /** Convenience method to mount the entry point dom node of a client app */
-export async function mountElement(element: UIElement, container: Node, mode: UpdateMode = "on-event-from-invalidated") {
+export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
 	emptyContainer(container)
-	const dom = await renderAsync(element)
+	let dom = await renderAsync(element)
+	// requestAnimationFrame(() => { container.appendChild(dom) })
 	container.appendChild(dom)
 
-	if (mode === "continuous-from-top") {
+	if (options?.updateMode === "continuous-from-top") {
 		setInterval(async () => {
-			await updateAsync(dom)
-		}, UPDATE_INTERVAL_MILLISECONDS)
+			console.log(`Updating mounted dom element...`)
+			// eslint-disable-next-line fp/no-mutation, require-atomic-updates
+			dom = await updateAsync(dom)
+		}, options.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
 	}
 	else {
 		const invalidatedElementIds: string[] = []
@@ -93,7 +100,7 @@ export async function mountElement(element: UIElement, container: Node, mode: Up
 		let daemon: NodeJS.Timeout | undefined = undefined
 
 		document.addEventListener('UIInvalidated', async (eventInfo) => {
-			console.log(`UIInvalidated fired with data: ${stringify(eventInfo)}`)
+			console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
 			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
 			invalidatedElementIds.push(...(eventInfo as any).detail.invalidatedElementIds as string[])
 			// eslint-disable-next-line fp/no-mutation
@@ -106,9 +113,12 @@ export async function mountElement(element: UIElement, container: Node, mode: Up
 				// eslint-disable-next-line fp/no-mutating-methods
 				const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
 				const topmostElementIds = getApexElementIds(idsToProcess)
-				await Promise.all(topmostElementIds.map(id => updateAsync(document.getElementById(id) as DOMAugmented)))
+				await Promise.all(topmostElementIds.map(id => {
+					console.log(`Updating "${id}" dom element...`)
+					updateAsync(document.getElementById(id) as DOMAugmented)
+				}))
 
-			}, UPDATE_INTERVAL_MILLISECONDS)
+			}, options?.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
 		})
 	}
 }

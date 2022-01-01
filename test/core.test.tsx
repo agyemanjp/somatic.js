@@ -508,28 +508,29 @@ describe("CORE MODULE", () => {
 				itemsPanel={StackPanel}
 				itemTemplate={item => <i style={{ width: "7em", border: "thin solid orange" }}>{item.value}</i>}
 			/>)
+			assert(!isTextDOM(dom))
 
 			const updatedDom = await updateAsync(dom)
 
 			assert(!isTextDOM(updatedDom))
-			// assert.strictEqual(updatedDom.)
+			assert.strictEqual(updatedDom.tagName, dom.tagName)
 		})
-
 	})
 
 	describe("mountElement", async () => {
 		it("should work", async () => {
 			const div = document.createElement("div")
 			await mountElement(<View<string>
-				id={"test_view"}
+				id={"test_view_id"}
 				sourceData={["a", "b", "c"]}
 				itemsPanel={StackPanel}
 				itemTemplate={item => <i style={{ width: "7em", border: "thin solid orange" }}>{item.value}</i>}
-			/>, div)
+			/>, document.body)
+
+			document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds: ["test_view_id"] } }))
 
 			assert(true)
 		})
-
 	})
 
 	describe("createElement", async () => {

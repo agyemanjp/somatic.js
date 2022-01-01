@@ -189,7 +189,7 @@ export const booleanAttributes = [
 ]
 
 /** Library-specific DOM update/refresh interval */
-export const UPDATE_INTERVAL_MILLISECONDS = 250
+export const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 250
 
 
 /** Checks if a string corresponds to one of the (uppercase) event names keys */
