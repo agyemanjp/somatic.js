@@ -3,8 +3,8 @@
 import * as assert from "assert"
 import { isAsyncGenerator, isGenerator, pick, unique } from "@agyemanjp/standard"
 import { UIElement, ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/types'
-import { isEltProper, isIntrinsicElt, isComponentElt, updateResultAsync, traceToLeafAsync, updateTraceAsync } from '../dist/element'
-import { stringify, normalizeChildren } from '../dist/common'
+import { isEltProper, isIntrinsicElt, isComponentElt, updateResultAsync, traceToLeafAsync, updateTraceAsync, getChildren } from '../dist/element'
+import { stringify } from '../dist/common'
 import { createElement } from '../dist/core'
 import { StackPanel } from '../dist/components'
 
@@ -101,7 +101,7 @@ describe("ELEMENT MODULE", () => {
 				let { selectedIndex, selectedStyle, children } = props
 				while (true)
 					yield <StackPanel orientation="vertical" style={{ padding: 0, margin: 0 }} >
-						{normalizeChildren(children).map((child, index) =>
+						{(children ? Array.isArray(children) ? children : [children] : []).map((child, index) =>
 							// eslint-disable-next-line fp/no-mutation
 							<div
 								style={index === selectedIndex ? selectedStyle : {}}
@@ -127,7 +127,7 @@ describe("ELEMENT MODULE", () => {
 
 			assert(isComponentElt(updatedResult.element), `Result element is not a component element`)
 			assert.strictEqual(updatedResult.element.type, StackPanel, `Result element is not a 'StackPanel' element`)
-			assert.strictEqual(normalizeChildren(updatedResult.element.children).length, 2)
+			assert.strictEqual(getChildren(updatedResult.element).length, 2)
 			assert.deepStrictEqual(updatedResult.element.props, {
 				// id: "root",
 				orientation: "vertical",

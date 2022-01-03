@@ -50,7 +50,8 @@ export interface RenderingTrace {
 	componentElts: ComponentEltAugmented[],
 	leafElement: IntrinsicElement | ValueElement
 }
-export type DOMAugmented = (HTMLElement | SVGElement) & { renderTrace: RenderingTrace }
+export type DOMElement = SVGElement | HTMLElement
+export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
 	alignContent?: string | null;

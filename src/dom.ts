@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
 import { skip, hasValue, toCamelCase } from "@agyemanjp/standard"
-import { DOMAugmented, IntrinsicElement, ValueElement } from "./types"
+import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
 import { svgTags, isEventKey, eventNames, booleanAttributes } from "./common"
@@ -13,7 +13,7 @@ export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TE
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way.
  * The input property key must already be in the correct case 
  */
-export function setAttribute(element: HTMLElement | SVGElement, key: string, value: any) {
+export function setAttribute(element: DOMElement, key: string, value: any) {
 	if (["preserveaspectratio", "viewbox"].includes(key.toLowerCase()))
 		console.log(`SetAttribute starting for "${key}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}`)
 
@@ -91,7 +91,7 @@ export function setAttribute(element: HTMLElement | SVGElement, key: string, val
  * @returns A non-text DOM element (without children) when passed an intrinsic element (that possibly has children)
  * @returns A text DOM element when passed a primitive value
  */
-export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): HTMLElement | SVGElement | Text {
+export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): DOMElement | Text {
 	if (hasValue(eltUI) && isEltProper(eltUI)) {
 		const dom = svgTags.includes(eltUI.type.toUpperCase())
 			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
@@ -112,7 +112,7 @@ export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): HTMLE
  * If passed a primitive value, the original DOM is replaced with a new text element with content set to the value
  * @returns: The original or new DOM element according to the above rules
  */
-export function updateDomShallow(eltDOM: HTMLElement | SVGElement, eltUI: IntrinsicElement | ValueElement) {
+export function updateDomShallow(eltDOM: DOMElement, eltUI: IntrinsicElement | ValueElement) {
 	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
 		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
 		const props = eltUI.props ?? {}
@@ -162,7 +162,7 @@ export function getApexElementIds(elementIds: string[]): string[] {
 		return true
 	})
 }
-export function getApexElements(elements: (HTMLElement | SVGElement)[]): (HTMLElement | SVGElement)[] {
+export function getApexElements(elements: DOMElement[]): DOMElement[] {
 	return elements.filter(elt => {
 		// eslint-disable-next-line fp/no-let
 		let parent = elt.parentElement

@@ -199,14 +199,6 @@ export function isEventKey(key: string): key is keyof typeof eventNames {
 		&& Object.keys(eventNames).includes(keyUpper)
 }
 
-export function normalizeChildren(children?: Children) {
-	return children
-		? Array.isArray(children)
-			? children.flat()
-			: [children]
-		: []
-}
-
 export function camelCaseToDash(str: string): string {
 	return str
 		.replace(/[^a-zA-Z0-9]+/g, '-')

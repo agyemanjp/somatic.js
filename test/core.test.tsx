@@ -8,8 +8,8 @@ import * as chaiHTML from "chai-html"
 const cleanup = require('jsdom-global')()
 
 import { IntrinsicElement, DOMAugmented, Component, ComponentElt, CSSProperties } from '../dist/types'
-import { createElement, renderAsync, renderToStringAsync, updateChildrenAsync, applyTraceAsync, updateAsync, mountElement } from '../dist/core'
-import { isComponentElt, isEltProper, isIntrinsicElt, traceToLeafAsync } from '../dist/element'
+import { createElement, renderAsync, renderToStringAsync, updateChildrenAsync, applyLeafElementAsync, updateAsync, mountElement } from '../dist/core'
+import { isComponentElt, isEltProper, isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
 import { isAugmentedDOM, isTextDOM, createDOMShallow, updateDomShallow } from '../dist/dom'
 import { StackPanel, CommandBox, View } from '../dist/components'
 import { idProvider } from '../dist/components/utils'
@@ -31,7 +31,7 @@ describe("CORE MODULE", () => {
 			const dom = createDOMShallow(intrinsic)
 			assert(!isTextDOM(dom))
 
-			const updatedDom = await updateChildrenAsync(Object.assign(dom, { renderTrace: trace }))
+			const updatedDom = await updateChildrenAsync(dom, getChildren(trace.leafElement))
 			assert.strictEqual(updatedDom.childNodes.length, 1)
 		})
 		it("should work for with multiple intrinsic children", async () => {
@@ -46,12 +46,25 @@ describe("CORE MODULE", () => {
 			const dom = createDOMShallow(intrinsic)
 			assert(!isTextDOM(dom))
 
-			const updatedDom = await updateChildrenAsync(Object.assign(dom, { renderTrace: trace }))
+			const updatedDom = await updateChildrenAsync(dom, getChildren(trace.leafElement))
 			assert.strictEqual(updatedDom.childNodes.length, 2)
 
 			const firstChild = updatedDom.childNodes.item(0) as HTMLElement
 			assert.strictEqual(firstChild.tagName.toUpperCase(), "SPAN")
 			assert.strictEqual(firstChild.style.display, "inline-block")
+		})
+		it("should remove children from input dom element if input children array is empty", async () => {
+			const dom = await renderAsync({
+				type: "div",
+				props: { className: "clss", style: { backgroundColor: "blue" } },
+				children: [{ type: "span", props: { style: { display: "inline-block" } } }, "val"]
+			})
+			assert(!isTextDOM(dom))
+			assert.strictEqual(dom.childNodes.length, 2)
+
+			const updatedDom = await updateChildrenAsync(dom, [])
+			assert.strictEqual(updatedDom.childNodes.length, 0)
+
 		})
 		it("should work for component children", async () => {
 			const intrinsic: IntrinsicElement = {
@@ -67,7 +80,7 @@ describe("CORE MODULE", () => {
 			const dom = createDOMShallow(intrinsic)
 			assert(!isTextDOM(dom))
 			// eslint-disable-next-line fp/no-mutating-assign
-			const updatedDom = await updateChildrenAsync(Object.assign(dom, { renderTrace: trace }))
+			const updatedDom = await updateChildrenAsync(dom, getChildren(trace.leafElement))
 			assert.strictEqual(updatedDom.childNodes.length, 3)
 
 			const firstChild = updatedDom.childNodes.item(0) as HTMLElement
@@ -182,6 +195,32 @@ describe("CORE MODULE", () => {
 			assert.strictEqual(lastChild.firstChild.textContent, "4000")
 		})
 
+		it("should render SVG elements properly", async () => {
+			const svg = await renderAsync({
+				type: "svg",
+				props: {
+					id: "Layer_1",
+					xmlns: "http://www.w3.org/2000/svg",
+					viewBox: "0 0 122.88 78.97"
+				},
+				children: [
+					{ type: "title", children: ["logo"] },
+					{
+						type: "path",
+						props: {
+							fillRule: "evenodd",
+							d: "M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z"
+
+						}
+					}
+				]
+			})
+			assert(!isTextDOM(svg))
+			assert(svg.tagName.toUpperCase() === "SVG")
+			assert.strictEqual(svg.children.length, 2)
+			assert.strictEqual((svg.children.item(1) as any).fillRule, "evenodd")
+		})
+
 		/*test("attrs", () => {
 			expect(
 				renderer.render(
@@ -194,7 +233,7 @@ describe("CORE MODULE", () => {
 				'<input id="toggle" type="checkbox" checked data-checked><label for="toggle"></label>',
 			)
 		})
-	
+		
 		test("styles", () => {
 			expect(
 				renderer.render(
@@ -210,11 +249,11 @@ describe("CORE MODULE", () => {
 				'<div style="color:red;"></div><img src="x" style="xss:foo;&quot; onerror=&quot;alert(&#039;hack&#039;)&quot; other=&quot;;">',
 			)
 		})
-	
+		
 		test("null", () => {
 			expect(renderer.render(null)).toEqual("")
 		})
-	
+		
 		test("fragment", () => {
 			expect(
 				renderer.render(
@@ -225,7 +264,7 @@ describe("CORE MODULE", () => {
 				),
 			).toEqual("<span>1</span><span>2</span>")
 		})
-	
+		
 		test("array", () => {
 			expect(
 				renderer.render(
@@ -239,7 +278,7 @@ describe("CORE MODULE", () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span></div>",
 			)
 		})
-	
+		
 		test("nested arrays", () => {
 			expect(
 				renderer.render(
@@ -253,7 +292,7 @@ describe("CORE MODULE", () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>",
 			)
 		})
-	
+		
 		test("keyed array", () => {
 			const spans = [
 				<span crank-key="2">2</span>,
@@ -272,13 +311,13 @@ describe("CORE MODULE", () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>",
 			)
 		})
-	
+		
 		test("escaped children", () => {
 			expect(renderer.render(<div>{"< > & \" '"}</div>)).toEqual(
 				"<div>&lt; &gt; &amp; &quot; &#039;</div>",
 			)
 		})
-	
+		
 		test("raw html", () => {
 			const html = '<span id="raw">Hi</span>'
 			expect(
@@ -295,27 +334,27 @@ describe("CORE MODULE", () => {
 				<span> Some render</span>
 				<i>test</i>
 			</div>
-	
+		
 			// Generating an element through render
 			const renderNode = await renderAsync(vNode)
 			const fakeDivRender = document.createElement("div")
 			while (fakeDivRender.firstChild) fakeDivRender.removeChild(fakeDivRender.firstChild)
 			fakeDivRender.appendChild(renderNode)
-	
+		
 			// Generating an element through renderToString
 			const renderString = await renderToStringAsync(vNode)
 			const fakeDivRenderToString = document.createElement("div")
 			fakeDivRenderToString.innerHTML = renderString
 			hydrate(fakeDivRenderToString)
-	
+		
 			assert.ok(isEquivalent(fakeDivRender, fakeDivRenderToString))
 		})*/
 
 	})
 
 	describe("renderToStringAsync()", () => {
-		it("should return an empty string when not passed any argument", async () => {
-			assert.strictEqual(await renderToStringAsync(), "")
+		it("should return an empty string when passed null", async () => {
+			assert.strictEqual(await renderToStringAsync(null), "")
 		})
 		it("should work for intrinsic elements without properties or children", async () => {
 			assert.strictEqual(await renderToStringAsync(<div></div>), `<div></div>`)
@@ -466,7 +505,7 @@ describe("CORE MODULE", () => {
 		})
 	})
 
-	describe("applyTraceAsync", () => {
+	describe("applyLeafElementAsync", () => {
 		it("should work for an intrinsic element with component", async () => {
 			const elt = {
 				type: StackPanel,
@@ -485,9 +524,9 @@ describe("CORE MODULE", () => {
 			assert(!isTextDOM(dom))
 
 			// eslint-disable-next-line fp/no-mutating-assign
-			const updatedDom = await applyTraceAsync(dom, trace)
+			const updatedDom = await applyLeafElementAsync(dom, trace.leafElement)
 
-			assert(isAugmentedDOM(updatedDom))
+			assert(!isTextDOM(updatedDom))
 			assert.notStrictEqual(updatedDom, dom)
 			assert.strictEqual(updatedDom.tagName.toUpperCase(), "DIV")
 			assert.strictEqual(updatedDom.style.flexDirection, "row")

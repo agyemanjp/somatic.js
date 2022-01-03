@@ -3,11 +3,19 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Obj, hasValue, firstOrDefault, skip, last, isIterable, isGenerator, union, Sequence } from "@agyemanjp/standard"
 import { ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
-import { normalizeChildren } from "./common"
 
 export const isEltProper = (elt: UIElement): elt is (IntrinsicElement | ComponentElt) => (hasValue(elt) && typeof elt === "object" && "type" in elt)
 export const isIntrinsicElt = (elt: UIElement): elt is IntrinsicElement => isEltProper(elt) && typeof elt.type === "string"
 export const isComponentElt = (elt: UIElement): elt is ComponentElt => isEltProper(elt) && typeof elt.type !== "string"
+
+/** Returns a flattened array of children  */
+export function getChildren(elt: UIElement) {
+	return isEltProper(elt) && elt.children
+		? Array.isArray(elt.children)
+			? elt.children.flat()
+			: [elt.children]
+		: []
+}
 
 /** Return a copy of a component element augmented with its invocation results
  * @argument elt The input component element (possibly with a result member, which is recomputed)
@@ -111,8 +119,8 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 
 				const eltResult = lastElt.result.element
 				if (isEltProper(eltResult) && eltResult.type === eltCurrent.type) {
-					const childrenResult = normalizeChildren(eltResult.children)
-					const childrenCurr = normalizeChildren(eltCurrent.children)
+					const childrenResult = getChildren(eltResult)
+					const childrenCurr = getChildren(eltCurrent)
 
 					return eltResult.type.isPure && childrenCurr === childrenResult && eltResult.props === eltCurrent.props
 						? eltCurrent // no need to update results

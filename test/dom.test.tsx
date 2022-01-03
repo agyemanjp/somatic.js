@@ -5,6 +5,7 @@
 require('jsdom-global')()
 import * as assert from "assert"
 import { IntrinsicElement } from "../dist/types"
+import { renderAsync } from "../dist/core"
 import {
 	createDOMShallow,
 	updateDomShallow,
@@ -94,8 +95,26 @@ describe("DOM MODULE", () => {
 
 		})
 
-		it("should set SVG attributes properly", () => {
-			const svg = createDOMShallow({ type: "svg" }) as SVGSVGElement
+		it("should set SVG attributes properly", async () => {
+			const svg = await renderAsync({
+				type: "svg",
+				props: {
+					id: "Layer_1",
+					xmlns: "http://www.w3.org/2000/svg",
+					viewBox: "0 0 122.88 78.97"
+				},
+				children: [
+					{ type: "title", children: ["logo"] },
+					{
+						type: "path",
+						props: {
+							fillRule: "evenodd",
+							d: "M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z"
+
+						}
+					}
+				]
+			}) as any as SVGSVGElement
 			assert(svg.tagName.toUpperCase() === "SVG")
 
 			setAttribute(svg, "preserveAspectRatio", 'xMidYMid meet')
@@ -103,6 +122,20 @@ describe("DOM MODULE", () => {
 
 			setAttribute(svg, "viewBox", "0 0 122.88 78.97")
 			assert.strictEqual(svg.viewBox, "0 0 122.88 78.97")
+
+			assert.strictEqual(svg.children.length, 2)
+			assert.strictEqual((svg.children.item(1) as any).fillRule, "evenodd")
+
+			// const title = createDOMShallow({ type: "title", children: ["logo"] })
+			// const path = createDOMShallow({
+			// 	type: "path",
+			// 	props: {
+			// 		fillRule: "evenodd",
+			// 		d: "M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z"
+
+			// 	}
+			// })
+
 		})
 
 		it("should set class/classname attribute properly", () => {

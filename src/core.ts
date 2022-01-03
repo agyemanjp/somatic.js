@@ -6,58 +6,43 @@
 import { String, hasValue, take, skip, sleep } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, truncateChildNodes, emptyContainer } from "./dom"
-import { isComponentElt, isIntrinsicElt, isEltProper, traceToLeafAsync, updateTraceAsync } from "./element"
-import { Component, RenderingTrace, UIElement, DOMAugmented } from "./types"
-import { normalizeChildren, stringify, selfClosingTags, DEFAULT_UPDATE_INTERVAL_MILLISECONDS } from "./common"
+import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, traceToLeafAsync, updateTraceAsync } from "./element"
+import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented, Children } from "./types"
+import { stringify, selfClosingTags, DEFAULT_UPDATE_INTERVAL_MILLISECONDS } from "./common"
 
 
-/** Render a UI element into a DOM node (which is augmented with information used for subsequent updates) */
-export async function renderAsync(elt: UIElement): Promise<DOMAugmented | Text> {
-	if (isComponentElt(elt) || isIntrinsicElt(elt)) {
-		const trace: RenderingTrace = await traceToLeafAsync(elt)
-		const nodeDOM = createDOMShallow(trace.leafElement)
-		return isTextDOM(nodeDOM)
-			? nodeDOM
-			// eslint-disable-next-line fp/no-mutating-assign
-			: updateChildrenAsync(Object.assign(nodeDOM, { renderTrace: trace }))
-	}
-	else {
-		return document.createTextNode(globalThis.String(elt ?? ""))
-	}
+/** JSX is transformed into calls of this function */
+export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
+	return { type, props: props ?? {}, children: (children ?? []).flat() }
 }
 
-export async function renderToStringAsync(elt?: JSX.Element): Promise<string> {
-	// if (elt && typeof (elt as any).type === "function" && (elt as any).type.name.toLocaleLowerCase() === "layout")
-	// 	console.log(chalk.yellow(`Starting renderToStringAsync of: ${stringify(elt)}\n`))
+/** Render a UI element into a DOM node (augmented with information used for subsequent updates) */
+export async function renderAsync(elt: UIElement): Promise<DOMAugmented | Text> {
+	const trace = await traceToLeafAsync(elt)
+	const leaf = trace.leafElement
+	const dom = createDOMShallow(leaf)
 
-	if (hasValue(elt) && isEltProper(elt)) {
-		// console.log(`renderToStringAsync: elt is proper, proceeding to generate html string`)
+	return isTextDOM(dom)
+		? dom
+		: await updateChildrenAsync(dom, getChildren(leaf)),
+		Object.assign(dom, { renderTrace: trace })
+}
 
-		const trace = await traceToLeafAsync(elt)
+/** Render a UI element into its HTML string representation */
+export async function renderToStringAsync(elt: UIElement): Promise<string> {
+	const trace = await traceToLeafAsync(elt)
+	const leaf = trace.leafElement
 
-		// console.assert((self as any).leafElement === trace.leafElement, `Leafs are different`)
-		console.assert(("leafElement" in trace) && trace.leafElement !== undefined, `trace has no leaf element`)
-		// console.log(`renderToStringAsync: Leaf of input elt: ${trace.leafElement}`)
-
-		const leafElt = trace.leafElement
-		if (hasValue(leafElt) && isIntrinsicElt(leafElt)) {
-			const children = normalizeChildren(leafElt.children)
-
-			// console.log(`renderToStringAsync: leaf of input is intrinsic, proceeding`)
-			const attributesHtml = new String(stringifyAttributes(leafElt.props)).prependSpaceIfNotEmpty().toString()
-			const childrenHtml = () => Promise.all((children).flat().map(renderToStringAsync))
-				.then(arr => (/*console.log(`Rendered children array: ${arr}`),*/ arr.join("")))
-			return selfClosingTags.includes(leafElt.type.toUpperCase()) && children.length === 0
-				? `<${leafElt.type}${attributesHtml} />`
-				: `<${leafElt.type}${attributesHtml}>${await childrenHtml()}</${leafElt.type}>`
-		}
-		else {
-			return globalThis.String(leafElt ?? "")
-		}
+	if (isIntrinsicElt(leaf)) {
+		const children = getChildren(leaf)
+		const attributesHtml = new String(stringifyAttributes(leaf.props)).prependSpaceIfNotEmpty().toString()
+		const childrenHtml = () => Promise.all(children.map(renderToStringAsync)).then(arr => arr.join(""))
+		return selfClosingTags.includes(leaf.type.toUpperCase()) && children.length === 0
+			? `<${leaf.type}${attributesHtml} />`
+			: `<${leaf.type}${attributesHtml}>${await childrenHtml()}</${leaf.type}>`
 	}
 	else {
-		// console.log(`renderToStringAsync: elt is not proper, returning an empty string`)
-		return globalThis.String(elt ?? "")
+		return globalThis.String(leaf ?? "")
 	}
 }
 
@@ -120,17 +105,12 @@ export async function mountElement(element: UIElement, container: Node, options?
 				const topmostElementIds = getApexElementIds(idsToProcess)
 				await Promise.all(topmostElementIds.map(id => {
 					console.log(`Updating "${id}" dom element...`)
-					updateAsync(document.getElementById(id) as DOMAugmented)
+					updateAsync(document.getElementById(id) as any as DOMAugmented)
 				}))
 
 			}, options?.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
 		})
 	}
-}
-
-/** JSX is transformed into calls of this function */
-export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
-	return { type, props: props ?? {}, children: (children ?? []).flat() }
 }
 
 /** Update the rendering of an existing DOM element (because the data on which its rendering was based has changed)
@@ -168,10 +148,13 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 		if (hasValue(elt)) {
 			if (areCompatible(dom, elt)) { // dom is not Text, elt is not a value, and they have the same type/tag
 				const trace = isComponentElt(elt)
-					? await updateTraceAsync(dom.renderTrace, elt /* ToDo: assimilate to 1st comp elt */)
+					? await updateTraceAsync(dom.renderTrace, elt)
 					: { componentElts: [], leafElement: elt }
 
-				return applyTraceAsync(dom, trace), dom
+				return isIntrinsicElt(trace.leafElement)
+					? applyLeafElementAsync(dom, trace.leafElement)
+					: updateDomShallow(dom, trace.leafElement),
+					dom
 
 			}
 			else {
@@ -179,43 +162,56 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 			}
 		}
 		else {
-			return applyTraceAsync(dom, await updateTraceAsync(dom.renderTrace)), dom
+			const newTrace = await updateTraceAsync(dom.renderTrace)
+			if (isIntrinsicElt(newTrace.leafElement))
+				applyLeafElementAsync(dom, newTrace.leafElement)
+			else
+				updateDomShallow(dom, newTrace.leafElement)
+			return Object.assign(dom, { renderingTrace: newTrace })
 		}
 	}
 }
 
-/** Update children of an DOM element; has side effects */
-export async function updateChildrenAsync(eltDOM: DOMAugmented): Promise<DOMAugmented> {
-	if (isIntrinsicElt(eltDOM.renderTrace.leafElement) && "children" in eltDOM.renderTrace.leafElement) {
-		const eltDomLeafChildren = normalizeChildren(eltDOM.renderTrace.leafElement.children)
-
-		// Update or replace existing existing DOM children that are matched with leaf elt's children
-		const childrenWithMatchingNodes = [...take(eltDomLeafChildren, eltDOM.children.length)]
-		await Promise.all(childrenWithMatchingNodes.map((child: UIElement, index) => {
-			return updateAsync((eltDOM.children.item(index) as DOMAugmented), child)
-		}))
-		const childrenWithoutMatchingNodes = [...skip(eltDomLeafChildren, eltDOM.children.length)]
-
-		// Add any new children
-		const newChildren = await Promise.all(childrenWithoutMatchingNodes.map((child) => renderAsync(child)))
-		newChildren.forEach(dom => eltDOM.appendChild(dom))
-
-		// Remove any existing DOM children that have no matches in leaf elt's children
-		truncateChildNodes(eltDOM, eltDomLeafChildren.length)
-	}
-	return eltDOM
-}
-
-/** Update a DOM node to reflect an existing (already updated) render trace
- * Posibly mutates the input node
- */
-export async function applyTraceAsync(nodeDOM: HTMLElement | SVGElement, trace: RenderingTrace): Promise<DOMAugmented | Text> {
-	// eslint-disable-next-line fp/no-mutating-assign
-	// const augmentedNode = Object.assign(nodeDOM, { renderTrace: trace })
-	const updatedDOM = updateDomShallow(nodeDOM, trace.leafElement)
+/*export async function applyLeafEltAsync(eltDOM: Element, eltLeaf: IntrinsicElement | ValueElement) {
+	const updatedDOM = updateDomShallow(eltDOM, eltLeaf)
 
 	return isTextDOM(updatedDOM)
 		? updatedDOM
-		// eslint-disable-next-line fp/no-mutating-assign
-		: updateChildrenAsync(Object.assign(updatedDOM, { renderTrace: trace }))
+		: isIntrinsicElt(eltLeaf) && "children" in eltLeaf
+			? updateChildrenAsync(updatedDOM, getChildren(eltLeaf))
+			: updatedDOM
+}*/
+
+/** Update children of an DOM element; has side effects */
+export async function updateChildrenAsync(eltDOM: DOMElement, children: UIElement[]): Promise<typeof eltDOM> {
+	// Update or replace existing existing DOM children that are matched with leaf elt's children
+	const childrenWithMatchingNodes = [...take(children, eltDOM.children.length)]
+	await Promise.all(childrenWithMatchingNodes.map((child: UIElement, index) => {
+		return updateAsync((eltDOM.children.item(index) as DOMAugmented), child)
+	}))
+	const childrenWithoutMatchingNodes = [...skip(children, eltDOM.children.length)]
+
+	// Add any new children
+	const newChildren = await Promise.all(childrenWithoutMatchingNodes.map((child) => renderAsync(child)))
+	newChildren.forEach(dom => eltDOM.appendChild(dom))
+
+	// Remove any existing DOM children that have no matches in leaf elt's children
+	truncateChildNodes(eltDOM, children.length)
+
+	return eltDOM
+}
+
+/** Update input DOM element to reflect input leaf UI element (type, props, and children)
+ * Posibly mutates the input node
+ */
+export async function applyLeafElementAsync(nodeDOM: DOMElement, eltLeaf: IntrinsicElement)/*: Promise<DOMAugmented | Text>*/ {
+	// eslint-disable-next-line fp/no-mutating-assign
+	// const augmentedNode = Object.assign(nodeDOM, { renderTrace: trace })
+	const updatedDOM = updateDomShallow(nodeDOM, eltLeaf)
+
+	return isTextDOM(updatedDOM)
+		? updatedDOM
+		: isIntrinsicElt(eltLeaf) && "children" in eltLeaf
+			? updateChildrenAsync(updatedDOM, getChildren(eltLeaf))
+			: updatedDOM
 }
