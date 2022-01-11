@@ -7,7 +7,7 @@ import { expect, use } from "chai"
 import * as chaiHTML from "chai-html"
 const cleanup = require('jsdom-global')()
 
-import { IntrinsicElement, DOMAugmented, Component, ComponentElt, CSSProperties } from '../dist/types'
+import { IntrinsicElement, DOMAugmented, Component, UIElement, CSSProperties } from '../dist/types'
 import { createElement, renderAsync, renderToStringAsync, updateChildrenAsync, applyLeafElementAsync, updateAsync, mountElement } from '../dist/core'
 import { isComponentElt, isEltProper, isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
 import { isAugmentedDOM, isTextDOM, createDOMShallow, updateDomShallow } from '../dist/dom'
@@ -196,7 +196,7 @@ describe("CORE MODULE", () => {
 		})
 
 		it("should render SVG elements properly", async () => {
-			const svg = await renderAsync({
+			/*const svg = await renderAsync({
 				type: "svg",
 				props: {
 					id: "Layer_1",
@@ -214,11 +214,122 @@ describe("CORE MODULE", () => {
 						}
 					}
 				]
-			})
-			assert(!isTextDOM(svg))
+			})*/
+
+			type FontIcon = Component<Partial<{ color: string | null | undefined; size: string | number; style: CSSProperties }>>
+			const MakeIcon = (svgElement: JSX.Element): FontIcon => {
+				console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
+				return function (props) {
+					const elt = svgElement as any
+					console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
+					return <svg
+						preserveAspectRatio='xMidYMid meet'
+						{...elt.props}
+						style={props.style}
+						// width={props.size || (props.style || {}).width || undefined}
+						// height={props.size || (props.style || {}).height || undefined}
+
+						color={props.color || (props.style || {}).color || undefined}
+						stroke={props.color || (props.style || {}).color || undefined}
+						fill='currentColor'>
+
+						{elt.children}
+					</svg>
+				}
+			}
+			const VytalsLogo = MakeIcon(
+				<svg
+					id="Layer_1"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 122.88 78.97">
+					<title>logo</title>
+					<path
+						fillRule="evenodd"
+						d="M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z" />
+				</svg>
+			)
+
+			interface User {
+				id: string
+				displayName: string
+				emailAddress?: string
+				imageUrl?: string
+				provider: "google" | "microsoft" | "dropbox" | "amazon" | "facebook" | "twitter",
+				refreshToken: string
+				accessToken: string
+			}
+			type Props = { user: User | undefined }
+			const Layout: Component<Props> = async function (props) {
+				console.log(`Starting layout component render`)
+				const { user, children } = props
+				return <StackPanel id="root"
+					orientation="vertical"
+					style={{ padding: 0, margin: 0 }}>
+
+					<StackPanel id="header"
+						itemsAlignH="uniform"
+						itemsAlignV="center"
+						style={{ backgroundColor: "purple", width: "100vw", height: "10vh" }}>
+
+						<VytalsLogo style={{ stroke: "white", fill: "transparent", height: "7vh" }} />
+
+						<StackPanel id="user-info" style={{ padding: "0.25em", color: "whitesmoke" }}>
+							{user
+								? <StackPanel style={{ gap: "10%" } as any}>
+									<span>Welcome, {user.displayName}</span>
+									<a href="/logout">LOGOUT</a>
+								</StackPanel>
+								: <a href="/auth/google">LOGIN</a>
+							}
+
+							{/* <button onClick={() => {
+					// fetch('/logout', { method: 'POST', credentials: 'same-origin' })
+					console.log(`Requesting logout from client `)
+					fetch('/logout',
+						{
+							method: 'get',
+							credentials: 'include', // <--- YOU NEED THIS LINE
+							redirect: "follow"
+						})
+						.then(res => { console.log(res) })
+						.catch(err => { console.log(err) })
+
+				}}>Logout</button> */}
+
+						</StackPanel>
+
+					</StackPanel>
+
+					<StackPanel id="content"
+						style={{ backgroundColor: "whitesmoke", height: "75vh" }}>
+						{children}
+					</StackPanel>
+
+					<StackPanel id="footer"
+						style={{ height: "10vh" }}>
+
+					</StackPanel>
+
+				</StackPanel>
+			}
+			const SplashPage: Component<Props> = (props) => <div>Splash page</div>
+
+			const elt = <Layout user={undefined}><SplashPage user={undefined} /></Layout>
+
+			const dom = await renderAsync(elt)
+			assert(!isTextDOM(dom))
+			const svg = dom.getElementsByTagName("svg").item(0) /*document.getElementById("Layer_1")*/ as any as SVGSVGElement
+			assert(svg.id === "Layer_1")
 			assert(svg.tagName.toUpperCase() === "SVG")
 			assert.strictEqual(svg.children.length, 2)
-			assert.strictEqual((svg.children.item(1) as any).fillRule, "evenodd")
+
+			const title = svg.children.item(0) as SVGTitleElement
+			assert.strictEqual(title.textContent, "logo")
+
+			const path = dom.getElementsByTagName("path").item(0) as SVGPathElement
+			assert.strictEqual(path.tagName.toUpperCase(), "PATH")
+			assert.strictEqual((path as any).fillRule, "evenodd")
+			assert.strictEqual((path as any).d, "M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z")
 		})
 
 		/*test("attrs", () => {
