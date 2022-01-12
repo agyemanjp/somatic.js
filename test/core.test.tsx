@@ -218,7 +218,7 @@ describe("CORE MODULE", () => {
 
 			type FontIcon = Component<Partial<{ color: string | null | undefined; size: string | number; style: CSSProperties }>>
 			const MakeIcon = (svgElement: JSX.Element): FontIcon => {
-				console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
+				// console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
 				return function (props) {
 					const elt = svgElement as any
 					console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
@@ -260,7 +260,7 @@ describe("CORE MODULE", () => {
 			}
 			type Props = { user: User | undefined }
 			const Layout: Component<Props> = async function (props) {
-				console.log(`Starting layout component render`)
+				// console.log(`Starting layout component render`)
 				const { user, children } = props
 				return <StackPanel id="root"
 					orientation="vertical"

@@ -71,7 +71,7 @@ export async function mountElement(element: UIElement, container: Node, options?
 
 	emptyContainer(container)
 	let dom = await renderAsync(element)
-	console.log(`Initial rendering of elt result: ${isTextDOM(dom) ? dom.textContent : dom.innerHTML}\nAppending as child of container ${container}`)
+	// console.log(`Initial rendering of elt result: ${isTextDOM(dom) ? dom.textContent : dom.innerHTML}\nAppending as child of container ${container}`)
 
 	// requestAnimationFrame(() => { container.appendChild(dom) })
 	container.appendChild(dom)

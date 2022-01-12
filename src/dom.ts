@@ -10,21 +10,83 @@ import { svgTags, isEventKey, eventNames, booleanAttributes } from "./common"
 export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
 
-interface KeyInfo {
-	type: "string" | "boolean"
-}
+
 /** Dictionary providing information on the key values to use in setting certain svg attributes 
  * This is needed because SVG attributes are most reliably set using setAttribute(),
  * yet their camelcase forms (unlike normal html elements) are what should be passed 
  * However, some require the dash-case form, like with regular html elements
  * This dictionary lists those svg attributes that require their dash-case keys to be passed
+ * From https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
 */
 const dashCaseSVGAttributes = [
 	"fillRule",
 	"baselineShift",
 	"accentHeight",
 	"alignmentBaseline",
-	"arabicForm"
+	"arabicForm",
+	"capHeight",
+	"clipPath",
+	"clipRule",
+	"colorInterpolation",
+	"colorInterpolationFilters",
+	"colorProfile",
+	"colorRendering",
+	"dominantBaseline",
+	"enableBackground",
+	"fillOpacity",
+	"fontFamily",
+	"fontSize",
+	"fontSizeAdjust",
+	"fontStretch",
+	"fontStyle",
+	"fontVariant",
+	"fontWeight",
+	"glyphName",
+	"glyphOrientationHorizontal",
+	"glyphOrientationVertical",
+	"horizOriginX",
+	"horizAdvX",
+	"imageRendering",
+	"letterSpacing",
+	"lightingColor",
+	"markerEnd",
+	"markerStart",
+	"markerMid",
+	"overlinePosition",
+	"overlineThickness",
+	"panose1",
+	"paintOrder",
+	"pointerEvents",
+	"renderingIntent",
+	"shapeRendering",
+	"stopColor",
+	"stopOpacity",
+	"strikethroughPosition",
+	"strikethroughThickness",
+	"strokeDasharray",
+	"strokeDashoffset",
+	"strokeLinecap",
+	"strokeLinejoin",
+	"strokeMiterlimit",
+	"strokeOpacity",
+	"strokeWidth",
+	"textAnchor",
+	"textDecoration",
+	"textRendering",
+	"transformOrigin",
+	"unicodeBidi",
+	"unicodeRange",
+	"unitsPerEm",
+	"vAlphabetic",
+	"vHanging",
+	"vIdeographic",
+	"vMathematical",
+	"vertAdvY",
+	"vertOriginX",
+	"vertOriginY",
+	"wordSpacing",
+	"writingMode",
+	"xHeight"
 ]
 
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way.
@@ -77,7 +139,7 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
 				if (svgTags.includes(element.tagName.toUpperCase()) && !["function", "object"].includes(typeof effectiveVal)) {
 					const effectiveKey = dashCaseSVGAttributes.includes(key) ? toDashCase(key) : key
 
-					console.log(`Setting ${effectiveKey} to ${effectiveVal}`)
+					// console.log(`Setting ${effectiveKey} to ${effectiveVal}`)
 					element.setAttribute(effectiveKey, effectiveVal)
 				}
 				else {
@@ -133,8 +195,8 @@ export function updateDomShallow(eltDOM: DOMElement, eltUI: IntrinsicElement | V
 		return eltDOM
 	}
 	else {
-		if (isIntrinsicElt(eltUI))
-			console.log(`updateDOMShallow: ${eltUI.type.toUpperCase()} not compatible with ${eltDOM.tagName.toUpperCase()}, so creating new DOM`)
+		// if (isIntrinsicElt(eltUI))
+		// console.log(`updateDOMShallow: ${eltUI.type.toUpperCase()} not compatible with ${eltDOM.tagName.toUpperCase()}, so creating new DOM`)
 
 		const newDom = createDOMShallow(eltUI)
 		eltDOM.replaceWith(newDom)
