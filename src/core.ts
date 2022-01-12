@@ -67,11 +67,11 @@ type MountOptions = {
 }
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
-	console.log(`Mounting element ${JSON.stringify(element)} on container ${container}...`)
+	console.log(`Mounting element ${stringify(element)} on container ${container}...`)
 
 	emptyContainer(container)
 	let dom = await renderAsync(element)
-	console.log(`Initial rendering of element resulted in ${dom};\nAppending as child of container ${container}`)
+	console.log(`Initial rendering of elt result: ${isTextDOM(dom) ? dom.textContent : dom.innerHTML}\nAppending as child of container ${container}`)
 
 	// requestAnimationFrame(() => { container.appendChild(dom) })
 	container.appendChild(dom)

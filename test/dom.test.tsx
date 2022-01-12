@@ -118,13 +118,13 @@ describe("DOM MODULE", () => {
 			assert(svg.tagName.toUpperCase() === "SVG")
 
 			setAttribute(svg, "preserveAspectRatio", 'xMidYMid meet')
-			assert.strictEqual(svg.preserveAspectRatio, 'xMidYMid meet')
+			assert.strictEqual(svg.getAttribute("preserveAspectRatio"), 'xMidYMid meet')
 
 			setAttribute(svg, "viewBox", "0 0 122.88 78.97")
-			assert.strictEqual(svg.viewBox, "0 0 122.88 78.97")
+			assert.strictEqual(svg.getAttribute("viewBox"), "0 0 122.88 78.97")
 
 			assert.strictEqual(svg.children.length, 2)
-			assert.strictEqual((svg.children.item(1) as any).fillRule, "evenodd")
+			assert.strictEqual(svg.children.item(1)?.getAttribute("fill-rule"), "evenodd")
 
 			// const title = createDOMShallow({ type: "title", children: ["logo"] })
 			// const path = createDOMShallow({
@@ -164,7 +164,7 @@ describe("DOM MODULE", () => {
 			setAttribute(input, "type", "radio")
 
 			setAttribute(input, "DISABLED", "disabled")
-			assert(input.disabled)
+			assert.notStrictEqual(input.disabled, true) // Should fail since "DISABLED" not in the proper case
 
 			setAttribute(input, "disabled", "")
 			assert(input.disabled, "Boolean attribute removed by setting to empty string")
@@ -188,6 +188,8 @@ describe("DOM MODULE", () => {
 
 			const textArea = document.createElement("textarea")
 			setAttribute(textArea, "readonly", true)
+			assert(!textArea.readOnly) // // Should fail since "readonly" not in the proper case
+			setAttribute(textArea, "readOnly", true)
 			assert(textArea.readOnly)
 		})
 	})
@@ -228,7 +230,7 @@ describe("DOM MODULE", () => {
 			// assert.strictEqual(String(dom.className).toUpperCase(), "CLSS")
 
 			console.log(dom.transform)
-			assert.deepStrictEqual(dom.transform, `matrix(0.660991,0,0,0.655918,524.665,744.892)`)
+			assert.deepStrictEqual(dom.getAttribute("transform"), `matrix(0.660991,0,0,0.655918,524.665,744.892)`)
 			assert.strictEqual(dom.childNodes.length, 0)
 		})
 		it("should return a text DOM element with content set to the input primitive value", async () => {

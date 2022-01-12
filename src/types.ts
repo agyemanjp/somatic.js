@@ -1024,7 +1024,7 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 	alt?: string;
-	crossOrigin?: "anonymous" | "use-credentials" | "";
+	crossorigin?: "anonymous" | "use-credentials" | "";
 	decoding?: "async" | "auto" | "sync";
 	height?: number | string;
 	sizes?: string;
@@ -1044,7 +1044,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 	autoFocus?: boolean;
 	capture?: boolean | string; // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
 	checked?: boolean;
-	crossOrigin?: string;
+	crossorigin?: string;
 	disabled?: boolean;
 	form?: string;
 	formAction?: string;
@@ -1091,7 +1091,7 @@ export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	as?: string;
-	crossOrigin?: string;
+	crossorigin?: string;
 	href?: string;
 	hrefLang?: string;
 	integrity?: string;
@@ -1110,7 +1110,7 @@ export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autoPlay?: boolean;
 	controls?: boolean;
 	controlsList?: string;
-	crossOrigin?: string;
+	crossorigin?: string;
 	loop?: boolean;
 	mediaGroup?: string;
 	muted?: boolean;
@@ -1178,7 +1178,7 @@ export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
 export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	async?: boolean;
 	charSet?: string;
-	crossOrigin?: string;
+	crossorigin?: string;
 	defer?: boolean;
 	integrity?: string;
 	noModule?: boolean;

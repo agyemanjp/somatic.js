@@ -1,7 +1,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { skip, hasValue, toCamelCase } from "@agyemanjp/standard"
+import { skip, hasValue, toCamelCase, toDashCase } from "@agyemanjp/standard"
 import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
@@ -10,13 +10,28 @@ import { svgTags, isEventKey, eventNames, booleanAttributes } from "./common"
 export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
 
+interface KeyInfo {
+	type: "string" | "boolean"
+}
+/** Dictionary providing information on the key values to use in setting certain svg attributes 
+ * This is needed because SVG attributes are most reliably set using setAttribute(),
+ * yet their camelcase forms (unlike normal html elements) are what should be passed 
+ * However, some require the dash-case form, like with regular html elements
+ * This dictionary lists those svg attributes that require their dash-case keys to be passed
+*/
+const dashCaseSVGAttributes = [
+	"fillRule",
+	"baselineShift",
+	"accentHeight",
+	"alignmentBaseline",
+	"arabicForm"
+]
+
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way.
- * The input property key must already be in the correct case 
+ * The input property key must already be in the correct case as specified in the somatic typings, 
+ * E.g., preserveAspectRatio, viewBox, fillRule, readOnly, etc
  */
 export function setAttribute(element: DOMElement, key: string, value: any) {
-	if (["preserveaspectratio", "viewbox"].includes(key.toLowerCase()))
-		console.log(`SetAttribute starting for "${key}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}`)
-
 	try {
 		if (["CLASSNAME", "CLASS"].includes(key.toUpperCase())) {
 			if (typeof value === "string") {
@@ -26,8 +41,6 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
 				// avoids a type error, since Typescript (incorrectly) types className as read-only 
 				element.setAttribute('class', value)
 				//ToDo: Check if setAttributeNS is better to use above and in similar calls
-
-				// console.log(`Class property on <${element.tagName}> set to '${stringifyStyle(value ?? {})}'`)
 			}
 			else {
 				console.warn(`Ignored setting class on <${element.tagName}> to non-string value ${value}`)
@@ -57,29 +70,29 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
 		}
 		else {
 			const effectiveVal = booleanAttributes.includes(key.toUpperCase())
-				? [undefined, null, false].includes(value)
-					? false
-					: true
+				? [undefined, null, false].includes(value) ? false : true
 				: value
 
-			// The camelcase of <key> property on the element is set directly to <effectiveVal>. This approach works:
-			// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
-			// for setting the property to a value of <null>; and
-			// for setting function values with are not event handlers.
-			// It also avoids using setAttribute to set the property to a string form of the value
-
-			const effectiveKey = key.toUpperCase() === "READONLY" ? "readOnly" : toCamelCase(key)
-			// eslint-disable-next-line fp/no-mutation, @typescript-eslint/no-explicit-any
-			if (["preserveaspectratio", "viewbox"].includes(effectiveKey.toLowerCase()))
-				console.log(`Set "${effectiveKey}" on <${element.tagName}> to "${JSON.stringify(value, undefined, 2)}`)
-
 			try {
-				(element as any)[effectiveKey] = effectiveVal
+				if (svgTags.includes(element.tagName.toUpperCase()) && !["function", "object"].includes(typeof effectiveVal)) {
+					const effectiveKey = dashCaseSVGAttributes.includes(key) ? toDashCase(key) : key
+
+					console.log(`Setting ${effectiveKey} to ${effectiveVal}`)
+					element.setAttribute(effectiveKey, effectiveVal)
+				}
+				else {
+					// The <key> property on the element is set directly to <effectiveVal>. This approach works:
+					// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
+					// for setting the property to a value of <null>; and
+					// for setting function values which are not event handlers.
+					// It also avoids using setAttribute to set the property to a string form of the value
+
+					(element as any)[key] = effectiveVal
+				}
 			}
 			catch (err) {
-				element.setAttribute(effectiveKey, effectiveVal)
+				console.error(`Error setting ${key} to ${value}\n{err}`)
 			}
-			// console.log(`Style property on <${element.tagName}> set to '${stringifyStyle(value ?? {})}'`)
 		}
 	}
 	catch (e) {
