@@ -76,15 +76,13 @@ export function invalidateUI(info: { invalidatedElementIds: string[] }) {
 type MountOptions = { updateMode?: "continuous-from-top" | "on-event-from-invalidated", updateInterval?: number }
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
-	console.log(`Mounting element ${stringify(element)} on container ${container}...`)
+	// console.log(`Mounting element ${stringify(element)} on container ${container}...`)
 
 	if (options?.updateMode === "continuous-from-top") {
-		let dom = await renderAsync(element)
-		container.appendChild(dom)
 		setInterval(async () => {
 			// console.log(`Updating mounted dom element ${dom}...`)
-			// eslint-disable-next-line fp/no-mutation, require-atomic-updates
-			dom = await updateAsync(dom)
+			if (container.firstChild)
+				await updateAsync(container.firstChild as DOMAugmented)
 		}, options.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
 	}
 	else {
@@ -92,7 +90,7 @@ export async function mountElement(element: UIElement, container: Node, options?
 		// eslint-disable-next-line fp/no-let
 		let daemon: NodeJS.Timeout | undefined = undefined
 
-		console.log(`Setting up UIInvalidated event listener on document`)
+		// console.log(`Setting up UIInvalidated event listener on document`)
 		document.addEventListener('UIInvalidated', async (eventInfo) => {
 			console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
 			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
@@ -114,9 +112,10 @@ export async function mountElement(element: UIElement, container: Node, options?
 
 			}, options?.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
 		})
-
-		container.appendChild(await renderAsync(element))
 	}
+
+	emptyContainer(container)
+	container.appendChild(await renderAsync(element))
 }
 
 /** Update the rendering of an existing DOM element (because the data on which its rendering was based has changed)
