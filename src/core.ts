@@ -3,7 +3,13 @@
 /* eslint-disable fp/no-loops */
 /* eslint-disable @typescript-eslint/ban-types */
 // import * as chalk from "chalk"
-import { String, hasValue, take, skip, sleep } from "@agyemanjp/standard"
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+
+// import *  as morphdom from "morphdom"
+// const morphdom = require("morphdom")
+// const x = import("morpdom")
+
+import { String, hasValue, take, skip } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, traceToLeafAsync, updateTraceAsync } from "./element"
@@ -46,7 +52,7 @@ export async function renderToStringAsync(elt: UIElement): Promise<string> {
 	}
 }
 
-/** Invalidate UI after emitting input event (if present) */
+/** Invalidate UI and emitting input event (if present) */
 export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, data: E }, invalidatedElementIds: string[] }) {
 	const { event, invalidatedElementIds } = info
 	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
@@ -61,24 +67,22 @@ export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, 
 	}
 }
 
-type MountOptions = {
-	updateMode?: "continuous-from-top" | "on-event-from-invalidated",
-	updateInterval?: number
+/** Invalidate UI */
+export function invalidateUI(info: { invalidatedElementIds: string[] }) {
+	const { invalidatedElementIds } = info
+	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
 }
+
+type MountOptions = { updateMode?: "continuous-from-top" | "on-event-from-invalidated", updateInterval?: number }
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
 	console.log(`Mounting element ${stringify(element)} on container ${container}...`)
 
-	emptyContainer(container)
-	let dom = await renderAsync(element)
-	// console.log(`Initial rendering of elt result: ${isTextDOM(dom) ? dom.textContent : dom.innerHTML}\nAppending as child of container ${container}`)
-
-	// requestAnimationFrame(() => { container.appendChild(dom) })
-	container.appendChild(dom)
-
 	if (options?.updateMode === "continuous-from-top") {
+		let dom = await renderAsync(element)
+		container.appendChild(dom)
 		setInterval(async () => {
-			console.log(`Updating mounted dom element ${dom}...`)
+			// console.log(`Updating mounted dom element ${dom}...`)
 			// eslint-disable-next-line fp/no-mutation, require-atomic-updates
 			dom = await updateAsync(dom)
 		}, options.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
@@ -104,12 +108,14 @@ export async function mountElement(element: UIElement, container: Node, options?
 				const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
 				const topmostElementIds = getApexElementIds(idsToProcess)
 				await Promise.all(topmostElementIds.map(id => {
-					console.log(`Updating "${id}" dom element...`)
+					// console.log(`Updating "${id}" dom element...`)
 					updateAsync(document.getElementById(id) as any as DOMAugmented)
 				}))
 
 			}, options?.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
 		})
+
+		container.appendChild(await renderAsync(element))
 	}
 }
 
@@ -185,11 +191,12 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 /** Update children of an DOM element; has side effects */
 export async function updateChildrenAsync(eltDOM: DOMElement, children: UIElement[]): Promise<typeof eltDOM> {
 	// Update or replace existing existing DOM children that are matched with leaf elt's children
-	const childrenWithMatchingNodes = [...take(children, eltDOM.children.length)]
+	const childrenWithMatchingNodes = [...take(children, eltDOM.childNodes.length)]
 	await Promise.all(childrenWithMatchingNodes.map((child: UIElement, index) => {
-		return updateAsync((eltDOM.children.item(index) as DOMAugmented), child)
+		// console.log(`Updating ${eltDOM.childNodes.item(index)} with ${child}`)
+		return updateAsync((eltDOM.childNodes.item(index) as DOMAugmented), child)
 	}))
-	const childrenWithoutMatchingNodes = [...skip(children, eltDOM.children.length)]
+	const childrenWithoutMatchingNodes = [...skip(children, eltDOM.childNodes.length)]
 
 	// Add any new children
 	const newChildren = await Promise.all(childrenWithoutMatchingNodes.map((child) => renderAsync(child)))
