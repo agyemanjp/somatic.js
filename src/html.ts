@@ -1,12 +1,13 @@
 import { Obj, toDashCase } from "@agyemanjp/standard"
 import { HTMLAttributes, CSSProperties } from "./types"
-import { booleanAttributes, camelCaseToDash } from "./common"
+import { booleanAttributes, dashCaseAttributes } from "./common"
 
 /** Converts an attributes property object to a string */
 export function stringifyAttributes<E>(props: HTMLAttributes<any> & E): string {
 	return Object.keys(props)
 		.map(key => {
-			const htmlKey = encodeHTML(toDashCase(key))
+			const htmlKey = encodeHTML(dashCaseAttributes.includes(key) ? toDashCase(key) : key)
+			// const htmlKey = encodeHTML(toDashCase(key))
 			const value = (props as Obj)[key] as any
 			switch (true) {
 				case key.toUpperCase() === "STYLE":
@@ -31,7 +32,7 @@ export function stringifyAttributes<E>(props: HTMLAttributes<any> & E): string {
 export function stringifyStyle(style: CSSProperties, important = false): string {
 	if (typeof style === "object") {
 		return Object.keys(style)
-			.map((key) => `${camelCaseToDash(key)}: ${(style)[key as keyof typeof style]}${important === true ? " !important" : ""}`)
+			.map((key) => `${toDashCase(key)}: ${(style)[key as keyof typeof style]}${important === true ? " !important" : ""}`)
 			.join("; ")
 		// .concat(";")
 	}

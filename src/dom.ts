@@ -1,93 +1,18 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { skip, hasValue, toCamelCase, toDashCase } from "@agyemanjp/standard"
-import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
+import { skip, hasValue, toDashCase } from "@agyemanjp/standard"
+
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
-import { svgTags, isEventKey, eventNames, booleanAttributes } from "./common"
+import { svgTags, isEventKey, eventNames, booleanAttributes, dashCaseAttributes } from "./common"
+import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
 
 export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
 
 
-/** Dictionary providing information on the key values to use in setting certain svg attributes 
- * This is needed because SVG attributes are most reliably set using setAttribute(),
- * yet their camelcase forms (unlike normal html elements) are what should be passed 
- * However, some require the dash-case form, like with regular html elements
- * This dictionary lists those svg attributes that require their dash-case keys to be passed
- * From https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
-*/
-const dashCaseSVGAttributes = [
-	"fillRule",
-	"baselineShift",
-	"accentHeight",
-	"alignmentBaseline",
-	"arabicForm",
-	"capHeight",
-	"clipPath",
-	"clipRule",
-	"colorInterpolation",
-	"colorInterpolationFilters",
-	"colorProfile",
-	"colorRendering",
-	"dominantBaseline",
-	"enableBackground",
-	"fillOpacity",
-	"fontFamily",
-	"fontSize",
-	"fontSizeAdjust",
-	"fontStretch",
-	"fontStyle",
-	"fontVariant",
-	"fontWeight",
-	"glyphName",
-	"glyphOrientationHorizontal",
-	"glyphOrientationVertical",
-	"horizOriginX",
-	"horizAdvX",
-	"imageRendering",
-	"letterSpacing",
-	"lightingColor",
-	"markerEnd",
-	"markerStart",
-	"markerMid",
-	"overlinePosition",
-	"overlineThickness",
-	"panose1",
-	"paintOrder",
-	"pointerEvents",
-	"renderingIntent",
-	"shapeRendering",
-	"stopColor",
-	"stopOpacity",
-	"strikethroughPosition",
-	"strikethroughThickness",
-	"strokeDasharray",
-	"strokeDashoffset",
-	"strokeLinecap",
-	"strokeLinejoin",
-	"strokeMiterlimit",
-	"strokeOpacity",
-	"strokeWidth",
-	"textAnchor",
-	"textDecoration",
-	"textRendering",
-	"transformOrigin",
-	"unicodeBidi",
-	"unicodeRange",
-	"unitsPerEm",
-	"vAlphabetic",
-	"vHanging",
-	"vIdeographic",
-	"vMathematical",
-	"vertAdvY",
-	"vertOriginX",
-	"vertOriginY",
-	"wordSpacing",
-	"writingMode",
-	"xHeight"
-]
+
 
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way.
  * The input property key must already be in the correct case as specified in the somatic typings, 
@@ -137,7 +62,7 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
 
 			try {
 				if (svgTags.includes(element.tagName.toUpperCase()) && !["function", "object"].includes(typeof effectiveVal)) {
-					const effectiveKey = dashCaseSVGAttributes.includes(key) ? toDashCase(key) : key
+					const effectiveKey = dashCaseAttributes.includes(key) ? toDashCase(key) : key
 
 					// console.log(`Setting ${effectiveKey} to ${effectiveVal}`)
 					element.setAttribute(effectiveKey, effectiveVal)

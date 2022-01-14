@@ -1,4 +1,3 @@
-import { Children } from "./types"
 
 /** Names of DOM events. */
 export const eventNames = {
@@ -187,6 +186,84 @@ export const booleanAttributes = [
 	"CHECKED",
 	"READONLY"
 ]
+
+/** Attributes that should be converted to dash-case when being set with setAttribute or rendered in an html string
+ * From https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes and
+ * https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
+ */
+export const dashCaseAttributes = [
+	"acceptCharset",
+	"httpEquiv",
+	"fillRule",
+	"baselineShift",
+	"accentHeight",
+	"alignmentBaseline",
+	"arabicForm",
+	"capHeight",
+	"clipPath",
+	"clipRule",
+	"colorInterpolation",
+	"colorInterpolationFilters",
+	"colorProfile",
+	"colorRendering",
+	"dominantBaseline",
+	"enableBackground",
+	"fillOpacity",
+	"fontFamily",
+	"fontSize",
+	"fontSizeAdjust",
+	"fontStretch",
+	"fontStyle",
+	"fontVariant",
+	"fontWeight",
+	"glyphName",
+	"glyphOrientationHorizontal",
+	"glyphOrientationVertical",
+	"horizOriginX",
+	"horizAdvX",
+	"imageRendering",
+	"letterSpacing",
+	"lightingColor",
+	"markerEnd",
+	"markerStart",
+	"markerMid",
+	"overlinePosition",
+	"overlineThickness",
+	"panose1",
+	"paintOrder",
+	"pointerEvents",
+	"renderingIntent",
+	"shapeRendering",
+	"stopColor",
+	"stopOpacity",
+	"strikethroughPosition",
+	"strikethroughThickness",
+	"strokeDasharray",
+	"strokeDashoffset",
+	"strokeLinecap",
+	"strokeLinejoin",
+	"strokeMiterlimit",
+	"strokeOpacity",
+	"strokeWidth",
+	"textAnchor",
+	"textDecoration",
+	"textRendering",
+	"transformOrigin",
+	"unicodeBidi",
+	"unicodeRange",
+	"unitsPerEm",
+	"vAlphabetic",
+	"vHanging",
+	"vIdeographic",
+	"vMathematical",
+	"vertAdvY",
+	"vertOriginX",
+	"vertOriginY",
+	"wordSpacing",
+	"writingMode",
+	"xHeight"
+]
+
 
 /** Library-specific DOM update/refresh interval */
 export const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 250

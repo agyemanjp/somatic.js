@@ -14,7 +14,7 @@ import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented, Children } from "./types"
-import { stringify, selfClosingTags, DEFAULT_UPDATE_INTERVAL_MILLISECONDS } from "./common"
+import { stringify, selfClosingTags, dashCaseAttributes, DEFAULT_UPDATE_INTERVAL_MILLISECONDS } from "./common"
 
 
 /** JSX is transformed into calls of this function */
