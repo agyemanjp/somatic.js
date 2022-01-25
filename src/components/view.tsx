@@ -10,7 +10,7 @@
 
 // import { deepMerge, noop, promisify } from '@agyemanjp/standard'
 import * as cuid from "cuid"
-import { createElement, emitEvent } from '../core'
+import { createElement, invalidateUI } from '../core'
 import { PanelProps, HtmlProps, Component, CSSProperties, } from '../types'
 import { StackPanel } from './stack-panel'
 
@@ -56,7 +56,7 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 				style,
 				children, // children will be ignored, should be undefined
 				sourceData,
-				itemTemplate,
+				itemTemplate: ItemTemplate,
 				itemsPanel: ItemsPanel,
 				itemStyle,
 				selectedItemStyle,
@@ -74,23 +74,15 @@ export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncG
 							style={{ ...itemStyle, ...index === selectedIndex ? selectedItemStyle : {} }}
 							onClick={(ev) => {
 								if (selectionEnabled) {
-									const oldSelectedIndex = selectedIndex
+									// const oldSelectedIndex = selectedIndex
 									selectedIndex = index
-
-									// Always use emitCustomEvent function to raise events for standardized handling
-									emitEvent({
-										event: onSelect ? { handler: onSelect, data: { selectedIndex } } : undefined,
-
-										// specify elements whose UI need updating as a result of the event
-										invalidatedElementIds: [
-											`${id}_item_container_${oldSelectedIndex}`,
-											`${id}_item_container_${selectedIndex}`
-										]
-									})
+									if (onSelect)
+										onSelect({ selectedIndex })
+									invalidateUI([id])
 								}
 							}}>
 
-							{itemTemplate({ value: item, index, selected: index === selectedIndex })}
+							{<ItemTemplate value={item} index={index} selected={index === selectedIndex} />}
 						</div>
 					)
 				}

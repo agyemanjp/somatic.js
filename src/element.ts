@@ -1,21 +1,12 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
-import { Obj, hasValue, firstOrDefault, skip, last, isIterable, isGenerator, union, Sequence } from "@agyemanjp/standard"
+import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, Sequence } from "@agyemanjp/standard"
 import { ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
 
 export const isEltProper = (elt: UIElement): elt is (IntrinsicElement | ComponentElt) => (hasValue(elt) && typeof elt === "object" && "type" in elt)
 export const isIntrinsicElt = (elt: UIElement): elt is IntrinsicElement => isEltProper(elt) && typeof elt.type === "string"
 export const isComponentElt = (elt: UIElement): elt is ComponentElt => isEltProper(elt) && typeof elt.type !== "string"
-
-/** Returns a flattened array of children  */
-export function getChildren(elt: UIElement) {
-	return isEltProper(elt) && elt.children
-		? Array.isArray(elt.children)
-			? elt.children.flat()
-			: [elt.children]
-		: []
-}
 
 /** Return a copy of a component element augmented with its invocation results
  * @argument elt The input component element (possibly with a result member, which is recomputed)
@@ -41,7 +32,7 @@ export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P
 				console.warn(`Component generator is done yielding values.\nThis situation is normally unintended, since generator components can yield values infinitely while responding to props changes`)
 		}
 
-		const resultElt = await elt.type({ ...elt.props, children: elt.children })
+		const resultElt = await elt.type({ ...elt.props, children: elt.children }/*, { invalidate: ()=>{} }*/)
 		if (isGenerator(resultElt)) {
 			// No need to inject props again since call to elt.type above already used them
 			const next = await getNextAsync(resultElt)
@@ -122,7 +113,7 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 					const childrenResult = getChildren(eltResult)
 					const childrenCurr = getChildren(eltCurrent)
 
-					return eltResult.type.isPure && childrenCurr === childrenResult && eltResult.props === eltCurrent.props
+					return eltResult.type.isPure && childrenCurr.length === 0 && childrenResult.length === 0 && shallowEquals(eltResult.props, eltCurrent.props)
 						? eltCurrent // no need to update results
 						: updateResultAsync({
 							...eltCurrent,
@@ -151,4 +142,13 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 		componentElts: [...union([rendersAugmented, skip(_trace.componentElts, 1)])],
 		leafElement: _trace.leafElement
 	}
+}
+
+/** Returns a flattened array of children  */
+export function getChildren(elt: UIElement) {
+	return isEltProper(elt) && elt.children
+		? Array.isArray(elt.children)
+			? elt.children.flat()
+			: [elt.children]
+		: []
 }

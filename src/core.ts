@@ -9,9 +9,10 @@
 // const morphdom = require("morphdom")
 // const x = import("morpdom")
 
-import { String, hasValue, take, skip } from "@agyemanjp/standard"
+import * as cuid from "cuid"
+import { String, hasValue } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
-import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, truncateChildNodes, emptyContainer } from "./dom"
+import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented, Children } from "./types"
 import { stringify, selfClosingTags, dashCaseAttributes, DEFAULT_UPDATE_INTERVAL_MILLISECONDS } from "./common"
@@ -19,7 +20,7 @@ import { stringify, selfClosingTags, dashCaseAttributes, DEFAULT_UPDATE_INTERVAL
 
 /** JSX is transformed into calls of this function */
 export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
-	return { type, props: props ?? {}, children: (children ?? []).flat() }
+	return { type, props: Object.assign({ /*id: cuid()*/ }, props), children: (children ?? []).flat()/*, extra: {}*/ }
 }
 
 /** Render a UI element into a DOM node (augmented with information used for subsequent updates) */
@@ -53,7 +54,7 @@ export async function renderToStringAsync(elt: UIElement): Promise<string> {
 }
 
 /** Invalidate UI and emitting input event (if present) */
-export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, data: E }, invalidatedElementIds: string[] }) {
+/*export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, data: E }, invalidatedElementIds: string[] }) {
 	const { event, invalidatedElementIds } = info
 	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
 	if (event) {
@@ -65,11 +66,10 @@ export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, 
 			console.error(`Error occured handling event "${event.handler.name}": ${err}`)
 		}
 	}
-}
+}*/
 
 /** Invalidate UI */
-export function invalidateUI(info: { invalidatedElementIds: string[] }) {
-	const { invalidatedElementIds } = info
+export function invalidateUI(invalidatedElementIds?: string[]) {
 	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
 }
 
@@ -189,22 +189,51 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 
 /** Update children of an DOM element; has side effects */
 export async function updateChildrenAsync(eltDOM: DOMElement, children: UIElement[]): Promise<typeof eltDOM> {
-	// Update or replace existing existing DOM children that are matched with leaf elt's children
-	const childrenWithMatchingNodes = [...take(children, eltDOM.childNodes.length)]
-	await Promise.all(childrenWithMatchingNodes.map((child: UIElement, index) => {
-		// console.log(`Updating ${eltDOM.childNodes.item(index)} with ${child}`)
-		return updateAsync((eltDOM.childNodes.item(index) as DOMAugmented), child)
+	const eltDomChildren = [...eltDOM.childNodes]
+	const matching = (dom: Node, elt: UIElement) => {
+		return isAugmentedDOM(dom)
+			&& isIntrinsicElt(dom.renderTrace.leafElement)
+			&& "key" in dom.renderTrace.leafElement.props
+			&& isEltProper(elt)
+			&& "key" in elt.props
+			&& dom.renderTrace.leafElement.props.key === elt.props.key
+	}
+
+	const newChildren = await Promise.all(children.map((child, index) => {
+		const matchingNode = (index < eltDomChildren.length && matching(eltDomChildren[index], child))
+			? eltDomChildren[index]
+			: eltDomChildren.find(c => matching(c, child)) ?? eltDomChildren[index]
+		const updated = matchingNode
+			? updateAsync(matchingNode as DOMAugmented, child)
+			: renderAsync(child)
+
+		return updated
 	}))
-	const childrenWithoutMatchingNodes = [...skip(children, eltDOM.childNodes.length)]
+
+	emptyContainer(eltDOM)
 
 	// Add any new children
-	const newChildren = await Promise.all(childrenWithoutMatchingNodes.map((child) => renderAsync(child)))
 	newChildren.forEach(dom => eltDOM.appendChild(dom))
 
 	// Remove any existing DOM children that have no matches in leaf elt's children
-	truncateChildNodes(eltDOM, children.length)
+	// truncateChildNodes(eltDOM, children.length)
 
 	return eltDOM
+
+	// Update or replace existing existing DOM children that are matched with leaf elt's children
+	// const childrenWithMatchingNodes = [...take(children, eltDomChildren.length)]
+	// await Promise.all(children.map((child, index) => {
+	// 	if (matchingNode) {
+	// 		eltDOM.insertBefore(matchingNode, eltDomChildren[index])
+	// 	}
+	// 	if (index < eltDomChildren.length)
+	// 		// console.log(`Updating ${eltDOM.childNodes.item(index)} with ${child}`)
+	// 		return updateAsync((eltDOM.childNodes.item(index) as DOMAugmented), child)
+	// 	else
+	// 		eltDOM.appendChild()
+	// }))
+	// const childrenWithoutMatchingNodes = [...skip(children, eltDOM.childNodes.length)]
+	// const newChildren = await Promise.all(childrenWithoutMatchingNodes.map((child) => renderAsync(child)))
 }
 
 /** Update input DOM element to reflect input leaf UI element (type, props, and children)

@@ -7,13 +7,12 @@
 import { Obj } from "@agyemanjp/standard/utility"
 
 /** Main component type */
-export type Component<P extends Obj = Obj> = (
-	(props: P & { children?: Children }) =>
-		// UIElements below should not have a generic type since we don't know their props in advance
-		| AsyncGenerator<UIElement, UIElement, typeof props>
-		| Generator<UIElement, UIElement, typeof props>
-		| Promise<UIElement>
-		| UIElement
+export type Component<P extends Obj = Obj> = ((props: P & { children?: Children, key?: string }/*, extra: { invalidate: () => void }*/) =>
+	// UIElement generic types below should not be generic type since we don't know their props in advance
+	| AsyncGenerator<UIElement, UIElement, typeof props>
+	| Generator<UIElement, UIElement, typeof props>
+	| Promise<UIElement>
+	| UIElement
 ) & ComponentOptions<P>
 
 export interface ComponentOptions<P extends Obj = Obj> {
@@ -22,7 +21,7 @@ export interface ComponentOptions<P extends Obj = Obj> {
 	defaultProps?: Partial<P>
 }
 
-export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a generic type them
+export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a generic type
 export interface UIElementBase<P = unknown> { props: P, children?: Children }
 export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P>, result?: ComponentResult }
