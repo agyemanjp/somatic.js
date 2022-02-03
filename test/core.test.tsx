@@ -93,9 +93,8 @@ describe("CORE MODULE", () => {
 		it("should return elt with same html as renderToString, for an elt without children", async () => {
 			try {
 				const elt = <CommandBox
-					icon={{ on: <span>On</span>, off: <span>Off</span> }}
+					// icon={{ on: ()=><span>On</span>, off: ()=><span>Off</span> }}
 					style={{ height: "auto", width: "auto", fontSize: "14px" }}
-					onClick={async (msg) => { console.log('Message received' + msg.type) }}
 				/>
 
 				const dom = await renderAsync(elt)

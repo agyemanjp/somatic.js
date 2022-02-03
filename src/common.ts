@@ -276,20 +276,12 @@ export function isEventKey(key: string): key is keyof typeof eventNames {
 		&& Object.keys(eventNames).includes(keyUpper)
 }
 
-export function camelCaseToDash(str: string): string {
-	return str
-		.replace(/[^a-zA-Z0-9]+/g, '-')
-		.replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
-		.replace(/([a-z])([A-Z])/g, '$1-$2')
-		.replace(/([0-9])([^0-9])/g, '$1-$2')
-		.replace(/([^0-9])([0-9])/g, '$1-$2')
-		.replace(/-+/g, '-')
-		.toLowerCase()
-}
+
 
 export function stringify(x: any): string {
 	return JSON.stringify(x, (key, val) => typeof val === "function" ? `[Function ${val.name}]` : val, 2)
 }
+
 
 
 /** Mouse event names */

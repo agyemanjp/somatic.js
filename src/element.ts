@@ -2,7 +2,7 @@
 /* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
 import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, Sequence } from "@agyemanjp/standard"
-import { ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
+import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
 
 export const isEltProper = (elt: UIElement): elt is (IntrinsicElement | ComponentElt) => (hasValue(elt) && typeof elt === "object" && "type" in elt)
 export const isIntrinsicElt = (elt: UIElement): elt is IntrinsicElement => isEltProper(elt) && typeof elt.type === "string"
@@ -144,11 +144,16 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 	}
 }
 
+
+export function normalizeChildren(children?: Children) {
+	if (!hasValue(children))
+		return []
+	return Array.isArray(children)
+		? children.flat()
+		: [children]
+}
+
 /** Returns a flattened array of children  */
 export function getChildren(elt: UIElement) {
-	return isEltProper(elt) && elt.children
-		? Array.isArray(elt.children)
-			? elt.children.flat()
-			: [elt.children]
-		: []
+	return isEltProper(elt) ? normalizeChildren(elt.children) : []
 }

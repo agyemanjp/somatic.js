@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { createElement } from '../core'
-import { Component, HtmlProps, PanelProps, ButtonHTMLAttributes, CSSProperties } from '../types'
+import { Component, HtmlProps, PanelProps, CSSProperties } from '../types'
 export type Props = PanelProps & HtmlProps & {
 }
 

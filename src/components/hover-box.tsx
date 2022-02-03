@@ -1,87 +1,83 @@
-// /* eslint-disable fp/no-mutation */
-// /* eslint-disable fp/no-rest-parameters */
-// /* eslint-disable brace-style */
-// // eslint-disable-next-line @typescript-eslint/no-unused-vars
-// import { createElement, Component, CSSProperties, stringifyStyle, UIElement } from "../core"
-// import { first } from "@agyemanjp/standard/collections"
-// import { idProvider } from './utils'
-// import { HtmlProps } from './types'
+/* eslint-disable fp/no-mutation */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as cuid from 'cuid'
+import { deepMerge, first } from '@agyemanjp/standard'
+import { createElement } from '../core'
+import { stringifyStyle } from '../html'
+import { getChildren, normalizeChildren, isEltProper } from '../element'
+import { Component, CSSProperties, HtmlProps } from '../types'
 
-// // type Messages = { type: "HOVER_START" } | { type: "HOVER_STOP" }
+export type Props = HtmlProps & {
+	hoverStyle?: CSSProperties
+}
 
-// type Props = HtmlProps & {
-// 	hoverStyle?: CSSProperties
-// }
+export const HoverBox: Component<Props> = (props) => {
+	const {
+		children,
+		hoverStyle,
+		style,
+		...htmlProps
+	} = props
 
-// export const HoverBox: Component<Props> = (props) => {
+	const className__ = cuid()
 
-// 	const {
-// 		children,
-// 		hoverStyle,
-// 		style,
-// 		...htmlProps
-// 	} = props
+	// eslint-disable-next-line fp/no-let
+	let child = normalizeChildren(children)[0]
+	if (isEltProper(child)) {
+		child = {
+			...child,
+			props: {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				...child.props,
+				className: className__,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				style: child.props?.style ?? {},
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				onMouseEnter: (e: unknown) => {
+					// if (postMsgAsync)
+					// 	postMsgAsync({ type: "HOVER_START" })
+				},
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+				onMouseLeave: (e: any) => {
+					// if (postMsgAsync)
+					// 	postMsgAsync({ type: "HOVER_STOP" })
+				}
+			}
+		}
+	}
+	else {
+		child = <div {...htmlProps} className={className__}>{child}</div>
+	}
 
-// 	const className__ = idProvider.next()
-// 	// eslint-disable-next-line fp/no-let
+	return <div style={{ display: "inline" }}>
+		<style>
+			{`
+				.${className__} {
+					${stringifyStyle({ ...style }, true)}
+				}
+				.${className__}:hover {
+					${stringifyStyle({ ...hoverStyle }, true)}
+				}					
+				input[type="text"].${className__} {
+					${stringifyStyle({ backgroundColor: "#fff", }, true)}
+				}
+			`}
+		</style>
 
-// 	// eslint-disable-next-line fp/no-let
-// 	let child = (children ? first(children) : undefined) as any
-// 	if (child && "props" in child) {
-// 		child = {
-// 			...child,
-// 			props: {
-// 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// 				...child.props,
-// 				className: className__,
-// 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// 				style: child.props?.style ?? {},
-// 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// 				onMouseEnter: (e: unknown) => {
-// 					// if (postMsgAsync)
-// 					// 	postMsgAsync({ type: "HOVER_START" })
-// 				},
-// 				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-// 				onMouseLeave: (e: any) => {
-// 					// if (postMsgAsync)
-// 					// 	postMsgAsync({ type: "HOVER_STOP" })
-// 				}
-// 			}
-// 		}
-// 	}
-// 	else {
-// 		// eslint-disable-next-line fp/no-mutation
-// 		child = <div {...htmlProps} className={className__}>{child}</div>
-// 	}
+		{child}
+	</div>
+}
 
+HoverBox.isPure = true
+HoverBox.defaultProps = {
+	style: {
+		height: "auto",
+		width: "auto",
+		padding: 0,
+		margin: 0
+	} as CSSProperties,
+	hoverStyle: {}
+}
 
-// 	return <div style={{ display: "inline" }}>
-// 		<style>
-// 			{`
-// 				.${className__} {
-// 					${stringifyStyle({ ...style }, true)}
-// 				}
-// 				.${className__}:hover {
-// 					${stringifyStyle({ ...hoverStyle }, true)}
-// 				}					
-// 				input[type="text"].${className__} {
-// 					${stringifyStyle({ backgroundColor: "#fff", }, true)}
-// 				}
-// 			`}
-// 		</style>
-
-// 		{child}
-// 	</div>
-// }
-
-// // HoverBox.stateful = false
-// HoverBox.isPure = true
-// HoverBox.defaultProps = {
-// 	style: {
-// 		height: "auto",
-// 		width: "auto",
-// 		padding: 0,
-// 		margin: 0
-// 	} as CSSProperties,
-// 	hoverStyle: {}
-// }

@@ -75,7 +75,7 @@ declare global {
 			/** Contains style information for a document, or part of a document. 
 			 * It contains CSS, which is applied to the contents of the document containing the <style> element. 
 			 * */
-			style: StyleHTMLAttributes<HTMLStyleElement>
+			style: Intrinsic<StyleHTMLAttributes<HTMLStyleElement>>
 			/** Defines the document's title that is shown in a Browser's title bar or a page's tab. 
 			 * It only contains text; tags within the element are ignored. 
 			 */
@@ -451,6 +451,7 @@ declare global {
 }
 
 export { createElement, renderAsync, renderToStringAsync, updateAsync, mountElement, invalidateUI, } from './core'
+export { getChildren } from "./element"
 export { stringifyAttributes, stringifyStyle } from "./html"
 export * from './components'
 export * from './types'
