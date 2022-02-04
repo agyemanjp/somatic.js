@@ -7,7 +7,7 @@ import { colorLuminance } from './utils'
 import { Component, PanelProps, HtmlProps, IconProps, ButtonHTMLAttributes } from '../types'
 import { HoverBox } from './hover-box'
 
-export type Props = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
+export type CommandBoxProps = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
 	color?: string
 	icon?: Component<IconProps>
 	iconPlacement?: "before" | "after"
@@ -15,7 +15,7 @@ export type Props = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
 	hoverEffect?: "darken" | "invert"
 }
 
-export const CommandBox: Component<Props> = function (props) {
+export const CommandBox: Component<CommandBoxProps> = function (props) {
 	const defaultProps = {
 		color: "black",
 		orientation: "horizontal" as const,

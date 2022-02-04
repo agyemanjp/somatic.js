@@ -9,11 +9,11 @@ import { stringifyStyle } from '../html'
 import { getChildren, normalizeChildren, isEltProper } from '../element'
 import { Component, CSSProperties, HtmlProps } from '../types'
 
-export type Props = HtmlProps & {
+export type HoverBoxProps = HtmlProps & {
 	hoverStyle?: CSSProperties
 }
 
-export const HoverBox: Component<Props> = (props) => {
+export const HoverBox: Component<HoverBoxProps> = (props) => {
 	const {
 		children,
 		hoverStyle,

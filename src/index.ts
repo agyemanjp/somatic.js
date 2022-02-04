@@ -32,7 +32,7 @@ import {
 } from "./types"
 
 declare global {
-	namespace JSX {
+	export namespace JSX {
 		type Element = (
 			| AsyncGenerator<Element, Element>
 			| Generator<Element, Element>

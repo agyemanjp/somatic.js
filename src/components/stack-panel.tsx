@@ -4,10 +4,10 @@
 import { createElement } from '../core'
 import { Component, PanelProps, HtmlProps } from '../types'
 
-export type Props = PanelProps & HtmlProps & {
+export type StackPanelProps = PanelProps & HtmlProps & {
 }
 
-export const StackPanel: Component<Props> = function (props) {
+export const StackPanel: Component<StackPanelProps> = function (props) {
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":

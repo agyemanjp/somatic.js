@@ -19,7 +19,7 @@ import { StackPanel } from './stack-panel'
 
 // ToDo: Implement deletion and rearrangement
 
-export type Props<T = unknown> = HtmlProps & PanelProps & {
+export type ViewProps<T = unknown> = HtmlProps & PanelProps & {
 	sourceData: Iterable<T>
 	selectedIndex?: number,
 
@@ -38,12 +38,12 @@ export type Props<T = unknown> = HtmlProps & PanelProps & {
 	// onArrange?: (eventData: { oldIndex: number, newIndex: number }) => void
 }
 
-export async function* View<T>(props: Props<T> & { children?: never[] }): AsyncGenerator<JSX.Element, JSX.Element, typeof props> {
+export async function* View<T>(props: ViewProps<T> & { children?: never[] }): AsyncGenerator<JSX.Element, JSX.Element, typeof props> {
 	const defaultProps = {
 		id: cuid(),
 		selectedIndex: 0,
 		itemsPanel: StackPanel,
-		itemTemplate: (p => <div>{p.value}</div>) as Required<Props<T>>["itemTemplate"],
+		itemTemplate: (p => <div>{p.value}</div>) as Required<ViewProps<T>>["itemTemplate"],
 		itemStyle: {} as CSSProperties,
 		selectedItemStyle: {} as CSSProperties,
 		selectionEnabled: true,

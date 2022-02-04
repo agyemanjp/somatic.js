@@ -2,10 +2,10 @@
 
 import { createElement } from '../core'
 import { Component, HtmlProps, PanelProps, CSSProperties } from '../types'
-export type Props = PanelProps & HtmlProps & {
+export type GridPanelProps = PanelProps & HtmlProps & {
 }
 
-export const GridPanel: Component<Props> = function (props) {
+export const GridPanel: Component<GridPanelProps> = function (props) {
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":
