@@ -84,13 +84,13 @@ declare global {
 
 			//#region Content sectioning
 			/** indicates that the enclosed HTML provides contact information for a person or people, or for an organization. */
-			address: HTMLAttributes<HTMLElement>
+			address: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a self-contained composition in a document, page, application, or site, 
 			 * which is intended to be independently distributable or reusable (e.g., in syndication). 
 			 * Examples include: a forum post, a magazine or newspaper article, or a blog entry, a product card, a user-submitted comment, an interactive widget or gadget, 
 			 * or any other independent item of content.
 			 */
-			article: HTMLAttributes<HTMLElement>
+			article: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a portion of a document whose content is only indirectly related to the document's main content. 
 			 * Asides are frequently presented as sidebars or call-out boxes. 
 			 */
@@ -98,11 +98,11 @@ declare global {
 			/** Represents introductory content, typically a group of introductory or navigational aids. 
 			 * It may contain some heading elements but also a logo, a search form, an author name, and other elements. 
 			 */
-			header: HTMLAttributes<HTMLElement>
+			header: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a footer for its nearest sectioning content or sectioning root element. 
 			 * A <footer> typically contains information about the author of the section, copyright data or links to related documents
 			 */
-			footer: HTMLAttributes<HTMLElement>
+			footer: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents the dominant content of the body of a document.
 			 * The main content area consists of content that is directly related to or expands upon the central topic of a document, or the central functionality of an application. 
 			 */
@@ -110,27 +110,27 @@ declare global {
 			/** Represents a section of a page whose purpose is to provide navigation links, either within the current document or to other documents. 
 			 * Common examples of navigation sections are menus, tables of contents, and indexes.
 			 */
-			nav: HTMLAttributes<HTMLElement>
+			nav: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a generic standalone section of a document, which doesn't have a more specific semantic element to represent it. 
 			 * Sections should always have a heading, with very few exceptions.
 			 */
-			section: HTMLAttributes<HTMLElement>
+			section: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a thematic break between paragraph-level elements: 
 			 * for example, a change of scene in a story, or a shift of topic within a section. 
 			 */
 			hr: HTMLAttributes<HTMLHRElement>
 			/** Level 1 section heading. */
-			h1: HTMLAttributes<HTMLHeadingElement>
+			h1: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
 			/** Level 2 section heading. */
-			h2: HTMLAttributes<HTMLHeadingElement>
+			h2: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
 			/** Level 3 section heading. */
-			h3: HTMLAttributes<HTMLHeadingElement>
+			h3: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
 			/** Level 4 section heading. */
-			h4: HTMLAttributes<HTMLHeadingElement>
+			h4: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
 			/** Level 5 section heading. */
-			h5: HTMLAttributes<HTMLHeadingElement>
+			h5: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
 			/** Level 6 section heading. */
-			h6: HTMLAttributes<HTMLHeadingElement>
+			h6: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
 			//#endregion
 
 			//#region Text content
@@ -166,21 +166,21 @@ declare global {
 			 * In menus and unordered lists, list items are usually displayed using bullet points. 
 			 * In ordered lists, they are usually displayed with an ascending counter on the left, such as a number or letter.
 			 */
-			li: LiHTMLAttributes<HTMLLIElement>
+			li: Intrinsic<LiHTMLAttributes<HTMLLIElement>>
 			/** Represents an unordered list of items, typically rendered as a bulleted list. */
-			ul: HTMLAttributes<HTMLUListElement>
+			ul: Intrinsic<HTMLAttributes<HTMLUListElement>>
 			/** Represents an ordered list of items, typically rendered as a numbered list. */
-			ol: OlHTMLAttributes<HTMLOListElement>
+			ol: Intrinsic<OlHTMLAttributes<HTMLOListElement>>
 			/** Represents preformatted text which is to be presented exactly as written in the HTML file. 
 			 * The text is typically rendered using a non-proportional, or "monospaced, font. 
 			 * Whitespace inside this element is displayed as written.
 			 */
-			pre: HTMLAttributes<HTMLElement>
+			pre: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a paragraph. 
 			 * Paragraphs are usually represented in visual media as blocks of text separated from adjacent blocks by blank lines and/or first-line indentation, 
 			 * but HTML paragraphs can be any structural grouping of related content, such as images or form fields.
 			 */
-			p: HtmlHTMLAttributes<HTMLParagraphElement>
+			p: Intrinsic<HtmlHTMLAttributes<HTMLParagraphElement>>
 			//#endregion
 
 			//#region Inline text semantics
@@ -356,16 +356,16 @@ declare global {
 			//#endregion
 
 			//#region Table content
-			table: TableHTMLAttributes<HTMLTableElement>,
+			table: Intrinsic<TableHTMLAttributes<HTMLTableElement>>,
 			th: ThHTMLAttributes<HTMLTableHeaderCellElement>,
-			tr: HTMLAttributes<HTMLTableRowElement>,
-			td: TdHTMLAttributes<HTMLTableDataCellElement>,
-			tbody: HTMLAttributes<HTMLElement>,
-			colgroup: HTMLAttributes<HTMLElement>,
-			col: HTMLAttributes<HTMLElement>,
-			caption: HTMLAttributes<HTMLElement>,
-			tfoot: HTMLAttributes<HTMLElement>,
-			thead: HTMLAttributes<HTMLElement>,
+			tr: Intrinsic<HTMLAttributes<HTMLTableRowElement>>,
+			td: Intrinsic<TdHTMLAttributes<HTMLTableDataCellElement>>,
+			tbody: Intrinsic<HTMLAttributes<HTMLElement>>,
+			colgroup: Intrinsic<HTMLAttributes<HTMLElement>>,
+			col: Intrinsic<HTMLAttributes<HTMLElement>>,
+			caption: Intrinsic<HTMLAttributes<HTMLElement>>,
+			tfoot: Intrinsic<HTMLAttributes<HTMLElement>>,
+			thead: Intrinsic<HTMLAttributes<HTMLElement>>,
 			//#endregion
 
 			//#region Interactive elements
@@ -379,7 +379,7 @@ declare global {
 			/** Represents a document section containing interactive controls for submitting information. */
 			form: Intrinsic<FormHTMLAttributes<HTMLFormElement>>
 			/** Represents a control that provides a menu of options */
-			select: SelectHTMLAttributes<HTMLSelectElement>
+			select: Intrinsic<SelectHTMLAttributes<HTMLSelectElement>>
 			/** Represents a clickable button, used to submit forms or anywhere in a document for accessible, standard button functionality. */
 			button: Intrinsic<ButtonHTMLAttributes<HTMLButtonElement>>
 			/** Used to create interactive controls for web-based forms in order to accept data from the user.
@@ -403,7 +403,7 @@ declare global {
 			/** Creates a grouping of options within a select element. */
 			optgroup: OptgroupHTMLAttributes<HTMLOptGroupElement>
 			/** Represents a multi-line plain-text editing control, useful when you want to allow users to enter a sizeable amount of free-form text, for example a comment on a review or feedback form. */
-			textarea: TextareaHTMLAttributes<HTMLTextAreaElement>
+			textarea: Intrinsic<TextareaHTMLAttributes<HTMLTextAreaElement>>
 			/** Container element into which a site or app can inject the results of a calculation or the outcome of a user action. */
 			output: HTMLAttributes<HTMLOutputElement>
 			/** Displays an indicator showing the completion progress of a task, typically displayed as a progress bar. */
