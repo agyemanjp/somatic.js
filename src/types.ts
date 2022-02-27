@@ -4,7 +4,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Obj } from "@agyemanjp/standard/utility"
+import { Obj, Digit, DigitNonZero } from "@agyemanjp/standard/utility"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> = ((props: P & { children?: Children, key?: string }/*, extra: { invalidate: () => void }*/) =>
@@ -127,7 +127,6 @@ export interface CSSProperties {
 	colorInterpolationFilters?: string | null;
 	columnCount?: any;
 	columnFill?: string | null;
-	columnGap?: any;
 	columnRule?: string | null;
 	columnRuleColor?: any;
 	columnRuleStyle?: string | null;
@@ -385,7 +384,106 @@ export interface CSSProperties {
 	writingMode?: string | null;
 	zIndex?: string | number | null;
 	zoom?: string | null;
+
+	/** A shorthand property for the grid-template-rows, grid-template-columns, grid-template-areas, grid-auto-rows, grid-auto-columns, and the grid-auto-flow properties */
+	grid?: string
+
+	/** Either specifies a name for the grid item,  or this property is a shorthand property for the 
+	 * grid-row-start, grid-column-start, grid-row-end, and grid-column-end properties 
+	 */
+	gridArea?: string
+
+	/** Defines on which row-line a grid item will start */
+	gridRowStart?:
+	| "auto" // Default value. The item will be placed following the flow
+	| `span ${number}` // the number of rows the item will span
+	| number // row line
+	| "inherit" | "initial" | "revert" | "unset"
+
+	/** Defines on which column-line a grid item will start. */
+	gridColumnStart?:
+	| "auto" // Default value. The item will be placed following the flow
+	| `span ${number}` // the number of columns the item will span
+	| number // column-line
+	| "inherit" | "initial" | "revert" | "unset"
+
+	/** Defines how many rows a grid item will span, or on which row-line the item will end */
+	gridRowEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+
+	/** Defines how many columns a grid item will span, or on which column-line the item will end */
+	gridColumnEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+
+	/** A shorthand property for the grid-row-start and the grid-row-end properties */
+	gridRow?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
+
+	/** A shorthand property for the grid-column-start and the grid-column-end properties */
+	gridColumn?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
+
+	/** Specifies the size of the columns, and how many columns in a grid layout */
+	gridTemplateColumns?: string;
+
+	/** Specifies the size of the rows in a grid layout */
+	gridTemplateRows?: string;
+
+	/** A shorthand property for the grid-template-rows, grid-template-columns and grid-areas properties 
+	 * Default is none
+	 */
+	gridTemplate?: `${string} / ${string}}` | SpaceRepeated<string | ".", 9> | "none" | "initial" | "inherit"
+
+	/** Specifies the gap between the grid rows */
+	rowGap?: CSSLength | "normal" | "initial" | "inherit" | "unset" | "revert"
+
+	/** Specifies the gap between the columns */
+	columnGap?: CSSLength | "normal" | "initial" | "inherit" | "unset" | "revert"
+
+	/** A shorthand property for the grid-row-gap and grid-column-gap properties 
+	 * Either a single CSS length value to both row and column gap
+	 * Or two CSS length values specifying the grid-row-gap grid-column-gap
+	 */
+	gridGap?: SpaceRepeated<CSSLength, 2> | "normal" | "initial" | "inherit" | "unset" | "revert"
+
+	/** A shorthand property for the row-gap and the column-gap properties
+	 * Either a single CSS length value to both row and column gap
+	 * Or two CSS length values specifying the row-gap column-gap
+	 */
+	gap?: CSSLength | `${CSSLength} ${CSSLength}` | "normal" | "initial" | "inherit"
 }
+
+export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
+export type CSSLength = `${number}${CSSLengthUnit}`;
+/** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
+export type CSSLengthUnit = (
+	| "%"
+	| "px" // Pixels (1px = 1/96th of 1in)
+	| "pt" // Points (1pt = 1/72th of 1in)
+	| "cm"  // Centimeters
+	| "mm" // Millimeters
+	| "Q" // Quarter-millimeters
+	| "in"  // Inches
+	| "pc" // Picas (1pt = 1/72th of 1in)
+
+	| "rem" // Relative to Font size of the root element.
+	| "em" // Relative to font size of parent, for typographical properties like font-size, and font size of the element itself, of other properties like width.
+	| "ex" // Relative to x-height of the element's font.
+	| "ch" // Relative to The advance measure (width) of the glyph "0" of the element's font.
+	| "lh" // Relative to Line height of the element.
+	| "vw" // 1% of the viewport's width.
+	| "vh" // 1% of the viewport's height.
+	| "vmin" // 1% of the viewport's smaller dimension.
+	| "vmax" // 1% of the viewport's larger dimension.
+)
+
+type SpaceRepeated<S extends string, Max extends DigitNonZero> = Max extends 1 ? S : S | `${S} ${SpaceRepeated<S, Dec<Max>>}`
+type Dec<N extends DigitNonZero> = (N extends 9 ? 8
+	: N extends 8 ? 7
+	: N extends 7 ? 6
+	: N extends 6 ? 5
+	: N extends 5 ? 4
+	: N extends 4 ? 3
+	: N extends 3 ? 2
+	: N extends 2 ? 1
+	: 1
+)
 
 export type HtmlProps = Partial<HTMLAttributes<HTMLElement>>
 export type StyleProps = { style?: CSSProperties }

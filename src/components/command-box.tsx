@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { deepMerge } from '@agyemanjp/standard'
 import { createElement } from '../core'
-import { colorLuminance } from './utils'
+import { colorLuminance } from '../common'
 import { Component, PanelProps, HtmlProps, IconProps, ButtonHTMLAttributes } from '../types'
 import { HoverBox } from './hover-box'
 

@@ -1,8 +1,16 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { createElement } from '../core'
-import { Component, HtmlProps, PanelProps, CSSProperties } from '../types'
+import { Component, PanelProps, HtmlProps, CSSLength } from '../types'
+import { isArray } from '@agyemanjp/standard/utility'
+
+type RowOrColumnInfo = CSSLength | "none" | "auto" | "max-content" | "min-content" | "initial" | "inherit"
+
 export type GridPanelProps = PanelProps & HtmlProps & {
+	rows?: number | RowOrColumnInfo[]
+	cols?: number | RowOrColumnInfo[]
+	gap: CSSLength | { row?: CSSLength, column?: CSSLength }
 }
 
 export const GridPanel: Component<GridPanelProps> = function (props) {
@@ -36,36 +44,35 @@ export const GridPanel: Component<GridPanelProps> = function (props) {
 		}
 	}
 
-	try {
-		const {
-			orientation,
-			itemsAlignH,
-			itemsAlignV,
-			children,
-			style,
-			...htmlProps
-		} = props
+	const {
+		orientation, itemsAlignH, itemsAlignV, children,
+		rows, cols, gap,
+		style, ...htmlProps
+	} = props
 
-		return <div
-			{...htmlProps}
+	return <div {...htmlProps}
+		style={{
+			...style,
+			gridTemplateRows: isArray(rows) ? rows.join(" ") : (String(rows) ?? "unset"),
+			gridTemplateColumns: isArray(cols) ? cols.join(" ") : (String(cols) ?? "unset"),
+			...typeof gap === "string" ? { gap } : { rowGap: gap.row ?? "unset", columnGap: gap.column ?? "unset" },
+			display: "grid",
+			flexDirection: orientation === "vertical" ? "column" : "row",
+			justifyContent: justifyContent(),
+			alignItems: alignItems()
+		}}>
 
-			style={{
-				display: "grid",
-				...style,
-				flexDirection: orientation === "vertical" ? "column" : "row",
-				justifyContent: justifyContent(),
-				alignItems: alignItems()
-			}}>
+		{children}
 
-			{children}
+	</div>
 
-		</div>
-	}
-	catch (e) {
-		console.error(`GridPanel render: ${e}`)
-		throw e
-	}
+
 }
 
 GridPanel.isPure = true
 
+
+// const elt = createElement(StackPanel, { itemsAlignH: "stretch", x: 1 }, createElement("div", {}))
+// const elt1 = createElement(StackPanel, { itemsAlignHX: "stretch" }, createElement("div", {}))
+// const x = <div />
+// const y = <StackPanel />

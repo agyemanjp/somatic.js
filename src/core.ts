@@ -15,7 +15,7 @@ import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented, Children } from "./types"
-import { stringify, selfClosingTags, dashCaseAttributes, DEFAULT_UPDATE_INTERVAL_MILLISECONDS } from "./common"
+import { stringify, selfClosingTags, dashCaseAttributes } from "./common"
 
 
 /** JSX is transformed into calls of this function */
@@ -73,9 +73,15 @@ export function invalidateUI(invalidatedElementIds?: string[]) {
 	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
 }
 
-type MountOptions = { updateMode?: "continuous-from-top" | "on-event-from-invalidated", updateInterval?: number }
+type MountOptions = {
+	updateMode?: "continuous-from-top" | "on-event-from-invalidated",
+	updateInterval?: number
+}
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
+	/** Library-specific DOM update/refresh interval */
+	const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 250
+
 	// console.log(`Mounting element ${stringify(element)} on container ${container}...`)
 
 	if (options?.updateMode === "continuous-from-top") {

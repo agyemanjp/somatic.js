@@ -455,3 +455,4 @@ export { getChildren } from "./element"
 export { stringifyAttributes, stringifyStyle } from "./html"
 export * from './components'
 export * from './types'
+export { colorConstants, colorLuminance } from "./common"
