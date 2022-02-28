@@ -4,7 +4,7 @@ import { booleanAttributes, attributeConversions, stringify } from "./common"
 
 /** Converts an attributes property object to a string */
 export function stringifyAttributes<E>(props: HTMLAttributes<any> & E): string {
-	console.log(`Stringifying ${stringify(props)}`)
+	// console.log(`Stringifying ${stringify(props)}`)
 
 	return Object.keys(props)
 		.map(key => {

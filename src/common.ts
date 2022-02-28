@@ -193,7 +193,8 @@ export const booleanAttributes = [
 	"REQUIRED",
 	"DISABLED",
 	"CHECKED",
-	"READONLY"
+	"READONLY",
+	"AUTOFOCUS"
 ]
 
 /** Attribute name conversions when passed to DOM setAttribute or rendered as HTML
@@ -204,6 +205,7 @@ export const booleanAttributes = [
  * so no conversion is needed. 
  */
 export const attributeConversions: Obj<string, string> = {
+	"autoreverse": "auto-reverse",
 	"htmlfor": "for",
 	"classname": "class",
 	"acceptcharset": "accept-charset",

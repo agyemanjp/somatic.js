@@ -739,8 +739,8 @@ export type HTMLAttributes<T> = DOMAttributes<T> & {
 
 	// Non-standard Attributes
 	autocapitalize?: string;
-	autoCorrect?: string;
-	autoSave?: string;
+	autocorrect?: string;
+	autosave?: string;
 	color?: string;
 	itemProp?: string;
 	itemScope?: boolean;
