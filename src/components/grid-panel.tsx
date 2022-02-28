@@ -10,7 +10,7 @@ type RowOrColumnInfo = CSSLength | "none" | "auto" | "max-content" | "min-conten
 export type GridPanelProps = PanelProps & HtmlProps & {
 	rows?: number | RowOrColumnInfo[]
 	cols?: number | RowOrColumnInfo[]
-	gap: CSSLength | { row?: CSSLength, column?: CSSLength }
+	gap?: CSSLength | { row?: CSSLength, column?: CSSLength }
 }
 
 export const GridPanel: Component<GridPanelProps> = function (props) {
@@ -55,7 +55,7 @@ export const GridPanel: Component<GridPanelProps> = function (props) {
 			...style,
 			gridTemplateRows: isArray(rows) ? rows.join(" ") : (String(rows) ?? "unset"),
 			gridTemplateColumns: isArray(cols) ? cols.join(" ") : (String(cols) ?? "unset"),
-			...typeof gap === "string" ? { gap } : { rowGap: gap.row ?? "unset", columnGap: gap.column ?? "unset" },
+			...typeof gap === "string" ? { gap } : { rowGap: gap?.row ?? "unset", columnGap: gap?.column ?? "unset" },
 			display: "grid",
 			flexDirection: orientation === "vertical" ? "column" : "row",
 			justifyContent: justifyContent(),

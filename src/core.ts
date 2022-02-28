@@ -15,7 +15,7 @@ import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, truncateChildNodes, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented, Children } from "./types"
-import { stringify, selfClosingTags, dashCaseAttributes } from "./common"
+import { stringify, selfClosingTags } from "./common"
 
 
 /** JSX is transformed into calls of this function */
@@ -39,7 +39,6 @@ export async function renderAsync(elt: UIElement): Promise<DOMAugmented | Text> 
 export async function renderToStringAsync(elt: UIElement): Promise<string> {
 	const trace = await traceToLeafAsync(elt)
 	const leaf = trace.leafElement
-
 	if (isIntrinsicElt(leaf)) {
 		const children = getChildren(leaf)
 		const attributesHtml = new String(stringifyAttributes(leaf.props)).prependSpaceIfNotEmpty().toString()

@@ -738,7 +738,7 @@ export type HTMLAttributes<T> = DOMAttributes<T> & {
 	vocab?: string;
 
 	// Non-standard Attributes
-	autoCapitalize?: string;
+	autocapitalize?: string;
 	autoCorrect?: string;
 	autoSave?: string;
 	color?: string;
@@ -1046,7 +1046,7 @@ export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
 	cite?: string;
 }
 export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
-	autoFocus?: boolean;
+	autofocus?: boolean;
 	disabled?: boolean;
 	form?: string;
 	formAction?: string;
@@ -1093,7 +1093,7 @@ export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 	acceptCharset?: string;
 	action?: string;
-	autoComplete?: string;
+	autocomplete?: string;
 	encType?: string;
 	method?: string;
 	name?: string;
@@ -1134,11 +1134,12 @@ export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
 	cite?: string;
 	dateTime?: string;
 }
+
 export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 	accept?: string;
 	alt?: string;
-	autoComplete?: string;
-	autoFocus?: boolean;
+	autocomplete?: string;
+	autofocus?: boolean;
 	capture?: boolean | string; // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
 	checked?: boolean;
 	crossorigin?: string;
@@ -1171,7 +1172,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 	onChange?: ChangeEventHandler<T>;
 }
 export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
-	autoFocus?: boolean;
+	autofocus?: boolean;
 	challenge?: string;
 	disabled?: boolean;
 	form?: string;
@@ -1284,8 +1285,8 @@ export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: string;
 }
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
-	autoComplete?: string;
-	autoFocus?: boolean;
+	autocomplete?: string;
+	autofocus?: boolean;
 	disabled?: boolean;
 	form?: string;
 	multiple?: boolean;
@@ -1314,8 +1315,8 @@ export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 	summary?: string;
 }
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
-	autoComplete?: string;
-	autoFocus?: boolean;
+	autocomplete?: string;
+	autofocus?: boolean;
 	cols?: number;
 	dirName?: string;
 	disabled?: boolean;
@@ -1365,7 +1366,7 @@ export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 export interface WebViewHTMLAttributes<T> extends HTMLAttributes<T> {
 	allowFullScreen?: boolean;
 	allowpopups?: boolean;
-	autoFocus?: boolean;
+	autofocus?: boolean;
 	autosize?: boolean;
 	blinkfeatures?: string;
 	disableblinkfeatures?: string;

@@ -1,12 +1,18 @@
-import { Obj, toDashCase } from "@agyemanjp/standard"
+import { Obj, keys, toDashCase } from "@agyemanjp/standard"
 import { HTMLAttributes, CSSProperties } from "./types"
-import { booleanAttributes, dashCaseAttributes } from "./common"
+import { booleanAttributes, attributeConversions, stringify } from "./common"
 
 /** Converts an attributes property object to a string */
 export function stringifyAttributes<E>(props: HTMLAttributes<any> & E): string {
+	console.log(`Stringifying ${stringify(props)}`)
+
 	return Object.keys(props)
 		.map(key => {
-			const htmlKey = encodeHTML(dashCaseAttributes.includes(key) ? toDashCase(key) : key)
+			const effectiveKey = keys(attributeConversions).includes(key.toLowerCase())
+				? attributeConversions[key.toLowerCase()]
+				: key.toLowerCase()
+			const htmlKey = encodeHTML(effectiveKey)
+
 			// const htmlKey = encodeHTML(toDashCase(key))
 			const value = (props as Obj)[key] as any
 			switch (true) {

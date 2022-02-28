@@ -1,11 +1,11 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { skip, hasValue, toDashCase } from "@agyemanjp/standard"
+import { keys, skip, hasValue, toDashCase } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
-import { svgTags, isEventKey, eventNames, booleanAttributes, dashCaseAttributes } from "./common"
+import { svgTags, isEventKey, eventNames, booleanAttributes, attributeConversions } from "./common"
 import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
 
 export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
@@ -14,10 +14,7 @@ export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TE
 
 
 
-/** Set a property on a DOM element to a value, in a DOM-idiomatic way.
- * The input property key must already be in the correct case as specified in the somatic typings, 
- * E.g., preserveAspectRatio, viewBox, fillRule, readOnly, etc
- */
+/** Set a property on a DOM element to a value, in a DOM-idiomatic way. */
 export function setAttribute(element: DOMElement, key: string, value: any) {
 	try {
 		if (["CLASSNAME", "CLASS"].includes(key.toUpperCase())) {
@@ -62,8 +59,9 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
 
 			try {
 				if (svgTags.includes(element.tagName.toUpperCase()) && !["function", "object"].includes(typeof effectiveVal)) {
-					const effectiveKey = dashCaseAttributes.includes(key) ? toDashCase(key) : key
-
+					const effectiveKey = keys(attributeConversions).includes(key.toLowerCase())
+						? attributeConversions[key.toLowerCase()]
+						: key
 					// console.log(`Setting ${effectiveKey} to ${effectiveVal}`)
 					element.setAttribute(effectiveKey, effectiveVal)
 				}
@@ -74,6 +72,7 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
 					// for setting function values which are not event handlers.
 					// It also avoids using setAttribute to set the property to a string form of the value
 
+					// We assume the input property key is in the correct case as specified in the typings, * E.g., preserveAspectRatio, viewBox, fillRule, readOnly, etc
 					(element as any)[key] = effectiveVal
 				}
 			}

@@ -262,20 +262,6 @@ describe("CORE MODULE", () => {
 								: <a href="/auth/google">LOGIN</a>
 							}
 
-							{/* <button onClick={() => {
-					// fetch('/logout', { method: 'POST', credentials: 'same-origin' })
-					console.log(`Requesting logout from client `)
-					fetch('/logout',
-						{
-							method: 'get',
-							credentials: 'include', // <--- YOU NEED THIS LINE
-							redirect: "follow"
-						})
-						.then(res => { console.log(res) })
-						.catch(err => { console.log(err) })
-
-				}}>Logout</button> */}
-
 						</StackPanel>
 
 					</StackPanel>

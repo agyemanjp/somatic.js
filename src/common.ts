@@ -1,4 +1,5 @@
 import * as cuid from "cuid"
+import { Obj } from "@agyemanjp/standard/utility"
 
 /** Names of DOM events. */
 export const eventNames = {
@@ -67,6 +68,13 @@ export const eventNames = {
 	ONVOLUMECHANGE: "volumechange",
 	ONWAITING: "waiting",
 	ONWHEEL: "wheel",
+}
+
+/** Checks if a string corresponds to one of the (uppercase) event names keys */
+export function isEventKey(key: string): key is keyof typeof eventNames {
+	const keyUpper = key.toUpperCase()
+	return keyUpper.startsWith("ON") // this condition is simply to prevent useless searches through the events list.
+		&& Object.keys(eventNames).includes(keyUpper)
 }
 
 /** SVG-specific tags. */
@@ -188,88 +196,86 @@ export const booleanAttributes = [
 	"READONLY"
 ]
 
-/** Attributes that should be converted to dash-case when being set with setAttribute or rendered in an html string
+/** Attribute name conversions when passed to DOM setAttribute or rendered as HTML
  * From https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes and
  * https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
+ * For directly settign an attribute on a DOM element, 
+ * we assume the attribute name is already in the proper case (as specified by the attribute typings)
+ * so no conversion is needed. 
  */
-export const dashCaseAttributes = [
-	"acceptCharset",
-	"httpEquiv",
-	"fillRule",
-	"baselineShift",
-	"accentHeight",
-	"alignmentBaseline",
-	"arabicForm",
-	"capHeight",
-	"clipPath",
-	"clipRule",
-	"colorInterpolation",
-	"colorInterpolationFilters",
-	"colorProfile",
-	"colorRendering",
-	"dominantBaseline",
-	"enableBackground",
-	"fillOpacity",
-	"fontFamily",
-	"fontSize",
-	"fontSizeAdjust",
-	"fontStretch",
-	"fontStyle",
-	"fontVariant",
-	"fontWeight",
-	"glyphName",
-	"glyphOrientationHorizontal",
-	"glyphOrientationVertical",
-	"horizOriginX",
-	"horizAdvX",
-	"imageRendering",
-	"letterSpacing",
-	"lightingColor",
-	"markerEnd",
-	"markerStart",
-	"markerMid",
-	"overlinePosition",
-	"overlineThickness",
-	"panose1",
-	"paintOrder",
-	"pointerEvents",
-	"renderingIntent",
-	"shapeRendering",
-	"stopColor",
-	"stopOpacity",
-	"strikethroughPosition",
-	"strikethroughThickness",
-	"strokeDasharray",
-	"strokeDashoffset",
-	"strokeLinecap",
-	"strokeLinejoin",
-	"strokeMiterlimit",
-	"strokeOpacity",
-	"strokeWidth",
-	"textAnchor",
-	"textDecoration",
-	"textRendering",
-	"transformOrigin",
-	"unicodeBidi",
-	"unicodeRange",
-	"unitsPerEm",
-	"vAlphabetic",
-	"vHanging",
-	"vIdeographic",
-	"vMathematical",
-	"vertAdvY",
-	"vertOriginX",
-	"vertOriginY",
-	"wordSpacing",
-	"writingMode",
-	"xHeight"
-]
-
-/** Checks if a string corresponds to one of the (uppercase) event names keys */
-export function isEventKey(key: string): key is keyof typeof eventNames {
-	const keyUpper = key.toUpperCase()
-	return keyUpper.startsWith("ON") // this condition is simply to prevent useless searches through the events list.
-		&& Object.keys(eventNames).includes(keyUpper)
+export const attributeConversions: Obj<string, string> = {
+	"htmlfor": "for",
+	"classname": "class",
+	"acceptcharset": "accept-charset",
+	"httpequiv": "http-equiv",
+	"fillrule": "fill-rule",
+	"baselineshift": "baseline-shift",
+	"accentheight": "accent-height",
+	"alignmentbaseline": "alignment-baseline",
+	"arabicform": "arabic-form",
+	"capheight": "cap-height",
+	"clippath": "clip-path",
+	"cliprule": "clip-rule",
+	"colorinterpolation": "color-interpolation",
+	"colorinterpolationfilters": "color-interpolation-filters",
+	"colorprofile": "color-profile",
+	"colorrendering": "color-rendering",
+	"dominantbaseline": "dominant-baseline",
+	"enablebackground": "enable-background",
+	"fillopacity": "fill-opacity",
+	"fontfamily": "font-family",
+	"fontsize": "font-size",
+	"fontsizeadjust": "font-size-adjust",
+	"fontstretch": "font-stretch",
+	"fontstyle": "font-style",
+	"fontvariant": "font-variant",
+	"fontweight": "font-weight",
+	"glyphname": "glyph-name",
+	"glyphorientationhorizontal": "glyph-orientation-horizontal",
+	"glyphorientationvertical": "glyph-orientation-vertical",
+	"horizoriginx": "horiz-origin-x",
+	"horizadvx": "horiz-adv-x",
+	"imagerendering": "image-rendering",
+	"letterspacing": "letter-spacing",
+	"lightingcolor": "lighting-color",
+	"markerend": "marker-end",
+	"markerstart": "marker-start",
+	"markermid": "marker-mid",
+	"overlineposition": "overline-position",
+	"overlinethickness": "overline-thickness",
+	"panose1": "panose-1",
+	"paintorder": "paint-order",
+	"pointerevents": "pointer-events",
+	"renderingintent": "rendering-intent",
+	"shaperendering": "shape-rendering",
+	"stopcolor": "stop-color",
+	"stopopacity": "stop-opacity",
+	"strikethroughposition": "strikethrough-position",
+	"strikethroughthickness": "strikethrough-thickness",
+	"strokedasharray": "stroke-dasharray",
+	"strokedashoffset": "stroke-dashoffset",
+	"strokelinecap": "stroke-linecap",
+	"strokelinejoin": "stroke-linejoin",
+	"strokemiterlimit": "stroke-miterlimit",
+	"strokeopacity": "stroke-opacity",
+	"strokewidth": "stroke-width",
+	"textanchor": "text-anchor",
+	"textdecoration": "text-decoration",
+	"textrendering": "text-rendering",
+	"transformorigin": "transform-origin",
+	"unicodebidi": "unicode-bidi",
+	"unicoderange": "unicode-range",
+	"unitsperem": "units-per-em",
+	"valphabetic": "v-alphabetic",
+	"vhanging": "v-hanging",
+	"videographic": "v-ideographic",
+	"vmathematical": "v-mathematical",
+	"vertadvy": "vert-adv-y",
+	"vertoriginx": "vert-origin-x",
+	"vertoriginy": "vert-origin-y",
+	"wordspacing": "word-spacing",
+	"writingmode": "writing-mode",
+	"xheight": "x-height"
 }
 
 export const colorConstants/*: Record<string, string>*/ = {

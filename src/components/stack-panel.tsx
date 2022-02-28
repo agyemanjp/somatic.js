@@ -8,8 +8,17 @@ export type StackPanelProps = PanelProps & HtmlProps & {
 }
 
 export const StackPanel: Component<StackPanelProps> = function (props) {
+	const {
+		orientation,
+		itemsAlignH,
+		itemsAlignV,
+		children,
+		style,
+		...htmlProps
+	} = props
+
 	const alignItems = () => {
-		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
+		switch (orientation === "vertical" ? (itemsAlignH) : (itemsAlignV)) {
 			case "start":
 				return "flex-start"
 			case "end":
@@ -24,7 +33,7 @@ export const StackPanel: Component<StackPanelProps> = function (props) {
 	}
 
 	const justifyContent = () => {
-		switch (props.orientation === "vertical" ? (props.itemsAlignV) : (props.itemsAlignH)) {
+		switch (orientation === "vertical" ? (itemsAlignV) : (itemsAlignH)) {
 			case "start":
 				return "flex-start"
 			case "end":
@@ -38,19 +47,10 @@ export const StackPanel: Component<StackPanelProps> = function (props) {
 		}
 	}
 
-	const {
-		orientation,
-		itemsAlignH,
-		itemsAlignV,
-		children,
-		style,
-		...htmlProps
-	} = props
-
 	return <div {...htmlProps}
 		style={{
-			display: "flex",
 			...style,
+			display: "flex",
 			flexDirection: orientation === "vertical" ? "column" : "row",
 			justifyContent: justifyContent(),
 			alignItems: alignItems()
@@ -59,8 +59,6 @@ export const StackPanel: Component<StackPanelProps> = function (props) {
 		{children}
 
 	</div>
-
-
 }
 
 StackPanel.isPure = true
