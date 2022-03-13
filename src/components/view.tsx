@@ -59,7 +59,7 @@ export async function* View<T>(props: ArgsType<Component<ViewProps<T>>>[0]): Asy
 				style,
 				children, // children will be ignored, should be undefined
 				sourceData,
-				itemTemplate: ItemTemplate,
+				// itemTemplate: ItemTemplate,
 				itemsPanel: ItemsPanel,
 				itemStyle,
 				selectedItemStyle,
@@ -69,7 +69,7 @@ export async function* View<T>(props: ArgsType<Component<ViewProps<T>>>[0]): Asy
 				...restOfProps
 			} = Object.assign({ ...defaultProps, ...props })
 
-			// const ItemTemplate = props.itemTemplate ?? defaultProps.itemTemplate
+			const ItemTemplate = props.itemTemplate ?? defaultProps.itemTemplate
 
 			console.assert(ItemTemplate !== undefined, `ItemTemplate is undefined`)
 
