@@ -10,6 +10,11 @@ type RowOrColumnInfo = CSSLength | "none" | "auto" | "max-content" | "min-conten
 export type GridPanelProps = PanelProps & HtmlProps & {
 	rows?: number | RowOrColumnInfo[]
 	cols?: number | RowOrColumnInfo[]
+
+	/** Specifies the gap between the grid rows and columns
+	 * Either a single CSS length value for both row and column gap
+	 * Or two CSS length values specifying the row-gap and column-gap
+	 */
 	gap?: CSSLength | { row?: CSSLength, column?: CSSLength }
 }
 

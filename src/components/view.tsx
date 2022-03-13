@@ -10,6 +10,7 @@
 
 // import { deepMerge, noop, promisify } from '@agyemanjp/standard'
 import * as cuid from "cuid"
+import { ArgsType } from "@agyemanjp/standard"
 import { createElement, invalidateUI } from '../core'
 import { PanelProps, HtmlProps, Component, CSSProperties, } from '../types'
 import { StackPanel } from './stack-panel'
@@ -28,17 +29,19 @@ export type ViewProps<T = unknown> = HtmlProps & PanelProps & {
 	itemStyle?: CSSProperties,
 	selectedItemStyle?: CSSProperties
 
+	children?: never[]
+
 	selectionEnabled?: boolean
 	// arrangementEnabled?: boolean
 	// deletionEnabled?: boolean
 
 	// Custom event handler callback
-	onSelect?: (eventData: { selectedIndex: number }) => void
+	onSelection?: (eventData: { selectedIndex: number }) => void
 	// onDelete?: (eventData: { deletedIndex: number }) => void
 	// onArrange?: (eventData: { oldIndex: number, newIndex: number }) => void
 }
 
-export async function* View<T>(props: ViewProps<T> & { children?: never[] }): AsyncGenerator<JSX.Element, JSX.Element, typeof props> {
+export async function* View<T>(props: ArgsType<Component<ViewProps<T>>>[0]): AsyncGenerator<JSX.Element, JSX.Element, typeof props> {
 	const defaultProps = {
 		id: cuid(),
 		selectedIndex: 0,
@@ -62,9 +65,13 @@ export async function* View<T>(props: ViewProps<T> & { children?: never[] }): As
 				selectedItemStyle,
 				selectedIndex,
 				selectionEnabled,
-				onSelect,
+				onSelection,
 				...restOfProps
-			} = { ...defaultProps, ...props }
+			} = Object.assign({ ...defaultProps, ...props })
+
+			// const ItemTemplate = props.itemTemplate ?? defaultProps.itemTemplate
+
+			console.assert(ItemTemplate !== undefined, `ItemTemplate is undefined`)
 
 			// Yield the current UI, and also updating props with any new injected props
 			props = (yield <ItemsPanel id={id} style={style} {...restOfProps}>
@@ -76,8 +83,8 @@ export async function* View<T>(props: ViewProps<T> & { children?: never[] }): As
 								if (selectionEnabled) {
 									// const oldSelectedIndex = selectedIndex
 									selectedIndex = index
-									if (onSelect)
-										onSelect({ selectedIndex })
+									if (onSelection)
+										onSelection({ selectedIndex })
 									invalidateUI([id])
 								}
 							}}>
@@ -94,6 +101,7 @@ export async function* View<T>(props: ViewProps<T> & { children?: never[] }): As
 		throw e
 	}
 }
+
 
 
 // this should succeed type-checking

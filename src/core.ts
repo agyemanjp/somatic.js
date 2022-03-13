@@ -20,11 +20,17 @@ import { stringify, selfClosingTags } from "./common"
 
 /** JSX is transformed into calls of this function */
 export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
+	if (!type) console.warn(`Type arguemnt mising in call to createElement`)
 	return { type, props: Object.assign({ /*id: cuid()*/ }, props), children: (children ?? []).flat()/*, extra: {}*/ }
 }
 
 /** Render a UI element into a DOM node (augmented with information used for subsequent updates) */
 export async function renderAsync(elt: UIElement): Promise<DOMAugmented | Text> {
+	if (hasValue(elt) && typeof elt === "object" && "props" in elt && "children" in elt && typeof elt.type === "undefined") {
+		console.warn(`Object appearing to represent proper element has no type member\nThis is likely an error arising from creating an element with an undefined component`)
+		return createDOMShallow(JSON.stringify(elt)) as Text
+	}
+
 	const trace = await traceToLeafAsync(elt)
 	const leaf = trace.leafElement
 	const dom = createDOMShallow(leaf)
@@ -37,6 +43,11 @@ export async function renderAsync(elt: UIElement): Promise<DOMAugmented | Text> 
 
 /** Render a UI element into its HTML string representation */
 export async function renderToStringAsync(elt: UIElement): Promise<string> {
+	if (hasValue(elt) && typeof elt === "object" && "props" in elt && "children" in elt && typeof elt.type === "undefined") {
+		console.warn(`Object appearing to represent proper element has no type member\nThis is likely an error arising from creating an element with an undefined component`)
+		return globalThis.String(elt)
+	}
+
 	const trace = await traceToLeafAsync(elt)
 	const leaf = trace.leafElement
 	if (isIntrinsicElt(leaf)) {
@@ -98,8 +109,9 @@ export async function mountElement(element: UIElement, container: Node, options?
 		// console.log(`Setting up UIInvalidated event listener on document`)
 		document.addEventListener('UIInvalidated', async (eventInfo) => {
 			console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
+			const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
 			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
-			invalidatedElementIds.push(...(eventInfo as any).detail.invalidatedElementIds as string[])
+			invalidatedElementIds.push(..._invalidatedElementIds)
 			// eslint-disable-next-line fp/no-mutation
 			if (daemon === undefined) daemon = setInterval(async () => {
 				if (invalidatedElementIds.length === 0 && daemon) {

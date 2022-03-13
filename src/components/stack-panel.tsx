@@ -2,13 +2,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createElement } from '../core'
-import { Component, PanelProps, HtmlProps } from '../types'
+import { Component, PanelProps, HtmlProps, CSSLength } from '../types'
 
 export type StackPanelProps = PanelProps & HtmlProps & {
+
 }
 
 export const StackPanel: Component<StackPanelProps> = function (props) {
 	const {
+		key,
 		orientation,
 		itemsAlignH,
 		itemsAlignV,
@@ -41,7 +43,7 @@ export const StackPanel: Component<StackPanelProps> = function (props) {
 			case "center":
 				return "center"
 			case "uniform":
-				return "space-between"
+				return "space-evenly"
 			default:
 				return "initial"
 		}

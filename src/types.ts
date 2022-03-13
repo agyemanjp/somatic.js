@@ -443,8 +443,8 @@ export interface CSSProperties {
 	gridGap?: SpaceRepeated<CSSLength, 2> | "normal" | "initial" | "inherit" | "unset" | "revert"
 
 	/** A shorthand property for the row-gap and the column-gap properties
-	 * Either a single CSS length value to both row and column gap
-	 * Or two CSS length values specifying the row-gap column-gap
+	 * Either a single CSS length value for both row and column gap
+	 * Or two CSS length values specifying the row-gap and column-gap
 	 */
 	gap?: CSSLength | `${CSSLength} ${CSSLength}` | "normal" | "initial" | "inherit"
 }

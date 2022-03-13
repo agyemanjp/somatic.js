@@ -2,11 +2,13 @@
 /* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
 import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, Sequence } from "@agyemanjp/standard"
-import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
+import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, ValueElement, IntrinsicElement, RenderingTrace } from "./types"
 
-export const isEltProper = (elt: UIElement): elt is (IntrinsicElement | ComponentElt) => (hasValue(elt) && typeof elt === "object" && "type" in elt)
+export const isEltProper = (elt: UIElement): elt is (IntrinsicElement | ComponentElt) =>
+	(hasValue(elt) && typeof elt === "object" && "type" in elt && (typeof elt.type === "string" || typeof elt.type === "function"))
 export const isIntrinsicElt = (elt: UIElement): elt is IntrinsicElement => isEltProper(elt) && typeof elt.type === "string"
 export const isComponentElt = (elt: UIElement): elt is ComponentElt => isEltProper(elt) && typeof elt.type !== "string"
+// export const isElt = (elt: UIElement): elt is IntrinsicElement | ComponentElt | ValueElement => isEltProper(elt) || typeof elt !== "object"
 
 /** Return a copy of a component element augmented with its invocation results
  * @argument elt The input component element (possibly with a result member, which is recomputed)
@@ -54,6 +56,8 @@ export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P
 export async function traceToLeafAsync(eltUI: UIElement): Promise<RenderingTrace> {
 	// let ret: RenderingTrace | undefined = undefined
 	if (isComponentElt(eltUI)) {
+		if (eltUI.type === undefined)
+			throw "eltUI expected to be component element, but its 'type' property is undefined, in traceToLeafAsync"
 		const eltUIAugmented = eltUI.result ? eltUI as ComponentEltAugmented : await updateResultAsync(eltUI)
 		const eltResult = eltUIAugmented.result.element
 
@@ -98,6 +102,8 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 		firstElt.children = eltComp.children
 	}
 
+	if (firstElt.type === undefined)
+		throw "firstElt expected to be component element, but its 'type' property is undefined, in updateTraceAsync"
 	const initialAugElts: Promise<ComponentEltAugmented | null>[] = [updateResultAsync(firstElt)]
 	const rendersAugmented = await Promise.all([...new Sequence(trace.componentElts)
 		.skip(1)
@@ -136,6 +142,10 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 		.last()]
 
 	) as ComponentEltAugmented[]
+
+	const lastRendersAugmented = last(rendersAugmented)
+	if (typeof lastRendersAugmented === "object" && lastRendersAugmented.type === undefined)
+		console.error("lastRendersAugmented is object but has no type property value, in updateTraceAsync")
 
 	const _trace = await traceToLeafAsync(last(rendersAugmented))
 	return {
