@@ -180,7 +180,8 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 
 			}
 			else {
-				return (dom.replaceWith(await renderAsync(elt))), dom
+				const replacement = await renderAsync(elt)
+				return (dom.replaceWith(replacement)), replacement
 			}
 		}
 		else {

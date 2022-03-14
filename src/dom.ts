@@ -112,7 +112,7 @@ export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): DOMEl
 
 /** Update or create a DOM element based on the passed intrinsic element or primitive value. 
  * If passed an intrinsic element with the same tag as the existing DOM, the DOM is updated to match the intrinsic element
- * Else the existing DOM is replaced (with respect ot its parent) with a new shallow DOM based on the intrinsic element
+ * Else the existing DOM is replaced (with respect to its parent) with a new shallow DOM based on the intrinsic element
  * If passed a primitive value, the original DOM is replaced with a new text element with content set to the value
  * @returns: The original or new DOM element according to the above rules
  */
