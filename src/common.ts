@@ -71,7 +71,7 @@ export const eventNames = {
 }
 
 /** Checks if a string corresponds to one of the (uppercase) event names keys */
-export function isEventKey(key: string): key is keyof typeof eventNames {
+export function isEventKey(key: string) {
 	const keyUpper = key.toUpperCase()
 	return keyUpper.startsWith("ON") // this condition is simply to prevent useless searches through the events list.
 		&& Object.keys(eventNames).includes(keyUpper)

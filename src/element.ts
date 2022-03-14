@@ -2,7 +2,7 @@
 /* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
 import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, Sequence } from "@agyemanjp/standard"
-import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, ValueElement, IntrinsicElement, RenderingTrace } from "./types"
+import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
 
 export const isEltProper = (elt: UIElement): elt is (IntrinsicElement | ComponentElt) =>
 	(hasValue(elt) && typeof elt === "object" && "type" in elt && (typeof elt.type === "string" || typeof elt.type === "function"))
@@ -27,7 +27,9 @@ export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P
 
 	const getResultAsync = async (): Promise<ComponentResult> => {
 		if (elt.result && elt.result.generator) {
-			const next = await getNextAsync(elt.result.generator, elt.props)
+			const next = await getNextAsync(elt.result.generator, {
+				...elt.props, children: elt.children
+			})
 			if (hasValue(next))
 				return next
 			else

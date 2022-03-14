@@ -1,7 +1,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { keys, skip, hasValue, toDashCase } from "@agyemanjp/standard"
+import { keys, skip, hasValue } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
@@ -44,13 +44,14 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
 			}
 		}
 		else if (typeof value === 'function' && isEventKey(key)) {
-			const eventName = eventNames[key.toUpperCase() as keyof typeof eventNames]
+			// const eventName = eventNames[key.toUpperCase() as keyof typeof eventNames];
+			(element as any)[key.toLowerCase()] = value
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			element.addEventListener(eventName, value as any)
-			element.addEventListener("unload", () => {
-				console.warn(`onloading element ${element}...`)
-				element.removeEventListener(eventName, value)
-			})
+			// element.addEventListener(eventName, value as any)
+			// element.addEventListener("unload", () => {
+			// 	console.warn(`onloading element ${element}...`)
+			// 	element.removeEventListener(eventName, value)
+			// })
 		}
 		else {
 			const effectiveVal = booleanAttributes.includes(key.toUpperCase())
