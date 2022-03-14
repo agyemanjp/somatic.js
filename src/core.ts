@@ -108,7 +108,7 @@ export async function mountElement(element: UIElement, container: Node, options?
 
 		// console.log(`Setting up UIInvalidated event listener on document`)
 		document.addEventListener('UIInvalidated', async (eventInfo) => {
-			console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
+			// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
 			const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
 			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
 			invalidatedElementIds.push(..._invalidatedElementIds)
@@ -229,29 +229,13 @@ export async function updateChildrenAsync(eltDOM: DOMElement, children: UIElemen
 	}))
 
 	emptyContainer(eltDOM)
+	// Remove any existing DOM children that have no matches in leaf elt's children
+	// truncateChildNodes(eltDOM, children.length)
 
 	// Add any new children
 	newChildren.forEach(dom => eltDOM.appendChild(dom))
 
-	// Remove any existing DOM children that have no matches in leaf elt's children
-	// truncateChildNodes(eltDOM, children.length)
-
 	return eltDOM
-
-	// Update or replace existing existing DOM children that are matched with leaf elt's children
-	// const childrenWithMatchingNodes = [...take(children, eltDomChildren.length)]
-	// await Promise.all(children.map((child, index) => {
-	// 	if (matchingNode) {
-	// 		eltDOM.insertBefore(matchingNode, eltDomChildren[index])
-	// 	}
-	// 	if (index < eltDomChildren.length)
-	// 		// console.log(`Updating ${eltDOM.childNodes.item(index)} with ${child}`)
-	// 		return updateAsync((eltDOM.childNodes.item(index) as DOMAugmented), child)
-	// 	else
-	// 		eltDOM.appendChild()
-	// }))
-	// const childrenWithoutMatchingNodes = [...skip(children, eltDOM.childNodes.length)]
-	// const newChildren = await Promise.all(childrenWithoutMatchingNodes.map((child) => renderAsync(child)))
 }
 
 /** Update input DOM element to reflect input leaf UI element (type, props, and children)
