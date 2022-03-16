@@ -90,7 +90,7 @@ type MountOptions = {
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
 	/** Library-specific DOM update/refresh interval */
-	const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 250
+	const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 14
 
 	// console.log(`Mounting element ${stringify(element)} on container ${container}...`)
 
