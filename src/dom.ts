@@ -1,7 +1,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { keys, skip, hasValue } from "@agyemanjp/standard"
+import { keys, skip, hasValue, indexesOf, first } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
 import { isEltProper, isIntrinsicElt } from "./element"
@@ -140,15 +140,17 @@ export function truncateChildNodes(node: Node, newLength: number) {
 
 /** Empty a node of child nodes */
 export function emptyContainer(container: Node) {
-	// eslint-disable-next-line fp/no-loops
-	while (container.lastChild) {
-		container.removeChild(container.lastChild)
-	}
+	container.textContent = ""
+}
 
-	// while (container.firstChild) {
-	// 	console.log(`Removing container's first child...`)
-	// 	container.firstChild.remove()
-	// }
+function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
+	const parent = dom.parentNode
+	if (parent) {
+		const index = first(indexesOf(parent.childNodes.entries(), { value: dom }))
+		parent.removeChild(dom)
+		fn(dom)
+		parent.insertBefore(dom, parent.childNodes.item(index))
+	}
 }
 
 /** Get ids of peak DOM elements among a list of elements in a tree */

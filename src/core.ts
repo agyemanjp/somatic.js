@@ -228,12 +228,9 @@ export async function updateChildrenAsync(eltDOM: DOMElement, children: UIElemen
 		return updated
 	}))
 
-	emptyContainer(eltDOM)
-	// Remove any existing DOM children that have no matches in leaf elt's children
-	// truncateChildNodes(eltDOM, children.length)
-
-	// Add any new children
-	newChildren.forEach(dom => eltDOM.appendChild(dom))
+	const fragment = new DocumentFragment()
+	newChildren.forEach(dom => fragment.appendChild(dom))
+	eltDOM.replaceChildren(fragment)
 
 	return eltDOM
 }
