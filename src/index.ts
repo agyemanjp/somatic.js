@@ -58,7 +58,7 @@ declare global {
 			 * */
 			html: Intrinsic<HtmlHTMLAttributes<HTMLHtmlElement>>
 			/** Represents the content of an HTML document. There can be only one <body> element in a document. */
-			body: Intrinsic<HTMLAttributes<HTMLBodyElement>>
+			body: HTMLAttributes<HTMLBodyElement>
 
 			//#region Document metadata
 			/** Specifies the base URL to use for all relative URLs in a document. There can be only one <base> element in a document. */
@@ -79,18 +79,18 @@ declare global {
 			/** Defines the document's title that is shown in a Browser's title bar or a page's tab. 
 			 * It only contains text; tags within the element are ignored. 
 			 */
-			title: Intrinsic<HTMLAttributes<HTMLTitleElement>>
+			title: HTMLAttributes<HTMLTitleElement>
 			//#endregion
 
 			//#region Content sectioning
 			/** indicates that the enclosed HTML provides contact information for a person or people, or for an organization. */
-			address: Intrinsic<HTMLAttributes<HTMLElement>>
+			address: HTMLAttributes<HTMLElement>
 			/** Represents a self-contained composition in a document, page, application, or site, 
 			 * which is intended to be independently distributable or reusable (e.g., in syndication). 
 			 * Examples include: a forum post, a magazine or newspaper article, or a blog entry, a product card, a user-submitted comment, an interactive widget or gadget, 
 			 * or any other independent item of content.
 			 */
-			article: Intrinsic<HTMLAttributes<HTMLElement>>
+			article: HTMLAttributes<HTMLElement>
 			/** Represents a portion of a document whose content is only indirectly related to the document's main content. 
 			 * Asides are frequently presented as sidebars or call-out boxes. 
 			 */
@@ -98,11 +98,11 @@ declare global {
 			/** Represents introductory content, typically a group of introductory or navigational aids. 
 			 * It may contain some heading elements but also a logo, a search form, an author name, and other elements. 
 			 */
-			header: Intrinsic<HTMLAttributes<HTMLElement>>
+			header: HTMLAttributes<HTMLElement>
 			/** Represents a footer for its nearest sectioning content or sectioning root element. 
 			 * A <footer> typically contains information about the author of the section, copyright data or links to related documents
 			 */
-			footer: Intrinsic<HTMLAttributes<HTMLElement>>
+			footer: HTMLAttributes<HTMLElement>
 			/** Represents the dominant content of the body of a document.
 			 * The main content area consists of content that is directly related to or expands upon the central topic of a document, or the central functionality of an application. 
 			 */
@@ -110,27 +110,27 @@ declare global {
 			/** Represents a section of a page whose purpose is to provide navigation links, either within the current document or to other documents. 
 			 * Common examples of navigation sections are menus, tables of contents, and indexes.
 			 */
-			nav: Intrinsic<HTMLAttributes<HTMLElement>>
+			nav: HTMLAttributes<HTMLElement>
 			/** Represents a generic standalone section of a document, which doesn't have a more specific semantic element to represent it. 
 			 * Sections should always have a heading, with very few exceptions.
 			 */
-			section: Intrinsic<HTMLAttributes<HTMLElement>>
+			section: HTMLAttributes<HTMLElement>
 			/** Represents a thematic break between paragraph-level elements: 
 			 * for example, a change of scene in a story, or a shift of topic within a section. 
 			 */
 			hr: HTMLAttributes<HTMLHRElement>
 			/** Level 1 section heading. */
-			h1: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
+			h1: HTMLAttributes<HTMLHeadingElement>
 			/** Level 2 section heading. */
-			h2: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
+			h2: HTMLAttributes<HTMLHeadingElement>
 			/** Level 3 section heading. */
-			h3: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
+			h3: HTMLAttributes<HTMLHeadingElement>
 			/** Level 4 section heading. */
-			h4: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
+			h4: HTMLAttributes<HTMLHeadingElement>
 			/** Level 5 section heading. */
-			h5: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
+			h5: HTMLAttributes<HTMLHeadingElement>
 			/** Level 6 section heading. */
-			h6: Intrinsic<HTMLAttributes<HTMLHeadingElement>>
+			h6: HTMLAttributes<HTMLHeadingElement>
 			//#endregion
 
 			//#region Text content
@@ -145,7 +145,7 @@ declare global {
 			/** Generic container for flow content. 
 			 * It has no effect on the content or layout until styled in some way using CSS (e.g. styling is directly applied to it, or some kind of layout model like Flexbox is applied to its parent element).
 			 */
-			div: Intrinsic<HTMLAttributes<HTMLDivElement>>
+			div: HTMLAttributes<HTMLDivElement>
 			/** Represents a description list. 
 			 * The element encloses a list of groups of terms (specified using the dt element) and descriptions (provided by dd elements). 
 			 * Common uses for this element are to implement a glossary or to display metadata (a list of key-value pairs).
@@ -168,14 +168,14 @@ declare global {
 			 */
 			li: Intrinsic<LiHTMLAttributes<HTMLLIElement>>
 			/** Represents an unordered list of items, typically rendered as a bulleted list. */
-			ul: Intrinsic<HTMLAttributes<HTMLUListElement>>
+			ul: HTMLAttributes<HTMLUListElement>
 			/** Represents an ordered list of items, typically rendered as a numbered list. */
 			ol: Intrinsic<OlHTMLAttributes<HTMLOListElement>>
 			/** Represents preformatted text which is to be presented exactly as written in the HTML file. 
 			 * The text is typically rendered using a non-proportional, or "monospaced, font. 
 			 * Whitespace inside this element is displayed as written.
 			 */
-			pre: Intrinsic<HTMLAttributes<HTMLElement>>
+			pre: HTMLAttributes<HTMLElement>
 			/** Represents a paragraph. 
 			 * Paragraphs are usually represented in visual media as blocks of text separated from adjacent blocks by blank lines and/or first-line indentation, 
 			 * but HTML paragraphs can be any structural grouping of related content, such as images or form fields.
@@ -269,7 +269,7 @@ declare global {
 			 * It should be used only when no other semantic element is appropriate. 
 			 * <span> is very much like a div element, but div is a block-level element whereas a <span> is an inline element.
 			 */
-			span: Intrinsic<HTMLAttributes<HTMLSpanElement>>
+			span: HTMLAttributes<HTMLSpanElement>
 			/** Indicates that its contents have strong importance, seriousness, or urgency. 
 			 * Browsers typically render the contents in bold type. 
 			 */
@@ -358,14 +358,14 @@ declare global {
 			//#region Table content
 			table: Intrinsic<TableHTMLAttributes<HTMLTableElement>>,
 			th: ThHTMLAttributes<HTMLTableHeaderCellElement>,
-			tr: Intrinsic<HTMLAttributes<HTMLTableRowElement>>,
+			tr: HTMLAttributes<HTMLTableRowElement>,
 			td: Intrinsic<TdHTMLAttributes<HTMLTableDataCellElement>>,
-			tbody: Intrinsic<HTMLAttributes<HTMLElement>>,
-			colgroup: Intrinsic<HTMLAttributes<HTMLElement>>,
-			col: Intrinsic<HTMLAttributes<HTMLElement>>,
-			caption: Intrinsic<HTMLAttributes<HTMLElement>>,
-			tfoot: Intrinsic<HTMLAttributes<HTMLElement>>,
-			thead: Intrinsic<HTMLAttributes<HTMLElement>>,
+			tbody: HTMLAttributes<HTMLElement>,
+			colgroup: HTMLAttributes<HTMLElement>,
+			col: HTMLAttributes<HTMLElement>,
+			caption: HTMLAttributes<HTMLElement>,
+			tfoot: HTMLAttributes<HTMLElement>,
+			thead: HTMLAttributes<HTMLElement>,
 			//#endregion
 
 			//#region Interactive elements
@@ -399,9 +399,9 @@ declare global {
 			/** Used to define an item contained in a select, an optgroup, or a datalist element. 
 			 * As such, <option> can represent menu items in popups and other lists of items in an HTML document. 
 			 */
-			option: OptionHTMLAttributes<HTMLOptionElement>
+			option: Intrinsic<OptionHTMLAttributes<HTMLOptionElement>>
 			/** Creates a grouping of options within a select element. */
-			optgroup: OptgroupHTMLAttributes<HTMLOptGroupElement>
+			optgroup: Intrinsic<OptgroupHTMLAttributes<HTMLOptGroupElement>>
 			/** Represents a multi-line plain-text editing control, useful when you want to allow users to enter a sizeable amount of free-form text, for example a comment on a review or feedback form. */
 			textarea: Intrinsic<TextareaHTMLAttributes<HTMLTextAreaElement>>
 			/** Container element into which a site or app can inject the results of a calculation or the outcome of a user action. */

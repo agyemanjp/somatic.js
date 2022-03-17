@@ -696,6 +696,8 @@ export type DOMAttributes<T> = {
 	onTransitionEndCapture?: TransitionEventHandler<T>;
 }
 export type HTMLAttributes<T> = DOMAttributes<T> & {
+	children?: Children
+
 	// React-specific Attributes
 	defaultChecked?: boolean;
 	defaultValue?: string | string[];
