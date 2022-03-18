@@ -425,8 +425,8 @@ declare global {
 			//#endregion
 
 			//#region SVG
-			svg: Intrinsic<SVGAttributes<SVGSVGElement>>,
-			g: Intrinsic<SVGAttributes<SVGGElement>>,
+			svg: SVGAttributes<SVGSVGElement>,
+			g: SVGAttributes<SVGGElement>,
 			circle: SVGAttributes<SVGCircleElement>,
 			animate: SVGAttributes<SVGAnimateElement>,
 			animateTransform: SVGAttributes<SVGAnimateTransformElement>,

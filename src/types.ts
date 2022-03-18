@@ -754,6 +754,8 @@ export type HTMLAttributes<T> = DOMAttributes<T> & {
 	unselectable?: 'on' | 'off';
 }
 export type SVGAttributes<T> = DOMAttributes<T> & {
+	children?: Children
+
 	// Attributes which also defined in HTMLAttributes
 	// See comment in SVGDOMPropertyConfig.js
 	className?: string;
