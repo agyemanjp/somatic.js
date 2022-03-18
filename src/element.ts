@@ -4,10 +4,10 @@
 import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, Sequence } from "@agyemanjp/standard"
 import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
 
-export const isEltProper = (elt: UIElement): elt is (IntrinsicElement | ComponentElt) =>
+export const isEltProper = <P extends Obj>(elt: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
 	(hasValue(elt) && typeof elt === "object" && "type" in elt && (typeof elt.type === "string" || typeof elt.type === "function"))
-export const isIntrinsicElt = (elt: UIElement): elt is IntrinsicElement => isEltProper(elt) && typeof elt.type === "string"
-export const isComponentElt = (elt: UIElement): elt is ComponentElt => isEltProper(elt) && typeof elt.type !== "string"
+export const isIntrinsicElt = <P extends Obj>(elt: UIElement<P>): elt is IntrinsicElement<P> => isEltProper(elt) && typeof elt.type === "string"
+export const isComponentElt = <P extends Obj>(elt: UIElement<P>): elt is ComponentElt<P> => isEltProper(elt) && typeof elt.type !== "string"
 // export const isElt = (elt: UIElement): elt is IntrinsicElement | ComponentElt | ValueElement => isEltProper(elt) || typeof elt !== "object"
 
 /** Return a copy of a component element augmented with its invocation results
