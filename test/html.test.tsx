@@ -104,7 +104,7 @@ describe("HTML MODULE", () => {
 			})
 
 			describe('multiple times', function () {
-				it('should replace all occurrances with "&quot;"', function () {
+				it('should replace all occurrences with "&quot;"', function () {
 					assert.strictEqual(encodeHTML('foo""bar'), 'foo&quot;&quot;bar')
 				})
 			})
@@ -136,7 +136,7 @@ describe("HTML MODULE", () => {
 			})
 
 			describe('multiple times', function () {
-				it('should replace all occurrances with "&amp;"', function () {
+				it('should replace all occurrences with "&amp;"', function () {
 					assert.strictEqual(encodeHTML('foo&&bar'), 'foo&amp;&amp;bar')
 				})
 			})
@@ -168,7 +168,7 @@ describe("HTML MODULE", () => {
 			})
 
 			describe('multiple times', function () {
-				it('should replace all occurrances with "&#39;"', function () {
+				it('should replace all occurrences with "&#39;"', function () {
 					assert.strictEqual(encodeHTML("foo''bar"), 'foo&#39;&#39;bar')
 				})
 			})
@@ -200,7 +200,7 @@ describe("HTML MODULE", () => {
 			})
 
 			describe('multiple times', function () {
-				it('should replace all occurrances with "&lt;"', function () {
+				it('should replace all occurrences with "&lt;"', function () {
 					assert.strictEqual(encodeHTML('foo<<bar'), 'foo&lt;&lt;bar')
 				})
 			})
@@ -232,14 +232,14 @@ describe("HTML MODULE", () => {
 			})
 
 			describe('multiple times', function () {
-				it('should replace all occurrances with "&gt;"', function () {
+				it('should replace all occurrences with "&gt;"', function () {
 					assert.strictEqual(encodeHTML('foo>>bar'), 'foo&gt;&gt;bar')
 				})
 			})
 		})
 
 		describe('when escaped character mixed', function () {
-			it('should escape all occurrances', function () {
+			it('should escape all occurrences', function () {
 				assert.strictEqual(encodeHTML('&foo <> bar "fizz" l\'a'),
 					'&amp;foo &lt;&gt; bar &quot;fizz&quot; l&#39;a')
 			})

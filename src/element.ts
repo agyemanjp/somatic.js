@@ -1,7 +1,7 @@
+/* eslint-disable brace-style */
 /* eslint-disable fp/no-mutation */
-/* eslint-disable fp/no-mutating-assign */
 /* eslint-disable @typescript-eslint/ban-types */
-import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, Sequence } from "@agyemanjp/standard"
+import { Obj, hasValue, firstOrDefault, skip, takeWhile, takeWhileAsync, last, shallowEquals, isGenerator, union, toArrayAsync, SequenceAsync } from "@agyemanjp/standard"
 import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
 
 export const isEltProper = <P extends Obj>(elt: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
@@ -106,16 +106,34 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 
 	if (firstElt.type === undefined)
 		throw "firstElt expected to be component element, but its 'type' property is undefined, in updateTraceAsync"
-	const initialAugElts: Promise<ComponentEltAugmented | null>[] = [updateResultAsync(firstElt)]
-	const rendersAugmented = await Promise.all([...new Sequence(trace.componentElts)
-		.skip(1)
 
-		.reduce(initialAugElts, (eltPromisesAccum, eltCurrent/*, index*/) => {
+	const initialAugElts: (Promise<ComponentEltAugmented> | null)[] = [updateResultAsync(firstElt)]
+	const rendersAugmentedPromises = await new SequenceAsync(trace.componentElts)
+		.skipAsync(1)
+		.reduceAsync(initialAugElts, async (eltPromisesAccum, eltCurrent, index) => {
 			const lastEltPromise = last(eltPromisesAccum)
-			const elt = lastEltPromise.then(async lastElt => {
-				if (!lastElt) // Last element accumulated for trace must not be null (since the takeWhile combinator below excludes such)
-					throw new Error(`Last element of accumulated trace is null in reducer`)
+			if (!lastEltPromise) // Last element accumulated for trace must not be null (since the takeWhile combinator below excludes such)
+				throw new Error(`Last element of accumulated trace is null in reducer`)
 
+			const eltResult = (await lastEltPromise).result.element
+			if (isEltProper(eltResult) && eltResult.type === eltCurrent.type) {
+				const childrenResult = getChildren(eltResult)
+				const childrenCurr = getChildren(eltCurrent)
+
+				const elt = eltResult.type.isPure && childrenCurr.length === 0 && childrenResult.length === 0 && shallowEquals(eltResult.props, eltCurrent.props)
+					? Promise.resolve(eltCurrent) // no need to update results
+					: updateResultAsync({
+						...eltCurrent,
+						props: eltResult.props,
+						children: eltResult.children
+					})
+				return [...eltPromisesAccum, elt]
+			}
+			else {
+				return [...eltPromisesAccum, null]
+			}
+
+			/*const elt = lastEltPromise.then(async lastElt => {
 				const eltResult = lastElt.result.element
 				if (isEltProper(eltResult) && eltResult.type === eltCurrent.type) {
 					const childrenResult = getChildren(eltResult)
@@ -132,24 +150,21 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 				else {
 					return null
 				}
+			})*/
 
-			})
-
-			return [...eltPromisesAccum, elt]
+			// return [...eltPromisesAccum, elt]
 		})
-
 		// Take while last elt promise accumulated not null (i.e continues to be compatible with the render trace)
-		.takeWhile(eltPromises => last(eltPromises) !== null)
+		.takeWhileAsync(async eltPromises => last(eltPromises) !== null)
+		.lastAsync()
 
-		.last()]
-
-	) as ComponentEltAugmented[]
+	const rendersAugmented = await Promise.all(rendersAugmentedPromises) as ComponentEltAugmented[]
 
 	const lastRendersAugmented = last(rendersAugmented)
 	if (typeof lastRendersAugmented === "object" && lastRendersAugmented.type === undefined)
 		console.error("lastRendersAugmented is object but has no type property value, in updateTraceAsync")
 
-	const _trace = await traceToLeafAsync(last(rendersAugmented))
+	const _trace = await traceToLeafAsync(lastRendersAugmented)
 	return {
 		componentElts: [...union([rendersAugmented, skip(_trace.componentElts, 1)])],
 		leafElement: _trace.leafElement

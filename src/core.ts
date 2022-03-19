@@ -63,78 +63,6 @@ export async function renderToStringAsync(elt: UIElement): Promise<string> {
 	}
 }
 
-/** Invalidate UI and emitting input event (if present) */
-/*export function emitEvent<E>(info: { event?: { handler: (eventData: E) => void, data: E }, invalidatedElementIds: string[] }) {
-	const { event, invalidatedElementIds } = info
-	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
-	if (event) {
-		try {
-			event.handler(event.data)
-		}
-		// eslint-disable-next-line no-empty
-		catch (err) { // do not let 
-			console.error(`Error occured handling event "${event.handler.name}": ${err}`)
-		}
-	}
-}*/
-
-/** Invalidate UI */
-export function invalidateUI(invalidatedElementIds?: string[]) {
-	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
-}
-
-type MountOptions = {
-	updateMode?: "continuous-from-top" | "on-event-from-invalidated",
-	updateInterval?: number
-}
-/** Convenience method to mount the entry point dom node of a client app */
-export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
-	/** Library-specific DOM update/refresh interval */
-	const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 14
-
-	// console.log(`Mounting element ${stringify(element)} on container ${container}...`)
-
-	if (options?.updateMode === "continuous-from-top") {
-		setInterval(async () => {
-			// console.log(`Updating mounted dom element ${dom}...`)
-			if (container.firstChild)
-				await updateAsync(container.firstChild as DOMAugmented)
-		}, options.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
-	}
-	else {
-		const invalidatedElementIds: string[] = []
-		// eslint-disable-next-line fp/no-let
-		let daemon: NodeJS.Timeout | undefined = undefined
-
-		// console.log(`Setting up UIInvalidated event listener on document`)
-		document.addEventListener('UIInvalidated', async (eventInfo) => {
-			// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
-			const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
-			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
-			invalidatedElementIds.push(..._invalidatedElementIds)
-			// eslint-disable-next-line fp/no-mutation
-			if (daemon === undefined) daemon = setInterval(async () => {
-				if (invalidatedElementIds.length === 0 && daemon) {
-					clearInterval(daemon)
-					// eslint-disable-next-line fp/no-mutation
-					daemon = undefined
-				}
-				// eslint-disable-next-line fp/no-mutating-methods
-				const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
-				const topmostElementIds = getApexElementIds(idsToProcess)
-				await Promise.all(topmostElementIds.map(id => {
-					// console.log(`Updating "${id}" dom element...`)
-					updateAsync(document.getElementById(id) as any as DOMAugmented)
-				}))
-
-			}, options?.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
-		})
-	}
-
-	emptyContainer(container)
-	container.appendChild(await renderAsync(element))
-}
-
 /** Update the rendering of an existing DOM element (because the data on which its rendering was based has changed)
  * @param dom The DOM element whose rendering is to be updated
  * @param elt A UI (JSX) element that is used as the overriding starting point of the re-render, if passed
@@ -195,15 +123,62 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 	}
 }
 
-/*export async function applyLeafEltAsync(eltDOM: Element, eltLeaf: IntrinsicElement | ValueElement) {
-	const updatedDOM = updateDomShallow(eltDOM, eltLeaf)
+/** Invalidate UI */
+export function invalidateUI(invalidatedElementIds?: string[]) {
+	document.dispatchEvent(new CustomEvent('UIInvalidated', { detail: { invalidatedElementIds } }))
+}
 
-	return isTextDOM(updatedDOM)
-		? updatedDOM
-		: isIntrinsicElt(eltLeaf) && "children" in eltLeaf
-			? updateChildrenAsync(updatedDOM, getChildren(eltLeaf))
-			: updatedDOM
-}*/
+type MountOptions = {
+	updateMode?: "continuous-from-top" | "on-event-from-invalidated",
+	updateInterval?: number
+}
+/** Convenience method to mount the entry point dom node of a client app */
+export async function mountElement(element: UIElement, container: Node, options?: MountOptions) {
+	/** Library-specific DOM update/refresh interval */
+	const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 14
+
+	// console.log(`Mounting element ${stringify(element)} on container ${container}...`)
+
+	if (options?.updateMode === "continuous-from-top") {
+		setInterval(async () => {
+			// console.log(`Updating mounted dom element ${dom}...`)
+			if (container.firstChild)
+				await updateAsync(container.firstChild as DOMAugmented)
+		}, options.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
+	}
+	else {
+		const invalidatedElementIds: string[] = []
+		// eslint-disable-next-line fp/no-let
+		let daemon: NodeJS.Timeout | undefined = undefined
+
+		// console.log(`Setting up UIInvalidated event listener on document`)
+		document.addEventListener('UIInvalidated', async (eventInfo) => {
+			// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
+			const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
+			// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
+			invalidatedElementIds.push(..._invalidatedElementIds)
+			// eslint-disable-next-line fp/no-mutation
+			if (daemon === undefined) daemon = setInterval(async () => {
+				if (invalidatedElementIds.length === 0 && daemon) {
+					clearInterval(daemon)
+					// eslint-disable-next-line fp/no-mutation
+					daemon = undefined
+				}
+				// eslint-disable-next-line fp/no-mutating-methods
+				const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
+				const topmostElementIds = getApexElementIds(idsToProcess)
+				await Promise.all(topmostElementIds.map(id => {
+					// console.log(`Updating "${id}" dom element...`)
+					updateAsync(document.getElementById(id) as any as DOMAugmented)
+				}))
+
+			}, options?.updateInterval ?? DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
+		})
+	}
+
+	emptyContainer(container)
+	container.appendChild(await renderAsync(element))
+}
 
 /** Update children of an DOM element; has side effects */
 export async function updateChildrenAsync(eltDOM: DOMElement, children: UIElement[]): Promise<typeof eltDOM> {
