@@ -110,7 +110,7 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 	const initialAugElts: (Promise<ComponentEltAugmented> | null)[] = [updateResultAsync(firstElt)]
 	const rendersAugmentedPromises = await new SequenceAsync(trace.componentElts)
 		.skipAsync(1)
-		.reduceAsync(initialAugElts, async (eltPromisesAccum, eltCurrent, index) => {
+		.reduceAsync(initialAugElts, async (eltPromisesAccum, eltCurrent) => {
 			const lastEltPromise = last(eltPromisesAccum)
 			if (!lastEltPromise) // Last element accumulated for trace must not be null (since the takeWhile combinator below excludes such)
 				throw new Error(`Last element of accumulated trace is null in reducer`)
