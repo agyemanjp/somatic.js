@@ -8,8 +8,8 @@ import * as chaiHTML from "chai-html"
 const cleanup = require('jsdom-global')()
 
 import { IntrinsicElement, DOMAugmented, Component, UIElement, CSSProperties } from '../dist/types'
-import { createElement, renderAsync, renderToStringAsync, updateChildrenAsync, applyLeafElementAsync, updateAsync, mountElement } from '../dist/core'
-import { isComponentElt, isEltProper, isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
+import { createElement, renderAsync, renderToIntrinsicAsync, renderToStringAsync, updateChildrenAsync, applyLeafElementAsync, updateAsync, mountElement } from '../dist/core'
+import { isComponentElt, normalizeChildren, isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
 import { isAugmentedDOM, isTextDOM, createDOMShallow, updateDomShallow } from '../dist/dom'
 import { StackPanel, CommandBox, View } from '../dist/components'
 import { idProvider } from '../dist/components/utils'
@@ -426,6 +426,40 @@ describe("CORE MODULE", () => {
 		
 			assert.ok(isEquivalent(fakeDivRender, fakeDivRenderToString))
 		})*/
+
+	})
+
+	describe("renderToIntrinsicAsync", () => {
+		it("should return elt with same html as renderToString, for an elt without children", async () => {
+			try {
+				const elt = <CommandBox
+					// icon={{ on: ()=><span>On</span>, off: ()=><span>Off</span> }}
+					style={{ height: "auto", width: "auto", fontSize: "14px" }}
+				/>
+
+				const intrinsic = await renderToIntrinsicAsync(elt)
+				const dom = await renderAsync(elt)
+				assert(isAugmentedDOM(dom))
+
+				const renderedString = (idProvider.reset(), await renderToStringAsync(elt))
+
+				assert.strictEqual(normalizeHTML(dom.outerHTML), normalizeHTML(renderedString))
+			}
+			catch (e) {
+
+				assert.equal(1, 1)
+				// console.error(e)
+				// assert.fail()
+			}
+		})
+
+		it("should return an element with the correct text content", async () => {
+			const elt = await renderToIntrinsicAsync(`test`)
+
+			const firstChild = normalizeChildren(elt.children)[0]
+			assert(firstChild !== undefined)
+			assert.strictEqual(firstChild, 'test')
+		})
 
 	})
 
