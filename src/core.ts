@@ -46,7 +46,7 @@ export async function renderToIntrinsicAsync(elt: UIElement, injectedProps?: Obj
 	const valueToIntrinsic = (val: ValueElement) => ({
 		type: "div",
 		props: { ...injectedProps },
-		children: [stringify(val)]
+		children: [globalThis.String(val)]
 	})
 	const mergeProps = (oldProps: Obj, newProps: Obj) => {
 		const props = { ...oldProps }
