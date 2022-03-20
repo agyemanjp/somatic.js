@@ -450,7 +450,7 @@ declare global {
 	}
 }
 
-export { createElement, renderAsync, renderToStringAsync, updateAsync, mountElement, invalidateUI, } from './core'
+export { createElement, renderAsync, renderToStringAsync, renderToIntrinsicAsync, updateAsync, mountElement, invalidateUI, } from './core'
 export { getChildren, normalizeChildren, isEltProper, isIntrinsicElt, isComponentElt } from "./element"
 export { stringifyAttributes, stringifyStyle } from "./html"
 export * from './components'
