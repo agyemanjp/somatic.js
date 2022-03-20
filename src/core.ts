@@ -10,7 +10,7 @@
 // const x = import("morpdom")
 
 // import * as cuid from "cuid"
-import { String, Obj, hasValue } from "@agyemanjp/standard"
+import { String, Obj, hasValue, deepMerge } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync } from "./element"
@@ -61,7 +61,7 @@ export async function renderToIntrinsicAsync(elt: UIElement, injectedProps?: Obj
 				}
 			}
 			else {
-				props[key] = newVal
+				props[key] = deepMerge(oldVal, newVal)
 			}
 		})
 		return props
