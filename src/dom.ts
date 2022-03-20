@@ -12,8 +12,6 @@ export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeTyp
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
 
 
-
-
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way. */
 export function setAttribute(element: DOMElement, key: string, value: any) {
 	try {

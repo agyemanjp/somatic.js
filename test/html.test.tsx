@@ -75,6 +75,24 @@ describe("HTML MODULE", () => {
 		it('should return empty string for empty object argument', function () {
 			assert.strictEqual(stringifyStyle({}), '')
 		})
+
+		it('should convert all style attribute keys to dash-case', function () {
+			assert.strictEqual(
+				stringifyStyle({
+					margin: "0.5em",
+					marginLeft: "0.5em",
+					WIDTH: "1.5em"
+				} as any),
+				'margin: 0.5em; margin-left: 0.5em; width: 1.5em'
+			)
+		})
+
+		it('should process style attribute values with spaces properly', function () {
+			assert.strictEqual(
+				stringifyStyle({ gridTemplateColumns: "10em 10em 10em" }),
+				'grid-template-columns: 10em 10em 10em'
+			)
+		})
 	})
 
 	describe('encodeHTML', function () {

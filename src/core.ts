@@ -9,11 +9,11 @@
 // const morphdom = require("morphdom")
 // const x = import("morpdom")
 
-import * as cuid from "cuid"
-import { String, hasValue } from "@agyemanjp/standard"
+// import * as cuid from "cuid"
+import { String, Obj, hasValue } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
-import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, truncateChildNodes, emptyContainer } from "./dom"
-import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, traceToLeafAsync, updateTraceAsync } from "./element"
+import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
+import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented, Children } from "./types"
 import { stringify, selfClosingTags } from "./common"
 
@@ -39,6 +39,28 @@ export async function renderAsync(elt: UIElement): Promise<DOMAugmented | Text> 
 		? dom
 		: await updateChildrenAsync(dom, getChildren(leaf)),
 		Object.assign(dom, { renderTrace: trace })
+}
+
+/** Render a UI element into a tree of intrinsic elements, optionally injecting some props in the root element */
+export async function renderToIntrinsicAsync(elt: UIElement, injectedProps?: Obj): Promise<IntrinsicElement> {
+	const valueToIntrinsic = (val: ValueElement) => ({ type: "div", props: { ...injectedProps }, children: [stringify(val)] })
+
+	if (hasValue(elt) && typeof elt === "object" && "props" in elt && "children" in elt && typeof elt.type === "undefined") {
+		console.warn(`Object appearing to represent proper element has no type member\nThis is likely an error due to creating an element with an undefined component`)
+		return valueToIntrinsic(elt)
+	}
+
+	const leaf = await getLeafAsync(elt)
+	return (isIntrinsicElt(leaf))
+		? {
+			type: leaf.type,
+			props: { ...leaf.props, ...injectedProps },
+			children: await Promise.all(
+				getChildren(leaf).map(c => renderToIntrinsicAsync(c))
+			)
+		}
+
+		: valueToIntrinsic(leaf)
 }
 
 /** Render a UI element into its HTML string representation */

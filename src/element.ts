@@ -1,8 +1,8 @@
 /* eslint-disable brace-style */
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/ban-types */
-import { Obj, hasValue, firstOrDefault, skip, takeWhile, takeWhileAsync, last, shallowEquals, isGenerator, union, toArrayAsync, SequenceAsync } from "@agyemanjp/standard"
-import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, IntrinsicElement, RenderingTrace } from "./types"
+import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, SequenceAsync } from "@agyemanjp/standard"
+import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, ValueElement, IntrinsicElement, RenderingTrace } from "./types"
 
 export const isEltProper = <P extends Obj>(elt: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
 	(hasValue(elt) && typeof elt === "object" && "type" in elt && (typeof elt.type === "string" || typeof elt.type === "function"))
@@ -65,16 +65,13 @@ export async function traceToLeafAsync(eltUI: UIElement): Promise<RenderingTrace
 
 		if (isComponentElt(eltResult)) {
 			const trace = await traceToLeafAsync(eltResult)
-			// ret = { componentElts: [eltUI, ...trace.componentElts], leafElement: trace.leafElement ?? "" }
 			return { componentElts: [eltUIAugmented, ...trace.componentElts], leafElement: trace.leafElement ?? "" }
 		}
 		else { // intrinsic or value element
-			// ret = { componentElts: [eltUI], leafElement: eltResult ?? "" }
 			return { componentElts: [eltUIAugmented], leafElement: eltResult ?? "" }
 		}
 	}
 	else { // eltUI is intrinsic or a value
-		// ret = { componentElts: [], leafElement: eltUI ?? "" }
 		return { componentElts: [], leafElement: eltUI ?? "" }
 	}
 
@@ -84,6 +81,27 @@ export async function traceToLeafAsync(eltUI: UIElement): Promise<RenderingTrace
 	// console.log(`Returning leaf elt from traceToLeafAsync: ${ret.leafElement}`)
 
 	// return ret
+}
+
+/** Gets leaf (intrinsic or value) element */
+export async function getLeafAsync(eltUI: UIElement): Promise<IntrinsicElement | ValueElement> {
+	if (isComponentElt(eltUI)) {
+		if (eltUI.type === undefined)
+			throw "eltUI should be component element, but its 'type' property is undefined, in traceToLeafAsync"
+
+		const eltUIAugmented = eltUI.result ? eltUI as ComponentEltAugmented : await updateResultAsync(eltUI)
+		const eltResult = eltUIAugmented.result.element
+
+		if (isComponentElt(eltResult)) { // eltResult is a component element
+			return (await getLeafAsync(eltResult)) ?? ""
+		}
+		else { // eltResult is a leaf (intrinsic or value element)
+			return eltResult ?? ""
+		}
+	}
+	else { // eltUI is already a leaf (intrinsic or a value)
+		return eltUI ?? ""
+	}
 }
 
 /** Return an updated render-to-leaf trace, to reflect a changed state of the world. Does not mutate input trace
@@ -171,16 +189,16 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 	}
 }
 
-
-export function normalizeChildren(children?: Children) {
-	if (!hasValue(children))
+/** Returns a flattened array of children  */
+export function normalizeChildren(children?: Children): UIElement<Obj<unknown, string>>[] {
+	if (children === undefined)
 		return []
 	return Array.isArray(children)
 		? children.flat()
 		: [children]
 }
 
-/** Returns a flattened array of children  */
-export function getChildren(elt: UIElement) {
+/** Returns normalized children of an element  */
+export function getChildren(elt: UIElement): UIElement<Obj<unknown, string>>[] {
 	return isEltProper(elt) ? normalizeChildren(elt.children) : []
 }
