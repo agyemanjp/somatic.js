@@ -90,12 +90,12 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 	}
 
 	if (isTextDOM(dom)) {
-		return hasValue(elt)
+		return elt !== undefined // don't use hasValue here because that will flag null, "", etc, which are valid value elements
 			? renderAsync(elt).then(domNew => (dom.replaceWith(domNew), domNew))
 			: dom
 	}
 	else { // DOM elt is augmented
-		if (hasValue(elt)) {
+		if (elt !== undefined) { // don't use hasValue here because that will flag null, "", etc, which are valid value elements
 			if (areCompatible(dom, elt)) { // dom is not Text, elt is not a value, and they have the same type/tag
 				const trace = isComponentElt(elt)
 					? await updateTraceAsync(dom.renderTrace, elt)

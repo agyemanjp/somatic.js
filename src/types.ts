@@ -27,7 +27,7 @@ export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> 
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P>, result?: ComponentResult }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type ValueElement = | null | string | number | boolean | Object
+export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
 
 /** An UI element is, basically, information for a future (component) function invocation,
  * I.e., the component function plus the arguments with which to call it
