@@ -15,7 +15,7 @@ import { stringifyAttributes } from "./html"
 import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented, Children } from "./types"
-import { stringify, selfClosingTags } from "./common"
+import { stringify, selfClosingTags, isEventKey } from "./common"
 
 
 /** JSX is transformed into calls of this function */
@@ -43,7 +43,29 @@ export async function renderAsync(elt: UIElement): Promise<DOMAugmented | Text> 
 
 /** Render a UI element into a tree of intrinsic elements, optionally injecting some props in the root element */
 export async function renderToIntrinsicAsync(elt: UIElement, injectedProps?: Obj): Promise<IntrinsicElement> {
-	const valueToIntrinsic = (val: ValueElement) => ({ type: "div", props: { ...injectedProps }, children: [stringify(val)] })
+	const valueToIntrinsic = (val: ValueElement) => ({
+		type: "div",
+		props: { ...injectedProps },
+		children: [stringify(val)]
+	})
+	const mergeProps = (oldProps: Obj, newProps: Obj) => {
+		const props = { ...oldProps }
+		Object.keys(newProps).forEach(key => {
+			const oldVal = oldProps[key]
+			const newVal = newProps[key]
+			if (isEventKey(key) && (oldVal === undefined || typeof oldVal === "function") && typeof newVal === 'function') {
+				// eslint-disable-next-line fp/no-mutation
+				props[key] = () => {
+					if (oldVal) oldVal()
+					newVal()
+				}
+			}
+			else {
+				props[key] = newVal
+			}
+		})
+		return props
+	}
 
 	if (hasValue(elt) && typeof elt === "object" && "props" in elt && "children" in elt && typeof elt.type === "undefined") {
 		console.warn(`Object appearing to represent proper element has no type member\nThis is likely an error due to creating an element with an undefined component`)
@@ -54,10 +76,8 @@ export async function renderToIntrinsicAsync(elt: UIElement, injectedProps?: Obj
 	return (isIntrinsicElt(leaf))
 		? {
 			type: leaf.type,
-			props: { ...leaf.props, ...injectedProps },
-			children: await Promise.all(
-				getChildren(leaf).map(c => renderToIntrinsicAsync(c))
-			)
+			props: injectedProps ? mergeProps(leaf.props, injectedProps) : leaf.props,
+			children: await Promise.all(getChildren(leaf).map(c => renderToIntrinsicAsync(c)))
 		}
 
 		: valueToIntrinsic(leaf)
