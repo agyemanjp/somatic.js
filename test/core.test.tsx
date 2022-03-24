@@ -284,6 +284,7 @@ describe("CORE MODULE", () => {
 
 			const dom = await renderAsync(elt)
 			assert(!isTextDOM(dom))
+			assert(!(dom instanceof DocumentFragment))
 			const svg = dom.getElementsByTagName("svg").item(0) /*document.getElementById("Layer_1")*/ as any as SVGSVGElement
 			assert(svg.id === "Layer_1")
 			assert(svg.tagName.toUpperCase() === "SVG")
@@ -694,6 +695,8 @@ describe("CORE MODULE", () => {
 			const updatedDom = await applyLeafElementAsync(dom, trace.leafElement)
 
 			assert(!isTextDOM(updatedDom))
+			assert(!(updatedDom instanceof DocumentFragment))
+
 			assert.notStrictEqual(updatedDom, dom)
 			assert.strictEqual(updatedDom.tagName.toUpperCase(), "DIV")
 			assert.strictEqual(updatedDom.style.flexDirection, "row")
@@ -715,10 +718,12 @@ describe("CORE MODULE", () => {
 				itemTemplate={item => <i style={{ width: "7em", border: "thin solid orange" }}>{item.value}</i>}
 			/>)
 			assert(!isTextDOM(dom))
+			assert(!(dom instanceof DocumentFragment))
 
 			const updatedDom = await updateAsync(dom)
 
 			assert(!isTextDOM(updatedDom))
+			assert(!(updatedDom instanceof DocumentFragment))
 			assert.strictEqual(updatedDom.tagName, dom.tagName)
 		})
 	})

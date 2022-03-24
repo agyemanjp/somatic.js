@@ -8,9 +8,10 @@ import { isEltProper, isIntrinsicElt } from "./element"
 import { svgTags, isEventKey, eventNames, booleanAttributes, attributeConversions } from "./common"
 import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
 
+export type LeafElement = IntrinsicElement | ValueElement
+
 export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
-
 
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way. */
 export function setAttribute(element: DOMElement, key: string, value: any) {
@@ -93,13 +94,15 @@ export function setAttribute(element: DOMElement, key: string, value: any) {
  * @returns A non-text DOM element (without children) when passed an intrinsic element (that possibly has children)
  * @returns A text DOM element when passed a primitive value
  */
-export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): DOMElement | Text {
-	if (hasValue(eltUI) && isEltProper(eltUI)) {
+export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragment | Text {
+	if (isEltProper(eltUI)) {
 		const dom = svgTags.includes(eltUI.type.toUpperCase())
 			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
-			: document.createElement(eltUI.type)
+			: eltUI.type === "" ? document.createDocumentFragment()
+				: document.createElement(eltUI.type)
 		const props = eltUI.props ?? {}
-		Object.keys(props).forEach(key => setAttribute(dom, key, props[key]))
+		if (!(dom instanceof DocumentFragment))
+			Object.keys(props).forEach(key => setAttribute(dom, key, props[key]))
 
 		return dom
 	}
@@ -114,7 +117,7 @@ export function createDOMShallow(eltUI?: IntrinsicElement | ValueElement): DOMEl
  * If passed a primitive value, the original DOM is replaced with a new text element with content set to the value
  * @returns: The original or new DOM element according to the above rules
  */
-export function updateDomShallow(eltDOM: DOMElement, eltUI: IntrinsicElement | ValueElement) {
+export function updateDomShallow(eltDOM: DOMElement, eltUI: LeafElement) {
 	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
 		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
 		const props = eltUI.props ?? {}
@@ -122,9 +125,6 @@ export function updateDomShallow(eltDOM: DOMElement, eltUI: IntrinsicElement | V
 		return eltDOM
 	}
 	else {
-		// if (isIntrinsicElt(eltUI))
-		// console.log(`updateDOMShallow: ${eltUI.type.toUpperCase()} not compatible with ${eltDOM.tagName.toUpperCase()}, so creating new DOM`)
-
 		const newDom = createDOMShallow(eltUI)
 		eltDOM.replaceWith(newDom)
 		return newDom

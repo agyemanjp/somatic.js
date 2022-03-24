@@ -212,7 +212,8 @@ describe("DOM MODULE", () => {
 				children: ["val"]
 			} as IntrinsicElement)
 
-			assert(!isTextDOM(dom))
+			assert(!(isTextDOM(dom) || (dom instanceof DocumentFragment)))
+
 			assert.strictEqual(dom.tagName.toUpperCase(), "DIV")
 			assert.strictEqual(String(dom.className).toUpperCase(), "CLSS")
 			assert.deepStrictEqual(dom.getAttribute("style"), `background-color: blue`)
@@ -235,7 +236,8 @@ describe("DOM MODULE", () => {
 				}]
 			} as IntrinsicElement) as SVGGElement
 
-			assert(!isTextDOM(dom))
+			assert(!(isTextDOM(dom) || (dom instanceof DocumentFragment)))
+
 			assert.strictEqual(dom.tagName.toUpperCase(), "G")
 			// assert.strictEqual(String(dom.className).toUpperCase(), "CLSS")
 
@@ -250,7 +252,7 @@ describe("DOM MODULE", () => {
 			assert.strictEqual(text.childNodes.length, 0) // text should not have any children
 		})
 		it("should return a text DOM element with empty content when passed null or undefined", async () => {
-			const text = createDOMShallow(undefined)
+			const text = createDOMShallow(null)
 			assert(isTextDOM(text))
 			assert.strictEqual(text.textContent, "")
 			assert.strictEqual(text.childNodes.length, 0)
@@ -264,7 +266,8 @@ describe("DOM MODULE", () => {
 				props: { className: "clss", style: { backgroundColor: "blue" } },
 				children: ["val"]
 			} as IntrinsicElement)
-			assert(!isTextDOM(dom1))
+			assert(!(isTextDOM(dom1) || (dom1 instanceof DocumentFragment)))
+
 			assert.strictEqual(dom1.tagName.toUpperCase(), "DIV")
 			assert(dom1.classList.contains("clss"))
 			assert.deepStrictEqual(dom1.getAttribute("style"), `background-color: blue`)
@@ -291,7 +294,8 @@ describe("DOM MODULE", () => {
 				props: { className: "clss", style: { backgroundColor: "blue" } },
 				children: ["val"]
 			} as IntrinsicElement)
-			assert(!isTextDOM(div))
+			assert(!(isTextDOM(div) || (div instanceof DocumentFragment)))
+
 			assert.strictEqual(div.tagName.toUpperCase(), "DIV")
 			assert(div.classList.contains("clss"))
 			assert.deepStrictEqual(div.getAttribute("style"), `background-color: blue`)
@@ -304,7 +308,7 @@ describe("DOM MODULE", () => {
 			} as IntrinsicElement)
 
 			assert(div !== span)
-			assert(!isTextDOM(span))
+			assert(!(isTextDOM(span) || (span instanceof DocumentFragment)))
 			assert.strictEqual(span.tagName.toUpperCase(), "SPAN")
 			assert(!span.classList.contains("clss"))
 			assert.deepStrictEqual(span.getAttribute("style"), `background-color: yellow; display: inline-block`)
@@ -334,7 +338,7 @@ describe("DOM MODULE", () => {
 				props: { style: { backgroundColor: "yellow", display: "inline-block" } },
 				children: []
 			} as IntrinsicElement)
-			assert(!isTextDOM(span))
+			assert(!(isTextDOM(span) || (span instanceof DocumentFragment)))
 
 			const text = updateDomShallow(span, 1)
 			assert(span !== text)

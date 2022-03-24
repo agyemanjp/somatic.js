@@ -2,13 +2,18 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/ban-types */
 import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, SequenceAsync } from "@agyemanjp/standard"
-import { Children, ComponentElt, ComponentResult, ComponentEltAugmented, UIElement, ValueElement, IntrinsicElement, RenderingTrace } from "./types"
+import {
+	Children,
+	ComponentResult, ComponentEltAugmented,
+	ComponentElt, UIElement, ValueElement, IntrinsicElement, /*FragmentElement,*/
+	RenderingTrace
+} from "./types"
 
-export const isEltProper = <P extends Obj>(elt: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
+export const isEltProper = <P extends Obj>(elt?: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
 	(hasValue(elt) && typeof elt === "object" && "type" in elt && (typeof elt.type === "string" || typeof elt.type === "function"))
 export const isIntrinsicElt = <P extends Obj>(elt: UIElement<P>): elt is IntrinsicElement<P> => isEltProper(elt) && typeof elt.type === "string"
+// export const isFragmentElt = (elt: UIElement): elt is FragmentElement => isEltProper(elt) && elt.type === ""
 export const isComponentElt = <P extends Obj>(elt: UIElement<P>): elt is ComponentElt<P> => isEltProper(elt) && typeof elt.type !== "string"
-// export const isElt = (elt: UIElement): elt is IntrinsicElement | ComponentElt | ValueElement => isEltProper(elt) || typeof elt !== "object"
 
 /** Return a copy of a component element augmented with its invocation results
  * @argument elt The input component element (possibly with a result member, which is recomputed)

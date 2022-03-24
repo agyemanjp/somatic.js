@@ -24,6 +24,7 @@ export interface ComponentOptions<P extends Obj = Obj> {
 export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a generic type
 export interface UIElementBase<P = unknown> { props: P, children?: Children }
 export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
+// export interface FragmentElement extends UIElementBase<undefined> { type: "" }
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P>, result?: ComponentResult }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -35,7 +36,7 @@ export type ValueElement = | null | string | number | bigint | symbol | boolean 
  * until an intrinsic element is obtained, at which point we can generate an actual node from it
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | ValueElement
+export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | /*FragmentElement |*/ ValueElement
 
 export type ComponentResult = {
 	element: UIElement,
