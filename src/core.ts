@@ -58,7 +58,12 @@ export async function renderAsync(elt: UIElement): Promise<(DOMAugmented | Docum
 
 /** Render a UI element into a tree of intrinsic elements, optionally injecting some props in the root element */
 export async function renderToIntrinsicAsync(elt: UIElement/*, injectedProps?: Obj*/): Promise<IntrinsicElement> {
-	const valueToIntrinsic = (val: ValueElement) => ({ type: "div", props: {}, children: [globalThis.String(val)] })
+	const valueToIntrinsic = (val: ValueElement) => ({
+		type: Fragment,
+		props: {},
+		children: [globalThis.String(val)]
+	})
+
 	/*const mergeProps = (oldProps: Obj, newProps: Obj) => {
 		const props = { ...oldProps }
 		Object.keys(newProps).forEach(key => {
@@ -84,6 +89,8 @@ export async function renderToIntrinsicAsync(elt: UIElement/*, injectedProps?: O
 	}
 
 	const leaf = await getLeafAsync(elt)
+
+	// console.log(`Leaf from render to intrinsic: ${JSON.stringify(leaf)}`)
 	return (isIntrinsicElt(leaf))
 		? {
 			...leaf,
