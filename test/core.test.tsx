@@ -454,12 +454,9 @@ describe("CORE MODULE", () => {
 			}
 		})
 
-		it("should return an element with the correct text content", async () => {
+		it("should return an element with the correct content", async () => {
 			const elt = await renderToIntrinsicAsync(`test`)
-
-			const firstChild = normalizeChildren(elt.children)[0]
-			assert(firstChild !== undefined)
-			assert.strictEqual(firstChild, 'test')
+			assert.strictEqual(elt, 'test')
 		})
 
 	})
