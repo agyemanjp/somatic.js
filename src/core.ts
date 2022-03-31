@@ -57,35 +57,10 @@ export async function renderAsync(elt: UIElement): Promise<(DOMAugmented | Docum
 }
 
 /** Render a UI element into a tree of intrinsic elements, optionally injecting some props in the root element */
-export async function renderToIntrinsicAsync(elt: UIElement/*, injectedProps?: Obj*/): Promise<IntrinsicElement> {
-	const valueToIntrinsic = (val: ValueElement) => ({
-		type: Fragment,
-		props: {},
-		children: [globalThis.String(val)]
-	})
-
-	/*const mergeProps = (oldProps: Obj, newProps: Obj) => {
-		const props = { ...oldProps }
-		Object.keys(newProps).forEach(key => {
-			const oldVal = oldProps[key]
-			const newVal = newProps[key]
-			if (isEventKey(key) && (oldVal === undefined || typeof oldVal === "function") && typeof newVal === 'function') {
-				// eslint-disable-next-line fp/no-mutation
-				props[key] = () => {
-					if (oldVal) oldVal()
-					newVal()
-				}
-			}
-			else {
-				props[key] = deepMerge(oldVal, newVal)
-			}
-		})
-		return props
-	}*/
-
+export async function renderToIntrinsicAsync(elt: UIElement/*, injectedProps?: Obj*/): Promise<IntrinsicElement | ValueElement> {
 	if (hasValue(elt) && typeof elt === "object" && "props" in elt && "children" in elt && typeof elt.type === "undefined") {
 		console.warn(`Object appearing to represent proper element has no type member\nThis is likely an error due to creating an element with an undefined component`)
-		return valueToIntrinsic(elt)
+		return (elt)
 	}
 
 	const leaf = await getLeafAsync(elt)
@@ -98,7 +73,7 @@ export async function renderToIntrinsicAsync(elt: UIElement/*, injectedProps?: O
 			children: await Promise.all(getChildren(leaf).map(c => renderToIntrinsicAsync(c)))
 		}
 
-		: valueToIntrinsic(leaf)
+		: (leaf)
 }
 
 /** Render a UI element into its HTML string representation */
