@@ -17,6 +17,7 @@
 		"test": "mocha --require ts-node/register test/*.test.*",
 		"testci": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
 		"build": "run-s lint compile test",
+		"buildci": "run-s lintci compile testci",
 		"pubstage": "cp package.json LICENSE README.md dist",
 		"pubpreview": "npm run pubstage && cd dist && npm publish --dry-run && cd ..",
 		"version:patch": "npm version patch && git push --follow-tags",

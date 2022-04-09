@@ -89,9 +89,12 @@ export async function renderToStringAsync(elt: UIElement): Promise<string> {
 		const children = getChildren(leaf)
 		const attributesHtml = new String(stringifyAttributes(leaf.props)).prependSpaceIfNotEmpty().toString()
 		const childrenHtml = () => Promise.all(children.map(renderToStringAsync)).then(arr => arr.join(""))
-		return selfClosingTags.includes(leaf.type.toUpperCase()) && children.length === 0
-			? `<${leaf.type}${attributesHtml} />`
-			: `<${leaf.type}${attributesHtml}>${await childrenHtml()}</${leaf.type}>`
+		return hasValue(leaf.type)
+			? selfClosingTags.includes(leaf.type.toUpperCase()) && children.length === 0
+				? `<${leaf.type}${attributesHtml} />`
+				: `<${leaf.type}${attributesHtml}>${await childrenHtml()}</${leaf.type}>`
+			: `${await childrenHtml()}`
+
 	}
 	else {
 		return globalThis.String(leaf ?? "")
@@ -138,8 +141,12 @@ export async function updateAsync(dom: DOMAugmented | Text, elt?: UIElement): Pr
 					: { componentElts: [], leafElement: elt }
 
 				return await (isIntrinsicElt(trace.leafElement)
-					? applyLeafElementAsync(dom, trace.leafElement).then(_ => Object.assign(_ as DOMElement, { renderTrace: trace }))
-					: (() => { updateDomShallow(dom, trace.leafElement); return Promise.resolve(dom as any as Text) })()
+					? applyLeafElementAsync(dom, trace.leafElement)
+						.then(_ => Object.assign(_ as DOMElement, { renderTrace: trace }))
+					: (() => {
+						updateDomShallow(dom, trace.leafElement)
+						return Promise.resolve(dom as any as Text)
+					})()
 				)
 			}
 			else {
@@ -192,7 +199,9 @@ export async function mountElement(element: UIElement, container: Element) {
 			const topmostElementIds = getApexElementIds(idsToProcess)
 			await Promise.all(topmostElementIds.map(id => {
 				// console.log(`Updating "${id}" dom element...`)
-				updateAsync(document.getElementById(id) as any as DOMAugmented)
+				const elt = document.getElementById(id)
+				if (elt)
+					updateAsync(elt as DOMAugmented)
 			}))
 
 		}, DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
