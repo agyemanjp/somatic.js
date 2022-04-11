@@ -317,7 +317,12 @@ declare global {
 			/** Embeds a media player which supports video playback into the document. 
 			 * You can use <video> for audio content as well, but the audio element may provide a more appropriate user experience.
 			 */
-			video: HTMLAttributes<HTMLVideoElement>
+			video: Intrinsic<HTMLAttributes<HTMLVideoElement> & {
+				height?: number | string;
+				width?: number | string;
+				controls?: boolean;
+				poster?: string;
+			}>
 			/** Used as a child of the media elements: audio and video. 
 			 * It lets you specify timed text tracks (or time-based data), for example to automatically handle subtitles. 
 			 * The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks.
@@ -346,7 +351,11 @@ declare global {
 			 * It is an empty element, meaning that it has no content and does not have a closing tag. 
 			 * It is commonly used to offer the same media content in multiple file formats in order to provide compatibility with a broad range of browsers given their differing support for image file formats and media file formats. 
 			 */
-			source: HTMLAttributes<HTMLSourceElement>
+			source: Intrinsic<HTMLAttributes<HTMLSourceElement> & {
+				src?: string
+				type?: string
+			}>
+
 			//#endregion
 
 			//#region Scripting

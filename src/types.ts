@@ -845,8 +845,8 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 	fontSize?: number | string;
 	fontSizeAdjust?: number | string;
 	fontStretch?: number | string;
-	fontStyle?: number | string;
-	fontVariant?: number | string;
+	fontStyle?: CSSProperty<"normal" | "italic" | "oblique">;
+	fontVariant?: CSSProperty<"normal" | "small-caps">;
 	fontWeight?: number | string;
 	format?: number | string;
 	from?: number | string;
