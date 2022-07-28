@@ -58,20 +58,20 @@ declare global {
 			 * */
 			html: Intrinsic<HtmlHTMLAttributes<HTMLHtmlElement>>
 			/** Represents the content of an HTML document. There can be only one <body> element in a document. */
-			body: HTMLAttributes<HTMLBodyElement>
+			body: Intrinsic<HTMLAttributes<HTMLBodyElement>>
 
 			//#region Document metadata
 			/** Specifies the base URL to use for all relative URLs in a document. There can be only one <base> element in a document. */
-			base: HTMLAttributes<HTMLBaseElement>
+			base: Intrinsic<HTMLAttributes<HTMLBaseElement>>
 			/** Contains machine-readable information (metadata) about the document, like its title, scripts, and style sheets. */
 			head: Intrinsic<HtmlHTMLAttributes<HTMLHeadElement>>
 			/** Specifies relationships between the current document and an external resource. 
 			 * This element is most commonly used to link to CSS, but is also used to establish site icons 
 			 * (both "favicon" style icons and icons for the home screen and apps on mobile devices) among other things. 
 			 * */
-			link: LinkHTMLAttributes<HTMLLinkElement>
+			link: Intrinsic<LinkHTMLAttributes<HTMLLinkElement>>
 			/** Represents Metadata that cannot be represented by other HTML meta-related elements, like base, link, script, style or title. */
-			meta: MetaHTMLAttributes<HTMLMetaElement>
+			meta: Intrinsic<MetaHTMLAttributes<HTMLMetaElement>>
 			/** Contains style information for a document, or part of a document. 
 			 * It contains CSS, which is applied to the contents of the document containing the <style> element. 
 			 * */
@@ -79,34 +79,34 @@ declare global {
 			/** Defines the document's title that is shown in a Browser's title bar or a page's tab. 
 			 * It only contains text; tags within the element are ignored. 
 			 */
-			title: HTMLAttributes<HTMLTitleElement>
+			title: Intrinsic<HTMLAttributes<HTMLTitleElement>>
 			//#endregion
 
 			//#region Content sectioning
 			/** indicates that the enclosed HTML provides contact information for a person or people, or for an organization. */
-			address: HTMLAttributes<HTMLElement>
+			address: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a self-contained composition in a document, page, application, or site, 
 			 * which is intended to be independently distributable or reusable (e.g., in syndication). 
 			 * Examples include: a forum post, a magazine or newspaper article, or a blog entry, a product card, a user-submitted comment, an interactive widget or gadget, 
 			 * or any other independent item of content.
 			 */
-			article: HTMLAttributes<HTMLElement>
+			article: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a portion of a document whose content is only indirectly related to the document's main content. 
 			 * Asides are frequently presented as sidebars or call-out boxes. 
 			 */
-			aside: HTMLAttributes<HTMLElement>;
+			aside: Intrinsic<HTMLAttributes<HTMLElement>>;
 			/** Represents introductory content, typically a group of introductory or navigational aids. 
 			 * It may contain some heading elements but also a logo, a search form, an author name, and other elements. 
 			 */
-			header: HTMLAttributes<HTMLElement>
+			header: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a footer for its nearest sectioning content or sectioning root element. 
 			 * A <footer> typically contains information about the author of the section, copyright data or links to related documents
 			 */
-			footer: HTMLAttributes<HTMLElement>
+			footer: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents the dominant content of the body of a document.
 			 * The main content area consists of content that is directly related to or expands upon the central topic of a document, or the central functionality of an application. 
 			 */
-			main: HTMLAttributes<HTMLElement>
+			main: Intrinsic<HTMLAttributes<HTMLElement>>
 			/** Represents a section of a page whose purpose is to provide navigation links, either within the current document or to other documents. 
 			 * Common examples of navigation sections are menus, tables of contents, and indexes.
 			 */
