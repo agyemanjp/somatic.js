@@ -38,7 +38,7 @@ export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P
 			if (hasValue(next))
 				return next
 			else
-				console.warn(`Component generator is done yielding values.\nThis situation is normally unintended, since generator components can yield values infinitely while responding to props changes`)
+				console.trace(`Component generator is done yielding values.\nThis situation is normally unintended, since generator components can yield values infinitely while responding to props changes`)
 		}
 
 		const resultElt = await elt.type({ ...elt.props, children: elt.children }/*, { invalidate: ()=>{} }*/)

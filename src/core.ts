@@ -23,7 +23,8 @@ export type Fragment = typeof Fragment
 
 /** JSX is transformed into calls of this function */
 export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
-	if (!type) console.warn(`Type argument mising in call to createElement`)
+	if (typeof type !== "string" && typeof type !== "function")
+		console.trace(`Type argument has invalid type ${typeof type}`)
 
 	return { type, props: props ?? {}, children: (children ?? []).flat() }
 }
@@ -202,6 +203,9 @@ export async function mountElement(element: UIElement, container: Element) {
 				const elt = document.getElementById(id)
 				if (elt)
 					updateAsync(elt as DOMAugmented)
+				else
+					console.trace(`DOM element to update (id ${id}) not found`)
+
 			}))
 
 		}, DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
@@ -216,6 +220,7 @@ export async function updateChildrenAsync(eltDOM: DOMElement | DocumentFragment,
 	const matching = (dom: Node, elt: UIElement) => {
 		return isAugmentedDOM(dom)
 			&& isIntrinsicElt(dom.renderTrace.leafElement)
+			&& hasValue(dom.renderTrace.leafElement.props)
 			&& "key" in dom.renderTrace.leafElement.props
 			&& isEltProper(elt)
 			&& "key" in elt.props

@@ -356,10 +356,6 @@ class IdProvider {
 export const idProvider = new IdProvider()
 
 
-export function stringify(x: any): string {
-	return JSON.stringify(x, (key, val) => typeof val === "function" ? `[Function ${val.name}]` : val, 2)
-}
-
 
 
 /** Mouse event names */

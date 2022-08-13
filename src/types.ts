@@ -54,7 +54,39 @@ export type DOMElement = SVGElement | HTMLElement
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
-	alignContent?: string | null;
+	alignContent?:
+	/* align-content does not take left and right values */
+	| "center"		/* Pack items around the center */
+	| "start"		/* Pack items from the start */
+	| "end"			/* Pack items from the end */
+	| "flex-start"	/* Pack flex items from the start */
+	| "flex-end"	/* Pack flex items from the end */
+
+	/* Normal alignment */
+	| "normal"
+
+	/* Baseline alignment */
+	| "baseline"
+	| "first baseline"
+	| "last baseline"
+
+	/* Distributed alignment */
+	| "space-between" /* Distribute items evenly; The first item is flush with the start, the last is flush with the end */
+	| "space-around"  /* Distribute items evenly; Items have a half-size space on either end */
+	| "space-evenly"  /* Distribute items evenly; Items have equal space around them */
+	| "stretch"       /* Distribute items evenly; Stretch 'auto'-sized items to fit the container */
+
+	/* Overflow alignment */
+	| "safe center"
+	| "unsafe center";
+
+	/* Global values */
+	// | "inherit"
+	// | "initial"
+	// | "revert"
+	// | "revert-layer"
+	// | "unset"
+
 	alignItems?: string | null;
 	alignSelf?: string | null;
 	alignmentBaseline?: string | null;

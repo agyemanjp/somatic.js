@@ -17,7 +17,7 @@ import {
 	isTextDOM
 } from '../dist/dom'
 import { traceToLeafAsync, isIntrinsicElt } from "../dist/element"
-import { StackPanel, CommandBox, View } from "../dist/components"
+import { StackPanel, CommandBox, View } from "./_utils"
 
 
 import { Set, except } from '@agyemanjp/standard'

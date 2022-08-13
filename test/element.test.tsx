@@ -1,12 +1,11 @@
 /* eslint-disable fp/no-loops */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert"
-import { isAsyncGenerator, isGenerator, pick, unique } from "@agyemanjp/standard"
-import { UIElement, RenderingTrace, ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/types'
+import { isGenerator, pick, unique, stringify } from "@agyemanjp/standard"
+import { ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/types'
 import { isEltProper, isIntrinsicElt, isComponentElt, updateResultAsync, traceToLeafAsync, updateTraceAsync, getChildren } from '../dist/element'
-import { stringify } from '../dist/common'
 import { createElement } from '../dist/core'
-import { StackPanel } from '../dist/components'
+import { StackPanel } from './_utils'
 
 interface User {
 	id: string
@@ -145,9 +144,12 @@ describe("ELEMENT MODULE", () => {
 			)
 
 			assert.strictEqual(typeof trace.leafElement, "object")
+			// console.log(`trace.leafElement = ${_stringify(trace.leafElement)}`)
 			assert.deepStrictEqual(trace.leafElement, {
 				type: "div",
 				props: {
+					// id: undefined,
+					// title: undefined,
 					style: {
 						alignItems: 'initial',
 						display: 'flex',
