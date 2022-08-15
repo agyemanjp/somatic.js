@@ -283,33 +283,102 @@ export interface CSSProperties {
 		/*Column break values*/
 		| "avoid-column"
 		| "column"
-	breakBefore?: string | null
-	breakInside?: string | null
-	captionSide?: string | null
-	clear?: string | null
+		/*Region break values*/
+		| "avoid-region"
+		| "region"
+	breakBefore?: /*Generic break values*/
+	| "auto"
+		| "avoid"
+		| "always"
+		| "all"
+		/*Page break values*/
+		| "avoid-page"
+		| "page"
+		| "left"
+		| "right"
+		| "recto"
+		| "verso"
+		/*Column break values*/
+		| "avoid-column"
+		| "column"
+		/*Region break values*/
+		| "avoid-region"
+		| "region"
+	breakInside?: /*Keyword values*/
+	"auto" | "avoid" | "avoid-page" | "avoid-column" | "avoid-region"
+	captionSide?: /*Directional values*/
+	| "top"
+		| "bottom"
+		/*Logical values*/
+		| "block-start"
+		| "block-end"
+		| "inline-start"
+		| "inline-end"
+	clear?: /*Keyword values*/
+	"none" | "left" | "right" | "both" | "inline-start" | "inline-end"
 	clip?: string | null
 	clipPath?: string | null
 	clipRule?: string | null
 	color?: string | null
 	colorInterpolationFilters?: string | null
-	columnCount?: any
-	columnFill?: string | null
+	columnCount?: "auto" | number
+	columnFill?: /*Keyword values*/
+	"auto" | "balance" | "balance-all"
 	columnRule?: string | null
 	columnRuleColor?: any
-	columnRuleStyle?: string | null
-	columnRuleWidth?: any
-	columnSpan?: string | null
-	columnWidth?: any
+	columnRuleStyle?: /*Keyword values*/
+	| "none"
+		| "hidden"
+		| "dotted"
+		| "dashed"
+		| "solid"
+		| "double"
+		| "groove"
+		| "ridge"
+		| "inset"
+		| "outset"
+	columnRuleWidth?: /*Keyword values*/
+	"thin" | "medium" | "thick" | string
+	columnSpan?: /**Keyword values     */
+	"none" | "all"
+	columnWidth?: /*Keyword value*/
+	"auto" | string
 	columns?: string | null
 	content?: string | null
 	counterIncrement?: string | null
 	counterReset?: string | null
 	cssFloat?: string | null
-	float?: string | null
+	float?: /*Keyword values*/
+	"left" | "right" | "none" | "inline-start" | "inline-end"
 	cssText?: string
 	cursor?: string | null
-	direction?: string | null
-	display?: string | null
+	direction?: /*Keyword values*/
+	"ltr" | "rtl"
+	display?: /*precomposed values*/
+	| "block"
+		| "inline"
+		| "inline-block"
+		| "flex"
+		| "inline-flex"
+		| "grid"
+		| "inline-grid"
+		| "flow-root"
+		/*box generation*/
+		| "none"
+		| "contents"
+		/* two-value syntax */
+		| "block flow"
+		| "inline flow"
+		| "inline flow-root"
+		| "block flex"
+		| "inline flex"
+		| "block grid"
+		| "inline grid"
+		| "block flow-root"
+		/*other values*/
+		| "table"
+		| "table-row" /* all table elements have an equivalent CSS display value */
+		| "list-item"
 	dominantBaseline?: string | null
 	emptyCells?: string | null
 	enableBackground?: string | null
