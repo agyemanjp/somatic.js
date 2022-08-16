@@ -117,22 +117,27 @@ export interface CSSProperties {
 	// | "revert-layer"
 	// | "unset"
 
-	alignItems?:
-		| "normal"
+	alignItems?: /* Basic keywords */
+	| "normal"
 		| "stretch"
+		/* Positional alignment */
+		/* align-items does not take left and right values */
 		| "center"
 		| "start"
 		| "end"
 		| "flex-start"
 		| "flex-end"
+		/* Baseline alignment */
 		| "baseline"
 		| "first baseline"
 		| "last baseline"
 		| "safe center"
 		| "unsafe center"
-	alignSelf?:
-		| "auto"
+	alignSelf?: /* Keyword values*/
+	| "auto"
 		| "normal"
+		/* Positional alignment */
+		/* align-self does not take left and right values */
 		| "center"
 		| "start"
 		| "end"
@@ -140,13 +145,32 @@ export interface CSSProperties {
 		| "self-end"
 		| "flex-start"
 		| "flex-end"
+		/* Baseline alignment*/
 		| "baseline"
 		| "first baseline"
 		| "last baseline"
 		| "stretch"
+		/* Overflow alignment*/
 		| "safe center"
 		| "unsafe center"
-	alignmentBaseline?: string | null
+	alignmentBaseline?:
+		| "auto"
+		| "baseline"
+		| "before-edge"
+		| "text-before-edge"
+		| "middle"
+		| "central"
+		| "after-edge"
+		| "text-after-edge"
+		| "ideographic"
+		| "alphabetic"
+		| "hanging"
+		| "mathematical"
+		| "top"
+		| "center" /* Positional alignment */
+		/* align-self does not take left and right values */
+		| "bottom" /* Positional alignment */
+	/* align-self does not take left and right values */
 	animation?: string | null
 	animationDelay?: string | null
 	animationDirection?: "normal" | "reverse" | "alternate" | "alternate-reverse"
@@ -183,18 +207,30 @@ export interface CSSProperties {
 	backgroundImage?: string | null
 	backgroundOrigin?: "border-box" | "padding-box" | "content-box"
 	backgroundPosition?: "top" | "bottom" | "left" | "right" | "center"
-	backgroundPositionX?: string | null
-	backgroundPositionY?: string | null
+	backgroundPositionX?: /* Keyword Values */
+	| "left"
+		| "center"
+		| "right"
+		| CSSLength
+		| `right ${CSSLength}`
+		| `left ${CSSLength}`
+	backgroundPositionY?: /* Keyword Values */
+	| "top"
+		| "center"
+		| "bottom"
+		| CSSLength
+		| `bottom ${CSSLength}`
+		| `top ${CSSLength}`
 	backgroundRepeat?: /**Keyword Values */
 	"repeat-x" | "repeat-y" | "repeat" | "space" | "round" | "no-repeat"
 	backgroundSize?: /**Keyword values*/
-	"cover" | "contain" | string
-	baselineShift?: string | null
+	"cover" | "contain" | CSSLength | `${CSSLength} ${CSSLength}`
+	baselineShift?: "sub" | "super"
 	border?: string | null
-	borderBottom?: string | null
+	borderBottom?: CSSLength
 	borderBottomColor?: string | null
-	borderBottomLeftRadius?: string | number | null
-	borderBottomRightRadius?: string | number | null
+	borderBottomLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`
+	borderBottomRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`
 	borderBottomStyle?: /*Keyword values*/
 	| "none"
 		| "hidden"
