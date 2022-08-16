@@ -102,12 +102,62 @@ export interface CSSProperties {
     // | "revert-layer"
     // | "unset"
 
-    alignItems?: | "normal" | "stretch" | "center" | "start" | "end"
-        | "flex-start" | "flex-end" | "baseline" | "first baseline" | "last baseline" | "safe center" | "unsafe center";
-    alignSelf?: | "auto" | "normal" | "center" | "start" | "end"
-        | "self-start" | "self-end" | "flex-start" | "flex-end"
-        | "baseline" | "first baseline" | "last baseline" | "stretch" | "safe center" | "unsafe center";
-    alignmentBaseline?: string | null;
+    alignItems?:
+    /* Basic keywords */
+        | "normal"
+        | "stretch"
+        /* Positional alignment */
+        /* align-items does not take left and right values */
+        | "center"
+        | "start"
+        | "end"
+        | "flex-start"
+        | "flex-end"
+        /* Baseline alignment */
+        | "baseline"
+        | "first baseline"
+        | "last baseline"
+        | "safe center"
+        | "unsafe center";
+    alignSelf?:
+    /* Keyword values*/
+        | "auto"
+        | "normal"
+        /* Positional alignment */
+        /* align-self does not take left and right values */
+        | "center"
+        | "start"
+        | "end"
+        | "self-start"
+        | "self-end"
+        | "flex-start"
+        | "flex-end"
+        /* Baseline alignment*/
+        | "baseline"
+        | "first baseline"
+        | "last baseline"
+        | "stretch"
+        /* Overflow alignment*/
+        | "safe center"
+        | "unsafe center";
+    alignmentBaseline?:
+        | "auto"
+        | "baseline"
+        | "before-edge"
+        | "text-before-edge"
+        | "middle"
+        | "central"
+        | "after-edge"
+        | "text-after-edge"
+        | "ideographic"
+        | "alphabetic"
+        | "hanging"
+        | "mathematical"
+        | "top"
+        | "center"/* Positional alignment */
+        /* align-self does not take left and right values */
+        | "bottom";/* Positional alignment */
+    /* align-self does not take left and right values */
     animation?: string | null;
     animationDelay?: string | null;
     animationDirection?: | "normal" | "reverse" | "alternate" | "alternate-reverse";
@@ -116,21 +166,40 @@ export interface CSSProperties {
     animationIterationCount?: | "infinite" | number;
     animationName?: string | null;
     animationPlayState?: | "running" | "paused";
-    animationTimingFunction?: | "ease" | "ease-in"
-        | "ease-out" | "ease-in-out"
-        | "linear" | "step-start"
-        | "step-end" | `cubic-beizier(${number})`
+    animationTimingFunction?:
+        | "ease"
+        | "ease-in"
+        | "ease-out"
+        | "ease-in-out"
+        | "linear"
+        | "step-start"
+        | "step-end"
+        | `cubic-beizier(${number})`
         | `steps(${number},${'jump-start' | 'jump-end' | 'jump-none' | 'jump-both' | 'start' | 'end'})`;
-    backfaceVisibility?: | "visible" | "hidden";
+    backfaceVisibility?: "visible" | "hidden";
     background?: string | null;
     backgroundAttachment?: | "scroll" | "fixed" | "local";
-    backgroundClip?: | "border-box" | "padding-box" | "content-box" | "text";
+    backgroundClip?: "border-box" | "padding-box" | "content-box" | "text";
     backgroundColor?: string | "currentcolor" | "transparent" | `rgb(${number},${number},${number})`;
     backgroundImage?: string | null;
-    backgroundOrigin?: | "border-box" | "padding-box" | "content-box";
-    backgroundPosition?: | "top" | "bottom" | "left" | "right" | "center";
-    backgroundPositionX?: string | null;
-    backgroundPositionY?: string | null;
+    backgroundOrigin?: "border-box" | "padding-box" | "content-box";
+    backgroundPosition?: "top" | "bottom" | "left" | "right" | "center";
+    backgroundPositionX?:
+    /* Keyword Values */
+        | "left"
+        | "center"
+        | "right"
+        | CSSLength
+        | `right ${CSSLength}`
+        | `left ${CSSLength}`;
+    backgroundPositionY?:
+    /* Keyword Values */
+        | "top"
+        | "center"
+        | "bottom"
+        | CSSLength
+        | `bottom ${CSSLength}`
+        | `top ${CSSLength}`;
     backgroundRepeat?:
     /**Keyword Values */
         | "repeat-x"
@@ -143,13 +212,16 @@ export interface CSSProperties {
     /**Keyword values*/
         | "cover"
         | "contain"
-        | string;
-    baselineShift?: string | null;
+        | CSSLength
+        | `${CSSLength} ${CSSLength}`;
+    baselineShift?:
+        | "sub"
+        | "super";
     border?: string | null;
-    borderBottom?: string | null;
+    borderBottom?: CSSLength;
     borderBottomColor?: string | null;
-    borderBottomLeftRadius?: string | number | null;
-    borderBottomRightRadius?: string | number | null;
+    borderBottomLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
+    borderBottomRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
     borderBottomStyle?:
     /*Keyword values*/
         | "none"
