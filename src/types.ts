@@ -247,18 +247,37 @@ export interface CSSProperties {
 		| "medium"
 		| "thick"
 		/* <Length> values */
-		| string
+		| CSSLength
 	borderCollapse?: /*Keyword values*/
 	"collapse" | "separate"
 	borderColor?: string | null
-	borderImage?: string | null
-	borderImageOutset?: string | number
+	borderImage?:
+		| `linear-gradient(${string}, ${string}) ${number}`
+		| `url(${string}) ${number} ${string}`
+		| `linear-gradient(${string}, ${string} ${number}/${CSSLength}`
+	borderImageOutset?:
+		| CSSLength
+		| number
+		| `${number} ${number}`
+		| `${CSSLength} ${number} ${CSSLength}`
+		| `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`
 	borderImageRepeat?: /*Keyword values*/
 	"stretch" | "repeat" | "round" | "space"
-	borderImageSlice?: string | null
-	borderImageSource?: string | null
-	borderImageWidth?: string | number | null
-	borderLeft?: string | number | null
+	borderImageSlice?:
+		| `${number}%`
+		| number
+		| `${`${number}%` | number} ${`${number}%` | number}`
+		| `${`${number}%` | number} ${`${number}%` | number} ${
+				| `${number}%`
+				| number}`
+	borderImageSource?: "none" | `url(${string})`
+	borderImageWidth?:
+		| "auto"
+		| CSSLength
+		| number
+		| `${CSSLength | number} ${CSSLength | number}`
+		| `${CSSLength | number} ${CSSLength | number} ${CSSLength | number}`
+	borderLeft?: CSSLength | `${CSSLength} ${string}`
 	borderLeftColor?: string | null
 	borderLeftStyle?: /*Keyword values*/
 	| "none"
@@ -276,13 +295,24 @@ export interface CSSProperties {
 		| "medium"
 		| "thick"
 		/* <Length> values */
-		| string
-	borderRadius?: string | number | null
+		| CSSLength
+	borderRadius?:
+		| CSSLength
+		| `${CSSLength} ${CSSLength}`
+		| `${CSSLength} ${CSSLength} ${CSSLength}`
+		| `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`
+		| `${CSSLength}/${CSSLength}`
+		| `${CSSLength} ${CSSLength}/${CSSLength} ${CSSLength}`
 	borderRight?: string | null
 	borderRightColor?: string | null
 	borderRightStyle?: string | null
-	borderRightWidth?: string | number | null
-	borderSpacing?: string | null
+	borderRightWidth?: /*Keyword values*/
+	| "thin"
+		| "medium"
+		| "thick"
+		/* <Length> values */
+		| CSSLength
+	borderSpacing?: CSSLength | `${CSSLength} ${CSSLength}`
 	borderStyle?: /*Keyword values*/
 	| "none"
 		| "hidden"
@@ -296,11 +326,32 @@ export interface CSSProperties {
 		| "outset"
 	borderTop?: string | null
 	borderTopColor?: string | null
-	borderTopLeftRadius?: string | number | null
-	borderTopRightRadius?: string | number | null
-	borderTopStyle?: string | null
-	borderTopWidth?: string | number | null
-	borderWidth?: string | number | null
+	borderTopLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`
+	borderTopRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`
+	borderTopStyle?: /*Keyword values*/
+	| "none"
+		| "hidden"
+		| "dotted"
+		| "dashed"
+		| "solid"
+		| "double"
+		| "groove"
+		| "ridge"
+		| "inset"
+		| "outset"
+	borderTopWidth?: /*Keyword values*/
+	| "thin"
+		| "medium"
+		| "thick"
+		/* <Length> values */
+		| CSSLength
+	borderWidth?: /*Keyword values*/
+	| "thin"
+		| "medium"
+		| "thick"
+		/* <Length> values */
+		| CSSLength
+		| `${CSSLength} ${CSSLength}`
 	bottom?: string | number | null
 	boxShadow?: string | null
 	boxSizing?: "border-box" | "content-box"
