@@ -72,6 +72,9 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 					if (typeof effectiveVal === "string" || effectiveVal === true)
 						element.setAttribute(attribName, effectiveVal)
 
+					if (effectiveVal === true)
+						element.setAttribute(attribName, "")
+
 					// The <key> property on the element is set directly to <effectiveVal>. This approach works:
 					// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
 					// for setting the property to a value of <null>; and
