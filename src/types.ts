@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {DigitNonZero, Obj} from "@agyemanjp/standard/utility"
+import {colorConstants} from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> =
@@ -70,61 +71,51 @@ export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
     alignContent?:
-    /* align-content does not take left and right values */
-        | "center"		/* Pack items around the center */
-        | "start"		/* Pack items from the start */
-        | "end"			/* Pack items from the end */
-        | "flex-start"	/* Pack flex items from the start */
-        | "flex-end"	/* Pack flex items from the end */
-
-        /* Normal alignment */
-        | "normal"
-
-        /* Baseline alignment */
-        | "baseline"
-        | "first baseline"
-        | "last baseline"
-
-        /* Distributed alignment */
-        | "space-between" /* Distribute items evenly; The first item is flush with the start, the last is flush with the end */
-        | "space-around"  /* Distribute items evenly; Items have a half-size space on either end */
-        | "space-evenly"  /* Distribute items evenly; Items have equal space around them */
-        | "stretch"       /* Distribute items evenly; Stretch 'auto'-sized items to fit the container */
-
-        /* Overflow alignment */
-        | "safe center"
-        | "unsafe center";
-
-    /* Global values */
-    // | "inherit"
-    // | "initial"
-    // | "revert"
-    // | "revert-layer"
-    // | "unset"
-
-    alignItems?:
-    /* Basic keywords */
-        | "normal"
-        | "stretch"
-        /* Positional alignment */
-        /* align-items does not take left and right values */
+    // align-content does not take left and right values
         | "center"
         | "start"
         | "end"
         | "flex-start"
         | "flex-end"
-        /* Baseline alignment */
+        //Normal alignment
+        | "normal"
+        // Baseline alignment
+        | "baseline"
+        | "first baseline"
+        | "last baseline"
+
+        // Distributed alignment
+        | "space-between"
+        | "space-around"
+        | "space-evenly"
+        | "stretch"
+
+        // Overflow alignment
+        | "safe center"
+        | "unsafe center";
+    alignItems?:
+    // Basic keywords
+        | "normal"
+        | "stretch"
+        // Positional alignment
+        // align-items does not take left and right values
+        | "center"
+        | "start"
+        | "end"
+        | "flex-start"
+        | "flex-end"
+        // Baseline alignment
         | "baseline"
         | "first baseline"
         | "last baseline"
         | "safe center"
         | "unsafe center";
     alignSelf?:
-    /* Keyword values*/
+    // Keyword values
         | "auto"
         | "normal"
-        /* Positional alignment */
-        /* align-self does not take left and right values */
+        // Positional alignment
+        // align-self does not take left and right values
         | "center"
         | "start"
         | "end"
@@ -132,12 +123,12 @@ export interface CSSProperties {
         | "self-end"
         | "flex-start"
         | "flex-end"
-        /* Baseline alignment*/
+        // Baseline alignment
         | "baseline"
         | "first baseline"
         | "last baseline"
         | "stretch"
-        /* Overflow alignment*/
+        // Overflow alignment
         | "safe center"
         | "unsafe center";
     alignmentBaseline?:
@@ -154,10 +145,12 @@ export interface CSSProperties {
         | "hanging"
         | "mathematical"
         | "top"
-        | "center"/* Positional alignment */
-        /* align-self does not take left and right values */
-        | "bottom";/* Positional alignment */
-    /* align-self does not take left and right values */
+        // Positional alignment
+        //align-self does not take left and right values
+        | "center"
+        // Positional alignment
+        //align-self does not take left and right values
+        | "bottom";
     animation?: string | null;
     animationDelay?: string | null;
     animationDirection?: | "normal" | "reverse" | "alternate" | "alternate-reverse";
@@ -177,10 +170,19 @@ export interface CSSProperties {
         | `cubic-beizier(${number})`
         | `steps(${number},${'jump-start' | 'jump-end' | 'jump-none' | 'jump-both' | 'start' | 'end'})`;
     backfaceVisibility?: "visible" | "hidden";
-    background?: string | null;
+    background?:
+        | keyof typeof colorConstants
+        | `border-box ${keyof typeof colorConstants}`;
     backgroundAttachment?: | "scroll" | "fixed" | "local";
     backgroundClip?: "border-box" | "padding-box" | "content-box" | "text";
-    backgroundColor?: string | "currentcolor" | "transparent" | `rgb(${number},${number},${number})`;
+    backgroundColor?:
+        | keyof typeof colorConstants
+        | "currentcolor"
+        | "transparent"
+        | `rgb(${number},${number},${number})`
+        | `rgba(${number},${number},${number},${number})`
+        | `hsl(${number}, ${CSSLength}, ${CSSLength})`
+        | `hsla(${number}, ${CSSLength}, ${CSSLength},${number})`;
     backgroundImage?: string | null;
     backgroundOrigin?: "border-box" | "padding-box" | "content-box";
     backgroundPosition?: "top" | "bottom" | "left" | "right" | "center";
