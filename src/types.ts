@@ -183,27 +183,31 @@ export interface CSSProperties {
         | `rgba(${number},${number},${number},${number})`
         | `hsl(${number}, ${CSSLength}, ${CSSLength})`
         | `hsla(${number}, ${CSSLength}, ${CSSLength},${number})`;
-    backgroundImage?: string | null;
+    backgroundImage?: `url(${string})`;
     backgroundOrigin?: "border-box" | "padding-box" | "content-box";
-    backgroundPosition?: "top" | "bottom" | "left" | "right" | "center";
+    backgroundPosition?:
+        | "top"
+        | "bottom"
+        | "left"
+        | "right"
+        | "center"
+        | `${CSSLength} ${CSSLength}`;
     backgroundPositionX?:
-    /* Keyword Values */
+    // Keyword Values
         | "left"
         | "center"
         | "right"
         | CSSLength
-        | `right ${CSSLength}`
-        | `left ${CSSLength}`;
+        | `${"right" | "left"} ${CSSLength}`;
     backgroundPositionY?:
-    /* Keyword Values */
+    // Keyword Values
         | "top"
         | "center"
         | "bottom"
         | CSSLength
-        | `bottom ${CSSLength}`
-        | `top ${CSSLength}`;
+        | `${"bottom" | "top"} ${CSSLength}`;
     backgroundRepeat?:
-    /**Keyword Values */
+    // Keyword Values
         | "repeat-x"
         | "repeat-y"
         | "repeat"
@@ -214,18 +218,25 @@ export interface CSSProperties {
     /**Keyword values*/
         | "cover"
         | "contain"
+        | "auto"
         | CSSLength
         | `${CSSLength} ${CSSLength}`;
     baselineShift?:
+        | CSSLength
         | "sub"
         | "super";
     border?: string | null;
     borderBottom?: CSSLength;
-    borderBottomColor?: string | null;
+    borderBottomColor?:
+        | keyof typeof colorConstants
+        | `rgb(${number},${number},${number})`
+        | `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
+        | "currentcolor"
+        | "transparent";
     borderBottomLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
     borderBottomRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
     borderBottomStyle?:
-    /*Keyword values*/
+    // Keyword values
         | "none"
         | "hidden"
         | "dotted"
@@ -237,21 +248,21 @@ export interface CSSProperties {
         | "inset"
         | "outset";
     borderBottomWidth?:
-    /*Keyword values*/
+    // Keyword values
         | "thin"
         | "medium"
         | "thick"
-        /* <Length> values */
+        // <Length> values
         | CSSLength;
     borderCollapse?:
-    /*Keyword values*/
+    // Keyword values
         | "collapse"
         | "separate";
-    borderColor?: string | null;
+    borderColor?: keyof typeof colorConstants;
     borderImage?:
-        | `linear-gradient(${string}, ${string}) ${number}`
-        | `url(${string}) ${number} ${string}`
-        | `linear-gradient(${string}, ${string} ${number}/${CSSLength}`;
+        | `linear-gradient(${keyof typeof colorConstants}, ${keyof typeof colorConstants}) ${number}`
+        | `url(${string}) ${number} ${string}`;
+    //| `linear-gradient(${keyof typeof colorConstants}, ${keyof typeof colorConstants} ${number}/${CSSLength}`;
     borderImageOutset?:
         | CSSLength
         | number
@@ -259,16 +270,17 @@ export interface CSSProperties {
         | `${CSSLength} ${number} ${CSSLength}`
         | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`;
     borderImageRepeat?:
-    /*Keyword values*/
+    // Keyword values
         | "stretch"
         | "repeat"
         | "round"
         | "space";
     borderImageSlice?:
-        | `${number}%`
+        | CSSLength
         | number
-        | `${`${number}%` | number} ${`${number}%` | number}`
-        | `${`${number}%` | number} ${`${number}%` | number} ${`${number}%` | number}`;
+        | `${CSSLength}|${number} ${CSSLength}|${number}`
+        | `${CSSLength}|${number} fill ${CSSLength}|${number} ${CSSLength}|${number}`
+        | `${CSSLength}|${number} ${CSSLength}|${number} ${CSSLength}|${number} ${CSSLength}|${number}`;
     borderImageSource?:
         | "none"
         | `url(${string})`;
