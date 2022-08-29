@@ -276,8 +276,13 @@ export interface CSSProperties {
 		| `${CSSLength | number} ${CSSLength | number}`
 		| `${CSSLength | number} ${CSSLength | number} ${CSSLength | number}`
 	borderLeft?: CSSLength | `${CSSLength} ${string}`
-	borderLeftColor?: string | null
-	borderLeftStyle?: /*Keyword values*/
+	borderLeftColor?:
+		| keyof typeof colorConstants
+		| `rgb(${number},${number},${number})`
+		| `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
+		| "currentcolor"
+		| "transparent"
+	borderLeftStyle?: // Keyword values
 	| "none"
 		| "hidden"
 		| "dotted"
@@ -288,11 +293,11 @@ export interface CSSProperties {
 		| "ridge"
 		| "inset"
 		| "outset"
-	borderLeftWidth?: /*Keyword values*/
+	borderLeftWidth?: // Keyword values
 	| "thin"
 		| "medium"
 		| "thick"
-		/* <Length> values */
+		// <Length> values
 		| CSSLength
 	borderRadius?:
 		| CSSLength
@@ -301,17 +306,14 @@ export interface CSSProperties {
 		| `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`
 		| `${CSSLength}/${CSSLength}`
 		| `${CSSLength} ${CSSLength}/${CSSLength} ${CSSLength}`
-	borderRight?: string | null
-	borderRightColor?: string | null
-	borderRightStyle?: string | null
-	borderRightWidth?: /*Keyword values*/
-	| "thin"
-		| "medium"
-		| "thick"
-		/* <Length> values */
-		| CSSLength
-	borderSpacing?: CSSLength | `${CSSLength} ${CSSLength}`
-	borderStyle?: /*Keyword values*/
+	borderRight?: CSSLength | `${CSSLength} ${string}`
+	borderRightColor?:
+		| keyof typeof colorConstants
+		| `rgb(${number},${number},${number})`
+		| `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
+		| "currentcolor"
+		| "transparent"
+	borderRightStyle?: // Keyword values
 	| "none"
 		| "hidden"
 		| "dotted"
@@ -322,11 +324,51 @@ export interface CSSProperties {
 		| "ridge"
 		| "inset"
 		| "outset"
-	borderTop?: string | null
-	borderTopColor?: string | null
+	borderRightWidth?: // Keyword values
+	| "thin"
+		| "medium"
+		| "thick"
+		// <Length> values
+		| CSSLength
+	borderSpacing?: // <length>
+	| CSSLength
+		// horizontal <length> | vertical <length>
+		| `${CSSLength} ${CSSLength}`
+	borderStyle?: // Keyword values
+	| "none"
+		| "hidden"
+		| "dotted"
+		| "dashed"
+		| "solid"
+		| "double"
+		| "groove"
+		| "ridge"
+		| "inset"
+		| "outset"
+	borderTop?:
+		| CSSLength
+		| "thin"
+		| "medium"
+		| "thick"
+		| "none"
+		| "hidden"
+		| "dotted"
+		| "dashed"
+		| "solid"
+		| "double"
+		| "groove"
+		| "ridge"
+		| "inset"
+		| "outset"
+	borderTopColor?:
+		| keyof typeof colorConstants
+		| `rgb(${number},${number},${number})`
+		| `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
+		| "currentcolor"
+		| "transparent"
 	borderTopLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`
 	borderTopRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`
-	borderTopStyle?: /*Keyword values*/
+	borderTopStyle?: // Keyword values
 	| "none"
 		| "hidden"
 		| "dotted"
@@ -337,74 +379,101 @@ export interface CSSProperties {
 		| "ridge"
 		| "inset"
 		| "outset"
-	borderTopWidth?: /*Keyword values*/
+	borderTopWidth?: // Keyword values
 	| "thin"
 		| "medium"
 		| "thick"
-		/* <Length> values */
+		// <Length> values
 		| CSSLength
-	borderWidth?: /*Keyword values*/
+	borderWidth?: // Keyword values
 	| "thin"
 		| "medium"
 		| "thick"
-		/* <Length> values */
+		// <Length> values
 		| CSSLength
 		| `${CSSLength} ${CSSLength}`
-	bottom?: string | number | null
+	bottom?: CSSLength | "auto"
 	boxShadow?: string | null
 	boxSizing?: "border-box" | "content-box"
-	breakAfter?: /*Generic break values*/
+	breakAfter?: // Generic break values
 	| "auto"
 		| "avoid"
 		| "always"
 		| "all"
-		/*Page break values*/
+		// Page break values
 		| "avoid-page"
 		| "page"
 		| "left"
 		| "right"
 		| "recto"
 		| "verso"
-		/*Column break values*/
+		// Column break values
 		| "avoid-column"
 		| "column"
-		/*Region break values*/
+		// Region break values
 		| "avoid-region"
 		| "region"
-	breakBefore?: /*Generic break values*/
+	breakBefore?: // Generic break values
 	| "auto"
 		| "avoid"
 		| "always"
 		| "all"
-		/*Page break values*/
+		// Page break values
 		| "avoid-page"
 		| "page"
 		| "left"
 		| "right"
 		| "recto"
 		| "verso"
-		/*Column break values*/
+		// Column break values
 		| "avoid-column"
 		| "column"
-		/*Region break values*/
+		// Region break values
 		| "avoid-region"
 		| "region"
-	breakInside?: /*Keyword values*/
+	breakInside?: // Keyword values
 	"auto" | "avoid" | "avoid-page" | "avoid-column" | "avoid-region"
-	captionSide?: /*Directional values*/
+	captionSide?: // Directional values
 	| "top"
 		| "bottom"
-		/*Logical values*/
-		| "block-start"
+		//Logical values*
+		// | "block-start"
 		| "block-end"
 		| "inline-start"
 		| "inline-end"
 	clear?: /*Keyword values*/
 	"none" | "left" | "right" | "both" | "inline-start" | "inline-end"
 	clip?: string | null
-	clipPath?: string | null
-	clipRule?: string | null
-	color?: string | null
+	clipPath?: // <clip-source> values
+	| `url(${string})`
+		// <geometry-box> values
+		| "margin-box"
+		| "border-box"
+		| "padding-box"
+		| "content-box"
+		| "fill-box"
+		| "stroke-box"
+		| "view-box"
+		// <basic-shape> values
+		| `inset(${CSSLength} ${CSSLength})`
+		| `circle(${CSSLength} at ${CSSLength} ${CSSLength})`
+		| `ellipse(${CSSLength} ${CSSLength} at ${CSSLength} ${CSSLength})`
+		| `polygon(${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength})`
+		| `path(${string})`
+	clipRule?: "nonezero" | "evenodd" | "inherit"
+	color?: // Keyword values
+	| "currentcolor"
+		// <named-color> values
+		| keyof typeof colorConstants
+		// rgb() values
+		| `rgb(${number}, ${number}, ${number})`
+		| `rgba(${number}, ${number}, ${number},${number})`
+		// hsl() values
+		| `hsl(${CSSLength}, ${CSSLength}, ${CSSLength})`
+		| `hsla(${CSSLength}, ${CSSLength}, ${CSSLength},${number})`
+		// hwb() values
+		| `hwb(${CSSLength} ${CSSLength} ${CSSLength})`
+		| `hwb(${CSSLength} ${CSSLength} ${CSSLength} / ${number})`
 	colorInterpolationFilters?: string | null
 	columnCount?: "auto" | number
 	columnFill?: /*Keyword values*/
