@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {DigitNonZero, Obj} from "@agyemanjp/standard/utility"
-import {colorConstants} from "./common"
+import {borderStyles, borderWidthValues, colorConstants} from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> =
@@ -235,23 +235,10 @@ export interface CSSProperties {
         | "transparent";
     borderBottomLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
     borderBottomRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
-    borderBottomStyle?:
-    // Keyword values
-        | "none"
-        | "hidden"
-        | "dotted"
-        | "dashed"
-        | "solid"
-        | "double"
-        | "groove"
-        | "ridge"
-        | "inset"
-        | "outset";
+    borderBottomStyle?: keyof typeof borderStyles;
     borderBottomWidth?:
     // Keyword values
-        | "thin"
-        | "medium"
-        | "thick"
+        | keyof typeof borderWidthValues
         // <Length> values
         | CSSLength;
     borderCollapse?:
@@ -301,21 +288,10 @@ export interface CSSProperties {
         | "transparent";
     borderLeftStyle?:
     // Keyword values
-        | "none"
-        | "hidden"
-        | "dotted"
-        | "dashed"
-        | "solid"
-        | "double"
-        | "groove"
-        | "ridge"
-        | "inset"
-        | "outset";
+        | keyof typeof borderStyles;
     borderLeftWidth?:
     // Keyword values
-        | "thin"
-        | "medium"
-        | "thick"
+        | keyof typeof borderWidthValues
         // <Length> values
         | CSSLength;
     borderRadius?:
@@ -336,21 +312,10 @@ export interface CSSProperties {
         | "transparent";
     borderRightStyle?:
     // Keyword values
-        | "none"
-        | "hidden"
-        | "dotted"
-        | "dashed"
-        | "solid"
-        | "double"
-        | "groove"
-        | "ridge"
-        | "inset"
-        | "outset";
+        | keyof typeof borderStyles;
     borderRightWidth?:
     // Keyword values
-        | "thin"
-        | "medium"
-        | "thick"
+        | keyof typeof borderWidthValues
         // <Length> values
         | CSSLength;
     borderSpacing?:
@@ -360,31 +325,11 @@ export interface CSSProperties {
         | `${CSSLength} ${CSSLength}`;
     borderStyle?:
     // Keyword values
-        | "none"
-        | "hidden"
-        | "dotted"
-        | "dashed"
-        | "solid"
-        | "double"
-        | "groove"
-        | "ridge"
-        | "inset"
-        | "outset";
+        | keyof typeof borderStyles;
     borderTop?:
         | CSSLength
-        | "thin"
-        | "medium"
-        | "thick"
-        | "none"
-        | "hidden"
-        | "dotted"
-        | "dashed"
-        | "solid"
-        | "double"
-        | "groove"
-        | "ridge"
-        | "inset"
-        | "outset";
+        | keyof typeof borderWidthValues
+        | keyof typeof borderStyles;
     borderTopColor?:
         | keyof typeof colorConstants
         | `rgb(${number},${number},${number})`
@@ -397,30 +342,15 @@ export interface CSSProperties {
     borderTopRightRadius?:
         | CSSLength
         | `${CSSLength} ${CSSLength}`;
-    borderTopStyle?:
-    // Keyword values
-        | "none"
-        | "hidden"
-        | "dotted"
-        | "dashed"
-        | "solid"
-        | "double"
-        | "groove"
-        | "ridge"
-        | "inset"
-        | "outset";
+    borderTopStyle?: | keyof typeof borderStyles
     borderTopWidth?:
     // Keyword values
-        | "thin"
-        | "medium"
-        | "thick"
+        | keyof typeof borderWidthValues
         // <Length> values
         | CSSLength;
     borderWidth?:
     // Keyword values
-        | "thin"
-        | "medium"
-        | "thick"
+        | keyof typeof borderWidthValues
         // <Length> values
         | CSSLength
         | `${CSSLength} ${CSSLength}`;
@@ -507,7 +437,7 @@ export interface CSSProperties {
         | `inset(${CSSLength} ${CSSLength})`
         | `circle(${CSSLength} at ${CSSLength} ${CSSLength})`
         | `ellipse(${CSSLength} ${CSSLength} at ${CSSLength} ${CSSLength})`
-        | `polygon(${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength})`
+
         | `path(${string})`;
     clipRule?: "nonezero" | "evenodd" | "inherit"
     color?:
@@ -527,42 +457,43 @@ export interface CSSProperties {
     colorInterpolationFilters?: string | null;
     columnCount?: | "auto" | number;
     columnFill?:
-    /*Keyword values*/
+    // Keyword values
         | "auto"
         | "balance"
         | "balance-all";
-    columnRule?: string | null;
-    columnRuleColor?: any;
-    columnRuleStyle?:
-    /*Keyword values*/
-        | "none"
-        | "hidden"
-        | "dotted"
-        | "dashed"
-        | "solid"
-        | "double"
-        | "groove"
-        | "ridge"
-        | "inset"
-        | "outset";
+    columnRule?:
+        | keyof typeof borderStyles
+        | `${keyof typeof borderStyles} ${keyof typeof colorConstants}`
+        | `${keyof typeof borderStyles} ${CSSLength}`;
+    columnRuleColor?:
+        | keyof typeof colorConstants
+        | `rgb(${number},${number},${number})`
+        | `hsla(${number}, ${CSSLength}, ${CSSLength}, ${number})`
+        | "transparent";
+    columnRuleStyle?: keyof typeof borderStyles;
     columnRuleWidth?:
-    /*Keyword values*/
-        | "thin"
-        | "medium"
-        | "thick"
-        | string;
+    // Keyword values
+        | keyof typeof borderWidthValues
+        | CSSLength;
     columnSpan?:
-    /**Keyword values     */
+    // Keyword values
         | "none"
         | "all";
     columnWidth?:
-    /*Keyword value*/
+    // Keyword value
         | "auto"
-        | string;
-    columns?: string | null;
+        | CSSLength;
+    columns?:
+        | CSSLength
+        | "auto"
+        | number
+        | `${number | CSSLength | "auto"} ${number | CSSLength | "auto"}`;
     content?: string | null;
-    counterIncrement?: string | null;
-    counterReset?: string | null;
+    counterIncrement?:
+        | "none"
+        | string
+        | `${string} ${number}`;
+    counterReset?: string | `${string} ${number}`;
     cssFloat?: string | null;
     float?:
     /*Keyword values*/
