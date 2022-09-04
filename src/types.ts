@@ -4,8 +4,8 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DigitNonZero, Obj } from "@agyemanjp/standard/utility"
-import { borderStyles, borderWidthValues, colorConstants } from "./common"
+import {DigitNonZero, Obj} from "@agyemanjp/standard/utility"
+import {borderStyles, borderWidthValues, colorConstants, cursorKeywords} from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> = ((
@@ -713,8 +713,363 @@ export interface CSSProperties {
 	zIndex?: string | number | null
 	zoom?: string | null
 
-	/** A shorthand property for the grid-template-rows, grid-template-columns, grid-template-areas, grid-auto-rows, grid-auto-columns, and the grid-auto-flow properties */
-	grid?: string
+        | `path(${string})`;
+    clipRule?: "nonezero" | "evenodd" | "inherit"
+    color?:
+    // Keyword values
+        | "currentcolor"
+        // <named-color> values
+        | keyof typeof colorConstants
+        // rgb() values
+        | `rgb(${number}, ${number}, ${number})`
+        | `rgba(${number}, ${number}, ${number},${number})`
+        // hsl() values
+        | `hsl(${CSSLength}, ${CSSLength}, ${CSSLength})`
+        | `hsla(${CSSLength}, ${CSSLength}, ${CSSLength},${number})`
+        // hwb() values
+        | `hwb(${CSSLength} ${CSSLength} ${CSSLength})`
+        | `hwb(${CSSLength} ${CSSLength} ${CSSLength} / ${number})`;
+    colorInterpolationFilters?: string | null;
+    columnCount?: | "auto" | number;
+    columnFill?:
+    // Keyword values
+        | "auto"
+        | "balance"
+        | "balance-all";
+    columnRule?:
+        | keyof typeof borderStyles
+        | `${keyof typeof borderStyles} ${keyof typeof colorConstants}`
+        | `${keyof typeof borderStyles} ${CSSLength}`;
+    columnRuleColor?:
+        | keyof typeof colorConstants
+        | `rgb(${number},${number},${number})`
+        | `hsla(${number}, ${CSSLength}, ${CSSLength}, ${number})`
+        | "transparent";
+    columnRuleStyle?: keyof typeof borderStyles;
+    columnRuleWidth?:
+    // Keyword values
+        | keyof typeof borderWidthValues
+        | CSSLength;
+    columnSpan?:
+    // Keyword values
+        | "none"
+        | "all";
+    columnWidth?:
+    // Keyword value
+        | "auto"
+        | CSSLength;
+    columns?:
+        | CSSLength
+        | "auto"
+        | number
+        | `${number | CSSLength | "auto"} ${number | CSSLength | "auto"}`;
+    content?: string | null;
+    counterIncrement?:
+        | "none"
+        | string
+        | `${string} ${number}`;
+    counterReset?:
+        | "none"
+        | string
+        | `${string} ${number}`;
+    cssFloat?: string | null;
+    float?:
+    // Keyword values
+        | "left"
+        | "right"
+        | "none"
+        | "inline-start"
+        | "inline-end";
+    cssText?: string;
+    cursor?:
+    // Keyword values
+        | keyof typeof cursorKeywords
+        // url with mandatory keyword fallback
+        | `url(${string}), ${keyof typeof cursorKeywords}`
+        // url and coordinates with mandatory keyword fallback
+        | `url(${string}) ${number} ${number}, ${keyof typeof cursorKeywords}`
+    // urls and fallback urls, with mandatory keyword fallback;
+    direction?:
+    // Keyword values
+        | "ltr"
+        | "rtl";
+    display?:
+    // precomposed values
+        | "block"
+        | "inline"
+        | "inline-block"
+        | "flex"
+        | "inline-flex"
+        | "grid"
+        | "inline-grid"
+        | "flow-root"
+        // box generation
+        | "none"
+        | "contents"
+        // two-value syntax
+        | "block flow"
+        | "inline flow"
+        | "inline flow-root"
+        | "block flex"
+        | "inline flex"
+        | "block grid"
+        | "inline grid"
+        | "block flow-root"
+        // other values
+        | "table"
+        | "table-row" /* all table elements have an equivalent CSS display value */
+        | "list-item";
+    dominantBaseline?:
+        | "auto"
+        | "ideographic"
+        | "alphabetic"
+        | "hanging"
+        | "mathematical"
+        | "central"
+        | "middle"
+        | "text-after-edge"
+        | "text-before-edge"
+        | "text-top";
+    emptyCells?: "show" | "hide";// keyword values
+    enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`;
+    fill?: string | null;
+    fillOpacity?: string | null;
+    fillRule?: string | null;
+    filter?: string | null;
+    flex?: string | null;
+    flexBasis?: string | null;
+    flexDirection?: string | null;
+    flexFlow?: string | number | null;
+    flexGrow?: string | number | null;
+    flexShrink?: string | number | null;
+    flexWrap?: string | null;
+    floodColor?: string | null;
+    floodOpacity?: string | number | null;
+    font?: string | null;
+    fontFamily?: string | null;
+    fontFeatureSettings?: string | null;
+    fontSize?: string | null;
+    fontSizeAdjust?: string | null;
+    fontStretch?: string | null;
+    fontStyle?: string | null;
+    fontVariant?: string | null;
+    fontWeight?: string | number | null;
+    glyphOrientationHorizontal?: string | null;
+    glyphOrientationVertical?: string | null;
+    height?: string | null;
+    imeMode?: string | null;
+    justifyContent?: string | null;
+    kerning?: string | null;
+    left?: string | number | null;
+    readonly length?: number;
+    letterSpacing?: string | null;
+    lightingColor?: string | null;
+    lineHeight?: string | null;
+    listStyle?: string | null;
+    listStyleImage?: string | null;
+    listStylePosition?: string | null;
+    listStyleType?: string | null;
+    margin?: string | number | null;
+    marginBottom?: string | number | null;
+    marginLeft?: string | number | null;
+    marginRight?: string | number | null;
+    marginTop?: string | number | null;
+    marker?: string | null;
+    markerEnd?: string | null;
+    markerMid?: string | null;
+    markerStart?: string | null;
+    mask?: string | null;
+    maxHeight?: string | null;
+    maxWidth?: string | null;
+    minHeight?: string | null;
+    minWidth?: string | null;
+    msContentZoomChaining?: string | null;
+    msContentZoomLimit?: string | null;
+    msContentZoomLimitMax?: any;
+    msContentZoomLimitMin?: any;
+    msContentZoomSnap?: string | null;
+    msContentZoomSnapPoints?: string | null;
+    msContentZoomSnapType?: string | null;
+    msContentZooming?: string | null;
+    msFlowFrom?: string | null;
+    msFlowInto?: string | null;
+    msFontFeatureSettings?: string | null;
+    msGridColumn?: any;
+    msGridColumnAlign?: string | null;
+    msGridColumnSpan?: any;
+    msGridColumns?: string | null;
+    msGridRow?: any;
+    msGridRowAlign?: string | null;
+    msGridRowSpan?: any;
+    msGridRows?: string | null;
+    msHighContrastAdjust?: string | null;
+    msHyphenateLimitChars?: string | null;
+    msHyphenateLimitLines?: any;
+    msHyphenateLimitZone?: any;
+    msHyphens?: string | null;
+    msImeAlign?: string | null;
+    msOverflowStyle?: string | null;
+    msScrollChaining?: string | null;
+    msScrollLimit?: string | null;
+    msScrollLimitXMax?: any;
+    msScrollLimitXMin?: any;
+    msScrollLimitYMax?: any;
+    msScrollLimitYMin?: any;
+    msScrollRails?: string | null;
+    msScrollSnapPointsX?: string | null;
+    msScrollSnapPointsY?: string | null;
+    msScrollSnapType?: string | null;
+    msScrollSnapX?: string | null;
+    msScrollSnapY?: string | null;
+    msScrollTranslation?: string | null;
+    msTextCombineHorizontal?: string | null;
+    msTextSizeAdjust?: any;
+    msTouchAction?: string | null;
+    msTouchSelect?: string | null;
+    msUserSelect?: string | null;
+    msWrapFlow?: string;
+    msWrapMargin?: any;
+    msWrapThrough?: string;
+    opacity?: string | number | null;
+    order?: string | null;
+    orphans?: string | null;
+    outline?: string | null;
+    outlineColor?: string | null;
+    outlineStyle?: string | null;
+    outlineWidth?: string | null;
+    overflow?: string | null;
+    overflowX?: string | null;
+    overflowY?: string | null;
+    padding?: string | number | null;
+    paddingBottom?: string | number | null;
+    paddingLeft?: string | number | null;
+    paddingRight?: string | number | null;
+    paddingTop?: string | number | null;
+    pageBreakAfter?: string | null;
+    pageBreakBefore?: string | null;
+    pageBreakInside?: string | null;
+    perspective?: string | null;
+    perspectiveOrigin?: string | null;
+    pointerEvents?: string | null;
+    position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null;
+    quotes?: string | null;
+    right?: string | number | null;
+    rubyAlign?: string | null;
+    rubyOverhang?: string | null;
+    rubyPosition?: string | null;
+    stopColor?: string | null;
+    stopOpacity?: string | null;
+    stroke?: string | null;
+    strokeDasharray?: string | null;
+    strokeDashoffset?: string | null;
+    strokeLinecap?: string | null;
+    strokeLinejoin?: string | null;
+    strokeMiterlimit?: string | number | null;
+    strokeOpacity?: string | null;
+    strokeWidth?: string | number | null;
+    tableLayout?: string | null;
+    textAlign?: string | null;
+    textAlignLast?: string | null;
+    textAnchor?: string | null;
+    textDecoration?: string | null;
+    textIndent?: string | number | null;
+    textJustify?: string | null;
+    textKashida?: string | null;
+    textKashidaSpace?: string | null;
+    textOverflow?: string | null;
+    textShadow?: string | null;
+    textTransform?: string | null;
+    textUnderlinePosition?: string | null;
+    top?: string | number | null;
+    touchAction?: string | null;
+    transform?: string | null;
+    transformOrigin?: string | null;
+    transformStyle?: string | null;
+    transition?: string | null;
+    transitionDelay?: string | null;
+    transitionDuration?: string | null;
+    transitionProperty?: string | null;
+    transitionTimingFunction?: string | null;
+    unicodeBidi?: string | null;
+    verticalAlign?: string | null;
+    visibility?: string | null;
+    webkitAlignContent?: string | null;
+    webkitAlignItems?: string | null;
+    webkitAlignSelf?: string | null;
+    webkitAnimation?: string | null;
+    webkitAnimationDelay?: string | null;
+    webkitAnimationDirection?: string | null;
+    webkitAnimationDuration?: string | null;
+    webkitAnimationFillMode?: string | null;
+    webkitAnimationIterationCount?: string | null;
+    webkitAnimationName?: string | null;
+    webkitAnimationPlayState?: string | null;
+    webkitAnimationTimingFunction?: string | null;
+    webkitAppearance?: string | null;
+    webkitBackfaceVisibility?: string | null;
+    webkitBackgroundClip?: string | null;
+    webkitBackgroundOrigin?: string | null;
+    webkitBackgroundSize?: string | null;
+    webkitBorderBottomLeftRadius?: string | null;
+    webkitBorderBottomRightRadius?: string | null;
+    webkitBorderImage?: string | null;
+    webkitBorderRadius?: string | null;
+    webkitBorderTopLeftRadius?: string | number | null;
+    webkitBorderTopRightRadius?: string | number | null;
+    webkitBoxAlign?: string | null;
+    webkitBoxDirection?: string | null;
+    webkitBoxFlex?: string | null;
+    webkitBoxOrdinalGroup?: string | null;
+    webkitBoxOrient?: string | null;
+    webkitBoxPack?: string | null;
+    webkitBoxSizing?: string | null;
+    webkitColumnBreakAfter?: string | null;
+    webkitColumnBreakBefore?: string | null;
+    webkitColumnBreakInside?: string | null;
+    webkitColumnCount?: any;
+    webkitColumnGap?: any;
+    webkitColumnRule?: string | null;
+    webkitColumnRuleColor?: any;
+    webkitColumnRuleStyle?: string | null;
+    webkitColumnRuleWidth?: any;
+    webkitColumnSpan?: string | null;
+    webkitColumnWidth?: any;
+    webkitColumns?: string | null;
+    webkitFilter?: string | null;
+    webkitFlex?: string | null;
+    webkitFlexBasis?: string | null;
+    webkitFlexDirection?: string | null;
+    webkitFlexFlow?: string | null;
+    webkitFlexGrow?: string | null;
+    webkitFlexShrink?: string | null;
+    webkitFlexWrap?: string | null;
+    webkitJustifyContent?: string | null;
+    webkitOrder?: string | null;
+    webkitPerspective?: string | null;
+    webkitPerspectiveOrigin?: string | null;
+    webkitTapHighlightColor?: string | null;
+    webkitTextFillColor?: string | null;
+    webkitTextSizeAdjust?: any;
+    webkitTransform?: string | null;
+    webkitTransformOrigin?: string | null;
+    webkitTransformStyle?: string | null;
+    webkitTransition?: string | null;
+    webkitTransitionDelay?: string | null;
+    webkitTransitionDuration?: string | null;
+    webkitTransitionProperty?: string | null;
+    webkitTransitionTimingFunction?: string | null;
+    webkitUserModify?: string | null;
+    webkitUserSelect?: string | null;
+    webkitWritingMode?: string | null;
+    whiteSpace?: string | null;
+    widows?: string | null;
+    width?: string | null;
+    wordBreak?: string | null;
+    wordSpacing?: string | null;
+    wordWrap?: string | null;
+    writingMode?: string | null;
+    zIndex?: string | number | null;
+    zoom?: string | null;
 
 	/** Either specifies a name for the grid item,  or this property is a shorthand property for the
 	 * grid-row-start, grid-column-start, grid-row-end, and grid-column-end properties
