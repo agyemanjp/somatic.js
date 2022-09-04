@@ -833,26 +833,171 @@ export interface CSSProperties {
     emptyCells?: "show" | "hide";// keyword values
     enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`;
     fill?: string | null;
-    fillOpacity?: string | null;
-    fillRule?: string | null;
-    filter?: string | null;
-    flex?: string | null;
-    flexBasis?: string | null;
-    flexDirection?: string | null;
-    flexFlow?: string | number | null;
-    flexGrow?: string | number | null;
-    flexShrink?: string | number | null;
-    flexWrap?: string | null;
-    floodColor?: string | null;
-    floodOpacity?: string | number | null;
+    fillOpacity?: number | `${number}%`;
+    fillRule?: "nonzero" | "evenodd";
+    filter?:
+    // url to SVG filter
+        | `url(${string})`
+        // <filter-function> values
+        | `blur(${CSSLength})`
+        | `brightness(${number})`
+        | `contrast(${number}%)`
+        | `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${keyof typeof colorConstants})`
+        | `grayscale(${number}%)`
+        | `hue-rotate(${number}deg)`
+        | `invert(${number}%)`
+        | `opacity(${number}%)`
+        | `saturate(${number}%)`
+        | `sepia(${number}%)`
+        // use no filter
+        | "none"
+    // multiple filters
+    ;
+    flex?:
+    // keyword values
+        | "none"
+        | "auto"
+        | "initial"
+        // One value, unitless number: flex-grow     flex-basis is then equal to 0.
+        | number
+        // One value, width/height: flex-basis
+        | CSSLength
+        // Two values, flex-grow and flex-basis
+        | `${number} ${CSSLength}`
+        // Two values, flex-grow and flex-shrink
+        | `${number} ${number}`
+        // Three values, flex-grow, flex-shrink and flex-basis
+        | `${number} ${number} ${CSSLength}`;
+    flexBasis?:
+    // Specify <width>
+        | "auto"
+        | CSSLength
+        // Intrinsic sizing keywords
+        | "min-content"
+        | "max-content"
+        | "fit-content"
+        // Automatically size based on flex item's content
+        | "content";
+    flexDirection?:
+    // The direction text is laid out in a line
+        | "row"
+        // Like <row>, but reversed
+        | "row-reverse"
+        // The direction in which lines of text are stacked
+        | "column"
+        // Like <column>, but reversed
+        | "column-reverse";
+    flexFlow?:
+    // flex-flow: <flex-direction>
+        | "row"
+        | "row-reverse"
+        | "column"
+        | "column-reverse"
+        // flex-flow: <flex-wrap>
+        | "nowrap"
+        | "wrap"
+        | "wrap-reverse"
+        // flex-flow: <flex-direction> and <flex-wrap>
+        | `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`;
+    flexGrow?: number;
+    flexShrink?: number;
+    flexWrap?:
+        | "nowrap" // Default value
+        | "wrap"
+        | "wrap-reverse";
+    floodColor?: keyof typeof colorConstants;
+    floodOpacity?: number | `${number}%`;
     font?: string | null;
-    fontFamily?: string | null;
-    fontFeatureSettings?: string | null;
-    fontSize?: string | null;
-    fontSizeAdjust?: string | null;
-    fontStretch?: string | null;
-    fontStyle?: string | null;
-    fontVariant?: string | null;
+    fontFamily?:
+    // generic family name only
+        | "serif"
+        | "sans-serif"
+        | "cursive"
+        | "fantasy"
+        | "monospace"
+        | "system-ui"
+        | "ui-serif"
+        | "ui-sans-serif"
+        | "ui-monospace"
+        | "ui-rounded"
+        | "emoji"
+        | "math"
+        | "fangsong"
+        // family name and generic family name
+        | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" | "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`;
+    fontFeatureSettings?:
+    // use default settings
+        | "normal"
+        | string
+        | `${string} ${"on" | "off" | number}`;
+    fontSize?:
+    // <absolute size values>
+        | "xx-small"
+        | "x-small"
+        | "small"
+        | "medium"
+        | "large"
+        | "x-large"
+        | "xx-large"
+        | "xxx-large"
+        // <relative size> values
+        | "larger"
+        | "smaller"
+        // <length> values | <percentage> values
+        | CSSLength
+        // math value
+        | "math";
+    fontSizeAdjust?:
+    // use the specified font size
+        | "none"
+        // Use a font size that makes lowercase
+        //    letters half the specified font size
+        | number
+        // Two values
+        | `${"ex-height" | "cap-height" | "ch-width" | "ic-width" | "ic-height"} ${number}`;
+    fontStretch?:
+    // keyword values
+        | "normal"
+        | "ultra-condensed"
+        | "extra-condensed"
+        | "condensed"
+        | "semi-condensed"
+        | "semi-expanded"
+        | "expanded"
+        | "extra-expanded"
+        | "ultra-expanded"
+        // percentage values
+        | `${number}%`;
+    fontStyle?:
+        | "normal"
+        | "italic"
+        | "oblique"
+        | `oblique ${number}deg`;
+    fontVariant?:
+        | "normal"
+        | "small-caps"
+        | "all-small-caps"
+        | "petite-caps"
+        | "all-petite-caps"
+        | "unicase"
+        | "titling-caps"
+        | "lining-nums"
+        | "oldstyle-nums"
+        | "proportional-nums"
+        | "tabular-nums"
+        | "diagonal-fractions"
+        | "stacked-fractions"
+        | "ordinal"
+        | "slashed-zero"
+        | "jis78"
+        | "jis83"
+        | "jis90"
+        | "jis04"
+        | "simplified"
+        | "traditional"
+        | "full-width"
+        | "proportional-width"
+        | "ruby";
     fontWeight?: string | number | null;
     glyphOrientationHorizontal?: string | null;
     glyphOrientationVertical?: string | null;
