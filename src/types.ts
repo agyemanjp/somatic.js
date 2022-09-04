@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {DigitNonZero, Obj} from "@agyemanjp/standard/utility"
-import {borderStyles, borderWidthValues, colorConstants} from "./common"
+import {borderStyles, borderWidthValues, colorConstants, cursorKeywords} from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> =
@@ -493,23 +493,33 @@ export interface CSSProperties {
         | "none"
         | string
         | `${string} ${number}`;
-    counterReset?: string | `${string} ${number}`;
+    counterReset?:
+        | "none"
+        | string
+        | `${string} ${number}`;
     cssFloat?: string | null;
     float?:
-    /*Keyword values*/
+    // Keyword values
         | "left"
         | "right"
         | "none"
         | "inline-start"
         | "inline-end";
     cssText?: string;
-    cursor?: string | null;
+    cursor?:
+    // Keyword values
+        | keyof typeof cursorKeywords
+        // url with mandatory keyword fallback
+        | `url(${string}), ${keyof typeof cursorKeywords}`
+        // url and coordinates with mandatory keyword fallback
+        | `url(${string}) ${number} ${number}, ${keyof typeof cursorKeywords}`
+    // urls and fallback urls, with mandatory keyword fallback;
     direction?:
-    /*Keyword values*/
+    // Keyword values
         | "ltr"
         | "rtl";
     display?:
-    /*precomposed values*/
+    // precomposed values
         | "block"
         | "inline"
         | "inline-block"
@@ -518,10 +528,10 @@ export interface CSSProperties {
         | "grid"
         | "inline-grid"
         | "flow-root"
-        /*box generation*/
+        // box generation
         | "none"
         | "contents"
-        /* two-value syntax */
+        // two-value syntax
         | "block flow"
         | "inline flow"
         | "inline flow-root"
@@ -530,13 +540,23 @@ export interface CSSProperties {
         | "block grid"
         | "inline grid"
         | "block flow-root"
-        /*other values*/
+        // other values
         | "table"
         | "table-row" /* all table elements have an equivalent CSS display value */
         | "list-item";
-    dominantBaseline?: string | null;
-    emptyCells?: string | null;
-    enableBackground?: string | null;
+    dominantBaseline?:
+        | "auto"
+        | "ideographic"
+        | "alphabetic"
+        | "hanging"
+        | "mathematical"
+        | "central"
+        | "middle"
+        | "text-after-edge"
+        | "text-before-edge"
+        | "text-top";
+    emptyCells?: "show" | "hide";// keyword values
+    enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`;
     fill?: string | null;
     fillOpacity?: string | null;
     fillRule?: string | null;
