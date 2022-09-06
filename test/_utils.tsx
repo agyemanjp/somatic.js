@@ -118,7 +118,7 @@ export const CommandBox: Component<CommandBoxProps> = function (props) {
 			borderWidth: "thin",
 			borderStyle: "solid",
 			cursor: "pointer"
-		}
+		} as CSSProperties
 	}
 	const {
 		orientation,
@@ -134,7 +134,7 @@ export const CommandBox: Component<CommandBoxProps> = function (props) {
 
 	const hoverStyle: CSSProperties = (hoverEffect === "invert"
 		? {
-			color: style.backgroundColor ?? style.background ?? defaultProps.style.backgroundColor,
+			color: style.backgroundColor ?? defaultProps.style.backgroundColor,
 			borderColor: style.backgroundColor ?? style.background ?? defaultProps.style.backgroundColor,
 			backgroundColor: style.color ?? defaultProps.style.color,
 		}
@@ -220,7 +220,7 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 				const itemElement = (ItemTemplate
 					? <ItemTemplate id={id} value={datum} index={index} selected={index === selectedIndex} />
 					: <div id={id} style={{ ...itemStyle, ...(index === selectedIndex) ? selectedItemStyle : {} }}>
-						{datum}
+						{datum as any}
 					</div>
 				) as UIElement
 

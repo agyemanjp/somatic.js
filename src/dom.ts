@@ -1,11 +1,11 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { keys, skip, hasValue, indexesOf, first } from "@agyemanjp/standard"
+import { keys, skip } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
-import { isEltProper, isIntrinsicElt } from "./element"
-import { svgTags, isEventKey, eventNames, booleanAttributes, attributeConversions } from "./common"
+import { isIntrinsicElt } from "./element"
+import { svgTags, isEventKey, booleanAttributes, attributeConversions } from "./common"
 import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
 
 export type LeafElement = IntrinsicElement | ValueElement
@@ -69,11 +69,8 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 				else {
 					// For string values, first set attribute using setAttribute, 
 					// for a few cases not handled properly by the assignment that follows
-					if (typeof effectiveVal === "string")
+					if (typeof effectiveVal === "string" || effectiveVal === true)
 						element.setAttribute(attribName, effectiveVal)
-
-					if (effectiveVal === true)
-						element.setAttribute(attribName, "")
 
 					// The <key> property on the element is set directly to <effectiveVal>. This approach works:
 					// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
@@ -100,7 +97,7 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
  * @returns A text DOM element when passed a primitive value
  */
 export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragment | Text {
-	if (isEltProper(eltUI)) {
+	if (isIntrinsicElt(eltUI)) {
 		const dom = svgTags.includes(eltUI.type.toUpperCase())
 			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
 			: eltUI.type === "" ? document.createDocumentFragment()
@@ -146,7 +143,7 @@ export function emptyContainer(container: Node) {
 	container.textContent = ""
 }
 
-function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
+/*function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
 	const parent = dom.parentNode
 	if (parent) {
 		const index = first(indexesOf(parent.childNodes.entries(), { value: dom }))
@@ -154,7 +151,7 @@ function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
 		fn(dom)
 		parent.insertBefore(dom, parent.childNodes.item(index))
 	}
-}
+}*/
 
 /** Get ids of peak DOM elements among a list of elements in a tree */
 export function getApexElementIds(elementIds: string[]): string[] {
