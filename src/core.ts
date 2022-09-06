@@ -13,7 +13,7 @@
 // import * as cuid from "cuid"
 import { String, hasValue } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
-import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM } from "./dom"
+import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented } from "./types"
 import { selfClosingTags } from "./common"
@@ -173,6 +173,12 @@ export function invalidateUI(invalidatedElementIds?: string[]) {
 
 /** Convenience method to mount the entry point dom node of a client app */
 export async function mountElement(element: UIElement, container: Element) {
+	// console.log(`Setting up UIInvalidated event listener on document`)
+	document.addEventListener('UIInvalidated', invalidationHandler)
+
+	container.replaceChildren(await renderAsync(element))
+}
+async function invalidationHandler(eventInfo: Event) {
 	/** Library-specific DOM update/refresh interval */
 	const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 14
 
@@ -182,36 +188,31 @@ export async function mountElement(element: UIElement, container: Element) {
 	// eslint-disable-next-line fp/no-let
 	let daemon: NodeJS.Timeout | undefined = undefined
 
-	// console.log(`Setting up UIInvalidated event listener on document`)
-	document.addEventListener('UIInvalidated', async (eventInfo) => {
-		// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
-		const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
-		// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
-		invalidatedElementIds.push(..._invalidatedElementIds)
-		// eslint-disable-next-line fp/no-mutation
-		if (daemon === undefined) daemon = setInterval(async () => {
-			if (invalidatedElementIds.length === 0 && daemon) {
-				clearInterval(daemon)
-				// eslint-disable-next-line fp/no-mutation
-				daemon = undefined
-			}
-			// eslint-disable-next-line fp/no-mutating-methods
-			const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
-			const topmostElementIds = getApexElementIds(idsToProcess)
-			await Promise.all(topmostElementIds.map(id => {
-				// console.log(`Updating "${id}" dom element...`)
-				const elt = document.getElementById(id)
-				if (elt)
-					updateAsync(elt as DOMAugmented)
-				else
-					console.trace(`DOM element to update (id ${id}) not found`)
+	// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
+	const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
+	// eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
+	invalidatedElementIds.push(..._invalidatedElementIds)
+	// eslint-disable-next-line fp/no-mutation
+	if (daemon === undefined) daemon = setInterval(async () => {
+		if (invalidatedElementIds.length === 0 && daemon) {
+			clearInterval(daemon)
+			// eslint-disable-next-line fp/no-mutation
+			daemon = undefined
+		}
+		// eslint-disable-next-line fp/no-mutating-methods
+		const idsToProcess = invalidatedElementIds.splice(0, invalidatedElementIds.length)
+		const topmostElementIds = getApexElementIds(idsToProcess)
+		await Promise.all(topmostElementIds.map(id => {
+			// console.log(`Updating "${id}" dom element...`)
+			const elt = document.getElementById(id)
+			if (elt)
+				updateAsync(elt as DOMAugmented)
+			else
+				console.trace(`DOM element to update (id ${id}) not found`)
 
-			}))
+		}))
 
-		}, DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
-	})
-
-	container.replaceChildren(await renderAsync(element))
+	}, DEFAULT_UPDATE_INTERVAL_MILLISECONDS)
 }
 
 /** Update children of an DOM element; has side effects */
@@ -238,9 +239,12 @@ export async function updateChildrenAsync(eltDOM: DOMElement | DocumentFragment,
 		return updated
 	}))
 
-	const fragment = new DocumentFragment()
-	fragment.append(...newChildren)
-	eltDOM.replaceChildren(fragment)
+	emptyContainer(eltDOM)
+	newChildren.forEach(_ => eltDOM.appendChild(_))
+
+	// const fragment = new DocumentFragment()
+	// fragment.append(...newChildren)
+	// eltDOM.replaceChildren(fragment)
 
 	return eltDOM
 }
