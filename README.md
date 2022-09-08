@@ -104,6 +104,7 @@ export const StackPanel: Component<PanelProps & HtmlProps> = function (props) {
 	</div>
 }
 ```
+<<<<<<< HEAD
 
 **A stateful async generator function component:**
 ```typescript
@@ -217,3 +218,5 @@ type ViewProps<T = unknown> = HtmlProps & PanelProps & {
 	onSelection?: (eventData: { selectedIndex: number }) => void
 }
 ```
+=======
+>>>>>>> 2b940d3 (Improved Readme)
