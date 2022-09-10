@@ -567,7 +567,7 @@ export interface CSSProperties {
         | `blur(${CSSLength})`
         | `brightness(${number})`
         | `contrast(${number}%)`
-        | `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${keyof typeof colorConstants})`
+        | `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
         | `grayscale(${number}%)`
         | `hue-rotate(${number}deg)`
         | `invert(${number}%)`
@@ -723,36 +723,222 @@ export interface CSSProperties {
         | "full-width"
         | "proportional-width"
         | "ruby";
-    fontWeight?: string | number | null;
-    glyphOrientationHorizontal?: string | null;
-    glyphOrientationVertical?: string | null;
-    height?: string | null;
-    imeMode?: string | null;
-    justifyContent?: string | null;
-    kerning?: string | null;
-    left?: string | number | null;
-    readonly length?: number;
-    letterSpacing?: string | null;
-    lightingColor?: string | null;
-    lineHeight?: string | null;
-    listStyle?: string | null;
-    listStyleImage?: string | null;
-    listStylePosition?: string | null;
-    listStyleType?: string | null;
-    margin?: string | number | null;
-    marginBottom?: string | number | null;
-    marginLeft?: string | number | null;
-    marginRight?: string | number | null;
-    marginTop?: string | number | null;
+    fontWeight?:
+    // keyword values
+        | "normal"
+        | "bold"
+        // keyword values relative to parent
+        | "bolder"
+        | "lighter"
+        // numeric keyword values
+        | "100"
+        | "200"
+        | "300"
+        | "400" // normal
+        | "500"
+        | "600"
+        | "700" // bold
+        | "800"
+        | "900";
+    glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
+    glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`;
+    height?:
+    // Keyword values
+        | "max-content"
+        | "min-content"
+        | `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength;
+    imeMode?:
+    // Keyword values
+        | "auto"
+        | "normal"
+        | "active"
+        | "inactive"
+        | "disabled";
+    justifyContent?:
+    // Positional alignment
+        | "center" // Pack items around the center
+        | "start" // Pack items from the start
+        | "end"     // Pack items from the end
+        | "flex-start" // Pack flex items from the start
+        | "flex-end"  // Pack flex items from the end
+        | "left"  // Pack items from the left
+        | "right"  // Pack items from the right
+        // Base alignment
+        // Justify-content does not take baseline values
+
+        // Normal alignment
+        | "normal"
+        // Distributed alignment
+        | "space-between" // Distribute items evenly The first item is flush with the start,
+        | "space-around" // Distribute items evenly Items have a half-size space on either end
+        | "space-evenly" // Distribute items evenly Items have equal space around them
+        | "stretch" // Distribute items evenly Stretch 'auto'-sized items to fit the container
+        // Overflow alignment
+        | "safe center"
+        | "unsafe center";
+    kerning?: "auto" | number | CSSLength;
+    left?: "auto" | CSSLength;
+    readonly length?: CSSLength;
+    letterSpacing?:
+    // keyword values
+        | "normal"
+        // <length> values
+        | CSSLength;
+    lightingColor?: CSSColor;
+    lineHeight?:
+    // keyword value
+        | "normal"
+        // unitless values
+        | number
+        | CSSLength;
+    listStyle?: "";
+    listStyleImage?:
+    // keyword value
+        | "none"
+        // url values
+        | `url(${string})`;
+    listStylePosition?: "inside" | "outside";
+    listStyleType?:
+    // keyword value
+        | "none"
+        // string value
+        | string
+        // types
+        | "disc"
+        | "circle"
+        | "square"
+        | "decimal"
+        | "cjk-decimal"
+        | "decimal-leading-zero"
+        | "lower-roman"
+        | "upper-roman"
+        | "lower-greek"
+        | "lower-alpha"
+        | "lower-latin"
+        | "upper-alpha"
+        | "upper-latin"
+        | "arabic-indic"
+        | "-moz-arabic-indic"
+        | "armenian"
+        | "bengali"
+        | "-moz-bengali"
+        | "cambodian"
+        | "khmer"
+        | "cjk-earthly-branch"
+        | "-moz-cjk-earthly-branch"
+        | "cjk-heavenly-stem"
+        | "-moz-cjk-heavenly-stem"
+        | "cjk-ideographic"
+        | "devanagari"
+        | "-moz-devanagari"
+        | "ethiopic-numeric"
+        | "georgian"
+        | "gujarati"
+        | "-moz-gujarati"
+        | "gurmukhi"
+        | "-moz-gurmukhi"
+        | "hebrew"
+        | "hiragana"
+        | "hiragana-iroha"
+        | "japanese-formal"
+        | "japanese-informal"
+        | "kannada"
+        | "-moz-kannada"
+        | "katakana"
+        | "katakana-iroha"
+        | "korean-hangul-formal"
+        | "korean-hanja-formal"
+        | "korean-hanja-informal"
+        | "lao"
+        | "-moz-lao"
+        | "lower-armenian"
+        | "malayalam"
+        | "-moz-malayalam"
+        | "mongolian"
+        | "myanmar"
+        | "-moz-myanmar"
+        | "oriya"
+        | "-moz-oriya"
+        | "persian"
+        | "-moz-persian"
+        | "simp-chinese-formal"
+        | "simp-chinese-informal"
+        | "tamil"
+        | "-moz-tamil"
+        | "telugu"
+        | "-moz-telugu"
+        | "thai"
+        | "-moz-thai"
+        | "tibetan"
+        | "trad-chinese-formal"
+        | "trad-chinese-informal"
+        | "upper-armenian"
+        | "disclosure-open"
+        | "disclosure-closed";
+    margin?:
+    // Apply to all four sides
+        | CSSLength
+        // vertical | horizontal
+        | `${CSSLength | "auto"} ${CSSLength | "auto"}`
+        // top | horizontal | bottom
+        | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`
+        // top | right | bottom | left
+        | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`;
+    marginBottom?:
+    // Length values
+        | CSSLength
+        // keyword values
+        | "auto";
+    marginLeft?:
+    // Length values
+        | CSSLength
+        // keyword values
+        | "auto";
+    marginRight?:
+    // Length values
+        | CSSLength
+        // keyword values
+        | "auto";
+    marginTop?:
+    // Length values
+        | CSSLength
+        // keyword values
+        | "auto";
     marker?: string | null;
     markerEnd?: string | null;
     markerMid?: string | null;
     markerStart?: string | null;
     mask?: string | null;
-    maxHeight?: string | null;
-    maxWidth?: string | null;
-    minHeight?: string | null;
-    minWidth?: string | null;
+    maxHeight?:
+    // Keyword values
+        | "max-content"
+        | "min-content"
+        | `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength;
+    maxWidth?:
+    // Keyword values
+        | "max-content"
+        | "min-content"
+        | `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength;
+    minHeight?:
+    // Keyword values
+        | "max-content"
+        | "min-content"
+        | `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength;
+    minWidth?:
+    // Keyword values
+        | "max-content"
+        | "min-content"
+        | `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength;
     msContentZoomChaining?: string | null;
     msContentZoomLimit?: string | null;
     msContentZoomLimitMax?: any;
@@ -800,25 +986,90 @@ export interface CSSProperties {
     msWrapFlow?: string;
     msWrapMargin?: any;
     msWrapThrough?: string;
-    opacity?: string | number | null;
+    opacity?: number | `${number}%`;
     order?: string | null;
-    orphans?: string | null;
-    outline?: string | null;
-    outlineColor?: string | null;
-    outlineStyle?: string | null;
-    outlineWidth?: string | null;
-    overflow?: string | null;
-    overflowX?: string | null;
-    overflowY?: string | null;
-    padding?: string | number | null;
-    paddingBottom?: string | number | null;
-    paddingLeft?: string | number | null;
-    paddingRight?: string | number | null;
-    paddingTop?: string | number | null;
-    pageBreakAfter?: string | null;
-    pageBreakBefore?: string | null;
-    pageBreakInside?: string | null;
-    perspective?: string | null;
+    orphans?: number;
+    outline?:
+    // style
+        | keyof typeof borderStyles
+        // color | style
+        | `${CSSColor} ${keyof typeof borderStyles}`
+        // style | width
+        | `${keyof typeof borderStyles} ${keyof typeof borderWidthValues}`
+        // color | style | width
+        | `${CSSColor} ${keyof typeof borderStyles} ${keyof typeof borderWidthValues}`;
+    outlineColor?:
+    // color values
+        | CSSColor
+        // keyword value
+        | "invert";
+    outlineStyle?: keyof typeof borderStyles;
+    outlineWidth?:
+    // keyword values
+        | keyof typeof borderWidthValues
+        // length values
+        | CSSLength;
+    overflow?:
+    // keyword values
+        | "visible"
+        | "hidden"
+        | "clip"
+        | "scroll"
+        | "auto";
+    overflowX?:
+    // keyword values
+        | "visible"
+        | "hidden"
+        | "clip"
+        | "scroll"
+        | "auto";
+    overflowY?:
+    // keyword values
+        | "visible"
+        | "hidden"
+        | "clip"
+        | "scroll"
+        | "auto";
+    padding?:
+    // Apply to all four sides
+        | CSSLength
+        // vertical | horizontal
+        | `${CSSLength} ${CSSLength}`
+        // top | horizontal | bottom
+        | `${CSSLength} ${CSSLength} ${CSSLength}`
+        // top | right | bottom | left
+        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`;
+    paddingBottom?: CSSLength;
+    paddingLeft?: CSSLength;
+    paddingRight?: CSSLength;
+    paddingTop?: CSSLength;
+    pageBreakAfter?:
+    // keyword values
+        | "auto"
+        | "always"
+        | "avoid"
+        | "left"
+        | "right"
+        | "recto"
+        | "verso";
+    pageBreakBefore?:
+    // keyword values
+        | "auto"
+        | "always"
+        | "avoid"
+        | "left"
+        | "right"
+        | "recto"
+        | "verso";
+    pageBreakInside?:
+    // keyword values
+        | "auto"
+        | "avoid";
+    perspective?:
+    // keyword values
+        | "none"
+        // length values
+        | CSSLength;
     perspectiveOrigin?: string | null;
     pointerEvents?: string | null;
     position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null;
@@ -1028,6 +1279,16 @@ export type CSSLengthUnit = (
     | "vh" // 1% of the viewport's height.
     | "vmin" // 1% of the viewport's smaller dimension.
     | "vmax" // 1% of the viewport's larger dimension.
+    )
+
+export type CSSColor = (
+    | null
+    | keyof typeof colorConstants
+    | "currentcolor"
+    | "transparent"
+    | `#${string}`
+    | `rgb(${number},${number},${number})`
+    | `rgba(${number}, ${number}, ${number}, ${number})`
     )
 
 type SpaceRepeated<S extends string, Max extends DigitNonZero> = Max extends 1 ? S : S | `${S} ${SpaceRepeated<S, Dec<Max>>}`
