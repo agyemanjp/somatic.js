@@ -1346,39 +1346,148 @@ export interface CSSProperties {
         // length values
         | CSSLength;
     perspectiveOrigin?: string | null;
-    pointerEvents?: string | null;
+    pointerEvents?:
+    // keyword values
+        | "auto"
+        | "none"
+        | "visiblePainted"
+        | "visibleFill"
+        | "visibleStroke"
+        | "visible"
+        | "painted"
+        | "fill"
+        | "stroke"
+        | "all";
     position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null;
-    quotes?: string | null;
-    right?: string | number | null;
-    rubyAlign?: string | null;
+    quotes?:
+    // keyword value
+        | "none"
+        | "auto"
+        // string values
+        | `${string} ${string}`
+        | `${string} ${string} ${string} ${string}`;
+    right?: "auto" | CSSLength;
+    rubyAlign?:
+    // keyword values
+        | "start"
+        | "center"
+        | "space-between"
+        | "space-around";
     rubyOverhang?: string | null;
-    rubyPosition?: string | null;
-    stopColor?: string | null;
-    stopOpacity?: string | null;
+    rubyPosition?:
+    // keyword values
+        | "over"
+        | "under"
+        | "alternate"
+        | "inter-character";
+    stopColor?: "currentColor" | CSSColor;
+    stopOpacity?: number;
     stroke?: string | null;
-    strokeDasharray?: string | null;
-    strokeDashoffset?: string | null;
-    strokeLinecap?: string | null;
-    strokeLinejoin?: string | null;
-    strokeMiterlimit?: string | number | null;
-    strokeOpacity?: string | null;
-    strokeWidth?: string | number | null;
-    tableLayout?: string | null;
-    textAlign?: string | null;
-    textAlignLast?: string | null;
-    textAnchor?: string | null;
+    strokeDasharray?:
+    // keyword value
+        | "none"
+        | "inherit"
+        // length values
+        | `${CSSLength}`
+        | `${CSSLength} ${CSSLength}`
+        | `${CSSLength} ${CSSLength} ${CSSLength}`
+        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`;
+    strokeDashoffset?: CSSLength;
+    strokeLinecap?: "butt" | "round" | "square";
+    strokeLinejoin?: "miter" | "round" | "bevel" | "arcs" | "miter-clip"
+    strokeMiterlimit?: number;
+    strokeOpacity?: `${number}%`;
+    strokeWidth?: CSSLength;
+    tableLayout?: "auto" | "fixed";
+    textAlign?:
+    // keyword values
+        | "start"
+        | "end"
+        | "left"
+        | "right"
+        | "center"
+        | "justify"
+        | "justify-all"
+        | "match-parent"
+        | string;
+
+    textAlignLast?:
+    // keyword values
+        | "auto"
+        | "start"
+        | "end"
+        | "left"
+        | "right"
+        | "center"
+        | "justify";
+    textAnchor?: "start" | "middle" | "end";
     textDecoration?: string | null;
-    textIndent?: string | number | null;
-    textJustify?: string | null;
+    textIndent?:
+    // keyword values
+        | `${CSSLength} ${"hanging" | "each-line" | `${"each-line" | "hanging"} ${"each-line" | "hanging"}`}`
+        | CSSLength;
+    textJustify?:
+        | "auto"
+        | "none"
+        | "inter-word"
+        | "inter-character";
     textKashida?: string | null;
     textKashidaSpace?: string | null;
-    textOverflow?: string | null;
-    textShadow?: string | null;
-    textTransform?: string | null;
-    textUnderlinePosition?: string | null;
-    top?: string | number | null;
-    touchAction?: string | null;
-    transform?: string | null;
+    textOverflow?: "clip" | "ellipsis";
+    textShadow?:
+    // offset-x | offset-y | blur-radius | color
+        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor}`
+        // color | offset-x | offset-y | blur-radius
+        | `${CSSColor} ${CSSLength} ${CSSLength} ${CSSLength}`
+        // offset-x | offset-y | color
+        | `${CSSLength} ${CSSLength} ${CSSColor}`
+        // color | offset-x | offset-y
+        | `${CSSColor} ${CSSLength} ${CSSLength}`
+        // offset-x | offset-y
+        | `${CSSLength} ${CSSLength}`;
+    textTransform?:
+    // keyword values
+        | "none"
+        | "capitalize"
+        | "uppercase"
+        | "lowercase"
+        | "full-width"
+        | "full-size-kana";
+    textUnderlinePosition?:
+    // single keyword
+        | "auto"
+        | "under"
+        | "left"
+        | "right"
+        // multiple keywords
+        | `${"auto" | "under" | "left" | "right"} ${"auto" | "under" | "left" | "right"}`;
+    top?: "auto" | CSSLength;
+    touchAction?:
+    // keyword values
+        | "auto"
+        | "none"
+        | "pan-x"
+        | "pan-left"
+        | "pan-right"
+        | "pan-y"
+        | "pan-up"
+        | "pan-down"
+        | "pinch-zoom"
+        | "manipulation";
+    transform?:
+    // keyword value
+        | "none"
+        // function values
+        | `matrix(${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
+        | `matrix3d(${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
+        | `perspective(${CSSLength})`
+        | `rotate(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotate3d(${number},${number},${number},${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotateX(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotateY(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotateZ(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `translate(${CSSLength | `${CSSLength},${CSSLength}`})`
+        | `translate3d(${CSSLength} ${CSSLength} ${CSSLength})`;
     transformOrigin?: string | null;
     transformStyle?: string | null;
     transition?: string | null;
