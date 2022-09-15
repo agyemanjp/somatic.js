@@ -1212,17 +1212,88 @@ export interface CSSProperties {
         | `rotateY(${number}${"deg" | "grad" | "rad" | "turn"})`
         | `rotateZ(${number}${"deg" | "grad" | "rad" | "turn"})`
         | `translate(${CSSLength | `${CSSLength},${CSSLength}`})`
-        | `translate3d(${CSSLength} ${CSSLength} ${CSSLength})`;
-    transformOrigin?: string | null;
-    transformStyle?: string | null;
-    transition?: string | null;
-    transitionDelay?: string | null;
-    transitionDuration?: string | null;
-    transitionProperty?: string | null;
-    transitionTimingFunction?: string | null;
-    unicodeBidi?: string | null;
-    verticalAlign?: string | null;
-    visibility?: string | null;
+        | `translate3d(${CSSLength} ${CSSLength} ${CSSLength})`
+        | `translateX(${CSSLength})`
+        | `translateY(${CSSLength})`
+        | `translateZ(${CSSLength})`
+        | `scale(${number | `${number}%`}, ${number | `${number}%`})`
+        | `scale3d(${number}, ${number},${number})`
+        | `scaleX(${number})`
+        | `scaleY(${number})`
+        | `scaleZ(${number})`
+        | `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
+        | `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`;
+    transformOrigin?:
+    // One value syntax
+        | CSSLength
+        | "left"
+        | "right"
+        | "center"
+        | "bottom"
+        // x-offset | y-offset
+        | `${CSSLength} ${CSSLength}`
+        //x-offset-keyword | y-offset
+        | `${"left" | "right" | "center"} ${CSSLength}`
+        //x-offset-keyword | y-offset-keyword
+        | `${"left" | "right" | "center"} ${"top" | "bottom" | "center"}`
+        // y-offset-keyword | x-offset-keyword
+        | `${"top" | "bottom" | "center"} ${"left" | "right" | "center"}`
+        // x-offset | y-offset | z-offset
+        | `${CSSLength} ${CSSLength} ${CSSLength}`
+        // x-offset-keyword | y-offset | z-offset
+        | `${"left" | "right" | "center"} ${CSSLength} ${CSSLength}`
+        //x-offset-keyword | y-offset-keyword | z-offset
+        | `${"left" | "right" | "center"} ${"top" | "bottom" | "center"} ${CSSLength}`
+        // y-offset-keyword | x-offset-keyword | z-offset
+        | `${"top" | "bottom" | "center"} ${"left" | "right" | "center"} ${CSSLength}`;
+
+    transformStyle?: "flat" | "preserve-3d";
+    transition?:
+    // Apply to 1 property
+    //  property name | duration
+        | `${string} ${CSSTime}`
+        // property name | duration | delay
+        | `${string} ${CSSTime} ${CSSTime}`
+        // property name | duration | easing function
+        | `${string} ${CSSTime} ${CSSEasingFunction}`
+        // property name | duration | easing function | delay
+        | `${string} ${CSSTime} ${CSSEasingFunction} ${CSSTime}`
+        // Apply to all changed properties
+        | `all ${CSSTime} ${CSSEasingFunction}`;
+    transitionDelay?: CSSTime | `${CSSTime}, ${CSSTime}`;
+    transitionDuration?: CSSTime | `${CSSTime} ,${CSSTime}` | `${CSSTime}, ${CSSTime},${CSSTime}`;
+    transitionProperty?:
+    // keyword values
+        | "none"
+        | "all"
+        | string;
+    transitionTimingFunction?: CSSEasingFunction;
+    unicodeBidi?:
+    // keyword values
+        | "normal"
+        | "embed"
+        | "isolate"
+        | "bidi-override"
+        | "isolate-override"
+        | "plaintext";
+    verticalAlign?:
+    // keyword values
+        | "baseline"
+        | "sub"
+        | "super"
+        | "text-top"
+        | "text-bottom"
+        | "middle"
+        | "top"
+        | "bottom"
+        // length & percentage values
+        | CSSLength;
+    visibility?:
+    // keyword values
+        | "visible"
+        | "hidden"
+        | "collapse";
     webkitAlignContent?: string | null;
     webkitAlignItems?: string | null;
     webkitAlignSelf?: string | null;
@@ -1291,15 +1362,51 @@ export interface CSSProperties {
     webkitUserModify?: string | null;
     webkitUserSelect?: string | null;
     webkitWritingMode?: string | null;
-    whiteSpace?: string | null;
-    widows?: string | null;
-    width?: string | null;
-    wordBreak?: string | null;
-    wordSpacing?: string | null;
+    whiteSpace?:
+    // keyword values
+        | "normal"
+        | "nowrap"
+        | "pre"
+        | "pre-wrap"
+        | "pre-line"
+        | "break-spaces";
+    widows?: number;
+    width?:
+    // keyword values
+        | "auto"
+        | "max-content"
+        | "min-content"
+        | `fit-content(${CSSLength})`
+        | CSSLength;
+    wordBreak?:
+    // keyword values
+        | "normal"
+        | "break-all"
+        | "keep-all"
+        | "break-word";
+    wordSpacing?:
+    // keyword values
+        | "normal"
+        | CSSLength;
     wordWrap?: string | null;
-    writingMode?: string | null;
-    zIndex?: string | number | null;
-    zoom?: string | null;
+    writingMode?:
+    // keyword values
+        | "horizontal-tb"
+        | "vertical-rl"
+        | "vertical-lr";
+    zIndex?:
+    // keyword values
+        | "auto"
+        // integer values
+        | number;
+    zoom?:
+    // keyword values
+        | "normal"
+        | "reset"
+// percentage values
+        | `${number}%`
+        // number values
+        | number;
 
     /** A shorthand property for the grid-template-rows, grid-template-columns, grid-template-areas, grid-auto-rows, grid-auto-columns, and the grid-auto-flow properties */
     grid?: string
@@ -1364,6 +1471,24 @@ export interface CSSProperties {
      */
     gap?: CSSLength | `${CSSLength} ${CSSLength}` | "normal" | "initial" | "inherit"
 }
+
+export type CSSEasingFunction =
+    "linear"
+    | `linear(${number | CSSLength})`
+    | "ease"
+    | "ease-in"
+    | "ease-out"
+    | "ease-in-out"
+    | "step-start"
+    | "step-end"
+    | `steps(${number} ${"start" | "end" | "jump-start" | "jump-end" | "jump-both" | "jump-none"})`
+    | `cubic-bezier(${number},${number},${number},${number})`;
+
+export type CSSTime = `${number}${CSSTimeUnit}`
+export type CSSTimeUnit = (
+    | "ms"
+    | "s"
+    )
 
 export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
 export type CSSLength = `${number}${CSSLengthUnit}`;
