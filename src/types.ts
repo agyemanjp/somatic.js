@@ -1683,30 +1683,31 @@ export interface CSSProperties {
         // number values
         | number;
 
-	/** Either specifies a name for the grid item,  or this property is a shorthand property for the
-	 * grid-row-start, grid-column-start, grid-row-end, and grid-column-end properties
-	 */
-	gridArea?: string
-
-	/** Defines on which row-line a grid item will start */
-	gridRowStart?:
-		| "auto" // Default value. The item will be placed following the flow
-		| `span ${number}` // the number of rows the item will span
-		| number // row line
-		| "inherit"
-		| "initial"
-		| "revert"
-		| "unset"
-
-	/** Defines on which column-line a grid item will start. */
-	gridColumnStart?:
-		| "auto" // Default value. The item will be placed following the flow
-		| `span ${number}` // the number of columns the item will span
-		| number // column-line
-		| "inherit"
-		| "initial"
-		| "revert"
-		| "unset"
+    /** Either specifies a name for the grid item,  or this property is a shorthand property for the
+     * grid-row-start, grid-column-start, grid-row-end, and grid-column-end properties
+     */
+    gridArea?:
+    // keyword values
+        | "auto"
+        | "auto/auto"
+        | "auto/auto/auto"
+        | "auto/auto/auto/auto"
+        // custom-ident values
+        | string
+        | `${string} / ${string}`
+        // integer && custom-ident? values
+        | `${number} ${string}`
+        | `${number} ${string} / ${number} ${string}`
+        // span && [ <integer> || <custom-ident> ] values
+        | `span ${number}`
+        | `span ${number}/ span ${string}`
+        | `${number} span / ${string} span`;
+    /** Defines on which row-line a grid item will start */
+    gridRowStart?:
+        | "auto" // Default value. The item will be placed following the flow
+        | `span ${number}` // the number of rows the item will span
+        | number // row line
+        | "inherit" | "initial" | "revert" | "unset"
 
 	/** Defines how many rows a grid item will span, or on which row-line the item will end */
 	gridRowEnd?:
@@ -1740,21 +1741,30 @@ export interface CSSProperties {
 		| number
 		| `span ${number}`}`
 
-	/** Specifies the size of the columns, and how many columns in a grid layout */
-	gridTemplateColumns?: string
 
-	/** Specifies the size of the rows in a grid layout */
-	gridTemplateRows?: string
+    /** Specifies the size of the columns, and how many columns in a grid layout */
+    gridTemplateColumns?:
+        | "none"
+        | `${CSSLength} ${number}fr`
+        | `[ ${string} ] ${CSSLength}`
+        | `[${string}] ${CSSLength} [${string} ${string}]`
+        | `minmax(${CSSLength},${number}fr)`
+        | `repeat(${number},${CSSLength})`
+        | `fit-content(${number}%)`
+        | "subgrid"
+        | "masonry";
 
-	/** A shorthand property for the grid-template-rows, grid-template-columns and grid-areas properties
-	 * Default is none
-	 */
-	gridTemplate?:
-		| `${string} / ${string}}`
-		| SpaceRepeated<string | ".", 9>
-		| "none"
-		| "initial"
-		| "inherit"
+    /** Specifies the size of the rows in a grid layout */
+    gridTemplateRows?:
+        | "none"
+        | `${CSSLength} ${number}fr`
+        | `[ ${string} ] ${CSSLength}`
+        | `[${string}] ${CSSLength} [${string} ${string}]`
+        | `minmax(${CSSLength},${number}fr)`
+        | `repeat(${number},${CSSLength})`
+        | `fit-content(${number}%)`
+        | "subgrid"
+        | "masonry";
 
 	/** Specifies the gap between the grid rows */
 	rowGap?: CSSLength | "normal" | "initial" | "inherit" | "unset" | "revert"
