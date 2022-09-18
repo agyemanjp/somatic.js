@@ -151,7 +151,11 @@ export interface CSSProperties {
         // Positional alignment
         //align-self does not take left and right values
         | "bottom";
-    animation?: string | null;
+    animation?:
+    //@keyframes duration | easing-function | delay |
+    //iteration-count | direction | fill-mode | play-state | name
+        | `${CSSTime} ${CSSEasingFunction} ${CSSTime} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`;
+    s
     animationDelay?: string | null;
     animationDirection?: | "normal" | "reverse" | "alternate" | "alternate-reverse";
     animationDuration?: string | null;
