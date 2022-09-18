@@ -1414,8 +1414,22 @@ export interface CSSProperties {
     /** Either specifies a name for the grid item,  or this property is a shorthand property for the
      * grid-row-start, grid-column-start, grid-row-end, and grid-column-end properties
      */
-    gridArea?: string
-
+    gridArea?:
+    // keyword values
+        | "auto"
+        | "auto/auto"
+        | "auto/auto/auto"
+        | "auto/auto/auto/auto"
+        // custom-ident values
+        | string
+        | `${string} / ${string}`
+        // integer && custom-ident? values
+        | `${number} ${string}`
+        | `${number} ${string} / ${number} ${string}`
+        // span && [ <integer> || <custom-ident> ] values
+        | `span ${number}`
+        | `span ${number}/ span ${string}`
+        | `${number} span / ${string} span`;
     /** Defines on which row-line a grid item will start */
     gridRowStart?:
         | "auto" // Default value. The item will be placed following the flow
@@ -1431,10 +1445,10 @@ export interface CSSProperties {
         | "inherit" | "initial" | "revert" | "unset"
 
     /** Defines how many rows a grid item will span, or on which row-line the item will end */
-    gridRowEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+    gridRowEnd?: "auto" | string | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
 
     /** Defines how many columns a grid item will span, or on which column-line the item will end */
-    gridColumnEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+    gridColumnEnd?: "auto" | number | `${string} ${number}` | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
 
     /** A shorthand property for the grid-row-start and the grid-row-end properties */
     gridRow?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
@@ -1443,10 +1457,28 @@ export interface CSSProperties {
     gridColumn?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
 
     /** Specifies the size of the columns, and how many columns in a grid layout */
-    gridTemplateColumns?: string;
+    gridTemplateColumns?:
+        | "none"
+        | `${CSSLength} ${number}fr`
+        | `[ ${string} ] ${CSSLength}`
+        | `[${string}] ${CSSLength} [${string} ${string}]`
+        | `minmax(${CSSLength},${number}fr)`
+        | `repeat(${number},${CSSLength})`
+        | `fit-content(${number}%)`
+        | "subgrid"
+        | "masonry";
 
     /** Specifies the size of the rows in a grid layout */
-    gridTemplateRows?: string;
+    gridTemplateRows?:
+        | "none"
+        | `${CSSLength} ${number}fr`
+        | `[ ${string} ] ${CSSLength}`
+        | `[${string}] ${CSSLength} [${string} ${string}]`
+        | `minmax(${CSSLength},${number}fr)`
+        | `repeat(${number},${CSSLength})`
+        | `fit-content(${number}%)`
+        | "subgrid"
+        | "masonry";
 
     /** A shorthand property for the grid-template-rows, grid-template-columns and grid-areas properties
      * Default is none
