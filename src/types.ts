@@ -170,7 +170,6 @@ export interface CSSProperties {
     //@keyframes duration | easing-function | delay |
     //iteration-count | direction | fill-mode | play-state | name
         | `${CSSTime} ${CSSEasingFunction} ${CSSTime} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`;
-    s
     animationDelay?: string | null;
     animationDirection?: | "normal" | "reverse" | "alternate" | "alternate-reverse";
     animationDuration?: string | null;
@@ -594,9 +593,7 @@ export interface CSSProperties {
         | `saturate(${number}%)`
         | `sepia(${number}%)`
         // use no filter
-        | "none"
-    // multiple filters
-    ;
+        | "none";
     flex?:
     // keyword values
         | "none"
