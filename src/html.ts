@@ -1,6 +1,6 @@
 import { Obj, keys, toDashCase } from "@agyemanjp/standard"
 import { HTMLAttributes, CSSProperties } from "./types"
-import { booleanAttributes, attributeConversions, stringify } from "./common"
+import { booleanAttributes, attributeConversions } from "./common"
 
 /** Converts an attributes property object to a string */
 export function stringifyAttributes<E>(props: HTMLAttributes<any> & E): string {
@@ -135,3 +135,13 @@ export function encodeHTML(str: string): string {
 		}
 	};
 */
+
+
+/*export const encodeHTMLEntities = (s: string) => s.replace(/[\u00A0-\u9999<>&]/g, i => '&#' + i.charCodeAt(0) + ';')
+export const decodeHTMLEntities = (str: string) => {
+	if (str && typeof str === 'string') {
+		str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
+		str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '')
+	}
+	return str
+}*/

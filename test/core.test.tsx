@@ -7,8 +7,9 @@ import { expect, use } from "chai"
 import * as chaiHTML from "chai-html"
 const cleanup = require('jsdom-global')()
 
-import { IntrinsicElement, DOMAugmented, Component, UIElement, CSSProperties } from '../dist/types'
+import { IntrinsicElement, DOMAugmented, Component, CSSProperties } from '../dist/types'
 import { createElement, renderAsync, renderToIntrinsicAsync, renderToStringAsync, updateChildrenAsync, applyLeafElementAsync, updateAsync, mountElement } from '../dist/core'
+
 import { isComponentElt, normalizeChildren, isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
 import { isAugmentedDOM, isTextDOM, createDOMShallow, updateDomShallow } from '../dist/dom'
 import { StackPanel, CommandBox, View } from '../dist/components'
