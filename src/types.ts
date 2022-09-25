@@ -174,16 +174,12 @@ export interface CSSProperties {
         | `steps(${number},${'jump-start' | 'jump-end' | 'jump-none' | 'jump-both' | 'start' | 'end'})`;
     backfaceVisibility?: "visible" | "hidden";
     background?:
-        | keyof typeof colorConstants
-        | `border-box ${keyof typeof colorConstants}`;
+        | CSSColor
+        | `border-box ${CSSColor}`;
     backgroundAttachment?: | "scroll" | "fixed" | "local";
     backgroundClip?: "border-box" | "padding-box" | "content-box" | "text";
     backgroundColor?:
-        | keyof typeof colorConstants
-        | "currentcolor"
-        | "transparent"
-        | `rgb(${number},${number},${number})`
-        | `rgba(${number},${number},${number},${number})`
+        | CSSColor
         | `hsl(${number}, ${CSSLength}, ${CSSLength})`
         | `hsla(${number}, ${CSSLength}, ${CSSLength},${number})`;
     backgroundImage?: `url(${string})`;
@@ -230,12 +226,7 @@ export interface CSSProperties {
         | "super";
     border?: string | null;
     borderBottom?: CSSLength;
-    borderBottomColor?:
-        | keyof typeof colorConstants
-        | `rgb(${number},${number},${number})`
-        | `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
-        | "currentcolor"
-        | "transparent";
+    borderBottomColor?: CSSColor;
     borderBottomLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
     borderBottomRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
     borderBottomStyle?: keyof typeof borderStyles;
@@ -248,9 +239,9 @@ export interface CSSProperties {
     // Keyword values
         | "collapse"
         | "separate";
-    borderColor?: keyof typeof colorConstants;
+    borderColor?: CSSColor;
     borderImage?:
-        | `linear-gradient(${keyof typeof colorConstants}, ${keyof typeof colorConstants}) ${number}`
+        | `linear-gradient(${CSSColor}, ${CSSColor}) ${number}`
         | `url(${string}) ${number} ${string}`;
     //| `linear-gradient(${keyof typeof colorConstants}, ${keyof typeof colorConstants} ${number}/${CSSLength}`;
     borderImageOutset?:
@@ -283,12 +274,7 @@ export interface CSSProperties {
     borderLeft?:
         | CSSLength
         | `${CSSLength} ${string}`;
-    borderLeftColor?:
-        | keyof typeof colorConstants
-        | `rgb(${number},${number},${number})`
-        | `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
-        | "currentcolor"
-        | "transparent";
+    borderLeftColor?: CSSColor;
     borderLeftStyle?:
     // Keyword values
         | keyof typeof borderStyles;
@@ -307,12 +293,7 @@ export interface CSSProperties {
     borderRight?:
         | CSSLength
         | `${CSSLength} ${string}`;
-    borderRightColor?:
-        | keyof typeof colorConstants
-        | `rgb(${number},${number},${number})`
-        | `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
-        | "currentcolor"
-        | "transparent";
+    borderRightColor?: CSSColor;
     borderRightStyle?:
     // Keyword values
         | keyof typeof borderStyles;
@@ -333,12 +314,7 @@ export interface CSSProperties {
         | CSSLength
         | keyof typeof borderWidthValues
         | keyof typeof borderStyles;
-    borderTopColor?:
-        | keyof typeof colorConstants
-        | `rgb(${number},${number},${number})`
-        | `hsla(${CSSLength},${CSSLength},${CSSLength},${number})`
-        | "currentcolor"
-        | "transparent";
+    borderTopColor?: CSSColor;
     borderTopLeftRadius?:
         | CSSLength
         | `${CSSLength} ${CSSLength}`;
@@ -445,12 +421,7 @@ export interface CSSProperties {
     clipRule?: "nonezero" | "evenodd" | "inherit"
     color?:
     // Keyword values
-        | "currentcolor"
-        // <named-color> values
-        | keyof typeof colorConstants
-        // rgb() values
-        | `rgb(${number}, ${number}, ${number})`
-        | `rgba(${number}, ${number}, ${number},${number})`
+        | CSSColor
         // hsl() values
         | `hsl(${CSSLength}, ${CSSLength}, ${CSSLength})`
         | `hsla(${CSSLength}, ${CSSLength}, ${CSSLength},${number})`
@@ -466,13 +437,11 @@ export interface CSSProperties {
         | "balance-all";
     columnRule?:
         | keyof typeof borderStyles
-        | `${keyof typeof borderStyles} ${keyof typeof colorConstants}`
+        | `${keyof typeof borderStyles} ${CSSColor}`
         | `${keyof typeof borderStyles} ${CSSLength}`;
     columnRuleColor?:
-        | keyof typeof colorConstants
-        | `rgb(${number},${number},${number})`
-        | `hsla(${number}, ${CSSLength}, ${CSSLength}, ${number})`
-        | "transparent";
+        | CSSColor
+        | `hsla(${number}, ${CSSLength}, ${CSSLength}, ${number})`;
     columnRuleStyle?: keyof typeof borderStyles;
     columnRuleWidth?:
     // Keyword values
@@ -631,7 +600,7 @@ export interface CSSProperties {
         | "nowrap" // Default value
         | "wrap"
         | "wrap-reverse";
-    floodColor?: keyof typeof colorConstants;
+    floodColor?: CSSColor;
     floodOpacity?: number | `${number}%`;
     font?: string | null;
     fontFamily?:
@@ -732,15 +701,15 @@ export interface CSSProperties {
         | "bolder"
         | "lighter"
         // numeric keyword values
-        | "100"
-        | "200"
-        | "300"
-        | "400" // normal
-        | "500"
-        | "600"
-        | "700" // bold
-        | "800"
-        | "900";
+        | 100
+        | 200
+        | 300
+        | 400 // normal
+        | 500
+        | 600
+        | 700 // bold
+        | 800
+        | 900;
     glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
     glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`;
     height?:
@@ -880,11 +849,12 @@ export interface CSSProperties {
         | "disclosure-closed";
     margin?:
     // Apply to all four sides
+        | number
         | CSSLength
         // vertical | horizontal
-        | `${CSSLength | "auto"} ${CSSLength | "auto"}`
+        | `${CSSLength | "auto" | number} ${CSSLength | "auto" | number}`
         // top | horizontal | bottom
-        | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`;
+        | `${CSSLength | "auto" | number} ${CSSLength | "auto" | number} ${CSSLength | "auto" | number}`;
     // top | right | bottom | left
     // | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`;
     marginBottom?:
@@ -1033,6 +1003,7 @@ export interface CSSProperties {
         | "auto";
     padding?:
     // Apply to all four sides
+        | number
         | CSSLength
         // vertical | horizontal
         | `${CSSLength} ${CSSLength}`
