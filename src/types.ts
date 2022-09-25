@@ -585,7 +585,7 @@ export interface CSSProperties {
         | `blur(${CSSLength})`
         | `brightness(${number})`
         | `contrast(${number}%)`
-        | `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
+        //| `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
         | `grayscale(${number}%)`
         | `hue-rotate(${number}deg)`
         | `invert(${number}%)`
@@ -899,9 +899,9 @@ export interface CSSProperties {
         // vertical | horizontal
         | `${CSSLength | "auto"} ${CSSLength | "auto"}`
         // top | horizontal | bottom
-        | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`
-        // top | right | bottom | left
-        | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`;
+        | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`;
+    // top | right | bottom | left
+    // | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`;
     marginBottom?:
     // Length values
         | CSSLength
@@ -1176,16 +1176,16 @@ export interface CSSProperties {
     textKashidaSpace?: string | null;
     textOverflow?: "clip" | "ellipsis";
     textShadow?:
-    // offset-x | offset-y | blur-radius | color
-        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor}`
-        // color | offset-x | offset-y | blur-radius
-        | `${CSSColor} ${CSSLength} ${CSSLength} ${CSSLength}`
-        // offset-x | offset-y | color
         | `${CSSLength} ${CSSLength} ${CSSColor}`
         // color | offset-x | offset-y
         | `${CSSColor} ${CSSLength} ${CSSLength}`
         // offset-x | offset-y
         | `${CSSLength} ${CSSLength}`;
+    // offset-x | offset-y | blur-radius | color
+    // | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor}`
+    // color | offset-x | offset-y | blur-radius
+    //| `${CSSColor} ${CSSLength} ${CSSLength} ${CSSLength}`
+    // offset-x | offset-y | color;
     textTransform?:
     // keyword values
         | "none"
