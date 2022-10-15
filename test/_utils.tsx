@@ -287,8 +287,8 @@ export type ViewProps<T = unknown> = HtmlProps & PanelProps & {
 
 	children?: never[]
 
-	/** Selection options, or undefined/null if disabled 
-	 * Mode indicates method of selection 
+	/** Selection options, or undefined/null if disabled
+	 * Mode indicates method of selection
 	 */
 	selectionMode?: "none" | "click" | "check" | "click-or-check"
 	onSelection?: (eventData: { selectedIndex: number }) => void
