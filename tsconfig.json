@@ -28,8 +28,6 @@
 		"incremental": true,
 		"outDir": "./dist"
 	},
-	"include": [
-		"./src",
-	],
-	"exclude": []
+	"include": ["./src"],
+	"exclude": ["./node_modules"]
 }
