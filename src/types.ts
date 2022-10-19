@@ -4,7 +4,8 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Obj, Digit, DigitNonZero } from "@agyemanjp/standard/utility"
+import { Obj, Repeat, UnionOfRepeats, DigitNonZero, Digit } from "@agyemanjp/standard/utility"
+import { colorConstants } from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> = ((props: P & { children?: Children, key?: string }/*, extra: { invalidate: () => void }*/) =>
@@ -103,7 +104,7 @@ export interface CSSProperties {
 	background?: string | null;
 	backgroundAttachment?: string | null;
 	backgroundClip?: string | null;
-	backgroundColor?: string | null;
+	backgroundColor?: CSSColor;
 	backgroundImage?: string | null;
 	backgroundOrigin?: string | null;
 	backgroundPosition?: string | null;
@@ -156,7 +157,7 @@ export interface CSSProperties {
 	clip?: string | null;
 	clipPath?: string | null;
 	clipRule?: string | null;
-	color?: string | null;
+	color?: CSSColor;
 	colorInterpolationFilters?: string | null;
 	columnCount?: any;
 	columnFill?: string | null;
@@ -461,7 +462,7 @@ export interface CSSProperties {
 	/** A shorthand property for the grid-template-rows, grid-template-columns and grid-areas properties 
 	 * Default is none
 	 */
-	gridTemplate?: `${string} / ${string}}` | SpaceRepeated<string | ".", 9> | "none" | "initial" | "inherit"
+	gridTemplate?: `${string} / ${string}}` | UnionOfRepeats<string | ".", 9, " "> | "none" | "initial" | "inherit"
 
 	/** Specifies the gap between the grid rows */
 	rowGap?: CSSLength | "normal" | "initial" | "inherit" | "unset" | "revert"
@@ -473,7 +474,7 @@ export interface CSSProperties {
 	 * Either a single CSS length value to both row and column gap
 	 * Or two CSS length values specifying the grid-row-gap grid-column-gap
 	 */
-	gridGap?: SpaceRepeated<CSSLength, 2> | "normal" | "initial" | "inherit" | "unset" | "revert"
+	gridGap?: UnionOfRepeats<CSSLength, 2, " "> | "normal" | "initial" | "inherit" | "unset" | "revert"
 
 	/** A shorthand property for the row-gap and the column-gap properties
 	 * Either a single CSS length value for both row and column gap
@@ -483,7 +484,18 @@ export interface CSSProperties {
 }
 
 export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
+
+export type CSSColor = (
+	| null
+	| keyof typeof colorConstants
+	| "currentcolor"
+	| "transparent"
+	| `#${string}`
+	| `rgb(${number},${number},${number})`
+	| `rgba(${number}, ${number}, ${number}, ${number})`
+)
 export type CSSLength = `${number}${CSSLengthUnit}`;
+
 /** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
 export type CSSLengthUnit = (
 	| "%"
@@ -506,17 +518,8 @@ export type CSSLengthUnit = (
 	| "vmax" // 1% of the viewport's larger dimension.
 )
 
-type SpaceRepeated<S extends string, Max extends DigitNonZero> = Max extends 1 ? S : S | `${S} ${SpaceRepeated<S, Dec<Max>>}`
-type Dec<N extends DigitNonZero> = (N extends 9 ? 8
-	: N extends 8 ? 7
-	: N extends 7 ? 6
-	: N extends 6 ? 5
-	: N extends 5 ? 4
-	: N extends 4 ? 3
-	: N extends 3 ? 2
-	: N extends 2 ? 1
-	: 1
-)
+// eslint-disable-next-line fp/no-let, @typescript-eslint/no-unused-vars, prefer-const
+let c: CSSColor = "#001227"
 
 export type HtmlProps = Partial<HTMLAttributes<HTMLElement>>
 export type StyleProps = { style?: CSSProperties }
@@ -776,7 +779,7 @@ export type HTMLAttributes<T> = DOMAttributes<T> & {
 	autocapitalize?: string;
 	autocorrect?: string;
 	autosave?: string;
-	color?: string;
+	color?: CSSColor;
 	itemProp?: string;
 	itemScope?: boolean;
 	itemType?: string;
