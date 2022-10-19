@@ -4,8 +4,8 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {DigitNonZero, Obj} from "@agyemanjp/standard/utility"
-import {borderStyles, borderWidthValues, colorConstants, cursorKeywords} from "./common"
+import {DigitNonZero, Obj} from "@agyemanjp/standard"
+import {colorConstants} from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> = ((
@@ -86,845 +86,150 @@ export type DOMElement = SVGElement | HTMLElement
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
-	alignContent?: // align-content does not take left and right values
-	| "center"
-		| "start"
-		| "end"
-		| "flex-start"
-		| "flex-end"
-		//Normal alignment
-		| "normal"
-		// Baseline alignment
-		| "baseline"
-		| "first baseline"
-		| "last baseline"
-
-		// Distributed alignment
-		| "space-between"
-		| "space-around"
-		| "space-evenly"
-		| "stretch"
-
-        // Overflow alignment
-        | "safe center"
-        | "unsafe center";
-    alignItems?:
-    // Basic keywords
-        | "normal"
-        | "stretch"
-        // Positional alignment
-        // align-items does not take left and right values
-        | "center"
-        | "start"
-        | "end"
-        | "flex-start"
-        | "flex-end"
-        // Baseline alignment
-        | "baseline"
-        | "first baseline"
-        | "last baseline"
-        | "safe center"
-        | "unsafe center";
-    alignSelf?:
-    // Keyword values
-        | "auto"
-        | "normal"
-        // Positional alignment
-        // align-self does not take left and right values
-        | "center"
-        | "start"
-        | "end"
-        | "self-start"
-        | "self-end"
-        | "flex-start"
-        | "flex-end"
-        // Baseline alignment
-        | "baseline"
-        | "first baseline"
-        | "last baseline"
-        | "stretch"
-        // Overflow alignment
-        | "safe center"
-        | "unsafe center";
-    alignmentBaseline?:
-        | "auto"
-        | "baseline"
-        | "before-edge"
-        | "text-before-edge"
-        | "middle"
-        | "central"
-        | "after-edge"
-        | "text-after-edge"
-        | "ideographic"
-        | "alphabetic"
-        | "hanging"
-        | "mathematical"
-        | "top"
-        // Positional alignment
-        //align-self does not take left and right values
-        | "center"
-        // Positional alignment
-        //align-self does not take left and right values
-        | "bottom";
-    animation?:
-    //@keyframes duration | easing-function | delay |
-    //iteration-count | direction | fill-mode | play-state | name
-        | `${CSSTime} ${CSSEasingFunction} ${CSSTime} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`;
+    alignContent?: string | null;
+    alignItems?: string | null;
+    alignSelf?: string | null;
+    alignmentBaseline?: string | null;
+    animation?: string | null;
     animationDelay?: string | null;
-    animationDirection?: | "normal" | "reverse" | "alternate" | "alternate-reverse";
+    animationDirection?: string | null;
     animationDuration?: string | null;
-    animationFillMode?: | "none" | "forward" | "backward" | "both";
-    animationIterationCount?: | "infinite" | number;
+    animationFillMode?: string | null;
+    animationIterationCount?: string | null;
     animationName?: string | null;
-    animationPlayState?: | "running" | "paused";
-    animationTimingFunction?:
-        | "ease"
-        | "ease-in"
-        | "ease-out"
-        | "ease-in-out"
-        | "linear"
-        | "step-start"
-        | "step-end"
-        | `cubic-beizier(${number})`
-        | `steps(${number},${'jump-start' | 'jump-end' | 'jump-none' | 'jump-both' | 'start' | 'end'})`;
-    backfaceVisibility?: "visible" | "hidden";
-    background?:
-        | CSSColor
-        | `border-box ${CSSColor}`;
-    backgroundAttachment?: | "scroll" | "fixed" | "local";
-    backgroundClip?: "border-box" | "padding-box" | "content-box" | "text";
-    backgroundColor?:
-        | CSSColor
-        | `hsl(${number}, ${CSSLength}, ${CSSLength})`
-        | `hsla(${number}, ${CSSLength}, ${CSSLength},${number})`;
-    backgroundImage?: `url(${string})`;
-    backgroundOrigin?: "border-box" | "padding-box" | "content-box";
-    backgroundPosition?:
-        | "top"
-        | "bottom"
-        | "left"
-        | "right"
-        | "center"
-        | `${CSSLength} ${CSSLength}`;
-    backgroundPositionX?:
-    // Keyword Values
-        | "left"
-        | "center"
-        | "right"
-        | CSSLength
-        | `${"right" | "left"} ${CSSLength}`;
-    backgroundPositionY?:
-    // Keyword Values
-        | "top"
-        | "center"
-        | "bottom"
-        | CSSLength
-        | `${"bottom" | "top"} ${CSSLength}`;
-    backgroundRepeat?:
-    // Keyword Values
-        | "repeat-x"
-        | "repeat-y"
-        | "repeat"
-        | "space"
-        | "round"
-        | "no-repeat";
-    backgroundSize?:
-    /**Keyword values*/
-        | "cover"
-        | "contain"
-        | "auto"
-        | CSSLength
-        | `${CSSLength} ${CSSLength}`;
-    baselineShift?:
-        | CSSLength
-        | "sub"
-        | "super";
+    animationPlayState?: string | null;
+    animationTimingFunction?: string | null;
+    backfaceVisibility?: string | null;
+    background?: string | null;
+    backgroundAttachment?: string | null;
+    backgroundClip?: string | null;
+    backgroundColor?: string | null;
+    backgroundImage?: string | null;
+    backgroundOrigin?: string | null;
+    backgroundPosition?: string | null;
+    backgroundPositionX?: string | null;
+    backgroundPositionY?: string | null;
+    backgroundRepeat?: string | null;
+    backgroundSize?: string | null;
+    baselineShift?: string | null;
     border?: string | null;
-    borderBottom?: CSSLength;
-    borderBottomColor?: CSSColor;
-    borderBottomLeftRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
-    borderBottomRightRadius?: CSSLength | `${CSSLength} ${CSSLength}`;
-    borderBottomStyle?: keyof typeof borderStyles;
-    borderBottomWidth?:
-    // Keyword values
-        | keyof typeof borderWidthValues
-        // <Length> values
-        | CSSLength;
-    borderCollapse?:
-    // Keyword values
-        | "collapse"
-        | "separate";
-    borderColor?: CSSColor;
-    borderImage?:
-        | `linear-gradient(${CSSColor}, ${CSSColor}) ${number}`
-        | `url(${string}) ${number} ${string}`;
-    //| `linear-gradient(${keyof typeof colorConstants}, ${keyof typeof colorConstants} ${number}/${CSSLength}`;
-    borderImageOutset?:
-        | CSSLength
-        | number
-        | `${number} ${number}`
-        | `${CSSLength} ${number} ${CSSLength}`
-        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`;
-    borderImageRepeat?:
-    // Keyword values
-        | "stretch"
-        | "repeat"
-        | "round"
-        | "space";
-    borderImageSlice?:
-        | CSSLength
-        | number
-        | `${CSSLength}|${number} ${CSSLength}|${number}`
-        | `${CSSLength}|${number} fill ${CSSLength}|${number} ${CSSLength}|${number}`
-        | `${CSSLength}|${number} ${CSSLength}|${number} ${CSSLength}|${number} ${CSSLength}|${number}`;
-    borderImageSource?:
-        | "none"
-        | `url(${string})`;
-    borderImageWidth?:
-        | "auto"
-        | CSSLength
-        | number
-        | `${CSSLength | number} ${CSSLength | number}`
-        | `${CSSLength | number} ${CSSLength | number} ${CSSLength | number}`;
-    borderLeft?:
-        | CSSLength
-        | `${CSSLength} ${string}`;
-    borderLeftColor?: CSSColor;
-    borderLeftStyle?:
-    // Keyword values
-        | keyof typeof borderStyles;
-    borderLeftWidth?:
-    // Keyword values
-        | keyof typeof borderWidthValues
-        // <Length> values
-        | CSSLength;
-    borderRadius?:
-        | CSSLength
-        | `${CSSLength} ${CSSLength}`
-        | `${CSSLength} ${CSSLength} ${CSSLength}`
-        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`
-        | `${CSSLength}/${CSSLength}`
-        | `${CSSLength} ${CSSLength}/${CSSLength} ${CSSLength}`;
-    borderRight?:
-        | CSSLength
-        | `${CSSLength} ${string}`;
-    borderRightColor?: CSSColor;
-    borderRightStyle?:
-    // Keyword values
-        | keyof typeof borderStyles;
-    borderRightWidth?:
-    // Keyword values
-        | keyof typeof borderWidthValues
-        // <Length> values
-        | CSSLength;
-    borderSpacing?:
-    // <length>
-        | CSSLength
-        // horizontal <length> | vertical <length>
-        | `${CSSLength} ${CSSLength}`;
-    borderStyle?:
-    // Keyword values
-        | keyof typeof borderStyles;
-    borderTop?:
-        | CSSLength
-        | keyof typeof borderWidthValues
-        | keyof typeof borderStyles;
-    borderTopColor?: CSSColor;
-    borderTopLeftRadius?:
-        | CSSLength
-        | `${CSSLength} ${CSSLength}`;
-    borderTopRightRadius?:
-        | CSSLength
-        | `${CSSLength} ${CSSLength}`;
-    borderTopStyle?: | keyof typeof borderStyles
-    borderTopWidth?:
-    // Keyword values
-        | keyof typeof borderWidthValues
-        // <Length> values
-        | CSSLength;
-    borderWidth?:
-    // Keyword values
-        | keyof typeof borderWidthValues
-        // <Length> values
-        | CSSLength
-        | `${CSSLength} ${CSSLength}`;
-    bottom?: CSSLength | "auto";
+    borderBottom?: string | null;
+    borderBottomColor?: string | null;
+    borderBottomLeftRadius?: string | number | null;
+    borderBottomRightRadius?: string | number | null;
+    borderBottomStyle?: string | null;
+    borderBottomWidth?: string | null;
+    borderCollapse?: string | null;
+    borderColor?: string | null;
+    borderImage?: string | null;
+    borderImageOutset?: string | null;
+    borderImageRepeat?: string | null;
+    borderImageSlice?: string | null;
+    borderImageSource?: string | null;
+    borderImageWidth?: string | number | null;
+    borderLeft?: string | number | null;
+    borderLeftColor?: string | null;
+    borderLeftStyle?: string | null;
+    borderLeftWidth?: string | number | null;
+    borderRadius?: string | number | null;
+    borderRight?: string | null;
+    borderRightColor?: string | null;
+    borderRightStyle?: string | null;
+    borderRightWidth?: string | number | null;
+    borderSpacing?: string | null;
+    borderStyle?: string | null;
+    borderTop?: string | null;
+    borderTopColor?: string | null;
+    borderTopLeftRadius?: string | number | null;
+    borderTopRightRadius?: string | number | null;
+    borderTopStyle?: string | null;
+    borderTopWidth?: string | number | null;
+    borderWidth?: string | number | null;
+    bottom?: string | number | null;
     boxShadow?: string | null;
-    boxSizing?:
-        | "border-box"
-        | "content-box";
-    breakAfter?:
-    // Generic break values
-        | "auto"
-        | "avoid"
-        | "always"
-        | "all"
-        // Page break values
-        | "avoid-page"
-        | "page"
-        | "left"
-        | "right"
-        | "recto"
-        | "verso"
-        // Column break values
-        | "avoid-column"
-        | "column"
-        // Region break values
-        | "avoid-region"
-        | "region";
-    breakBefore?:
-    // Generic break values
-        | "auto"
-        | "avoid"
-        | "always"
-        | "all"
-        // Page break values
-        | "avoid-page"
-        | "page"
-        | "left"
-        | "right"
-        | "recto"
-        | "verso"
-        // Column break values
-        | "avoid-column"
-        | "column"
-        // Region break values
-        | "avoid-region"
-        | "region";
-    breakInside?:
-    // Keyword values
-        | "auto"
-        | "avoid"
-        | "avoid-page"
-        | "avoid-column"
-        | "avoid-region";
-    captionSide?:
-    // Directional values
-        | "top"
-        | "bottom"
-        //Logical values*
-        // | "block-start"
-        | "block-end"
-        | "inline-start"
-        | "inline-end";
-    clear?:
-    /*Keyword values*/
-        | "none"
-        | "left"
-        | "right"
-        | "both"
-        | "inline-start"
-        | "inline-end";
+    boxSizing?: string | null;
+    breakAfter?: string | null;
+    breakBefore?: string | null;
+    breakInside?: string | null;
+    captionSide?: string | null;
+    clear?: string | null;
     clip?: string | null;
-    clipPath?:
-    // <clip-source> values
-        | `url(${string})`
-        // <geometry-box> values
-        | "margin-box"
-        | "border-box"
-        | "padding-box"
-        | "content-box"
-        | "fill-box"
-        | "stroke-box"
-        | "view-box"
-        // <basic-shape> values
-        | `inset(${CSSLength} ${CSSLength})`
-        | `circle(${CSSLength} at ${CSSLength} ${CSSLength})`
-        | `ellipse(${CSSLength} ${CSSLength} at ${CSSLength} ${CSSLength})`
-
-        | `path(${string})`;
-    clipRule?: "nonezero" | "evenodd" | "inherit"
-    color?:
-    // Keyword values
-        | CSSColor
-        // hsl() values
-        | `hsl(${CSSLength}, ${CSSLength}, ${CSSLength})`
-        | `hsla(${CSSLength}, ${CSSLength}, ${CSSLength},${number})`
-        // hwb() values
-        | `hwb(${CSSLength} ${CSSLength} ${CSSLength})`
-        | `hwb(${CSSLength} ${CSSLength} ${CSSLength} / ${number})`;
+    clipPath?: string | null;
+    clipRule?: string | null;
+    color?: string | null;
     colorInterpolationFilters?: string | null;
-    columnCount?: | "auto" | number;
-    columnFill?:
-    // Keyword values
-        | "auto"
-        | "balance"
-        | "balance-all";
-    columnRule?:
-        | keyof typeof borderStyles
-        | `${keyof typeof borderStyles} ${CSSColor}`
-        | `${keyof typeof borderStyles} ${CSSLength}`;
-    columnRuleColor?:
-        | CSSColor
-        | `hsla(${number}, ${CSSLength}, ${CSSLength}, ${number})`;
-    columnRuleStyle?: keyof typeof borderStyles;
-    columnRuleWidth?:
-    // Keyword values
-        | keyof typeof borderWidthValues
-        | CSSLength;
-    columnSpan?:
-    // Keyword values
-        | "none"
-        | "all";
-    columnWidth?:
-    // Keyword value
-        | "auto"
-        | CSSLength;
-    columns?:
-        | CSSLength
-        | "auto"
-        | number
-        | `${number | CSSLength | "auto"} ${number | CSSLength | "auto"}`;
+    columnCount?: any;
+    columnFill?: string | null;
+    columnRule?: string | null;
+    columnRuleColor?: any;
+    columnRuleStyle?: string | null;
+    columnRuleWidth?: any;
+    columnSpan?: string | null;
+    columnWidth?: any;
+    columns?: string | null;
     content?: string | null;
-    counterIncrement?:
-        | "none"
-        | string
-        | `${string} ${number}`;
-    counterReset?:
-        | "none"
-        | string
-        | `${string} ${number}`;
+    counterIncrement?: string | null;
+    counterReset?: string | null;
     cssFloat?: string | null;
-    float?:
-    // Keyword values
-        | "left"
-        | "right"
-        | "none"
-        | "inline-start"
-        | "inline-end";
+    float?: string | null;
     cssText?: string;
-    cursor?:
-    // Keyword values
-        | keyof typeof cursorKeywords
-        // url with mandatory keyword fallback
-        | `url(${string}), ${keyof typeof cursorKeywords}`
-        // url and coordinates with mandatory keyword fallback
-        | `url(${string}) ${number} ${number}, ${keyof typeof cursorKeywords}`
-    // urls and fallback urls, with mandatory keyword fallback;
-    direction?:
-    // Keyword values
-        | "ltr"
-        | "rtl";
-    display?:
-    // precomposed values
-        | "block"
-        | "inline"
-        | "inline-block"
-        | "flex"
-        | "inline-flex"
-        | "grid"
-        | "inline-grid"
-        | "flow-root"
-        // box generation
-        | "none"
-        | "contents"
-        // two-value syntax
-        | "block flow"
-        | "inline flow"
-        | "inline flow-root"
-        | "block flex"
-        | "inline flex"
-        | "block grid"
-        | "inline grid"
-        | "block flow-root"
-        // other values
-        | "table"
-        | "table-row" /* all table elements have an equivalent CSS display value */
-        | "list-item";
-    dominantBaseline?:
-        | "auto"
-        | "ideographic"
-        | "alphabetic"
-        | "hanging"
-        | "mathematical"
-        | "central"
-        | "middle"
-        | "text-after-edge"
-        | "text-before-edge"
-        | "text-top";
-    emptyCells?: "show" | "hide";// keyword values
-    enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`;
+    cursor?: string | null;
+    direction?: string | null;
+    display?: string | null;
+    dominantBaseline?: string | null;
+    emptyCells?: string | null;
+    enableBackground?: string | null;
     fill?: string | null;
-    fillOpacity?: number | `${number}%`;
-    fillRule?: "nonzero" | "evenodd";
-    filter?:
-    // url to SVG filter
-        | `url(${string})`
-        // <filter-function> values
-        | `blur(${CSSLength})`
-        | `brightness(${number})`
-        | `contrast(${number}%)`
-        //| `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
-        | `grayscale(${number}%)`
-        | `hue-rotate(${number}deg)`
-        | `invert(${number}%)`
-        | `opacity(${number}%)`
-        | `saturate(${number}%)`
-        | `sepia(${number}%)`
-        // use no filter
-        | "none";
-    flex?:
-    // keyword values
-        | "none"
-        | "auto"
-        | "initial"
-        // One value, unitless number: flex-grow     flex-basis is then equal to 0.
-        | number
-        // One value, width/height: flex-basis
-        | CSSLength
-        // Two values, flex-grow and flex-basis
-        | `${number} ${CSSLength}`
-        // Two values, flex-grow and flex-shrink
-        | `${number} ${number}`
-        // Three values, flex-grow, flex-shrink and flex-basis
-        | `${number} ${number} ${CSSLength}`;
-    flexBasis?:
-    // Specify <width>
-        | "auto"
-        | CSSLength
-        // Intrinsic sizing keywords
-        | "min-content"
-        | "max-content"
-        | "fit-content"
-        // Automatically size based on flex item's content
-        | "content";
-    flexDirection?:
-    // The direction text is laid out in a line
-        | "row"
-        // Like <row>, but reversed
-        | "row-reverse"
-        // The direction in which lines of text are stacked
-        | "column"
-        // Like <column>, but reversed
-        | "column-reverse";
-    flexFlow?:
-    // flex-flow: <flex-direction>
-        | "row"
-        | "row-reverse"
-        | "column"
-        | "column-reverse"
-        // flex-flow: <flex-wrap>
-        | "nowrap"
-        | "wrap"
-        | "wrap-reverse"
-        // flex-flow: <flex-direction> and <flex-wrap>
-        | `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`;
-    flexGrow?: number;
-    flexShrink?: number;
-    flexWrap?:
-        | "nowrap" // Default value
-        | "wrap"
-        | "wrap-reverse";
-    floodColor?: CSSColor;
-    floodOpacity?: number | `${number}%`;
+    fillOpacity?: string | null;
+    fillRule?: string | null;
+    filter?: string | null;
+    flex?: string | null;
+    flexBasis?: string | null;
+    flexDirection?: string | null;
+    flexFlow?: string | number | null;
+    flexGrow?: string | number | null;
+    flexShrink?: string | number | null;
+    flexWrap?: string | null;
+    floodColor?: string | null;
+    floodOpacity?: string | number | null;
     font?: string | null;
-    fontFamily?:
-    // generic family name only
-        | "serif"
-        | "sans-serif"
-        | "cursive"
-        | "fantasy"
-        | "monospace"
-        | "system-ui"
-        | "ui-serif"
-        | "ui-sans-serif"
-        | "ui-monospace"
-        | "ui-rounded"
-        | "emoji"
-        | "math"
-        | "fangsong"
-        // family name and generic family name
-        | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" | "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`;
-    fontFeatureSettings?:
-    // use default settings
-        | "normal"
-        | string
-        | `${string} ${"on" | "off" | number}`;
-    fontSize?:
-    // <absolute size values>
-        | "xx-small"
-        | "x-small"
-        | "small"
-        | "medium"
-        | "large"
-        | "x-large"
-        | "xx-large"
-        | "xxx-large"
-        // <relative size> values
-        | "larger"
-        | "smaller"
-        // <length> values | <percentage> values
-        | CSSLength
-        // math value
-        | "math";
-    fontSizeAdjust?:
-    // use the specified font size
-        | "none"
-        // Use a font size that makes lowercase
-        //    letters half the specified font size
-        | number
-        // Two values
-        | `${"ex-height" | "cap-height" | "ch-width" | "ic-width" | "ic-height"} ${number}`;
-    fontStretch?:
-    // keyword values
-        | "normal"
-        | "ultra-condensed"
-        | "extra-condensed"
-        | "condensed"
-        | "semi-condensed"
-        | "semi-expanded"
-        | "expanded"
-        | "extra-expanded"
-        | "ultra-expanded"
-        // percentage values
-        | `${number}%`;
-    fontStyle?:
-        | "normal"
-        | "italic"
-        | "oblique"
-        | `oblique ${number}deg`;
-    fontVariant?:
-        | "normal"
-        | "small-caps"
-        | "all-small-caps"
-        | "petite-caps"
-        | "all-petite-caps"
-        | "unicase"
-        | "titling-caps"
-        | "lining-nums"
-        | "oldstyle-nums"
-        | "proportional-nums"
-        | "tabular-nums"
-        | "diagonal-fractions"
-        | "stacked-fractions"
-        | "ordinal"
-        | "slashed-zero"
-        | "jis78"
-        | "jis83"
-        | "jis90"
-        | "jis04"
-        | "simplified"
-        | "traditional"
-        | "full-width"
-        | "proportional-width"
-        | "ruby";
-    fontWeight?:
-    // keyword values
-        | "normal"
-        | "bold"
-        // keyword values relative to parent
-        | "bolder"
-        | "lighter"
-        // numeric keyword values
-        | 100
-        | 200
-        | 300
-        | 400 // normal
-        | 500
-        | 600
-        | 700 // bold
-        | 800
-        | 900;
-    glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
-    glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`;
-    height?:
-    // Keyword values
-        | "max-content"
-        | "min-content"
-        | `fit-content(${CSSLength})`
-        | "auto"
-        | CSSLength;
-    imeMode?:
-    // Keyword values
-        | "auto"
-        | "normal"
-        | "active"
-        | "inactive"
-        | "disabled";
-    justifyContent?:
-    // Positional alignment
-        | "center" // Pack items around the center
-        | "start" // Pack items from the start
-        | "end"     // Pack items from the end
-        | "flex-start" // Pack flex items from the start
-        | "flex-end"  // Pack flex items from the end
-        | "left"  // Pack items from the left
-        | "right"  // Pack items from the right
-        // Base alignment
-        // Justify-content does not take baseline values
-
-        // Normal alignment
-        | "normal"
-        // Distributed alignment
-        | "space-between" // Distribute items evenly The first item is flush with the start,
-        | "space-around" // Distribute items evenly Items have a half-size space on either end
-        | "space-evenly" // Distribute items evenly Items have equal space around them
-        | "stretch" // Distribute items evenly Stretch 'auto'-sized items to fit the container
-        // Overflow alignment
-        | "safe center"
-        | "unsafe center";
-    kerning?: "auto" | number | CSSLength;
-    left?: "auto" | CSSLength;
-    readonly length?: CSSLength;
-    letterSpacing?:
-    // keyword values
-        | "normal"
-        // <length> values
-        | CSSLength;
-    lightingColor?: CSSColor;
-    lineHeight?:
-    // keyword value
-        | "normal"
-        // unitless values
-        | number
-        | CSSLength;
-    listStyle?: "";
-    listStyleImage?:
-    // keyword value
-        | "none"
-        // url values
-        | `url(${string})`;
-    listStylePosition?: "inside" | "outside";
-    listStyleType?:
-    // keyword value
-        | "none"
-        // string value
-        | string
-        // types
-        | "disc"
-        | "circle"
-        | "square"
-        | "decimal"
-        | "cjk-decimal"
-        | "decimal-leading-zero"
-        | "lower-roman"
-        | "upper-roman"
-        | "lower-greek"
-        | "lower-alpha"
-        | "lower-latin"
-        | "upper-alpha"
-        | "upper-latin"
-        | "arabic-indic"
-        | "-moz-arabic-indic"
-        | "armenian"
-        | "bengali"
-        | "-moz-bengali"
-        | "cambodian"
-        | "khmer"
-        | "cjk-earthly-branch"
-        | "-moz-cjk-earthly-branch"
-        | "cjk-heavenly-stem"
-        | "-moz-cjk-heavenly-stem"
-        | "cjk-ideographic"
-        | "devanagari"
-        | "-moz-devanagari"
-        | "ethiopic-numeric"
-        | "georgian"
-        | "gujarati"
-        | "-moz-gujarati"
-        | "gurmukhi"
-        | "-moz-gurmukhi"
-        | "hebrew"
-        | "hiragana"
-        | "hiragana-iroha"
-        | "japanese-formal"
-        | "japanese-informal"
-        | "kannada"
-        | "-moz-kannada"
-        | "katakana"
-        | "katakana-iroha"
-        | "korean-hangul-formal"
-        | "korean-hanja-formal"
-        | "korean-hanja-informal"
-        | "lao"
-        | "-moz-lao"
-        | "lower-armenian"
-        | "malayalam"
-        | "-moz-malayalam"
-        | "mongolian"
-        | "myanmar"
-        | "-moz-myanmar"
-        | "oriya"
-        | "-moz-oriya"
-        | "persian"
-        | "-moz-persian"
-        | "simp-chinese-formal"
-        | "simp-chinese-informal"
-        | "tamil"
-        | "-moz-tamil"
-        | "telugu"
-        | "-moz-telugu"
-        | "thai"
-        | "-moz-thai"
-        | "tibetan"
-        | "trad-chinese-formal"
-        | "trad-chinese-informal"
-        | "upper-armenian"
-        | "disclosure-open"
-        | "disclosure-closed";
-    margin?:
-    // Apply to all four sides
-        | number
-        | CSSLength
-        // vertical | horizontal
-        | `${CSSLength | "auto" | number} ${CSSLength | "auto" | number}`
-        // top | horizontal | bottom
-        | `${CSSLength | "auto" | number} ${CSSLength | "auto" | number} ${CSSLength | "auto" | number}`;
-    // top | right | bottom | left
-    // | `${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"} ${CSSLength | "auto"}`;
-    marginBottom?:
-    // Length values
-        | CSSLength
-        // keyword values
-        | "auto";
-    marginLeft?:
-    // Length values
-        | CSSLength
-        // keyword values
-        | "auto";
-    marginRight?:
-    // Length values
-        | CSSLength
-        // keyword values
-        | "auto";
-    marginTop?:
-    // Length values
-        | CSSLength
-        // keyword values
-        | "auto";
+    fontFamily?: string | null;
+    fontFeatureSettings?: string | null;
+    fontSize?: string | null;
+    fontSizeAdjust?: string | null;
+    fontStretch?: string | null;
+    fontStyle?: string | null;
+    fontVariant?: string | null;
+    fontWeight?: string | number | null;
+    glyphOrientationHorizontal?: string | null;
+    glyphOrientationVertical?: string | null;
+    height?: string | null;
+    imeMode?: string | null;
+    justifyContent?: string | null;
+    kerning?: string | null;
+    left?: string | number | null;
+    readonly length?: number;
+    letterSpacing?: string | null;
+    lightingColor?: string | null;
+    lineHeight?: string | null;
+    listStyle?: string | null;
+    listStyleImage?: string | null;
+    listStylePosition?: string | null;
+    listStyleType?: string | null;
+    margin?: string | number | null;
+    marginBottom?: string | number | null;
+    marginLeft?: string | number | null;
+    marginRight?: string | number | null;
+    marginTop?: string | number | null;
     marker?: string | null;
     markerEnd?: string | null;
     markerMid?: string | null;
     markerStart?: string | null;
     mask?: string | null;
-    maxHeight?:
-    // Keyword values
-        | "max-content"
-        | "min-content"
-        | `fit-content(${CSSLength})`
-        | "auto"
-        | CSSLength;
-    maxWidth?:
-    // Keyword values
-        | "max-content"
-        | "min-content"
-        | `fit-content(${CSSLength})`
-        | "auto"
-        | CSSLength;
-    minHeight?:
-    // Keyword values
-        | "max-content"
-        | "min-content"
-        | `fit-content(${CSSLength})`
-        | "auto"
-        | CSSLength;
-    minWidth?:
-    // Keyword values
-        | "max-content"
-        | "min-content"
-        | `fit-content(${CSSLength})`
-        | "auto"
-        | CSSLength;
+    maxHeight?: string | null;
+    maxWidth?: string | null;
+    minHeight?: string | null;
+    minWidth?: string | null;
     msContentZoomChaining?: string | null;
     msContentZoomLimit?: string | null;
     msContentZoomLimitMax?: any;
@@ -972,315 +277,69 @@ export interface CSSProperties {
     msWrapFlow?: string;
     msWrapMargin?: any;
     msWrapThrough?: string;
-    opacity?: number | `${number}%`;
+    opacity?: string | number | null;
     order?: string | null;
-    orphans?: number;
-    outline?:
-    // style
-        | keyof typeof borderStyles
-        // color | style
-        | `${CSSColor} ${keyof typeof borderStyles}`
-        // style | width
-        | `${keyof typeof borderStyles} ${keyof typeof borderWidthValues}`
-        // color | style | width
-        | `${CSSColor} ${keyof typeof borderStyles} ${keyof typeof borderWidthValues}`;
-    outlineColor?:
-    // color values
-        | CSSColor
-        // keyword value
-        | "invert";
-    outlineStyle?: keyof typeof borderStyles;
-    outlineWidth?:
-    // keyword values
-        | keyof typeof borderWidthValues
-        // length values
-        | CSSLength;
-    overflow?:
-    // keyword values
-        | "visible"
-        | "hidden"
-        | "clip"
-        | "scroll"
-        | "auto";
-    overflowX?:
-    // keyword values
-        | "visible"
-        | "hidden"
-        | "clip"
-        | "scroll"
-        | "auto";
-    overflowY?:
-    // keyword values
-        | "visible"
-        | "hidden"
-        | "clip"
-        | "scroll"
-        | "auto";
-    padding?:
-    // Apply to all four sides
-        | number
-        | CSSLength
-        // vertical | horizontal
-        | `${CSSLength} ${CSSLength}`
-        // top | horizontal | bottom
-        | `${CSSLength} ${CSSLength} ${CSSLength}`
-        // top | right | bottom | left
-        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`;
-    paddingBottom?: CSSLength;
-    paddingLeft?: CSSLength;
-    paddingRight?: CSSLength;
-    paddingTop?: CSSLength;
-    pageBreakAfter?:
-    // keyword values
-        | "auto"
-        | "always"
-        | "avoid"
-        | "left"
-        | "right"
-        | "recto"
-        | "verso";
-    pageBreakBefore?:
-    // keyword values
-        | "auto"
-        | "always"
-        | "avoid"
-        | "left"
-        | "right"
-        | "recto"
-        | "verso";
-    pageBreakInside?:
-    // keyword values
-        | "auto"
-        | "avoid";
-    perspective?:
-    // keyword values
-        | "none"
-        // length values
-        | CSSLength;
+    orphans?: string | null;
+    outline?: string | null;
+    outlineColor?: string | null;
+    outlineStyle?: string | null;
+    outlineWidth?: string | null;
+    overflow?: string | null;
+    overflowX?: string | null;
+    overflowY?: string | null;
+    padding?: string | number | null;
+    paddingBottom?: string | number | null;
+    paddingLeft?: string | number | null;
+    paddingRight?: string | number | null;
+    paddingTop?: string | number | null;
+    pageBreakAfter?: string | null;
+    pageBreakBefore?: string | null;
+    pageBreakInside?: string | null;
+    perspective?: string | null;
     perspectiveOrigin?: string | null;
-    pointerEvents?:
-    // keyword values
-        | "auto"
-        | "none"
-        | "visiblePainted"
-        | "visibleFill"
-        | "visibleStroke"
-        | "visible"
-        | "painted"
-        | "fill"
-        | "stroke"
-        | "all";
+    pointerEvents?: string | null;
     position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null;
-    quotes?:
-    // keyword value
-        | "none"
-        | "auto"
-        // string values
-        | `${string} ${string}`
-        | `${string} ${string} ${string} ${string}`;
-    right?: "auto" | CSSLength;
-    rubyAlign?:
-    // keyword values
-        | "start"
-        | "center"
-        | "space-between"
-        | "space-around";
+    quotes?: string | null;
+    right?: string | number | null;
+    rubyAlign?: string | null;
     rubyOverhang?: string | null;
-    rubyPosition?:
-    // keyword values
-        | "over"
-        | "under"
-        | "alternate"
-        | "inter-character";
-    stopColor?: "currentColor" | CSSColor;
-    stopOpacity?: number;
+    rubyPosition?: string | null;
+    stopColor?: string | null;
+    stopOpacity?: string | null;
     stroke?: string | null;
-    strokeDasharray?:
-    // keyword value
-        | "none"
-        | "inherit"
-        // length values
-        | `${CSSLength}`
-        | `${CSSLength} ${CSSLength}`
-        | `${CSSLength} ${CSSLength} ${CSSLength}`
-        | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSLength}`;
-    strokeDashoffset?: CSSLength;
-    strokeLinecap?: "butt" | "round" | "square";
-    strokeLinejoin?: "miter" | "round" | "bevel" | "arcs" | "miter-clip"
-    strokeMiterlimit?: number;
-    strokeOpacity?: `${number}%`;
-    strokeWidth?: CSSLength;
-    tableLayout?: "auto" | "fixed";
-    textAlign?:
-    // keyword values
-        | "start"
-        | "end"
-        | "left"
-        | "right"
-        | "center"
-        | "justify"
-        | "justify-all"
-        | "match-parent"
-        | string;
-
-    textAlignLast?:
-    // keyword values
-        | "auto"
-        | "start"
-        | "end"
-        | "left"
-        | "right"
-        | "center"
-        | "justify";
-    textAnchor?: "start" | "middle" | "end";
+    strokeDasharray?: string | null;
+    strokeDashoffset?: string | null;
+    strokeLinecap?: string | null;
+    strokeLinejoin?: string | null;
+    strokeMiterlimit?: string | number | null;
+    strokeOpacity?: string | null;
+    strokeWidth?: string | number | null;
+    tableLayout?: string | null;
+    textAlign?: string | null;
+    textAlignLast?: string | null;
+    textAnchor?: string | null;
     textDecoration?: string | null;
-    textIndent?:
-    // keyword values
-        | `${CSSLength} ${"hanging" | "each-line" | `${"each-line" | "hanging"} ${"each-line" | "hanging"}`}`
-        | CSSLength;
-    textJustify?:
-        | "auto"
-        | "none"
-        | "inter-word"
-        | "inter-character";
+    textIndent?: string | number | null;
+    textJustify?: string | null;
     textKashida?: string | null;
     textKashidaSpace?: string | null;
-    textOverflow?: "clip" | "ellipsis";
-    textShadow?:
-        | `${CSSLength} ${CSSLength} ${CSSColor}`
-        // color | offset-x | offset-y
-        | `${CSSColor} ${CSSLength} ${CSSLength}`
-        // offset-x | offset-y
-        | `${CSSLength} ${CSSLength}`;
-    // offset-x | offset-y | blur-radius | color
-    // | `${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor}`
-    // color | offset-x | offset-y | blur-radius
-    //| `${CSSColor} ${CSSLength} ${CSSLength} ${CSSLength}`
-    // offset-x | offset-y | color;
-    textTransform?:
-    // keyword values
-        | "none"
-        | "capitalize"
-        | "uppercase"
-        | "lowercase"
-        | "full-width"
-        | "full-size-kana";
-    textUnderlinePosition?:
-    // single keyword
-        | "auto"
-        | "under"
-        | "left"
-        | "right"
-        // multiple keywords
-        | `${"auto" | "under" | "left" | "right"} ${"auto" | "under" | "left" | "right"}`;
-    top?: "auto" | CSSLength;
-    touchAction?:
-    // keyword values
-        | "auto"
-        | "none"
-        | "pan-x"
-        | "pan-left"
-        | "pan-right"
-        | "pan-y"
-        | "pan-up"
-        | "pan-down"
-        | "pinch-zoom"
-        | "manipulation";
-    transform?:
-    // keyword value
-        | "none"
-        // function values
-        | `matrix(${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
-        | `matrix3d(${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
-        | `perspective(${CSSLength})`
-        | `rotate(${number}${"deg" | "grad" | "rad" | "turn"})`
-        | `rotate3d(${number},${number},${number},${number}${"deg" | "grad" | "rad" | "turn"})`
-        | `rotateX(${number}${"deg" | "grad" | "rad" | "turn"})`
-        | `rotateY(${number}${"deg" | "grad" | "rad" | "turn"})`
-        | `rotateZ(${number}${"deg" | "grad" | "rad" | "turn"})`
-        | `translate(${CSSLength | `${CSSLength},${CSSLength}`})`
-        | `translate3d(${CSSLength} ${CSSLength} ${CSSLength})`
-        | `translateX(${CSSLength})`
-        | `translateY(${CSSLength})`
-        | `translateZ(${CSSLength})`
-        | `scale(${number | `${number}%`}, ${number | `${number}%`})`
-        | `scale3d(${number}, ${number},${number})`
-        | `scaleX(${number})`
-        | `scaleY(${number})`
-        | `scaleZ(${number})`
-        | `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
-        | `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
-        | `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`;
-    transformOrigin?:
-    // One value syntax
-        | CSSLength
-        | "left"
-        | "right"
-        | "center"
-        | "bottom"
-        // x-offset | y-offset
-        | `${CSSLength} ${CSSLength}`
-        //x-offset-keyword | y-offset
-        | `${"left" | "right" | "center"} ${CSSLength}`
-        //x-offset-keyword | y-offset-keyword
-        | `${"left" | "right" | "center"} ${"top" | "bottom" | "center"}`
-        // y-offset-keyword | x-offset-keyword
-        | `${"top" | "bottom" | "center"} ${"left" | "right" | "center"}`
-        // x-offset | y-offset | z-offset
-        | `${CSSLength} ${CSSLength} ${CSSLength}`
-        // x-offset-keyword | y-offset | z-offset
-        | `${"left" | "right" | "center"} ${CSSLength} ${CSSLength}`
-        //x-offset-keyword | y-offset-keyword | z-offset
-        | `${"left" | "right" | "center"} ${"top" | "bottom" | "center"} ${CSSLength}`
-        // y-offset-keyword | x-offset-keyword | z-offset
-        | `${"top" | "bottom" | "center"} ${"left" | "right" | "center"} ${CSSLength}`;
-
-    transformStyle?: "flat" | "preserve-3d";
-    transition?:
-    // Apply to 1 property
-    //  property name | duration
-        | `${string} ${CSSTime}`
-        // property name | duration | delay
-        | `${string} ${CSSTime} ${CSSTime}`
-        // property name | duration | easing function
-        | `${string} ${CSSTime} ${CSSEasingFunction}`
-        // property name | duration | easing function | delay
-        | `${string} ${CSSTime} ${CSSEasingFunction} ${CSSTime}`
-        // Apply to all changed properties
-        | `all ${CSSTime} ${CSSEasingFunction}`;
-    transitionDelay?: CSSTime | `${CSSTime}, ${CSSTime}`;
-    transitionDuration?: CSSTime | `${CSSTime} ,${CSSTime}` | `${CSSTime}, ${CSSTime},${CSSTime}`;
-    transitionProperty?:
-    // keyword values
-        | "none"
-        | "all"
-        | string;
-    transitionTimingFunction?: CSSEasingFunction;
-    unicodeBidi?:
-    // keyword values
-        | "normal"
-        | "embed"
-        | "isolate"
-        | "bidi-override"
-        | "isolate-override"
-        | "plaintext";
-    verticalAlign?:
-    // keyword values
-        | "baseline"
-        | "sub"
-        | "super"
-        | "text-top"
-        | "text-bottom"
-        | "middle"
-        | "top"
-        | "bottom"
-        // length & percentage values
-        | CSSLength;
-    visibility?:
-    // keyword values
-        | "visible"
-        | "hidden"
-        | "collapse";
+    textOverflow?: string | null;
+    textShadow?: string | null;
+    textTransform?: string | null;
+    textUnderlinePosition?: string | null;
+    top?: string | number | null;
+    touchAction?: string | null;
+    transform?: string | null;
+    transformOrigin?: string | null;
+    transformStyle?: string | null;
+    transition?: string | null;
+    transitionDelay?: string | null;
+    transitionDuration?: string | null;
+    transitionProperty?: string | null;
+    transitionTimingFunction?: string | null;
+    unicodeBidi?: string | null;
+    verticalAlign?: string | null;
+    visibility?: string | null;
     webkitAlignContent?: string | null;
     webkitAlignItems?: string | null;
     webkitAlignSelf?: string | null;
@@ -1349,71 +408,21 @@ export interface CSSProperties {
     webkitUserModify?: string | null;
     webkitUserSelect?: string | null;
     webkitWritingMode?: string | null;
-    whiteSpace?:
-    // keyword values
-        | "normal"
-        | "nowrap"
-        | "pre"
-        | "pre-wrap"
-        | "pre-line"
-        | "break-spaces";
-    widows?: number;
-    width?:
-    // keyword values
-        | "auto"
-        | "max-content"
-        | "min-content"
-        | `fit-content(${CSSLength})`
-        | CSSLength;
-    wordBreak?:
-    // keyword values
-        | "normal"
-        | "break-all"
-        | "keep-all"
-        | "break-word";
-    wordSpacing?:
-    // keyword values
-        | "normal"
-        | CSSLength;
+    whiteSpace?: string | null;
+    widows?: string | null;
+    width?: string | null;
+    wordBreak?: string | null;
+    wordSpacing?: string | null;
     wordWrap?: string | null;
-    writingMode?:
-    // keyword values
-        | "horizontal-tb"
-        | "vertical-rl"
-        | "vertical-lr";
-    zIndex?:
-    // keyword values
-        | "auto"
-        // integer values
-        | number;
-    zoom?:
-    // keyword values
-        | "normal"
-        | "reset"
-// percentage values
-        | `${number}%`
-        // number values
-        | number;
+    writingMode?: string | null;
+    zIndex?: string | number | null;
+    zoom?: string | null;
 
     /** Either specifies a name for the grid item,  or this property is a shorthand property for the
      * grid-row-start, grid-column-start, grid-row-end, and grid-column-end properties
      */
-    gridArea?:
-    // keyword values
-        | "auto"
-        | "auto/auto"
-        | "auto/auto/auto"
-        | "auto/auto/auto/auto"
-        // custom-ident values
-        | string
-        | `${string} / ${string}`
-        // integer && custom-ident? values
-        | `${number} ${string}`
-        | `${number} ${string} / ${number} ${string}`
-        // span && [ <integer> || <custom-ident> ] values
-        | `span ${number}`
-        | `span ${number}/ span ${string}`
-        | `${number} span / ${string} span`;
+    gridArea?: string
+
     /** Defines on which row-line a grid item will start */
     gridRowStart?:
         | "auto" // Default value. The item will be placed following the flow
@@ -1421,31 +430,12 @@ export interface CSSProperties {
         | number // row line
         | "inherit" | "initial" | "revert" | "unset"
 
-	/** Defines how many rows a grid item will span, or on which row-line the item will end */
-	gridRowEnd?:
-		| "auto"
-		| number
-		| `span ${number}`
-		| "inherit"
-		| "initial"
-		| "revert"
-		| "unset"
 
-	/** Defines how many columns a grid item will span, or on which column-line the item will end */
-	gridColumnEnd?:
-		| "auto"
-		| number
-		| `span ${number}`
-		| "inherit"
-		| "initial"
-		| "revert"
-		| "unset"
+    /** Defines how many rows a grid item will span, or on which row-line the item will end */
+    gridRowEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
 
-	/** A shorthand property for the grid-row-start and the grid-row-end properties */
-	gridRow?: `${"auto" | number | `span ${number}`} ${
-		| "auto"
-		| number
-		| `span ${number}`}`
+    /** Defines how many columns a grid item will span, or on which column-line the item will end */
+    gridColumnEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
 
 	/** A shorthand property for the grid-column-start and the grid-column-end properties */
 	gridColumn?: `${"auto" | number | `span ${number}`} ${
@@ -1455,60 +445,91 @@ export interface CSSProperties {
 
 
     /** Specifies the size of the columns, and how many columns in a grid layout */
-    gridTemplateColumns?:
-        | "none"
-        | `${CSSLength} ${number}fr`
-        | `[ ${string} ] ${CSSLength}`
-        | `[${string}] ${CSSLength} [${string} ${string}]`
-        | `minmax(${CSSLength},${number}fr)`
-        | `repeat(${number},${CSSLength})`
-        | `fit-content(${number}%)`
-        | "subgrid"
-        | "masonry";
+    gridTemplateColumns?: string;
 
     /** Specifies the size of the rows in a grid layout */
-    gridTemplateRows?:
-        | "none"
-        | `${CSSLength} ${number}fr`
-        | `[ ${string} ] ${CSSLength}`
-        | `[${string}] ${CSSLength} [${string} ${string}]`
-        | `minmax(${CSSLength},${number}fr)`
-        | `repeat(${number},${CSSLength})`
-        | `fit-content(${number}%)`
-        | "subgrid"
-        | "masonry";
+    gridTemplateRows?: string;
 
-	/** Specifies the gap between the grid rows */
-	rowGap?: CSSLength | "normal" | "initial" | "inherit" | "unset" | "revert"
+    /** A shorthand property for the grid-template-rows, grid-template-columns and grid-areas properties
+     * Default is none
+     */
+    gridTemplate?: string | null;
 
-	/** Specifies the gap between the columns */
-	columnGap?: CSSLength | "normal" | "initial" | "inherit" | "unset" | "revert"
+    /** Specifies the gap between the grid rows */
+    rowGap?: string | null;
 
-	/** A shorthand property for the grid-row-gap and grid-column-gap properties
-	 * Either a single CSS length value to both row and column gap
-	 * Or two CSS length values specifying the grid-row-gap grid-column-gap
-	 */
-	gridGap?:
-		| SpaceRepeated<CSSLength, 2>
-		| "normal"
-		| "initial"
-		| "inherit"
-		| "unset"
-		| "revert"
+    /** Specifies the gap between the columns */
+    columnGap?: string | null;
 
-	/** A shorthand property for the row-gap and the column-gap properties
-	 * Either a single CSS length value for both row and column gap
-	 * Or two CSS length values specifying the row-gap and column-gap
-	 */
-	gap?:
-		| CSSLength
-		| `${CSSLength} ${CSSLength}`
-		| "normal"
-		| "initial"
-		| "inherit"
+    /** A shorthand property for the grid-row-gap and grid-column-gap properties
+     * Either a single CSS length value to both row and column gap
+     * Or two CSS length values specifying the grid-row-gap grid-column-gap
+     */
+    gridGap?: string | null;
+
+    /** A shorthand property for the row-gap and the column-gap properties
+     * Either a single CSS length value for both row and column gap
+     * Or two CSS length values specifying the row-gap and column-gap
+     */
+    gap?: string | null;
 }
 
-export type CSSEasingFunction =
+export type NamedBorderWidth = "thin" | "medium" | "thick";
+export type NamedBorderStyle = (
+    "none"
+    | "hidden"
+    | "dotted"
+    | "dashed"
+    | "solid"
+    | "double"
+    | "groove"
+    | "ridge"
+    | "inset"
+    | "outset");
+
+type CursorKeywords = (
+    "auto"
+    | "default"
+    | "none"
+    | "context-menu"
+    | "help"
+    | "pointer"
+    | "progress"
+    | "wait"
+    | "cell"
+    | "crosshair"
+    | "text"
+    | "vertical-text"
+    | "alias"
+    | "copy"
+    | "move"
+    | "no-drop"
+    | "not-allowed"
+    | "grab"
+    | "grabbing"
+    | "all-scroll"
+    | "col-resize"
+    | "row-resize"
+    | "n-resize"
+    | "e-resize"
+    | "s-resize"
+    | "w-resize"
+    | "ne-resize"
+    | "nw-resize"
+    | "se-resize"
+    | "sw-resize"
+    | "ew-resize"
+    | "ns-resize"
+    | "nesw-resize"
+    | "nwse-resize"
+    | "zoom-in"
+    | "zoom-out"
+    | "inherit"
+    | "initial"
+    | "revert"
+    | "unset");
+
+export type CSSEasingFunction = (
     "linear"
     | `linear(${number | CSSLength})`
     | "ease"
@@ -1518,7 +539,7 @@ export type CSSEasingFunction =
     | "step-start"
     | "step-end"
     | `steps(${number} ${"start" | "end" | "jump-start" | "jump-end" | "jump-both" | "jump-none"})`
-    | `cubic-bezier(${number},${number},${number},${number})`;
+    | `cubic-bezier(${number},${number},${number},${number})`);
 
 export type CSSTime = `${number}${CSSTimeUnit}`
 export type CSSTimeUnit = (
