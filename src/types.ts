@@ -70,75 +70,227 @@ export type DOMElement = SVGElement | HTMLElement
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
-    alignContent?: string | null;
-    alignItems?: string | null;
-    alignSelf?: string | null;
-    alignmentBaseline?: string | null;
-    animation?: string | null;
-    animationDelay?: string | null;
-    animationDirection?: string | null;
-    animationDuration?: string | null;
-    animationFillMode?: string | null;
-    animationIterationCount?: string | null;
-    animationName?: string | null;
-    animationPlayState?: string | null;
-    animationTimingFunction?: string | null;
-    backfaceVisibility?: string | null;
-    background?: string | null;
-    backgroundAttachment?: string | null;
-    backgroundClip?: string | null;
-    backgroundColor?: string | null;
-    backgroundImage?: string | null;
-    backgroundOrigin?: string | null;
-    backgroundPosition?: string | null;
-    backgroundPositionX?: string | null;
-    backgroundPositionY?: string | null;
-    backgroundRepeat?: string | null;
-    backgroundSize?: string | null;
-    baselineShift?: string | null;
+    alignContent?: (
+        | "center"
+        | "start"
+        | "end"
+        | "flex-start"
+        | "flex-end"
+        | "normal"
+        | "baseline"
+        | "first baseline"
+        | "last baseline"
+        | "space-between"
+        | "space-around"
+        | "space-evenly"
+        | "stretch"
+        | "safe center"
+        | "unsafe center"
+        );
+    alignItems?: (
+        | "normal"
+        | "stretch"
+        | "center"
+        | "start"
+        | "end"
+        | "flex-start"
+        | "flex-end"
+        | "baseline"
+        | "first baseline"
+        | "last baseline"
+        | "safe center"
+        | "unsafe center"
+        );
+    alignSelf?: (
+        | "auto"
+        | "normal"
+        | "center"
+        | "start"
+        | "end"
+        | "self-start"
+        | "self-end"
+        | "flex-start"
+        | "flex-end"
+        | "baseline"
+        | "first baseline"
+        | "last baseline"
+        | "stretch"
+        | "safe center"
+        | "unsafe center"
+        );
+    alignmentBaseline?: (
+        | "auto"
+        | "baseline"
+        | "before-edge"
+        | "text-before-edge"
+        | "middle"
+        | "central"
+        | "after-edge"
+        | "text-after-edge"
+        | "ideographic"
+        | "alphabetic"
+        | "hanging"
+        | "mathematical"
+        | "top"
+        | "center"
+        | "bottom"
+        );
+    animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`;
+    animationDelay?: string;
+    animationDirection?: "normal" | "reverse" | "alternate" | "alternate-reverse";
+    animationDuration?: string;
+    animationFillMode?: "none" | "forward" | "backward" | "both";
+    animationIterationCount?: "infinite" | number;
+    animationName?: string;
+    animationPlayState?: "running" | "paused";
+    animationTimingFunction?: CSSEasingFunction;
+    backfaceVisibility?: "visible" | "hidden";
+    background?: string;
+    backgroundAttachment?: "scroll" | "fixed" | "local";
+    backgroundClip?: "border-box" | "padding-box" | "content-box" | "text";
+    backgroundColor?: CSSColor | string;
+    backgroundImage?: `url(${string})`
+    backgroundOrigin?: "border-box" | "padding-box" | "content-box";
+    backgroundPosition?: (
+        | "top"
+        | "right"
+        | "bottom"
+        | "left"
+        | "center"
+        | string
+        );
+    backgroundPositionX?: (
+        | "left"
+        | "center"
+        | "right"
+        | CSSLength
+        | `${"right" | "left"} ${string}`
+        );
+    backgroundPositionY?: (
+        | "left"
+        | "center"
+        | "right"
+        | CSSLength
+        | `${"right" | "left"} ${string}`
+        );
+    backgroundRepeat?: (
+        | "repeat-x"
+        | "repeat-y"
+        | "repeat"
+        | "space"
+        | "round"
+        | "no-repeat"
+        );
+    backgroundSize?: (
+        | "auto"
+        | "cover"
+        | "contain"
+        | string
+        );
+    baselineShift?: CSSLength | "sub" | "super";
     border?: string | null;
-    borderBottom?: string | null;
-    borderBottomColor?: string | null;
-    borderBottomLeftRadius?: string | number | null;
-    borderBottomRightRadius?: string | number | null;
-    borderBottomStyle?: string | null;
-    borderBottomWidth?: string | null;
-    borderCollapse?: string | null;
-    borderColor?: string | null;
-    borderImage?: string | null;
-    borderImageOutset?: string | null;
-    borderImageRepeat?: string | null;
-    borderImageSlice?: string | null;
-    borderImageSource?: string | null;
-    borderImageWidth?: string | number | null;
-    borderLeft?: string | number | null;
-    borderLeftColor?: string | null;
-    borderLeftStyle?: string | null;
-    borderLeftWidth?: string | number | null;
-    borderRadius?: string | number | null;
-    borderRight?: string | null;
-    borderRightColor?: string | null;
-    borderRightStyle?: string | null;
-    borderRightWidth?: string | number | null;
-    borderSpacing?: string | null;
-    borderStyle?: string | null;
-    borderTop?: string | null;
-    borderTopColor?: string | null;
-    borderTopLeftRadius?: string | number | null;
-    borderTopRightRadius?: string | number | null;
-    borderTopStyle?: string | null;
-    borderTopWidth?: string | number | null;
-    borderWidth?: string | number | null;
-    bottom?: string | number | null;
+    borderBottom?: CSSLength;
+    borderBottomColor?: CSSColor;
+    borderBottomLeftRadius?: string | number;
+    borderBottomRightRadius?: string | number;
+    borderBottomStyle?: NamedBorderStyle;
+    borderBottomWidth?: CSSLength;
+    borderCollapse?: "collapse" | "separate";
+    borderColor?: CSSColor;
+    borderImage?: (
+        | `url(${string}) ${number} ${string}`
+        | string
+        );
+    borderImageOutset?: number | string;
+    borderImageRepeat?: "stretch" | "repeat" | "round" | "space";
+    borderImageSlice?: string | number | CSSLength;
+    borderImageSource?: "none" | `url(${string})`;
+    borderImageWidth?: string | number | CSSLength;
+    borderLeft?: string | CSSLength;
+    borderLeftColor?: CSSColor;
+    borderLeftStyle?: NamedBorderStyle;
+    borderLeftWidth?: NamedBorderWidth | CSSLength;
+    borderRadius?: string | CSSLength;
+    borderRight?: string | CSSLength;
+    borderRightColor?: CSSColor;
+    borderRightStyle?: NamedBorderStyle;
+    borderRightWidth?: NamedBorderWidth | CSSLength;
+    borderSpacing?: string | CSSLength;
+    borderStyle?: NamedBorderStyle;
+    borderTop?: CSSLength | NamedBorderWidth | NamedBorderStyle;
+    borderTopColor?: CSSColor;
+    borderTopLeftRadius?: string | CSSLength;
+    borderTopRightRadius?: string | CSSLength;
+    borderTopStyle?: NamedBorderStyle;
+    borderTopWidth?: NamedBorderStyle | CSSLength;
+    borderWidth?: string | CSSLength;
+    bottom?: CSSLength | "auto";
     boxShadow?: string | null;
-    boxSizing?: string | null;
-    breakAfter?: string | null;
-    breakBefore?: string | null;
-    breakInside?: string | null;
-    captionSide?: string | null;
-    clear?: string | null;
+    boxSizing?: "border-box" | "content-box";
+    breakAfter?: (
+        | "auto"
+        | "avoid"
+        | "always"
+        | "all"
+        | "avoid-page"
+        | "page"
+        | "left"
+        | "right"
+        | "recto"
+        | "verso"
+        | "avoid-column"
+        | "region"
+        );
+    breakBefore?: (
+        | "auto"
+        | "avoid"
+        | "always"
+        | "all"
+        | "avoid-page"
+        | "page"
+        | "left"
+        | "right"
+        | "recto"
+        | "verso"
+        | "avoid-column"
+        | "region"
+        );
+    breakInside?: (
+        | "auto"
+        | "avoid"
+        | "avoid-page"
+        | "avoid-column"
+        | "avoid-region"
+        );
+    captionSide?: (
+        | "top"
+        | "bottom"
+        | "block-start"
+        | "block-end"
+        | "inline-start"
+        | "inline-end"
+        );
+    clear?: (
+        | "none"
+        | "left"
+        | "right"
+        | "both"
+        | "inline-start"
+        | "inline-end"
+        );
     clip?: string | null;
-    clipPath?: string | null;
+    clipPath?: (
+        | `url(${string})`
+        | "margin-box"
+        | "border-box"
+        | "padding-box"
+        | "content-box"
+        | "fill-box"
+        | "stroke-box"
+        | "view-box"
+        | `inset(${string} ${string})`
+        | `circle(${string} at ${string} ${string})`
+        );
     clipRule?: string | null;
     color?: string | null;
     colorInterpolationFilters?: string | null;
