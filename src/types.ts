@@ -814,32 +814,128 @@ export interface CSSProperties {
     strokeMiterlimit?: number;
     strokeOpacity?: `${number}%`;
     strokeWidth?: CSSLength;
-    tableLayout?: string | null;
-    textAlign?: string | null;
-    textAlignLast?: string | null;
-    textAnchor?: string | null;
+    tableLayout?: "auto" | "fixed";
+    textAlign?: (
+        | "start"
+        | "end"
+        | "left"
+        | "right"
+        | "center"
+        | "justify"
+        | "justify-all"
+        | "match-parent"
+        | string
+        );
+    textAlignLast?: (
+        | "auto"
+        | "start"
+        | "end"
+        | "left"
+        | "right"
+        | "center"
+        | "justify"
+        );
+    textAnchor?: "start" | "middle" | "end";
     textDecoration?: string | null;
-    textIndent?: string | number | null;
-    textJustify?: string | null;
+    textIndent?: CSSLength;
+    textJustify?: (
+        | "auto"
+        | "none"
+        | "inter-word"
+        | "inter-character"
+        );
     textKashida?: string | null;
     textKashidaSpace?: string | null;
-    textOverflow?: string | null;
+    textOverflow?: "clip" | "ellipsis";
     textShadow?: string | null;
-    textTransform?: string | null;
-    textUnderlinePosition?: string | null;
-    top?: string | number | null;
-    touchAction?: string | null;
-    transform?: string | null;
-    transformOrigin?: string | null;
-    transformStyle?: string | null;
-    transition?: string | null;
-    transitionDelay?: string | null;
-    transitionDuration?: string | null;
-    transitionProperty?: string | null;
-    transitionTimingFunction?: string | null;
-    unicodeBidi?: string | null;
-    verticalAlign?: string | null;
-    visibility?: string | null;
+    textTransform?: (
+        | "none"
+        | "capitalize"
+        | "uppercase"
+        | "lowercase"
+        | "full-width"
+        | "full-size-kana"
+        );
+    textUnderlinePosition?: (
+        | "auto"
+        | "under"
+        | "left"
+        | "right"
+        | `${"auto" | "under" | "left" | "right"} ${"auto" | "under" | "left" | "right"}`
+        );
+    top?: "auto" | CSSLength;
+    touchAction?: (
+        | "auto"
+        | "none"
+        | "pan-x"
+        | "pan-left"
+        | "pan-right"
+        | "pan-y"
+        | "pan-up"
+        | "pan-down"
+        | "pinch-zoom"
+        | "manipulation"
+        );
+    transform?: (
+        | "none"
+        | string
+        | `matrix(${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
+        | `matrix3d(${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
+        | `rotate(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotate3d(${number},${number},${number},${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotateX(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotateY(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `rotateZ(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `scale(${number | `${number}%`}, ${number | `${number}%`})`
+        | `scale3d(${number}, ${number},${number})`
+        | `scaleX(${number})`
+        | `scaleY(${number})`
+        | `scaleZ(${number})`
+        | `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
+        | `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
+        | `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`
+        );
+    transformOrigin?: (
+        | CSSLength
+        | "left"
+        | "right"
+        | "center"
+        | "bottom"
+        | string
+        );
+    transformStyle?: "flat" | "preserve-3d";
+    transition?: (
+        // | `${string} ${CSSTime}`
+        // | `${string} ${CSSTime} ${CSSTime}`
+        // | `${string} ${CSSTime} ${CSSEasingFunction}`
+        // | `${string} ${CSSTime} ${CSSEasingFunction} ${CSSTime}`
+        | `all ${CSSTime} ${CSSEasingFunction}`
+        | string
+        );
+    transitionDelay?: CSSTime | string;
+    transitionDuration?: CSSTime | string;
+    transitionProperty?: "none" | "all" | string;
+    transitionTimingFunction?: CSSEasingFunction;
+    unicodeBidi?: (
+        | "normal"
+        | "embed"
+        | "isolate"
+        | "bidi-override"
+        | "isolate-override"
+        | "plaintext"
+        );
+    verticalAlign?: (
+        | "baseline"
+        | "sub"
+        | "super"
+        | "text-top"
+        | "text-bottom"
+        | "middle"
+        | "top"
+        | "bottom"
+        | CSSLength
+        );
+    visibility?: "visible" | "hidden" | "collapse";
     webkitAlignContent?: string | null;
     webkitAlignItems?: string | null;
     webkitAlignSelf?: string | null;
@@ -908,15 +1004,28 @@ export interface CSSProperties {
     webkitUserModify?: string | null;
     webkitUserSelect?: string | null;
     webkitWritingMode?: string | null;
-    whiteSpace?: string | null;
-    widows?: string | null;
-    width?: string | null;
-    wordBreak?: string | null;
-    wordSpacing?: string | null;
+    whiteSpace?: (
+        | "normal"
+        | "nowrap"
+        | "pre"
+        | "pre-wrap"
+        | "pre-line"
+        | "break-spaces"
+        );
+    widows?: number;
+    width?: (
+        | "auto"
+        | "max-content"
+        | "min-content"
+        //| `fit-content(${CSSLength})`
+        | CSSLength
+        );
+    wordBreak?: "normal" | "break-all" | "keep-all" | "break-word";
+    wordSpacing?: "normal" | CSSLength;
     wordWrap?: string | null;
-    writingMode?: string | null;
-    zIndex?: string | number | null;
-    zoom?: string | null;
+    writingMode?: "horizontal-tb" | "vertical-rl" | "vertical-lr";
+    zIndex?: "auto" | number;
+    zoom?: "normal" | "reset" | `${number}%` | number;
 
     /** A shorthand property for the grid-template-rows, grid-template-columns, grid-template-areas, grid-auto-rows, grid-auto-columns, and the grid-auto-flow properties */
     grid?: string
