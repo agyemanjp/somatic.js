@@ -539,6 +539,7 @@ export interface CSSProperties {
         | "disabled"
         );
     justifyContent?: (
+        | GlobalValues
         | "center"
         | "start"
         | "end"
