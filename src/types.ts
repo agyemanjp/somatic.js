@@ -71,6 +71,7 @@ export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
     alignContent?: (
+
         | "center"
         | "start"
         | "end"
@@ -88,6 +89,7 @@ export interface CSSProperties {
         | "unsafe center"
         );
     alignItems?: (
+        | GlobalValues
         | "normal"
         | "stretch"
         | "center"
@@ -292,7 +294,7 @@ export interface CSSProperties {
         | `circle(${string} at ${string} ${string})`
         );
     clipRule?: string | null;
-    color?: string | null;
+    color?: CSSColor;
     colorInterpolationFilters?: string | null;
     columnCount?: any;
     columnFill?: string | null;
@@ -691,6 +693,14 @@ export type CSSTimeUnit = (
     | "s"
     )
 
+export type GlobalValues = (
+    | "inherit"
+    | "initial"
+    | "revert"
+    | "unset"
+    | "revert-layer"
+    )
+
 export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
 export type CSSLength = `${number}${CSSLengthUnit}`;
 /** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
@@ -717,7 +727,7 @@ export type CSSLengthUnit = (
     )
 
 export type CSSColor = (
-    | null
+    | string
     | keyof typeof colorConstants
     | "currentcolor"
     | "transparent"
