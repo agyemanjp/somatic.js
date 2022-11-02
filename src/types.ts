@@ -727,43 +727,93 @@ export interface CSSProperties {
     msWrapFlow?: string;
     msWrapMargin?: any;
     msWrapThrough?: string;
-    opacity?: string | number | null;
+    opacity?: number | `${number}%`;
     order?: string | null;
-    orphans?: string | null;
-    outline?: string | null;
-    outlineColor?: string | null;
-    outlineStyle?: string | null;
-    outlineWidth?: string | null;
-    overflow?: string | null;
-    overflowX?: string | null;
-    overflowY?: string | null;
-    padding?: string | number | null;
-    paddingBottom?: string | number | null;
-    paddingLeft?: string | number | null;
-    paddingRight?: string | number | null;
-    paddingTop?: string | number | null;
-    pageBreakAfter?: string | null;
-    pageBreakBefore?: string | null;
-    pageBreakInside?: string | null;
-    perspective?: string | null;
+    orphans?: number;
+    outline?: NamedBorderStyle | string;
+    outlineColor?: CSSColor | "invert";
+    outlineStyle?: NamedBorderStyle;
+    outlineWidth?: NamedBorderWidth | CSSLength;
+    overflow?: (
+        | "visible"
+        | "hidden"
+        | "clip"
+        | "scroll"
+        | "auto"
+        );
+    overflowX?: (
+        | "visible"
+        | "hidden"
+        | "clip"
+        | "scroll"
+        | "auto"
+        );
+    overflowY?: (
+        | "visible"
+        | "hidden"
+        | "clip"
+        | "scroll"
+        | "auto"
+        );
+    padding?: number | CSSLength | string;
+    paddingBottom?: CSSLength;
+    paddingLeft?: CSSLength;
+    paddingRight?: CSSLength;
+    paddingTop?: CSSLength;
+    pageBreakAfter?: (
+        | "auto"
+        | "always"
+        | "avoid"
+        | "left"
+        | "right"
+        | "recto"
+        | "verso"
+        );
+    pageBreakBefore?: (
+        | "auto"
+        | "always"
+        | "avoid"
+        | "left"
+        | "right"
+        | "recto"
+        | "verso"
+        );
+    pageBreakInside?: "auto" | "avoid";
+    perspective?: "none" | CSSLength;
     perspectiveOrigin?: string | null;
-    pointerEvents?: string | null;
+    pointerEvents?: (
+        | "auto"
+        | "none"
+        | "visiblePainted"
+        | "visibleFill"
+        | "visibleStroke"
+        | "visible"
+        | "painted"
+        | "fill"
+        | "stroke"
+        | "all"
+        );
     position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null;
-    quotes?: string | null;
-    right?: string | number | null;
-    rubyAlign?: string | null;
+    quotes?: (
+        | "none"
+        | "auto"
+        | `${string} ${string}`
+        | `${string} ${string} ${string} ${string}`
+        );
+    right?: "auto" | CSSLength;
+    rubyAlign?: "start" | "center" | "space-between" | "space-around";
     rubyOverhang?: string | null;
-    rubyPosition?: string | null;
-    stopColor?: string | null;
-    stopOpacity?: string | null;
+    rubyPosition?: "over" | "under" | "alternate" | "inter-character";
+    stopColor?: "currentColor" | CSSColor;
+    stopOpacity?: number;
     stroke?: string | null;
-    strokeDasharray?: string | null;
-    strokeDashoffset?: string | null;
-    strokeLinecap?: string | null;
-    strokeLinejoin?: string | null;
-    strokeMiterlimit?: string | number | null;
-    strokeOpacity?: string | null;
-    strokeWidth?: string | number | null;
+    strokeDasharray?: "none" | "inherit" | string | CSSLength;
+    strokeDashoffset?: CSSLength;
+    strokeLinecap?: "butt" | "round" | "square";
+    strokeLinejoin?: "miter" | "round" | "bevel" | "arcs" | "miter-clip";
+    strokeMiterlimit?: number;
+    strokeOpacity?: `${number}%`;
+    strokeWidth?: CSSLength;
     tableLayout?: string | null;
     textAlign?: string | null;
     textAlignLast?: string | null;
