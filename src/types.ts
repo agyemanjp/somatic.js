@@ -309,81 +309,393 @@ export interface CSSProperties {
         | `inset(${string} ${string})`
         | `circle(${string} at ${string} ${string})`
         );
-    clipRule?: string | null;
-    color?: CSSColor;
+    clipRule?: "nonzero" | "evenodd" | "inherit";
+    color?: CSSColor | string;
     colorInterpolationFilters?: string | null;
-    columnCount?: any;
-    columnFill?: string | null;
-    columnRule?: string | null;
-    columnRuleColor?: any;
-    columnRuleStyle?: string | null;
-    columnRuleWidth?: any;
-    columnSpan?: string | null;
-    columnWidth?: any;
-    columns?: string | null;
+    columnCount?: "auto" | number;
+    columnFill?: "auto" | "balance" | "balance-all";
+    columnRule?: NamedBorderStyle | string;
+    columnRuleColor?: CSSColor | string;
+    columnRuleStyle?: NamedBorderStyle;
+    columnRuleWidth?: NamedBorderStyle | CSSLength;
+    columnSpan?: "none" | "all";
+    columnWidth?: "auto" | CSSLength;
+    columns?: (
+        | CSSLength
+        | "auto"
+        | number
+        | string
+        );
     content?: string | null;
-    counterIncrement?: string | null;
-    counterReset?: string | null;
+    counterIncrement?: string | "none";
+    counterReset?: string | "none";
     cssFloat?: string | null;
-    float?: string | null;
+    float?: (
+        | "left"
+        | "right"
+        | "none"
+        | "inline-start"
+        | "inline-end"
+        );
     cssText?: string;
-    cursor?: string | null;
-    direction?: string | null;
-    display?: string | null;
-    dominantBaseline?: string | null;
-    emptyCells?: string | null;
-    enableBackground?: string | null;
+    cursor?: (
+        | CursorKeywords
+        | `url(${string}), ${CursorKeywords}`
+        | `url(${string}) ${number} ${number}, ${CursorKeywords}`
+        );
+    direction?: "ltr" | "rtl";
+    display?: (
+        | "block"
+        | "inline"
+        | "inline-block"
+        | "flex"
+        | "inline-flex"
+        | "grid"
+        | "inline-grid"
+        | "flow-root"
+        | "none"
+        | "contents"
+        | "block flow"
+        | "inline flow"
+        | "inline flow-root"
+        | "block flex"
+        | "inline flex"
+        | "block grid"
+        | "inline grid"
+        | "block flow-root"
+        | "table"
+        | "table-row"
+        | "list-item"
+        );
+    dominantBaseline?: (
+        | "auto"
+        | "ideographic"
+        | "alphabetic"
+        | "hanging"
+        | "mathematical"
+        | "central"
+        | "middle"
+        | "text-after-edge"
+        | "text-before-edge"
+        | "text-top"
+        );
+    emptyCells?: "show" | "hide";
+    enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`;
     fill?: string | null;
-    fillOpacity?: string | null;
-    fillRule?: string | null;
-    filter?: string | null;
-    flex?: string | null;
-    flexBasis?: string | null;
-    flexDirection?: string | null;
-    flexFlow?: string | number | null;
-    flexGrow?: string | number | null;
-    flexShrink?: string | number | null;
-    flexWrap?: string | null;
-    floodColor?: string | null;
-    floodOpacity?: string | number | null;
+    fillOpacity?: number | `${number}%`;
+    fillRule?: "nonzero" | "evenodd";
+    filter?: (
+        | `url(${string})`
+        | `blur(${CSSLength})`
+        | `brightness(${number})`
+        | `contrast(${number}%)`
+        //| `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
+        | `grayscale(${number}%)`
+        | `hue-rotate(${number}deg)`
+        | `invert(${number}%)`
+        | `opacity(${number}%)`
+        | `saturate(${number}%)`
+        | `sepia(${number}%)`
+        | string
+        | "none"
+        );
+    flex?: (
+        | "none"
+        | "auto"
+        | "initial"
+        | number
+        | CSSLength
+        | string
+        );
+    flexBasis?: (
+        | "auto"
+        | CSSLength
+        | "min-content"
+        | "max-content"
+        | "fit-content"
+        | "content"
+        );
+    flexDirection?: (
+        | "row"
+        | "row-reverse"
+        | "column"
+        | "column-reverse"
+        );
+    flexFlow?: (
+        | "row"
+        | "row-reverse"
+        | "column"
+        | "column-reverse"
+        | "nowrap"
+        | "wrap"
+        | "wrap-reverse"
+        //| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`
+        );
+    flexGrow?: number;
+    flexShrink?: number;
+    flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
+    floodColor?: CSSColor;
+    floodOpacity?: number | `${number}%`;
     font?: string | null;
-    fontFamily?: string | null;
-    fontFeatureSettings?: string | null;
-    fontSize?: string | null;
-    fontSizeAdjust?: string | null;
-    fontStretch?: string | null;
-    fontStyle?: string | null;
-    fontVariant?: string | null;
-    fontWeight?: string | number | null;
-    glyphOrientationHorizontal?: string | null;
-    glyphOrientationVertical?: string | null;
-    height?: string | null;
-    imeMode?: string | null;
-    justifyContent?: string | null;
-    kerning?: string | null;
-    left?: string | number | null;
-    readonly length?: number;
-    letterSpacing?: string | null;
-    lightingColor?: string | null;
-    lineHeight?: string | null;
+    fontFamily?: (
+        | "serif"
+        | "sans-serif"
+        | "cursive"
+        | "fantasy"
+        | "monospace"
+        | "system-ui"
+        | "ui-serif"
+        | "ui-sans-serif"
+        | "ui-monospace"
+        | "ui-rounded"
+        | "emoji"
+        | "math"
+        | "fangsong"
+        | string
+//         | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" |
+// "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`
+        );
+    fontFeatureSettings?: (
+        | "normal"
+        | string
+        | `${string} ${"on" | "off" | number}`
+        );
+    fontSize?: (
+        | "xx-small"
+        | "x-small"
+        | "small"
+        | "medium"
+        | "large"
+        | "x-large"
+        | "xx-large"
+        | "xxx-large"
+        | "larger"
+        | "smaller"
+        | CSSLength
+        | "math"
+        );
+    fontSizeAdjust?: (
+        | "none"
+        | number
+        | `${"ex-height" | "cap-height" | "ch-width" | "ic-width" | "ic-height"} ${number}`
+        );
+    fontStretch?: (
+        | "normal"
+        | "ultra-condensed"
+        | "extra-condensed"
+        | "condensed"
+        | "semi-condensed"
+        | "semi-expanded"
+        | "expanded"
+        | "extra-expanded"
+        | "ultra-expanded"
+        | `${number}%`
+        );
+    fontStyle?: (
+        | "normal"
+        | "italic"
+        | "oblique"
+        | `oblique ${number}deg`
+        );
+    fontVariant?: (
+        | "normal"
+        | "small-caps"
+        | "all-small-caps"
+        | "petite-caps"
+        | "all-petite-caps"
+        | "unicase"
+        | "titling-caps"
+        | "lining-nums"
+        | "oldstyle-nums"
+        | "proportional-nums"
+        | "tabular-nums"
+        | "diagonal-fractions"
+        | "stacked-fractions"
+        | "ordinal"
+        | "slashed-zero"
+        | "jis78"
+        | "jis83"
+        | "jis90"
+        | "jis04"
+        | "simplified"
+        | "traditional"
+        | "full-width"
+        | "proportional-width"
+        | "ruby"
+        );
+    fontWeight?: (
+        | "normal"
+        | "bold"
+        | "bolder"
+        | "lighter"
+        | 100
+        | 200
+        | 300
+        | 400
+        | 500
+        | 600
+        | 700
+        | 800
+        | 900
+        );
+    glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`;
+    glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`;
+    height?: (
+        | "max-content"
+        | "min-content"
+        //| `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength
+        );
+    imeMode?: (
+        | "auto"
+        | "normal"
+        | "active"
+        | "inactive"
+        | "disabled"
+        );
+    justifyContent?: (
+        | "center"
+        | "start"
+        | "end"
+        | "flex-start"
+        | "flex-end"
+        | "left"
+        | "right"
+        | "normal"
+        | "space-between"
+        | "space-around"
+        | "space-evenly"
+        | "stretch"
+        | "safe center"
+        | "unsafe center"
+        );
+    kerning?: "auto" | number | CSSLength;
+    left?: "auto" | CSSLength;
+    readonly length?: CSSLength;
+    letterSpacing?: "normal" | CSSLength;
+    lightingColor?: CSSColor;
+    lineHeight?: "normal" | number | CSSLength;
     listStyle?: string | null;
-    listStyleImage?: string | null;
-    listStylePosition?: string | null;
-    listStyleType?: string | null;
-    margin?: string | number | null;
-    marginBottom?: string | number | null;
-    marginLeft?: string | number | null;
-    marginRight?: string | number | null;
-    marginTop?: string | number | null;
+    listStyleImage?: "none" | `url(${string})`;
+    listStylePosition?: "inside" | "outside";
+    listStyleType?: (
+        | "none"
+        | string
+        | "disc"
+        | "circle"
+        | "square"
+        | "decimal"
+        | "cjk-decimal"
+        | "decimal-leading-zero"
+        | "lower-roman"
+        | "upper-roman"
+        | "lower-greek"
+        | "lower-alpha"
+        | "lower-latin"
+        | "upper-alpha"
+        | "upper-latin"
+        | "arabic-indic"
+        | "-moz-arabic-indic"
+        | "armenian"
+        | "bengali"
+        | "-moz-bengali"
+        | "cambodian"
+        | "khmer"
+        | "cjk-earthly-branch"
+        | "-moz-cjk-earthly-branch"
+        | "cjk-heavenly-stem"
+        | "-moz-cjk-heavenly-stem"
+        | "cjk-ideographic"
+        | "devanagari"
+        | "-moz-devanagari"
+        | "ethiopic-numeric"
+        | "georgian"
+        | "gujarati"
+        | "-moz-gujarati"
+        | "gurmukhi"
+        | "-moz-gurmukhi"
+        | "hebrew"
+        | "hiragana"
+        | "hiragana-iroha"
+        | "japanese-formal"
+        | "japanese-informal"
+        | "kannada"
+        | "-moz-kannada"
+        | "katakana"
+        | "katakana-iroha"
+        | "korean-hangul-formal"
+        | "korean-hanja-formal"
+        | "korean-hanja-informal"
+        | "lao"
+        | "-moz-lao"
+        | "lower-armenian"
+        | "malayalam"
+        | "-moz-malayalam"
+        | "mongolian"
+        | "myanmar"
+        | "-moz-myanmar"
+        | "oriya"
+        | "-moz-oriya"
+        | "persian"
+        | "-moz-persian"
+        | "simp-chinese-formal"
+        | "simp-chinese-informal"
+        | "tamil"
+        | "-moz-tamil"
+        | "telugu"
+        | "-moz-telugu"
+        | "thai"
+        | "-moz-thai"
+        | "tibetan"
+        | "trad-chinese-formal"
+        | "trad-chinese-informal"
+        | "upper-armenian"
+        | "disclosure-open"
+        | "disclosure-closed"
+        );
+    margin?: (
+        | number
+        | CSSLength
+        | string
+        );
+    marginBottom?: CSSLength | "auto";
+    marginLeft?: CSSLength | "auto";
+    marginRight?: CSSLength | "auto";
+    marginTop?: CSSLength | "auto";
     marker?: string | null;
     markerEnd?: string | null;
     markerMid?: string | null;
     markerStart?: string | null;
     mask?: string | null;
-    maxHeight?: string | null;
-    maxWidth?: string | null;
-    minHeight?: string | null;
-    minWidth?: string | null;
+    maxHeight?: (
+        | "max-content"
+        | "min-content"
+        //| `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength
+        );
+    maxWidth?: (
+        | "max-content"
+        | "min-content"
+        //| `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength
+        );
+    minHeight?: (
+        | "max-content"
+        | "min-content"
+        //| `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength
+        );
+    minWidth?: (
+        | "max-content"
+        | "min-content"
+        //| `fit-content(${CSSLength})`
+        | "auto"
+        | CSSLength
+        );
     msContentZoomChaining?: string | null;
     msContentZoomLimit?: string | null;
     msContentZoomLimitMax?: any;
