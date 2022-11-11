@@ -1,6 +1,6 @@
 {
 	"name": "@agyemanjp/somatic",
-	"version": "3.0.3",
+	"version": "3.0.0",
 	"description": "Functional, Asynchronous, Component-based UI Library that works with JSX",
 	"main": "index.js",
 	"types": "index.d.ts",

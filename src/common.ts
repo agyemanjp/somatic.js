@@ -423,7 +423,6 @@ export const colorConstants/*: Record<string, string>*/ = {
     "yellow":               "#ffff00",
     "yellowgreen":          "#9acd32"
 }
-
 export const colors: Record<string, string> = colorConstants
 
 export const borderStyles = {
