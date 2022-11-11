@@ -660,10 +660,10 @@ export interface CSSProperties {
         | CSSLength
         | string
         );
-    marginBottom?: CSSLength | "auto";
-    marginLeft?: CSSLength | "auto";
-    marginRight?: CSSLength | "auto";
-    marginTop?: CSSLength | "auto";
+    marginBottom?: CSSLength | "auto" | `${number}`;
+    marginLeft?: CSSLength | "auto" | `${number}`;
+    marginRight?: CSSLength | "auto" | `${number}`;
+    marginTop?: CSSLength | "auto" | `${number}`;
     marker?: string | null;
     markerEnd?: string | null;
     markerMid?: string | null;
