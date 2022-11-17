@@ -1,0 +1,33 @@
+name: Publish Major
+on:
+  workflow_dispatch:
+
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 16.x
+
+      - name: Git Configurations
+        run: |
+          git config --global user.name "${{env.GIT_USER_NAME}}"
+          git config --global user.email "${{env.GIT_USER_EMAIL}}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish to NPM
+        run: |
+          npm config set //registry.npmjs.org/:_authToken ${{ env.NPM_TOKEN }}
+          npm run publish:major
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+          GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
