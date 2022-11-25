@@ -1,6 +1,6 @@
-import {dashCase, keys, Obj} from "@agyemanjp/standard"
-import {attributeConversions, booleanAttributes} from "./common"
-import {CSSProperties, HTMLAttributes} from "./types"
+import { keys, Obj, toDashCase } from "@agyemanjp/standard"
+import { attributeConversions, booleanAttributes } from "./common"
+import { CSSProperties, HTMLAttributes } from "./types"
 
 /** Converts an attributes property object to a string */
 export function stringifyAttributes<E>(props: HTMLAttributes<any> & E): string {
@@ -47,8 +47,7 @@ export function stringifyStyle(
         return Object.keys(style)
             .map(
                 (key) =>
-                    `${dashCase(key)}: ${style[key as keyof typeof style]}${
-                        important === true ? " !important" : ""
+                    `${toDashCase(key)}: ${style[key as keyof typeof style]}${important === true ? " !important" : ""
                     }`
             )
             .join("; ")
