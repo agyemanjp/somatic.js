@@ -1,4 +1,4 @@
-import { keys, Obj, toDashCase } from "@agyemanjp/standard"
+import { dashCase, keys, Obj } from "@agyemanjp/standard"
 import { attributeConversions, booleanAttributes } from "./common"
 import { CSSProperties, HTMLAttributes } from "./types"
 
@@ -47,7 +47,7 @@ export function stringifyStyle(
         return Object.keys(style)
             .map(
                 (key) =>
-                    `${toDashCase(key)}: ${style[key as keyof typeof style]}${important === true ? " !important" : ""
+                    `${dashCase(key)}: ${style[key as keyof typeof style]}${important === true ? " !important" : ""
                     }`
             )
             .join("; ")
