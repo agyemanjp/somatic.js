@@ -1,4 +1,4 @@
-name: Publish Patch
+name: Publish Major
 on:
   workflow_dispatch:
 
@@ -23,10 +23,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Publish to NPM
+      - name: Check if package version updated
+        id: check_version
+        uses: EndBug/version-check@v2
+
+      - name: Publish to NPM if new version
+        if: steps.check_version.outputs.updated == 'true'
         run: |
           npm config set //registry.npmjs.org/:_authToken ${{ env.NPM_TOKEN }}
-          npm run publish:patch
+          npm run publish:major
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
