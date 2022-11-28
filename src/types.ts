@@ -4,8 +4,8 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {Obj, UnionOfRepeats} from "@agyemanjp/standard/utility"
-import {colorConstants} from "./common"
+import { Obj, UnionOfRepeats } from "@agyemanjp/standard/utility"
+import { colorConstants } from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> =
@@ -15,7 +15,7 @@ export type Component<P extends Obj = Obj> =
         | Generator<UIElement, UIElement, typeof props>
         | Promise<UIElement>
         | UIElement
-        )
+    )
     & ComponentOptions<P>
 
 export interface ComponentOptions<P extends Obj = Obj> {
@@ -25,13 +25,13 @@ export interface ComponentOptions<P extends Obj = Obj> {
 }
 
 export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a
-                                               // generic type
+// generic type
 export interface UIElementBase<P = unknown> {
     props: P,
     children?: Children
 }
 
-export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> {type: string}
+export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
 
 // export interface FragmentElement extends UIElementBase<undefined> { type: "" }
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> {
@@ -70,29 +70,29 @@ export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 export interface CSSProperties {
     alignContent?:
     /* align-content does not take left and right values */
-        | "center"		/* Pack items around the center */
-        | "start"		/* Pack items from the start */
-        | "end"			/* Pack items from the end */
-        | "flex-start"	/* Pack flex items from the start */
-        | "flex-end"	/* Pack flex items from the end */
+    | "center"		/* Pack items around the center */
+    | "start"		/* Pack items from the start */
+    | "end"			/* Pack items from the end */
+    | "flex-start"	/* Pack flex items from the start */
+    | "flex-end"	/* Pack flex items from the end */
 
-        /* Normal alignment */
-        | "normal"
+    /* Normal alignment */
+    | "normal"
 
-        /* Baseline alignment */
-        | "baseline"
-        | "first baseline"
-        | "last baseline"
+    /* Baseline alignment */
+    | "baseline"
+    | "first baseline"
+    | "last baseline"
 
-        /* Distributed alignment */
-        | "space-between" /* Distribute items evenly; The first item is flush with the start, the last is flush with the end */
-        | "space-around"  /* Distribute items evenly; Items have a half-size space on either end */
-        | "space-evenly"  /* Distribute items evenly; Items have equal space around them */
-        | "stretch"       /* Distribute items evenly; Stretch 'auto'-sized items to fit the container */
+    /* Distributed alignment */
+    | "space-between" /* Distribute items evenly; The first item is flush with the start, the last is flush with the end */
+    | "space-around"  /* Distribute items evenly; Items have a half-size space on either end */
+    | "space-evenly"  /* Distribute items evenly; Items have equal space around them */
+    | "stretch"       /* Distribute items evenly; Stretch 'auto'-sized items to fit the container */
 
-        /* Overflow alignment */
-        | "safe center"
-        | "unsafe center";
+    /* Overflow alignment */
+    | "safe center"
+    | "unsafe center";
 
     /* Global values */
     // | "inherit"
@@ -442,17 +442,17 @@ export interface CSSProperties {
 
     /** Defines on which row-line a grid item will start */
     gridRowStart?:
-        | "auto" // Default value. The item will be placed following the flow
-        | `span ${number}` // the number of rows the item will span
-        | number // row line
-        | "inherit" | "initial" | "revert" | "unset"
+    | "auto" // Default value. The item will be placed following the flow
+    | `span ${number}` // the number of rows the item will span
+    | number // row line
+    | "inherit" | "initial" | "revert" | "unset"
 
     /** Defines on which column-line a grid item will start. */
     gridColumnStart?:
-        | "auto" // Default value. The item will be placed following the flow
-        | `span ${number}` // the number of columns the item will span
-        | number // column-line
-        | "inherit" | "initial" | "revert" | "unset"
+    | "auto" // Default value. The item will be placed following the flow
+    | `span ${number}` // the number of columns the item will span
+    | number // column-line
+    | "inherit" | "initial" | "revert" | "unset"
 
     /** Defines how many rows a grid item will span, or on which row-line the item will end */
     gridRowEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
@@ -506,7 +506,7 @@ export type CSSColor = (
     | `#${string}`
     | `rgb(${number},${number},${number})`
     | `rgba(${number}, ${number}, ${number}, ${number})`
-    )
+)
 export type CSSLength = `${number}${CSSLengthUnit}`;
 
 /** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
@@ -530,7 +530,7 @@ export type CSSLengthUnit = (
     | "vh" // 1% of the viewport's height.
     | "vmin" // 1% of the viewport's smaller dimension.
     | "vmax" // 1% of the viewport's larger dimension.
-    )
+)
 
 // eslint-disable-next-line fp/no-let, @typescript-eslint/no-unused-vars, prefer-const
 let c: CSSColor = "#001227"
@@ -550,10 +550,10 @@ export type IconProps = Partial<{
 }>
 
 //#region Attributes
-export interface Attributes {key?: string | number | symbol}
+export interface Attributes { key?: string | number | symbol }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ClassAttributes<T> extends Attributes {}
+export interface ClassAttributes<T> extends Attributes { }
 
 export type DOMAttributes<T> = {
     //childrenx?: Somatic.VNode[];
@@ -765,7 +765,7 @@ export type HTMLAttributes<T> = DOMAttributes<T> & {
         | "ltr"
         | "rtl"
         | "auto"
-        );
+    );
     draggable?: boolean;
     hidden?: boolean;
     id?: string;
@@ -787,7 +787,7 @@ export type HTMLAttributes<T> = DOMAttributes<T> & {
         | "numeric"
         | "decimal"
         | "search"
-        );
+    );
     is?: string;
     radioGroup?: string; // <command>, <menuitem>
 
@@ -847,7 +847,7 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
     accumulate?: "none" | "sum";
     additive?: "replace" | "sum";
     alignmentBaseline?: "auto" | "baseline" | "before-edge" | "text-before-edge" | "middle" | "central" | "after-edge" |
-        "text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit";
+    "text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit";
     allowReorder?: "no" | "yes";
     alphabetic?: number | string;
     amplitude?: number | string;
@@ -860,118 +860,170 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
     baseFrequency?: number | string;
     baselineShift?: number | string;
     baseProfile?: number | string;
-    bbox?: number | string;
-    begin?: number | string;
-    bias?: number | string;
+    bbox?: string;
+    begin?: string;
+    bias?: number;
     by?: number | string;
-    calcMode?: number | string;
-    capHeight?: number | string;
-    clip?: number | string;
+    calcMode?: "discrete" | "linear" | "paced" | "spline";
+    capHeight?: number;
+    clip?: CSSProperty<"auto" | `rect(${string},${string},${string},${string},)`>;
     clipPath?: string;
-    clipPathUnits?: number | string;
-    clipRule?: number | string;
-    colorInterpolation?: number | string;
+    clipPathUnits?: "userSpaceOnUse" | "objectBoundingBox";
+    clipRule?: "nonzero" | "evenodd" | "inherit";
+    colorInterpolation?: "auto" | "sRGB" | "linearRGB" | "inherit";
     colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit";
-    colorProfile?: number | string;
+    colorProfile?: "auto" | "sRGB" | "string";
     colorRendering?: number | string;
-    contentScriptType?: number | string;
-    contentStyleType?: number | string;
-    cursor?: number | string;
-    cx?: number | string;
-    cy?: number | string;
+    contentScriptType?: string;
+    contentStyleType?: string;
+    cursor?: (
+        | "auto"
+        | "crosshair"
+        | "default"
+        | "pointer"
+        | "move"
+        | "e-resize"
+        | "ne-resize"
+        | "nw-resize"
+        | "n-resize"
+    );
+    cx?: number | `${number}%`;
+    cy?: number | `${number}%`;
     d?: string;
     decelerate?: number | string;
-    descent?: number | string;
-    diffuseConstant?: number | string;
-    direction?: number | string;
-    display?: number | string;
-    divisor?: number | string;
-    dominantBaseline?: number | string;
+    descent?: number;
+    diffuseConstant?: number;
+    direction?: "ltr" | "rtl" | "inherit";
+    display?: (
+        | "inline"
+        | "block"
+        | "list-item"
+        | "run-in"
+        | "compact"
+        | "marker"
+        | "table"
+        | "inline-table"
+        | "table-row-group"
+    );
+    divisor?: number;
+    dominantBaseline?: (
+        | "auto"
+        | "text-bottom"
+        | "alphabetic"
+        | "ideographic"
+        | "middle"
+        | "central"
+        | "mathematical"
+        | "hanging"
+        | "text-top"
+    );
     dur?: number | string;
     dx?: number | string;
     dy?: number | string;
-    edgeMode?: number | string;
-    elevation?: number | string;
+    edgeMode?: "duplicate" | "wrap" | "none";
+    elevation?: number;
     enableBackground?: number | string;
     end?: number | string;
-    exponent?: number | string;
+    exponent?: number;
     externalResourcesRequired?: number | string;
     fill?: string;
-    fillOpacity?: number | string;
+    fillOpacity?: number | `${number}%`;
     fillRule?: "nonzero" | "evenodd" | "inherit";
     filter?: string;
     filterRes?: number | string;
-    filterUnits?: number | string;
-    floodColor?: number | string;
-    floodOpacity?: number | string;
+    filterUnits?: "userSpaceOnUse" | "objectBoundingBox";
+    floodColor?: CSSColor;
+    floodOpacity?: number;
     focusable?: number | string;
     fontFamily?: string;
     fontSize?: number | string;
-    fontSizeAdjust?: number | string;
+    fontSizeAdjust?: number;
     fontStretch?: number | string;
     fontStyle?: CSSProperty<"normal" | "italic" | "oblique">;
     fontVariant?: CSSProperty<"normal" | "small-caps">;
     fontWeight?: number | string;
-    format?: number | string;
+    format?: number | "normal" | "bold" | "bolder" | "lighter";
     from?: number | string;
-    fx?: number | string;
-    fy?: number | string;
+    fx?: CSSLength;
+    fy?: CSSLength;
     g1?: number | string;
     g2?: number | string;
     glyphName?: number | string;
-    glyphOrientationHorizontal?: number | string;
-    glyphOrientationVertical?: number | string;
-    glyphRef?: number | string;
+    glyphOrientationHorizontal?: `${number}${"deg" | "grad" | "rad"}`;
+    glyphOrientationVertical?: `${number}${"deg" | "grad" | "rad"}`;
+    glyphRef?: string;
     gradientTransform?: string;
-    gradientUnits?: string;
-    hanging?: number | string;
-    horizAdvX?: number | string;
-    horizOriginX?: number | string;
+    gradientUnits?: "userSpaceOnUse" | "objectBoundingBox";
+    hanging?: number;
+    horizAdvX?: number;
+    horizOriginX?: number;
     href?: string;
-    ideographic?: number | string;
-    imageRendering?: number | string;
-    in2?: number | string;
+    ideographic?: number;
+    imageRendering?: "auto" | "optimizeSpeed" | "optimizeQuality";
+    in2?: string;
     in?: string;
-    intercept?: number | string;
-    k1?: number | string;
-    k2?: number | string;
-    k3?: number | string;
-    k4?: number | string;
-    k?: number | string;
-    kernelMatrix?: number | string;
+    intercept?: number;
+    k1?: number;
+    k2?: number;
+    k3?: number;
+    k4?: number;
+    k?: number;
+    kernelMatrix?: string;
     kernelUnitLength?: number | string;
-    kerning?: number | string;
+    kerning?: "auto" | CSSLength;
     keyPoints?: number | string;
     keySplines?: number | string;
     keyTimes?: number | string;
-    lengthAdjust?: number | string;
-    letterSpacing?: number | string;
-    lightingColor?: number | string;
-    limitingConeAngle?: number | string;
+    lengthAdjust?: "spacing" | "spacingAndGlyphs";
+    letterSpacing?: "normal" | CSSLength;
+    lightingColor?: CSSColor;
+    limitingConeAngle?: number;
     local?: number | string;
     markerEnd?: string;
     markerHeight?: number | string;
     markerMid?: string;
     markerStart?: string;
-    markerUnits?: number | string;
-    markerWidth?: number | string;
+    markerUnits?: "userSpaceOnUse" | "strokeWidth";
+    markerWidth?: CSSLength;
     mask?: string;
-    maskContentUnits?: number | string;
-    maskUnits?: number | string;
-    mathematical?: number | string;
-    mode?: number | string;
-    numOctaves?: number | string;
+    maskContentUnits?: "userSpaceOnUse" | "objectBoundingBox";
+    maskUnits?: "userSpaceOnUse" | "objectBoundingBox";
+    mathematical?: number;
+    mode?: (
+        | "normal"
+        | "multiply"
+        | "screen"
+        | "overlay"
+        | "darken"
+        | "lighten"
+        | "color-dodge"
+        | "color-burn"
+        | "hard-light"
+        | "soft-light"
+        | "difference"
+        | "exclusion"
+        | "hue"
+        | "saturation"
+        | "color"
+        | "luminosity"
+    );
+    numOctaves?: number;
     offset?: number | string;
-    opacity?: number | string;
-    operator?: number | string;
+    opacity?: number;
+    operator?: "over" | "in" | "out" | "atop" | "xor" | "lighter" | "arithmetic";
     order?: number | string;
-    orient?: number | string;
-    orientation?: number | string;
-    origin?: number | string;
-    overflow?: number | string;
-    overlinePosition?: number | string;
-    overlineThickness?: number | string;
-    paintOrder?: number | string;
+    orient?: (
+        | "auto"
+        | "auto-start-reverse"
+        | `${number}${"deg" | "grad" | "rad"}`
+        | number
+    );
+    orientation?: "h" | "v";
+    origin?: "default";
+    overflow?: "visible" | "hidden" | "scroll" | "auto";
+    overlinePosition?: number;
+    overlineThickness?: number;
+    paintOrder?: "normal" | "fill" | "stroke" | "markers";
     panose1?: number | string;
     pathLength?: number | string;
     patternContentUnits?: string;
@@ -979,93 +1031,93 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
     patternUnits?: string;
     pointerEvents?: number | string;
     points?: string;
-    pointsAtX?: number | string;
-    pointsAtY?: number | string;
-    pointsAtZ?: number | string;
-    preserveAlpha?: number | string;
+    pointsAtX?: number;
+    pointsAtY?: number;
+    pointsAtZ?: number;
+    preserveAlpha?: boolean;
     preserveAspectRatio?: string;
-    primitiveUnits?: number | string;
-    r?: number | string;
+    primitiveUnits?: "userSpaceOnUse" | "objectBoundingBox";
+    r?: CSSLength;
     radius?: number | string;
-    refX?: number | string;
-    refY?: number | string;
-    renderingIntent?: number | string;
-    repeatCount?: number | string;
+    refX?: number | `${number}%` | "left" | "right" | "center";
+    refY?: number | `${number}%` | "top" | "center" | "bottom";
+    renderingIntent?: number | "indefinite";
+    repeatCount?: number | "indefinite";
     repeatDur?: number | string;
     requiredExtensions?: number | string;
-    requiredFeatures?: number | string;
-    restart?: number | string;
+    requiredFeatures?: string;
+    restart?: "always" | "whenNotActive" | "never";
     result?: string;
-    rotate?: number | string;
-    rx?: number | string;
-    ry?: number | string;
-    scale?: number | string;
-    seed?: number | string;
-    shapeRendering?: number | string;
-    slope?: number | string;
-    spacing?: number | string;
-    specularConstant?: number | string;
-    specularExponent?: number | string;
-    speed?: number | string;
-    spreadMethod?: string;
-    startOffset?: number | string;
+    rotate?: "auto" | "auto-reverse" | number;
+    rx?: CSSLength | "auto";
+    ry?: CSSLength | "auto";
+    scale?: number;
+    seed?: number;
+    shapeRendering?: "auto" | "optimizeSpeed" | "crispEdges" | "geometricPrecision";
+    slope?: number;
+    spacing?: "auto" | "exact";
+    specularConstant?: number;
+    specularExponent?: number;
+    speed?: number;
+    spreadMethod?: "pad" | "reflect" | "repeat";
+    startOffset?: number | `${number}%`;
     stdDeviation?: number | string;
-    stemh?: number | string;
-    stemv?: number | string;
-    stitchTiles?: number | string;
-    stopColor?: string;
-    stopOpacity?: number | string;
-    strikethroughPosition?: number | string;
-    strikethroughThickness?: number | string;
+    stemh?: number;
+    stemv?: number;
+    stitchTiles?: "noStitch" | "stitch";
+    stopColor?: CSSColor;
+    stopOpacity?: number;
+    strikethroughPosition?: number;
+    strikethroughThickness?: number;
     string?: number | string;
     stroke?: string;
     strokeDasharray?: string | number;
-    strokeDashoffset?: string | number;
+    strokeDashoffset?: CSSLength;
     strokeLinecap?: "butt" | "round" | "square" | "inherit";
     strokeLinejoin?: "miter" | "round" | "bevel" | "inherit";
-    strokeMiterlimit?: number | string;
-    strokeOpacity?: number | string;
-    strokeWidth?: number | string;
-    surfaceScale?: number | string;
+    strokeMiterlimit?: number;
+    strokeOpacity?: number | `${number}%`;
+    strokeWidth?: CSSLength;
+    surfaceScale?: number;
     systemLanguage?: number | string;
     tableValues?: number | string;
     targetX?: number | string;
     targetY?: number | string;
-    textAnchor?: string;
-    textDecoration?: number | string;
-    textLength?: number | string;
-    textRendering?: number | string;
+    textAnchor?: "start" | "middle" | "end";
+    textDecoration?: string;
+    textLength?: number | `${number}%`;
+    textRendering?: "auto" | "optimizeSpeed" | "optimizeLegibility" | "geometricPrecision";
     to?: number | string;
     transform?: string;
     u1?: number | string;
     u2?: number | string;
     underlinePosition?: number | string;
     underlineThickness?: number | string;
-    unicode?: number | string;
+    unicode?: string;
     unicodeBidi?: number | string;
     unicodeRange?: number | string;
-    unitsPerEm?: number | string;
-    vAlphabetic?: number | string;
+    unitsPerEm?: number;
+    vAlphabetic?: number;
     values?: string;
-    vectorEffect?: number | string;
-    version?: string;
-    vertAdvY?: number | string;
-    vertOriginX?: number | string;
-    vertOriginY?: number | string;
-    vHanging?: number | string;
-    vIdeographic?: number | string;
+    vectorEffect?: "none" | "non-scaling-stroke" | "non-scaling-size" | "non-rotation" | "fixed-position";
+    version?: number;
+    vertAdvY?: number;
+    vertOriginX?: number;
+    vertOriginY?: number;
+    vHanging?: number;
+    vIdeographic?: number;
     viewBox?: string;
     viewTarget?: number | string;
-    visibility?: number | string;
-    vMathematical?: number | string;
-    widths?: number | string;
-    wordSpacing?: number | string;
-    writingMode?: number | string;
-    x1?: number | string;
-    x2?: number | string;
+    visibility?: "visible" | "hidden" | "collapse";
+    vMathematical?: number;
+    widths?: CSSLength | "normal";
+    wordSpacing?: CSSLength | "normal";
+    writingMode?: "horizontal-tb" | "vertical-rl" | "vertical-lr";
+    x1?: CSSLength;
+    x2?: CSSLength;
     x?: number | string;
-    xChannelSelector?: string;
-    xHeight?: number | string;
+    xChannelSelector?: "R" | "G" | "B" | "A";
+    xHeight?: number;
     xlinkActuate?: string;
     xlinkArcrole?: string;
     xlinkHref?: string;
@@ -1078,12 +1130,12 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
     xmlns?: string;
     xmlnsXlink?: string;
     xmlSpace?: string;
-    y1?: number | string;
-    y2?: number | string;
+    y1?: CSSLength;
+    y2?: CSSLength;
     y?: number | string;
-    yChannelSelector?: string;
-    z?: number | string;
-    zoomAndPan?: string;
+    yChannelSelector?: "R" | "G" | "B" | "A";
+    z?: number;
+    zoomAndPan?: "disable" | "magnify";
 }
 
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1097,7 +1149,7 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {}
+export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> { }
 
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
     alt?: string;
@@ -1283,7 +1335,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
         | "impp"
         | "url"
         | "photo"
-        );
+    );
     autofocus?: boolean;
     capture?: boolean | "user" | "environment"; // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
     checked?: boolean;
@@ -1295,13 +1347,13 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
         | "application/x-www-form-urlencoded"
         | "multipart/form-data"
         | "text/plain"
-        );
+    );
     formMethod?: (
         | "get"
         | "post"
         | "dialog"
 
-        );
+    );
     formNoValidate?: boolean;
     formTarget?: (
         | "_self"
@@ -1309,7 +1361,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
         | "_parent"
         | "_top"
         | string
-        );
+    );
     height?: number | string;
     list?: string;
     max?: number | string;
@@ -1324,7 +1376,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
     required?: boolean;
     size?: number;
     src?: string;
-    step?: number | string;
+    step?: number;
     type?: (
         | "button"
         | "checkbox"
@@ -1348,7 +1400,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
         | "time"
         | "url"
         | "week"
-        );
+    );
     value?: string | string[] | number;
     width?: number | string;
 
