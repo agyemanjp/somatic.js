@@ -1172,14 +1172,28 @@ export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
     href?: string;
     hrefLang?: string;
     media?: string;
-    rel?: string;
-    shape?: string;
+    rel?: (
+        | "alternate"
+        | "author"
+        | "bookmark"
+        | "external"
+        | "help"
+        | "license"
+        | "next"
+        | "nofollow"
+        | "noreferrer"
+        | "noopener"
+        | "prev"
+        | "search"
+        | "tag"
+    );
+    shape?: "default" | "rect" | "circle" | "poly";
     target?: string;
 }
 
 export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
     href?: string;
-    target?: string;
+    target?: "_blank" | "_parent" | "_self" | "_top";
 }
 
 export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1191,12 +1205,16 @@ export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
     disabled?: boolean;
     form?: string;
     formAction?: string;
-    formEncType?: string;
-    formMethod?: string;
+    formEncType?: (
+        | "application/x-www-form-urlencoded"
+        | "multipart/form-data"
+        | "text/plain"
+    );
+    formMethod?: "get" | "post";
     formNoValidate?: boolean;
     formTarget?: string;
     name?: string;
-    type?: string;
+    type?: "button" | "reset" | "submit";
     value?: string | string[] | number;
 }
 
@@ -1243,12 +1261,16 @@ export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
     acceptCharset?: string;
     action?: string;
-    autocomplete?: string;
-    encType?: string;
-    method?: string;
+    autocomplete?: "on" | "off";
+    encType?: (
+        | "application/x-www-form-urlencoded"
+        | "multipart/form-data"
+        | "text/plain"
+    );
+    method?: "get" | "post";
     name?: string;
     noValidate?: boolean;
-    target?: string;
+    target?: "_blank" | "_self" | "_parent" | "_top";
 }
 
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1264,7 +1286,14 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
     marginHeight?: number;
     marginWidth?: number;
     name?: string;
-    sandbox?: string;
+    sandbox?: (
+        | "allow-forms"
+        | "allow-pointer-lock"
+        | "allow-popups"
+        | "allow-same-origin"
+        | "allow-scripts"
+        | "allow-top-navigation"
+    );
     scrolling?: string;
     seamless?: boolean;
     src?: string;
@@ -1442,12 +1471,26 @@ export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
 
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
     as?: string;
-    crossorigin?: string;
+    crossorigin?: "anonymous" | "use-credentials";
     href?: string;
     hrefLang?: string;
     integrity?: string;
     media?: string;
-    rel?: string;
+    rel?: (
+        | "alternate"
+        | "author"
+        | "bookmark"
+        | "external"
+        | "help"
+        | "license"
+        | "next"
+        | "nofollow"
+        | "noreferrer"
+        | "noopener"
+        | "prev"
+        | "search"
+        | "tag"
+    );
     sizes?: string;
     type?: string;
 }
@@ -1476,8 +1519,15 @@ export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
     charSet?: string;
     content?: string;
-    httpEquiv?: string;
-    name?: string;
+    httpEquiv?: "content-security-policy" | "content-type" | "default-style" | "refresh";
+    name?: (
+        | "application-name"
+        | "author"
+        | "description"
+        | "generator"
+        | "keywords"
+        | "viewport"
+    );
 }
 
 export interface MeterHTMLAttributes<T> extends HTMLAttributes<T> {
