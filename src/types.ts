@@ -1139,11 +1139,25 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 }
 
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
-    download?: any;
+    download?: string;
     href?: string;
     hrefLang?: string;
     media?: string;
-    rel?: string;
+    rel?: (
+        | "alternate"
+        | "author"
+        | "bookmark"
+        | "external"
+        | "help"
+        | "license"
+        | "next"
+        | "nofollow"
+        | "noreferrer"
+        | "noopener"
+        | "prev"
+        | "search"
+        | "tag"
+    );
     target?: string;
     type?: string;
 }
