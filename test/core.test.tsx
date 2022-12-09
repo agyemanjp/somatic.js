@@ -3,9 +3,9 @@
 /* eslint-disable brace-style */
 
 import * as assert from "assert"
-import {expect, use} from "chai"
+import { expect, use } from "chai"
 import * as chaiHTML from "chai-html"
-import {Component, CSSProperties, DOMAugmented, IntrinsicElement} from '../dist/types'
+import { idProvider } from '../dist/common'
 import {
     applyLeafElementAsync,
     createElement,
@@ -16,10 +16,10 @@ import {
     updateAsync,
     updateChildrenAsync
 } from '../dist/core'
-import {getChildren, isIntrinsicElt, traceToLeafAsync} from '../dist/element'
-import {createDOMShallow, isAugmentedDOM, isTextDOM} from '../dist/dom'
-import {CommandBox, normalizeHTML, StackPanel, View} from './_utils'
-import {idProvider} from '../dist/common'
+import { createDOMShallow, isAugmentedDOM, isTextDOM } from '../dist/dom'
+import { getChildren, isIntrinsicElt, traceToLeafAsync } from '../dist/element'
+import { Component, CSSProperties, DOMAugmented, IntrinsicElement } from '../dist/types'
+import { CommandBox, normalizeHTML, StackPanel, View } from './_utils'
 
 const cleanup = require('jsdom-global')()
 
@@ -29,8 +29,8 @@ describe("CORE MODULE", () => {
     describe("updateChildren", () => {
         it("should work for a single value child", async () => {
             const intrinsic: IntrinsicElement = {
-                type:     "div",
-                props:    {className: "clss", style: {backgroundColor: "blue"}},
+                type: "div",
+                props: { className: "clss", style: { backgroundColor: "blue" } },
                 children: ["val"]
             }
             const trace = await traceToLeafAsync(intrinsic)
@@ -46,9 +46,9 @@ describe("CORE MODULE", () => {
         })
         it("should work for with multiple intrinsic children", async () => {
             const intrinsic: IntrinsicElement = {
-                type:     "div",
-                props:    {className: "clss", style: {backgroundColor: "blue"}},
-                children: [{type: "span", props: {style: {display: "inline-block"}}}, "val"]
+                type: "div",
+                props: { className: "clss", style: { backgroundColor: "blue" } },
+                children: [{ type: "span", props: { style: { display: "inline-block" } } }, "val"]
             }
             const trace = await traceToLeafAsync(intrinsic)
             assert.deepStrictEqual(trace.leafElement,
@@ -67,9 +67,9 @@ describe("CORE MODULE", () => {
         })
         it("should remove children from input dom element if input children array is empty", async () => {
             const dom = await renderAsync({
-                type:     "div",
-                props:    {className: "clss", style: {backgroundColor: "blue"}},
-                children: [{type: "span", props: {style: {display: "inline-block"}}}, "val"]
+                type: "div",
+                props: { className: "clss", style: { backgroundColor: "blue" } },
+                children: [{ type: "span", props: { style: { display: "inline-block" } } }, "val"]
             })
             assert(!isTextDOM(dom))
             assert.strictEqual(dom.childNodes.length, 2)
@@ -80,12 +80,12 @@ describe("CORE MODULE", () => {
         })
         it("should work for component children", async () => {
             const intrinsic: IntrinsicElement = {
-                type:     "div",
-                props:    {},
+                type: "div",
+                props: {},
                 children: [
-                    {type: View, props: {sourceData: [], orientation: "vertical"}},
-                    {type: StackPanel, children: ["Hello"]},
-                    {type: CommandBox, children: ["Hello"]}
+                    { type: View, props: { sourceData: [], orientation: "vertical" } },
+                    { type: StackPanel, children: ["Hello"] },
+                    { type: CommandBox, children: ["Hello"] }
                 ]
             }
             const trace = await traceToLeafAsync(intrinsic)
@@ -106,7 +106,7 @@ describe("CORE MODULE", () => {
             try {
                 const elt = <CommandBox
                     // icon={{ on: ()=><span>On</span>, off: ()=><span>Off</span> }}
-                    style={{height: "auto", width: "auto", fontSize: "14px"}}
+                    style={{ height: "auto", width: "auto", fontSize: "14px" }}
                 />
 
                 const dom = await renderAsync(elt)
@@ -125,10 +125,10 @@ describe("CORE MODULE", () => {
         })
 
         it("should return elt with same html as renderToString, for an elt with children", async () => {
-            const elt = <StackPanel style={{height: "auto", width: "auto", fontSize: "14px"}}>
-				<span style={{fontSize: "1.25em", fontWeight: 900}}>
-					Get Started
-				</span>
+            const elt = <StackPanel style={{ height: "auto", width: "auto", fontSize: "14px" }}>
+                <span style={{ fontSize: "1.25em", fontWeight: 900 }}>
+                    Get Started
+                </span>
             </StackPanel>
 
             const dom = await renderAsync(elt)
@@ -141,7 +141,7 @@ describe("CORE MODULE", () => {
 
         it("should render an element with the correct text content", async () => {
             const dom = await renderAsync(
-                <div className={'test'} style={{backgroundColor: "blue"}}>
+                <div className={'test'} style={{ backgroundColor: "blue" }}>
                     {`test`}
                 </div>
             )
@@ -152,7 +152,7 @@ describe("CORE MODULE", () => {
 
         it("should render an element with its corresponding attributes", async () => {
             const dom = await renderAsync(<div className={'test-class'}
-                                               style={{backgroundColor: "blue"}}>{`test`}</div>)
+                style={{ backgroundColor: "blue" }}>{`test`}</div>)
 
             assert(isAugmentedDOM(dom))
             assert.strictEqual((dom as DOMAugmented).getAttribute("class"), 'test-class')
@@ -255,21 +255,21 @@ describe("CORE MODULE", () => {
             type Props = { user: User | undefined }
             const Layout: Component<Props> = async function (props) {
                 // console.log(`Starting layout component render`)
-                const {user, children} = props
+                const { user, children } = props
                 return <StackPanel id="root"
-                                   orientation="vertical"
-                                   style={{padding: 0, margin: 0}}>
+                    orientation="vertical"
+                    style={{ padding: 0, margin: 0 }}>
 
                     <StackPanel id="header"
-                                itemsAlignH="uniform"
-                                itemsAlignV="center"
-                                style={{backgroundColor: "purple", width: "100vw", height: "10vh"}}>
+                        itemsAlignH="uniform"
+                        itemsAlignV="center"
+                        style={{ backgroundColor: "purple", width: "100vw", height: "10vh" }}>
 
-                        <VytalsLogo style={{stroke: "white", fill: "transparent", height: "7vh"}} />
+                        <VytalsLogo style={{ stroke: "white", fill: "transparent", height: "7vh" }} />
 
-                        <StackPanel id="user-info" style={{padding: "0.25em", color: "whitesmoke"}}>
+                        <StackPanel id="user-info" style={{ padding: "0.25em", color: "whitesmoke" }}>
                             {user
-                                ? <StackPanel style={{gap: "10%"} as any}>
+                                ? <StackPanel style={{ gap: "10%" } as any}>
                                     <span>Welcome, {user.displayName}</span>
                                     <a href="/logout">LOGOUT</a>
                                 </StackPanel>
@@ -281,12 +281,12 @@ describe("CORE MODULE", () => {
                     </StackPanel>
 
                     <StackPanel id="content"
-                                style={{backgroundColor: "whitesmoke", height: "75vh"}}>
+                        style={{ backgroundColor: "whitesmoke", height: "75vh" }}>
                         {children}
                     </StackPanel>
 
                     <StackPanel id="footer"
-                                style={{height: "10vh"}}>
+                        style={{ height: "10vh" }}>
 
                     </StackPanel>
 
@@ -451,7 +451,7 @@ describe("CORE MODULE", () => {
             try {
                 const elt = <CommandBox
                     // icon={{ on: ()=><span>On</span>, off: ()=><span>Off</span> }}
-                    style={{height: "auto", width: "auto", fontSize: "14px"}}
+                    style={{ height: "auto", width: "auto", fontSize: "14px" }}
                 />
 
                 const intrinsic = await renderToIntrinsicAsync(elt)
@@ -512,7 +512,7 @@ describe("CORE MODULE", () => {
             expect(expected).html.to.equal(actual)
         })
         it("should work for intrinsic elements with properties and a child", async () => {
-            const actual = await renderToStringAsync(<div style={{position: "static"}}>Splash page</div>)
+            const actual = await renderToStringAsync(<div style={{ position: "static" }}>Splash page</div>)
             const expected = `<div style="position: static">Splash page</div>`
             expect(expected).html.to.equal(actual)
         })
@@ -569,7 +569,7 @@ describe("CORE MODULE", () => {
                 </svg>
             )
 
-            const elt = <VytalsLogo style={{stroke: "white", fill: "transparent", height: "7vh"}} />
+            const elt = <VytalsLogo style={{ stroke: "white", fill: "transparent", height: "7vh" }} />
 
             const actual = await renderToStringAsync(elt)
             const expected = `<svg 
@@ -640,22 +640,22 @@ describe("CORE MODULE", () => {
             }
             const Layout: Component<{ user: User | undefined }> = async function* (props) {
                 // console.log(`Starting layout component render`)
-                const {user, children} = props
+                const { user, children } = props
 
                 yield <StackPanel id="root"
-                                  orientation="vertical"
-                                  style={{padding: 0, margin: 0}}>
+                    orientation="vertical"
+                    style={{ padding: 0, margin: 0 }}>
 
                     <StackPanel id="header"
-                                itemsAlignH="uniform"
-                                itemsAlignV="center"
-                                style={{backgroundColor: "purple", width: "100vw", height: "10vh"}}>
+                        itemsAlignH="uniform"
+                        itemsAlignV="center"
+                        style={{ backgroundColor: "purple", width: "100vw", height: "10vh" }}>
 
-                        <VytalsLogo style={{stroke: "white", fill: "transparent", height: "7vh"}} />
+                        <VytalsLogo style={{ stroke: "white", fill: "transparent", height: "7vh" }} />
 
-                        <StackPanel id="user-info" style={{padding: "0.25em", color: "whitesmoke"}}>
+                        <StackPanel id="user-info" style={{ padding: "0.25em", color: "whitesmoke" }}>
                             {user
-                                ? <StackPanel style={{gap: "10%"} as any}>
+                                ? <StackPanel style={{ gap: "10%" } as any}>
                                     <span>Welcome, {user.displayName}</span>
                                     <a href="/logout">LOGOUT</a>
                                 </StackPanel>
@@ -666,12 +666,12 @@ describe("CORE MODULE", () => {
                     </StackPanel>
 
                     <StackPanel id="content"
-                                style={{backgroundColor: "whitesmoke", height: "75vh"}}>
+                        style={{ backgroundColor: "whitesmoke", height: "75vh" }}>
                         {children}
                     </StackPanel>
 
                     <StackPanel id="footer"
-                                style={{height: "10vh"}}>
+                        style={{ height: "10vh" }}>
 
                     </StackPanel>
 
@@ -690,12 +690,12 @@ describe("CORE MODULE", () => {
     describe("applyLeafElementAsync", () => {
         it("should work for an intrinsic element with component", async () => {
             const elt = {
-                type:     StackPanel,
-                props:    {orientation: "horizontal"},
+                type: StackPanel,
+                props: { orientation: "horizontal" },
                 children: [
-                    {type: View, props: {sourceData: [], orientation: "vertical"}},
-                    {type: CommandBox, children: ["Hello"]},
-                    {type: "a"},
+                    { type: View, props: { sourceData: [], orientation: "vertical" } },
+                    { type: CommandBox, children: ["Hello"] },
+                    { type: "a" },
                 ]
             }
             const trace = await traceToLeafAsync(elt)
@@ -729,7 +729,7 @@ describe("CORE MODULE", () => {
                 id={"test_view"}
                 sourceData={["a", "b", "c"]}
                 itemsPanel={StackPanel}
-                itemTemplate={item => <i style={{width: "7em", border: "thin solid orange"}}>{item.value}</i>}
+                itemTemplate={item => <i style={{ width: "7em", border: "thin solid orange" }}>{item.value}</i>}
             />)
             assert(!isTextDOM(dom))
             assert(!(dom instanceof DocumentFragment))
@@ -749,11 +749,11 @@ describe("CORE MODULE", () => {
                 id={"test_view_id"}
                 sourceData={["a", "b", "c"]}
                 itemsPanel={StackPanel}
-                itemTemplate={item => <i style={{width: "7em", border: "thin solid orange"}}>{item.value}</i>}
+                itemTemplate={item => <i style={{ width: "7em", border: "thin solid orange" }}>{item.value}</i>}
             />, document.body)
 
             document.dispatchEvent(new CustomEvent('UIInvalidated',
-                {detail: {invalidatedElementIds: ["test_view_id"]}}))
+                { detail: { invalidatedElementIds: ["test_view_id"] } }))
 
             assert(true)
         })
@@ -761,9 +761,9 @@ describe("CORE MODULE", () => {
 
     describe("createElement", async () => {
         it("should create a element with props and children corresponsing to the arguments passed", async () => {
-            const elt = createElement(View as Component, {sourceData: [], itemsPanel: StackPanel})
+            const elt = createElement(View as Component, { sourceData: [], itemsPanel: StackPanel })
 
-            assert.deepStrictEqual(elt.props, {sourceData: [], itemsPanel: StackPanel})
+            assert.deepStrictEqual(elt.props, { sourceData: [], itemsPanel: StackPanel })
             assert.deepStrictEqual(elt.children, [])
         })
         it("should convert missing props and chiildren arguments into empty object and array, respectively",

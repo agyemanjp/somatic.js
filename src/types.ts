@@ -4,8 +4,8 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {DigitNonZero, Obj} from "@agyemanjp/standard"
-import {colorConstants} from "./common"
+import { DigitNonZero, Obj } from "@agyemanjp/standard"
+import { colorConstants } from "./common"
 
 /** Main component type */
 export type Component<P extends Obj = Obj> =
@@ -15,7 +15,7 @@ export type Component<P extends Obj = Obj> =
         | Generator<UIElement, UIElement, typeof props>
         | Promise<UIElement>
         | UIElement
-        )
+    )
     & ComponentOptions<P>
 
 export interface ComponentOptions<P extends Obj = Obj> {
@@ -25,7 +25,7 @@ export interface ComponentOptions<P extends Obj = Obj> {
 }
 
 export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a
-                                               // generic type
+// generic type
 export interface UIElementBase<P = unknown> {
     props: P,
     children?: Children
@@ -87,7 +87,7 @@ export interface CSSProperties {
         | "stretch"
         | "safe center"
         | "unsafe center"
-        );
+    );
     alignItems?: (
         | GlobalValues
         | "normal"
@@ -102,7 +102,7 @@ export interface CSSProperties {
         | "last baseline"
         | "safe center"
         | "unsafe center"
-        );
+    );
     alignSelf?: (
         | "auto"
         | "normal"
@@ -119,7 +119,7 @@ export interface CSSProperties {
         | "stretch"
         | "safe center"
         | "unsafe center"
-        );
+    );
     alignmentBaseline?: (
         | "auto"
         | "baseline"
@@ -136,7 +136,7 @@ export interface CSSProperties {
         | "top"
         | "center"
         | "bottom"
-        );
+    );
     animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`;
     animationDelay?: string;
     animationDirection?: "normal" | "reverse" | "alternate" | "alternate-reverse";
@@ -160,21 +160,21 @@ export interface CSSProperties {
         | "left"
         | "center"
         | string
-        );
+    );
     backgroundPositionX?: (
         | "left"
         | "center"
         | "right"
         | CSSLength
         | `${"right" | "left"} ${string}`
-        );
+    );
     backgroundPositionY?: (
         | "left"
         | "center"
         | "right"
         | CSSLength
         | `${"right" | "left"} ${string}`
-        );
+    );
     backgroundRepeat?: (
         | "repeat-x"
         | "repeat-y"
@@ -182,13 +182,13 @@ export interface CSSProperties {
         | "space"
         | "round"
         | "no-repeat"
-        );
+    );
     backgroundSize?: (
         | "auto"
         | "cover"
         | "contain"
         | string
-        );
+    );
     baselineShift?: CSSLength | "sub" | "super";
     border?: string | null;
     borderBottom?: CSSLength;
@@ -202,7 +202,7 @@ export interface CSSProperties {
     borderImage?: (
         | `url(${string}) ${number} ${string}`
         | string
-        );
+    );
     borderImageOutset?: number | string;
     borderImageRepeat?: "stretch" | "repeat" | "round" | "space";
     borderImageSlice?: string | number | CSSLength;
@@ -242,7 +242,7 @@ export interface CSSProperties {
         | "verso"
         | "avoid-column"
         | "region"
-        );
+    );
     breakBefore?: (
         | "auto"
         | "avoid"
@@ -256,14 +256,14 @@ export interface CSSProperties {
         | "verso"
         | "avoid-column"
         | "region"
-        );
+    );
     breakInside?: (
         | "auto"
         | "avoid"
         | "avoid-page"
         | "avoid-column"
         | "avoid-region"
-        );
+    );
     captionSide?: (
         | "top"
         | "bottom"
@@ -271,7 +271,7 @@ export interface CSSProperties {
         | "block-end"
         | "inline-start"
         | "inline-end"
-        );
+    );
     clear?: (
         | "none"
         | "left"
@@ -279,7 +279,7 @@ export interface CSSProperties {
         | "both"
         | "inline-start"
         | "inline-end"
-        );
+    );
     clip?: string | null;
     clipPath?: (
         | `url(${string})`
@@ -292,7 +292,7 @@ export interface CSSProperties {
         | "view-box"
         | `inset(${string} ${string})`
         | `circle(${string} at ${string} ${string})`
-        );
+    );
     clipRule?: "nonzero" | "evenodd" | "inherit";
     color?: CSSColor | string;
     colorInterpolationFilters?: string | null;
@@ -309,7 +309,7 @@ export interface CSSProperties {
         | "auto"
         | number
         | string
-        );
+    );
     content?: string | null;
     counterIncrement?: string | "none";
     counterReset?: string | "none";
@@ -320,13 +320,13 @@ export interface CSSProperties {
         | "none"
         | "inline-start"
         | "inline-end"
-        );
+    );
     cssText?: string;
     cursor?: (
         | CursorKeywords
         | `url(${string}), ${CursorKeywords}`
         | `url(${string}) ${number} ${number}, ${CursorKeywords}`
-        );
+    );
     direction?: "ltr" | "rtl";
     display?: (
         | "block"
@@ -350,7 +350,7 @@ export interface CSSProperties {
         | "table"
         | "table-row"
         | "list-item"
-        );
+    );
     dominantBaseline?: (
         | "auto"
         | "ideographic"
@@ -362,7 +362,7 @@ export interface CSSProperties {
         | "text-after-edge"
         | "text-before-edge"
         | "text-top"
-        );
+    );
     emptyCells?: "show" | "hide";
     enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`;
     fill?: string | null;
@@ -382,7 +382,7 @@ export interface CSSProperties {
         | `sepia(${number}%)`
         | string
         | "none"
-        );
+    );
     flex?: (
         | "none"
         | "auto"
@@ -390,7 +390,7 @@ export interface CSSProperties {
         | number
         | CSSLength
         | string
-        );
+    );
     flexBasis?: (
         | "auto"
         | CSSLength
@@ -398,13 +398,13 @@ export interface CSSProperties {
         | "max-content"
         | "fit-content"
         | "content"
-        );
+    );
     flexDirection?: (
         | "row"
         | "row-reverse"
         | "column"
         | "column-reverse"
-        );
+    );
     flexFlow?: (
         | "row"
         | "row-reverse"
@@ -414,7 +414,7 @@ export interface CSSProperties {
         | "wrap"
         | "wrap-reverse"
         //| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`
-        );
+    );
     flexGrow?: number;
     flexShrink?: number;
     flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
@@ -436,14 +436,14 @@ export interface CSSProperties {
         | "math"
         | "fangsong"
         | string
-//         | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" |
-// "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`
-        );
+        //         | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" |
+        // "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`
+    );
     fontFeatureSettings?: (
         | "normal"
         | string
         | `${string} ${"on" | "off" | number}`
-        );
+    );
     fontSize?: (
         | "xx-small"
         | "x-small"
@@ -457,12 +457,12 @@ export interface CSSProperties {
         | "smaller"
         | CSSLength
         | "math"
-        );
+    );
     fontSizeAdjust?: (
         | "none"
         | number
         | `${"ex-height" | "cap-height" | "ch-width" | "ic-width" | "ic-height"} ${number}`
-        );
+    );
     fontStretch?: (
         | "normal"
         | "ultra-condensed"
@@ -474,13 +474,13 @@ export interface CSSProperties {
         | "extra-expanded"
         | "ultra-expanded"
         | `${number}%`
-        );
+    );
     fontStyle?: (
         | "normal"
         | "italic"
         | "oblique"
         | `oblique ${number}deg`
-        );
+    );
     fontVariant?: (
         | "normal"
         | "small-caps"
@@ -506,7 +506,7 @@ export interface CSSProperties {
         | "full-width"
         | "proportional-width"
         | "ruby"
-        );
+    );
     fontWeight?: (
         | "normal"
         | "bold"
@@ -521,7 +521,7 @@ export interface CSSProperties {
         | 700
         | 800
         | 900
-        );
+    );
     glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`;
     glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`;
     height?: (
@@ -530,14 +530,14 @@ export interface CSSProperties {
         //| `fit-content(${CSSLength})`
         | "auto"
         | CSSLength
-        );
+    );
     imeMode?: (
         | "auto"
         | "normal"
         | "active"
         | "inactive"
         | "disabled"
-        );
+    );
     justifyContent?: (
         | GlobalValues
         | "center"
@@ -554,7 +554,7 @@ export interface CSSProperties {
         | "stretch"
         | "safe center"
         | "unsafe center"
-        );
+    );
     kerning?: "auto" | number | CSSLength;
     left?: "auto" | CSSLength;
     readonly length?: CSSLength;
@@ -638,12 +638,12 @@ export interface CSSProperties {
         | "upper-armenian"
         | "disclosure-open"
         | "disclosure-closed"
-        );
+    );
     margin?: (
         | number
         | CSSLength
         | string
-        );
+    );
     marginBottom?: CSSLength | "auto" | `${number}`;
     marginLeft?: CSSLength | "auto" | `${number}`;
     marginRight?: CSSLength | "auto" | `${number}`;
@@ -659,28 +659,28 @@ export interface CSSProperties {
         //| `fit-content(${CSSLength})`
         | "auto"
         | CSSLength
-        );
+    );
     maxWidth?: (
         | "max-content"
         | "min-content"
         //| `fit-content(${CSSLength})`
         | "auto"
         | CSSLength
-        );
+    );
     minHeight?: (
         | "max-content"
         | "min-content"
         //| `fit-content(${CSSLength})`
         | "auto"
         | CSSLength
-        );
+    );
     minWidth?: (
         | "max-content"
         | "min-content"
         //| `fit-content(${CSSLength})`
         | "auto"
         | CSSLength
-        );
+    );
     msContentZoomChaining?: string | null;
     msContentZoomLimit?: string | null;
     msContentZoomLimitMax?: any;
@@ -741,21 +741,21 @@ export interface CSSProperties {
         | "clip"
         | "scroll"
         | "auto"
-        );
+    );
     overflowX?: (
         | "visible"
         | "hidden"
         | "clip"
         | "scroll"
         | "auto"
-        );
+    );
     overflowY?: (
         | "visible"
         | "hidden"
         | "clip"
         | "scroll"
         | "auto"
-        );
+    );
     padding?: number | CSSLength | string;
     paddingBottom?: CSSLength;
     paddingLeft?: CSSLength;
@@ -769,7 +769,7 @@ export interface CSSProperties {
         | "right"
         | "recto"
         | "verso"
-        );
+    );
     pageBreakBefore?: (
         | "auto"
         | "always"
@@ -778,7 +778,7 @@ export interface CSSProperties {
         | "right"
         | "recto"
         | "verso"
-        );
+    );
     pageBreakInside?: "auto" | "avoid";
     perspective?: "none" | CSSLength;
     perspectiveOrigin?: string | null;
@@ -793,14 +793,14 @@ export interface CSSProperties {
         | "fill"
         | "stroke"
         | "all"
-        );
+    );
     position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null;
     quotes?: (
         | "none"
         | "auto"
         | `${string} ${string}`
         | `${string} ${string} ${string} ${string}`
-        );
+    );
     right?: "auto" | CSSLength;
     rubyAlign?: "start" | "center" | "space-between" | "space-around";
     rubyOverhang?: string | null;
@@ -826,7 +826,7 @@ export interface CSSProperties {
         | "justify-all"
         | "match-parent"
         | string
-        );
+    );
     textAlignLast?: (
         | "auto"
         | "start"
@@ -835,7 +835,7 @@ export interface CSSProperties {
         | "right"
         | "center"
         | "justify"
-        );
+    );
     textAnchor?: "start" | "middle" | "end";
     textDecoration?: string | null;
     textIndent?: CSSLength;
@@ -844,7 +844,7 @@ export interface CSSProperties {
         | "none"
         | "inter-word"
         | "inter-character"
-        );
+    );
     textKashida?: string | null;
     textKashidaSpace?: string | null;
     textOverflow?: "clip" | "ellipsis";
@@ -856,14 +856,14 @@ export interface CSSProperties {
         | "lowercase"
         | "full-width"
         | "full-size-kana"
-        );
+    );
     textUnderlinePosition?: (
         | "auto"
         | "under"
         | "left"
         | "right"
         | `${"auto" | "under" | "left" | "right"} ${"auto" | "under" | "left" | "right"}`
-        );
+    );
     top?: "auto" | CSSLength;
     touchAction?: (
         | "auto"
@@ -876,7 +876,7 @@ export interface CSSProperties {
         | "pan-down"
         | "pinch-zoom"
         | "manipulation"
-        );
+    );
     transform?: (
         | "none"
         | string
@@ -895,7 +895,7 @@ export interface CSSProperties {
         | `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
         | `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
         | `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`
-        );
+    );
     transformOrigin?: (
         | CSSLength
         | "left"
@@ -903,7 +903,7 @@ export interface CSSProperties {
         | "center"
         | "bottom"
         | string
-        );
+    );
     transformStyle?: "flat" | "preserve-3d";
     transition?: (
         // | `${string} ${CSSTime}`
@@ -912,7 +912,7 @@ export interface CSSProperties {
         // | `${string} ${CSSTime} ${CSSEasingFunction} ${CSSTime}`
         | `all ${CSSTime} ${CSSEasingFunction}`
         | string
-        );
+    );
     transitionDelay?: CSSTime | string;
     transitionDuration?: CSSTime | string;
     transitionProperty?: "none" | "all" | string;
@@ -924,7 +924,7 @@ export interface CSSProperties {
         | "bidi-override"
         | "isolate-override"
         | "plaintext"
-        );
+    );
     verticalAlign?: (
         | "baseline"
         | "sub"
@@ -935,7 +935,7 @@ export interface CSSProperties {
         | "top"
         | "bottom"
         | CSSLength
-        );
+    );
     visibility?: "visible" | "hidden" | "collapse";
     webkitAlignContent?: string | null;
     webkitAlignItems?: string | null;
@@ -1012,7 +1012,7 @@ export interface CSSProperties {
         | "pre-wrap"
         | "pre-line"
         | "break-spaces"
-        );
+    );
     widows?: number;
     width?: (
         | "auto"
@@ -1020,7 +1020,7 @@ export interface CSSProperties {
         | "min-content"
         //| `fit-content(${CSSLength})`
         | CSSLength
-        );
+    );
     wordBreak?: "normal" | "break-all" | "keep-all" | "break-word";
     wordSpacing?: "normal" | CSSLength;
     wordWrap?: string | null;
@@ -1038,17 +1038,17 @@ export interface CSSProperties {
 
     /** Defines on which row-line a grid item will start */
     gridRowStart?:
-        | "auto" // Default value. The item will be placed following the flow
-        | `span ${number}` // the number of rows the item will span
-        | number // row line
-        | "inherit" | "initial" | "revert" | "unset"
+    | "auto" // Default value. The item will be placed following the flow
+    | `span ${number}` // the number of rows the item will span
+    | number // row line
+    | "inherit" | "initial" | "revert" | "unset"
 
     /** Defines on which column-line a grid item will start. */
     gridColumnStart?:
-        | "auto" // Default value. The item will be placed following the flow
-        | `span ${number}` // the number of columns the item will span
-        | number // column-line
-        | "inherit" | "initial" | "revert" | "unset"
+    | "auto" // Default value. The item will be placed following the flow
+    | `span ${number}` // the number of columns the item will span
+    | number // column-line
+    | "inherit" | "initial" | "revert" | "unset"
 
     /** Defines how many rows a grid item will span, or on which row-line the item will end */
     gridRowEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
@@ -1163,7 +1163,7 @@ export type CSSTime = `${number}${CSSTimeUnit}`
 export type CSSTimeUnit = (
     | "ms"
     | "s"
-    )
+)
 
 export type GlobalValues = (
     | "inherit"
@@ -1171,7 +1171,7 @@ export type GlobalValues = (
     | "revert"
     | "unset"
     | "revert-layer"
-    )
+)
 
 export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
 export type CSSLength = `${number}${CSSLengthUnit}`;
@@ -1196,7 +1196,7 @@ export type CSSLengthUnit = (
     | "vh" // 1% of the viewport's height.
     | "vmin" // 1% of the viewport's smaller dimension.
     | "vmax" // 1% of the viewport's larger dimension.
-    )
+)
 
 export type CSSColor = (
     | string
@@ -1206,19 +1206,19 @@ export type CSSColor = (
     | `#${string}`
     | `rgb(${number},${number},${number})`
     | `rgba(${number}, ${number}, ${number}, ${number})`
-    )
+)
 
 type SpaceRepeated<S extends string, Max extends DigitNonZero> = Max extends 1 ? S : S | `${S} ${SpaceRepeated<S, Dec<Max>>}`
 type Dec<N extends DigitNonZero> = (N extends 9 ? 8
     : N extends 8 ? 7
-        : N extends 7 ? 6
-            : N extends 6 ? 5
-                : N extends 5 ? 4
-                    : N extends 4 ? 3
-                        : N extends 3 ? 2
-                            : N extends 2 ? 1
-                                : 1
-    )
+    : N extends 7 ? 6
+    : N extends 6 ? 5
+    : N extends 5 ? 4
+    : N extends 4 ? 3
+    : N extends 3 ? 2
+    : N extends 2 ? 1
+    : 1
+)
 
 export type HtmlProps = Partial<HTMLAttributes<HTMLElement>>
 export type StyleProps = { style?: CSSProperties }
@@ -1522,7 +1522,7 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
     accumulate?: "none" | "sum";
     additive?: "replace" | "sum";
     alignmentBaseline?: "auto" | "baseline" | "before-edge" | "text-before-edge" | "middle" | "central" | "after-edge" |
-        "text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit";
+    "text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit";
     allowReorder?: "no" | "yes";
     alphabetic?: number | string;
     amplitude?: number | string;

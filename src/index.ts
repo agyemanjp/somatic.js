@@ -3,32 +3,20 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import {
-	UIElement,
-	Children,
-	HTMLAttributes,
-	MetaHTMLAttributes,
-	StyleHTMLAttributes,
-	LinkHTMLAttributes,
-	SVGAttributes,
-	HtmlHTMLAttributes,
 	AnchorHTMLAttributes,
 	AudioHTMLAttributes,
 	ButtonHTMLAttributes,
-	CanvasHTMLAttributes,
-	FormHTMLAttributes,
-	ImgHTMLAttributes,
+	CanvasHTMLAttributes, Children, FormHTMLAttributes, HTMLAttributes, HtmlHTMLAttributes, ImgHTMLAttributes,
 	InputHTMLAttributes,
 	LabelHTMLAttributes,
-	LiHTMLAttributes,
-	OlHTMLAttributes,
+	LiHTMLAttributes, LinkHTMLAttributes, MetaHTMLAttributes, OlHTMLAttributes,
 	OptgroupHTMLAttributes,
 	OptionHTMLAttributes,
 	ScriptHTMLAttributes,
-	SelectHTMLAttributes,
-	TableHTMLAttributes,
+	SelectHTMLAttributes, StyleHTMLAttributes, SVGAttributes, TableHTMLAttributes,
 	TdHTMLAttributes,
 	TextareaHTMLAttributes,
-	ThHTMLAttributes
+	ThHTMLAttributes, UIElement
 } from "./types"
 
 declare global {
@@ -459,8 +447,8 @@ declare global {
 	}
 }
 
-export { createElement, Fragment, renderAsync, renderToStringAsync, renderToIntrinsicAsync, updateAsync, mountElement, invalidateUI, } from './core'
-export { getChildren, normalizeChildren, isEltProper, isIntrinsicElt, isComponentElt } from "./element"
+export { colorConstants, colorLuminance } from "./common"
+export { createElement, Fragment, invalidateUI, mountElement, renderAsync, renderToIntrinsicAsync, renderToStringAsync, updateAsync } from './core'
+export { getChildren, isComponentElt, isEltProper, isIntrinsicElt, normalizeChildren } from "./element"
 export { stringifyAttributes, stringifyStyle } from "./html"
 export * from './types'
-export { colorConstants, colorLuminance } from "./common"
