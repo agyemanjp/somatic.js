@@ -7,22 +7,22 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable prefer-const */
 
-import {ArgsType, deepMerge, mergeDeep} from "@agyemanjp/standard"
+import { ArgsType, deepMerge, mergeDeep } from "@agyemanjp/standard"
 import * as cuid from "cuid"
 
-import {createElement, renderToIntrinsicAsync} from "../dist/core"
-import {normalizeChildren} from "../dist/element"
-import {stringifyStyle} from "../dist/html"
-import {
-	ButtonHTMLAttributes,
-	Component,
-	CSSProperties,
-	HtmlProps,
-	PanelProps,
-	SVGAttributes,
-	UIElement
-} from "../dist/types"
 import "../dist" // for globals e.g., JSX
+import { createElement, renderToIntrinsicAsync } from "../dist/core"
+import { normalizeChildren } from "../dist/element"
+import { stringifyStyle } from "../dist/html"
+import {
+    ButtonHTMLAttributes,
+    Component,
+    CSSProperties,
+    HtmlProps,
+    PanelProps,
+    SVGAttributes,
+    UIElement
+} from "../dist/types"
 
 /** Create html element from html string; Requires <document> object to exist */
 export function constructElement(html: string): HTMLElement {
@@ -94,13 +94,13 @@ export const StackPanel: Component<PanelProps & HtmlProps> = function (props) {
 
     // console.log(`Rendering StackPanel, id = ${id}, props = ${stringify(props)}`)
     return <div {...htmlProps}
-                style={{
-                    ...style,
-                    display:        "flex",
-                    flexDirection:  orientation === "vertical" ? "column" : "row",
-                    justifyContent: justifyContent(),
-                    alignItems:     alignItems()
-                }}>
+        style={{
+            ...style,
+            display: "flex",
+            flexDirection: orientation === "vertical" ? "column" : "row",
+            justifyContent: justifyContent(),
+            alignItems: alignItems()
+        }}>
 
         {children}
 
@@ -111,22 +111,22 @@ StackPanel.isPure = true
 
 export const CommandBox: Component<CommandBoxProps> = function (props) {
     const defaultProps = {
-        orientation:   "horizontal" as Required<CommandBoxProps>["orientation"],
+        orientation: "horizontal" as Required<CommandBoxProps>["orientation"],
         iconPlacement: "before" as Required<CommandBoxProps>["iconPlacement"],
-        hoverEffect:   "invert" as Required<CommandBoxProps>["hoverEffect"],
-        style:         {
-                           overflow:   "hidden",
-                           lineHeight: "1.1em",
-                           padding:    "0.25em",
-                           // margin: "0.5em",
-                           marginLeft:      "0",
-                           borderRadius:    "0.2em",
-                           color:           "#444444",
-                           backgroundColor: "white",
-                           borderWidth:     "thin",
-                           borderStyle:     "solid",
-                           cursor:          "pointer"
-                       } as CSSProperties
+        hoverEffect: "invert" as Required<CommandBoxProps>["hoverEffect"],
+        style: {
+            overflow: "hidden",
+            lineHeight: "1.1em",
+            padding: "0.25em",
+            // margin: "0.5em",
+            marginLeft: "0",
+            borderRadius: "0.2em",
+            color: "#444444",
+            backgroundColor: "white",
+            borderWidth: "thin",
+            borderStyle: "solid",
+            cursor: "pointer"
+        } as CSSProperties
     }
     const {
         orientation,
@@ -141,27 +141,27 @@ export const CommandBox: Component<CommandBoxProps> = function (props) {
     } = mergeDeep()(defaultProps, props)
 
     const hoverStyle: CSSProperties = (hoverEffect === "invert"
-            ? {
-                color:           style.backgroundColor ?? defaultProps.style.backgroundColor,
-                borderColor:     style.backgroundColor ?? style.background ?? defaultProps.style.backgroundColor,
-                backgroundColor: style.color ?? defaultProps.style.color,
-            }
-            : {
-                opacity: 1
-            }
+        ? {
+            color: style.backgroundColor ?? defaultProps.style.backgroundColor,
+            borderColor: style.backgroundColor ?? style.background ?? defaultProps.style.backgroundColor,
+            backgroundColor: style.color ?? defaultProps.style.color,
+        }
+        : {
+            opacity: 1
+        }
     )
 
     // console.warn(`Rendering commmand box; htmlProps = ${JSON.stringify(htmlProps)}`)
-    return <HoverBox style={{opacity: hoverEffect === "darken" ? 0.75 : 1}} hoverStyle={hoverStyle}>
+    return <HoverBox style={{ opacity: hoverEffect === "darken" ? 0.75 : 1 }} hoverStyle={hoverStyle}>
         <button
             {...htmlProps}
-            style={{borderColor: style.color, ...style}}>
+            style={{ borderColor: style.color, ...style }}>
 
             <StackPanel
                 itemsAlignH={"center"}
                 itemsAlignV={"center"}
                 orientation={orientation}
-                style={{height: "auto"}}>
+                style={{ height: "auto" }}>
                 {
                     Icon ?
                         iconPlacement === "before"
@@ -188,14 +188,14 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
     //console.log(`"${_props.key}" view render start`)
 
     const defaultProps = {
-        id:                cuid(),
-        selectedIndex:     0,
-        itemsPanel:        StackPanel,
-        itemsPanelStyle:   {},
-        itemStyle:         {},
+        id: cuid(),
+        selectedIndex: 0,
+        itemsPanel: StackPanel,
+        itemsPanelStyle: {},
+        itemStyle: {},
         selectedItemStyle: {},
-        selectionMode:     "click" as Required<ViewProps>["selectionMode"],
-        style:             {}
+        selectionMode: "click" as Required<ViewProps>["selectionMode"],
+        style: {}
     }
 
     let props = deepMerge(defaultProps, _props)
@@ -226,14 +226,14 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
             const items = await Promise.all([...sourceData].map((datum, index) => {
                 const ItemTemplate = itemTemplate
                 const itemElement = (ItemTemplate
-                        ? <ItemTemplate id={id} value={datum} index={index} selected={index === selectedIndex} />
-                        : <div id={id} style={{...itemStyle, ...(index === selectedIndex) ? selectedItemStyle : {}}}>
-                            {datum as any}
-                        </div>
+                    ? <ItemTemplate id={id} value={datum} index={index} selected={index === selectedIndex} />
+                    : <div id={id} style={{ ...itemStyle, ...(index === selectedIndex) ? selectedItemStyle : {} }}>
+                        {datum as any}
+                    </div>
                 ) as UIElement
 
                 const clickAction = () => {
-                    if (selectionMode && onSelection) onSelection({selectedIndex: 0})
+                    if (selectionMode && onSelection) onSelection({ selectedIndex: 0 })
                 }
 
                 return renderToIntrinsicAsync(itemElement).then(elt => {
@@ -256,11 +256,11 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
                 })
             }))
             const newProps = yield <ItemsPanel id={id}
-                                               orientation={orientation}
-                                               itemsAlignH={itemsAlignV}
-                                               itemsAlignV={itemsAlignH}
-                                               style={style}
-                                               {...htmlProps}>
+                orientation={orientation}
+                itemsAlignH={itemsAlignV}
+                itemsAlignV={itemsAlignH}
+                style={style}
+                {...htmlProps}>
 
                 {items}
             </ItemsPanel>
@@ -273,9 +273,9 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
                     // if sourceData or selectedIndex has changed externally from what was initially passed, reset
                     // selectedIndex
                     selectedIndex: (newProps?.sourceData !== props.sourceData) ||
-                                   (props.selectedIndex !== newProps?.selectedIndex)
-                                       ? newProps?.selectedIndex ?? selectedIndex
-                                       : selectedIndex
+                        (props.selectedIndex !== newProps?.selectedIndex)
+                        ? newProps?.selectedIndex ?? selectedIndex
+                        : selectedIndex
                 }
             )
         }
@@ -317,24 +317,24 @@ export type ViewProps<T = unknown> = HtmlProps & PanelProps & {
 
 export const HoverBox: Component<HoverBoxProps> = function (props) {
     const defaultProps = {
-        style:      {
-                        display: "inline-block",
-                        padding: 0,
-                        margin:  0
-                    } as CSSProperties,
+        style: {
+            display: "inline-block",
+            padding: 0,
+            margin: 0
+        } as CSSProperties,
         hoverStyle: {},
-        id:         cuid()
+        id: cuid()
     }
 
     const className__ = cuid()
 
-    let {key, id, children, hoverStyle, style, ...htmlProps} = mergeDeep()(defaultProps, props)
+    let { key, id, children, hoverStyle, style, ...htmlProps } = mergeDeep()(defaultProps, props)
     const child = normalizeChildren(children)[0]
 
-    const styleContent = `.${className__}:hover {${stringifyStyle({...hoverStyle}, true)}}`
+    const styleContent = `.${className__}:hover {${stringifyStyle({ ...hoverStyle }, true)}}`
     // console.log(`style content: ${styleContent}`)
 
-    return <div id={id} style={{...style}} className={className__} {...htmlProps}>
+    return <div id={id} style={{ ...style }} className={className__} {...htmlProps}>
         <style>{styleContent}</style>
         {child}
     </div>
