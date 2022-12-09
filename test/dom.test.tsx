@@ -4,23 +4,23 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('jsdom-global')()
 import * as assert from "assert"
-import {IntrinsicElement} from "../dist/types"
-import {renderAsync} from "../dist/core"
+import { renderAsync } from "../dist/core"
 import {
-	createDOMShallow,
-	emptyContainer,
-	getApexElements,
-	isAugmentedDOM,
-	isTextDOM,
-	setAttribute,
-	truncateChildNodes,
-	updateDomShallow
+    createDOMShallow,
+    emptyContainer,
+    getApexElements,
+    isAugmentedDOM,
+    isTextDOM,
+    setAttribute,
+    truncateChildNodes,
+    updateDomShallow
 } from '../dist/dom'
-import {isIntrinsicElt, traceToLeafAsync} from "../dist/element"
-import {CommandBox, StackPanel, View} from "./_utils"
+import { isIntrinsicElt, traceToLeafAsync } from "../dist/element"
+import { IntrinsicElement } from "../dist/types"
+import { CommandBox, StackPanel, View } from "./_utils"
 
 
-import {Set} from '@agyemanjp/standard'
+import { Set } from '@agyemanjp/standard'
 
 
 /*describe("isAugmentedDOM", () => {
@@ -81,14 +81,14 @@ describe("DOM MODULE", () => {
         })
         it("should be true for a DOM element augmented with the 'renderTrace' property", async () => {
             assert.strictEqual(isAugmentedDOM(Object.assign(document.createElement("div"),
-                {renderTrace: {componentElts: []}})), true)
+                { renderTrace: { componentElts: [] } })), true)
         })
     })
 
     describe("setAttribute", () => {
         it("should set style attribute properly", () => {
             const elt = document.createElement("div")
-            setAttribute(elt, "style", {position: "absolute", backgroundColor: "blue"})
+            setAttribute(elt, "style", { position: "absolute", backgroundColor: "blue" })
             assert.strictEqual(elt.getAttribute("style"), "position: absolute; background-color: blue")
 
             setAttribute(elt, "style", {})
@@ -98,19 +98,19 @@ describe("DOM MODULE", () => {
 
         it("should set SVG attributes properly", async () => {
             const svg = await renderAsync({
-                type:     "svg",
-                props:    {
-                    id:      "Layer_1",
-                    xmlns:   "http://www.w3.org/2000/svg",
+                type: "svg",
+                props: {
+                    id: "Layer_1",
+                    xmlns: "http://www.w3.org/2000/svg",
                     viewBox: "0 0 122.88 78.97"
                 },
                 children: [
-                    {type: "title", children: ["logo"]},
+                    { type: "title", children: ["logo"] },
                     {
-                        type:  "path",
+                        type: "path",
                         props: {
                             fillRule: "evenodd",
-                            d:        "M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z"
+                            d: "M2.08,0h120.8V79H0V0ZM15.87,39.94a2.11,2.11,0,1,1,0-4.21h25l3.4-8.51a2.1,2.1,0,0,1,4,.39l5.13,20L60.71,11a2.11,2.11,0,0,1,4.14,0l6,22,4.76-10.5a2.1,2.1,0,0,1,3.86.08L84.55,35H107a2.11,2.11,0,1,1,0,4.21H83.14a2.12,2.12,0,0,1-2-1.32l-3.77-9.24L72.28,40h0a2.09,2.09,0,0,1-3.93-.31L63.09,20.5l-7.38,37h0a2.1,2.1,0,0,1-4.09.1L45.76,34.75l-1.48,3.72a2.11,2.11,0,0,1-2,1.47ZM4.15,4.15H118.73V64.29H4.15V4.15ZM55.91,69.27h11a2.1,2.1,0,0,1,0,4.2h-11a2.1,2.1,0,0,1,0-4.2Zm19,0h2a2.1,2.1,0,0,1,0,4.2h-2a2.1,2.1,0,0,1,0-4.2ZM46,69.27h2a2.1,2.1,0,0,1,0,4.2H46a2.1,2.1,0,0,1,0-4.2Z"
 
                         }
                     }
@@ -209,8 +209,8 @@ describe("DOM MODULE", () => {
     describe("createDOMShallow", () => {
         it("should return a DOM element matching the input intrinsic element", async () => {
             const dom = createDOMShallow({
-                type:     "div",
-                props:    {className: "clss", style: {backgroundColor: "blue"}},
+                type: "div",
+                props: { className: "clss", style: { backgroundColor: "blue" } },
                 children: ["val"]
             } as IntrinsicElement)
 
@@ -229,11 +229,11 @@ describe("DOM MODULE", () => {
             // </g >
 
             const dom = createDOMShallow({
-                type:     "g",
-                props:    {transform: "matrix(0.660991,0,0,0.655918,524.665,744.892)"},
+                type: "g",
+                props: { transform: "matrix(0.660991,0,0,0.655918,524.665,744.892)" },
                 children: [{
-                    type:     "rect",
-                    props:    {x: "690.935", y: "975.898", width: "967.715", height: "859.801", fill: "none"},
+                    type: "rect",
+                    props: { x: "690.935", y: "975.898", width: "967.715", height: "859.801", fill: "none" },
                     children: ["val"]
                 }]
             } as IntrinsicElement) as SVGGElement
@@ -264,8 +264,8 @@ describe("DOM MODULE", () => {
     describe("updateDOMShallow", () => {
         it("should update original DOM to match input intrinsic with matching tag", async () => {
             const dom1 = createDOMShallow({
-                type:     "div",
-                props:    {className: "clss", style: {backgroundColor: "blue"}},
+                type: "div",
+                props: { className: "clss", style: { backgroundColor: "blue" } },
                 children: ["val"]
             } as IntrinsicElement)
             assert(!(isTextDOM(dom1) || (dom1 instanceof DocumentFragment)))
@@ -276,8 +276,8 @@ describe("DOM MODULE", () => {
             assert.strictEqual(dom1.childNodes.length, 0)
 
             const dom2 = updateDomShallow(dom1, {
-                type:     "div",
-                props:    {style: {backgroundColor: "yellow"}, title: "hello"},
+                type: "div",
+                props: { style: { backgroundColor: "yellow" }, title: "hello" },
                 children: []
             } as IntrinsicElement)
 
@@ -292,8 +292,8 @@ describe("DOM MODULE", () => {
 
         it("should create new DOM to match input intrinsic without matching tag", async () => {
             const div = createDOMShallow({
-                type:     "div",
-                props:    {className: "clss", style: {backgroundColor: "blue"}},
+                type: "div",
+                props: { className: "clss", style: { backgroundColor: "blue" } },
                 children: ["val"]
             } as IntrinsicElement)
             assert(!(isTextDOM(div) || (div instanceof DocumentFragment)))
@@ -304,8 +304,8 @@ describe("DOM MODULE", () => {
             assert.strictEqual(div.childNodes.length, 0)
 
             const span = updateDomShallow(div, {
-                type:     "span",
-                props:    {style: {backgroundColor: "yellow", display: "inline-block"}},
+                type: "span",
+                props: { style: { backgroundColor: "yellow", display: "inline-block" } },
                 children: []
             } as IntrinsicElement)
 
@@ -318,12 +318,12 @@ describe("DOM MODULE", () => {
 
 
             const trace = await traceToLeafAsync({
-                type:     StackPanel,
-                props:    {orientation: "horizontal"},
+                type: StackPanel,
+                props: { orientation: "horizontal" },
                 children: [
-                    {type: View, props: {sourceData: [], orientation: "vertical"}},
-                    {type: CommandBox, children: ["Hello"]},
-                    {type: "a"},
+                    { type: View, props: { sourceData: [], orientation: "vertical" } },
+                    { type: CommandBox, children: ["Hello"] },
+                    { type: "a" },
                 ]
             })
             assert(isIntrinsicElt(trace.leafElement))
@@ -336,8 +336,8 @@ describe("DOM MODULE", () => {
 
         it("should create a text DOM with content set to input primitive value", async () => {
             const span = createDOMShallow({
-                type:     "span",
-                props:    {style: {backgroundColor: "yellow", display: "inline-block"}},
+                type: "span",
+                props: { style: { backgroundColor: "yellow", display: "inline-block" } },
                 children: []
             } as IntrinsicElement)
             assert(!(isTextDOM(span) || (span instanceof DocumentFragment)))
