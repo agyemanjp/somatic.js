@@ -11,12 +11,12 @@
 // const x = import("morpdom")
 
 // import * as cuid from "cuid"
-import { hasValue, String } from "@agyemanjp/standard"
-import { selfClosingTags } from "./common"
-import { createDOMShallow, emptyContainer, getApexElementIds, isAugmentedDOM, isTextDOM, updateDomShallow } from "./dom"
-import { getChildren, getLeafAsync, isComponentElt, isEltProper, isIntrinsicElt, traceToLeafAsync, updateTraceAsync } from "./element"
+import { String, hasValue } from "@agyemanjp/standard"
 import { stringifyAttributes } from "./html"
-import { Component, DOMAugmented, DOMElement, IntrinsicElement, UIElement, ValueElement } from "./types"
+import { getApexElementIds, createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
+import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync } from "./element"
+import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented } from "./types"
+import { selfClosingTags } from "./common"
 
 export const Fragment = ""
 export type Fragment = typeof Fragment
