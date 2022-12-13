@@ -1,10 +1,12 @@
 /* eslint-disable brace-style */
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/ban-types */
-import { firstOrDefault, hasValue, isGenerator, last, Obj, SequenceAsync, shallowEquals, skip, union } from "@agyemanjp/standard"
+import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, SequenceAsync } from "@agyemanjp/standard"
 import {
-	Children, ComponentElt, ComponentEltAugmented, ComponentResult, IntrinsicElement,
-	RenderingTrace, UIElement, ValueElement
+	Children,
+	ComponentResult, ComponentEltAugmented,
+	ComponentElt, UIElement, ValueElement, IntrinsicElement, /*FragmentElement,*/
+	RenderingTrace
 } from "./types"
 
 export const isEltProper = <P extends Obj>(elt?: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
