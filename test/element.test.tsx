@@ -1,10 +1,10 @@
 /* eslint-disable fp/no-loops */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { isGenerator, pick, stringify, unique } from "@agyemanjp/standard"
 import * as assert from "assert"
+import { isGenerator, pick, unique, stringify } from "@agyemanjp/standard"
+import { ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/types'
+import { isEltProper, isIntrinsicElt, isComponentElt, updateResultAsync, traceToLeafAsync, updateTraceAsync, getChildren } from '../dist/element'
 import { createElement } from '../dist/core'
-import { getChildren, isComponentElt, isEltProper, isIntrinsicElt, traceToLeafAsync, updateResultAsync, updateTraceAsync } from '../dist/element'
-import { Component, ComponentElt, CSSProperties, IntrinsicElement } from '../dist/types'
 import { StackPanel } from './_utils'
 
 interface User {
