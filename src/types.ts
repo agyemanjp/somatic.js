@@ -4,7 +4,7 @@
 /* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DigitNonZero, Obj } from "@agyemanjp/standard"
+import { Obj, DigitNonZero } from "@agyemanjp/standard"
 import { colorConstants } from "./common"
 
 /** Main component type */
@@ -35,6 +35,8 @@ export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> 
 	type: string
 }
 
+export interface UIElementBase<P = unknown> { props: P, children?: Children }
+export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
 // export interface FragmentElement extends UIElementBase<undefined> { type: "" }
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> {
 	type: Component<P>,
@@ -56,7 +58,6 @@ export type ComponentResult = {
 	element: UIElement,
 	generator?: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>
 }
-
 export interface ComponentEltAugmented<P extends Obj = Obj> extends ComponentElt<P> {
 	result: ComponentResult
 }
@@ -65,7 +66,6 @@ export interface RenderingTrace {
 	componentElts: ComponentEltAugmented[],
 	leafElement: IntrinsicElement | ValueElement
 }
-
 export type DOMElement = SVGElement | HTMLElement
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
@@ -1240,9 +1240,7 @@ export interface Attributes {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ClassAttributes<T> extends Attributes {
-}
-
+export interface ClassAttributes<T> extends Attributes { }
 export type DOMAttributes<T> = {
 	//childrenx?: Somatic.VNode[];
 	// dangerouslySetInnerHTML?: {
@@ -1760,7 +1758,6 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 	z?: number | string;
 	zoomAndPan?: string;
 }
-
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	download?: any;
 	href?: string;
@@ -1770,11 +1767,8 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	target?: string;
 	type?: string;
 }
-
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {
-}
-
+export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> { }
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 	alt?: string;
 	coords?: string;
@@ -1786,16 +1780,13 @@ export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 	shape?: string;
 	target?: string;
 }
-
 export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
 	href?: string;
 	target?: string;
 }
-
 export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
 	cite?: string;
 }
-
 export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
 	autofocus?: boolean;
 	disabled?: boolean;
@@ -1809,47 +1800,38 @@ export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
 	type?: string;
 	value?: string | string[] | number;
 }
-
 export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
 	height?: number | string;
 	width?: number | string;
 }
-
 export interface ColHTMLAttributes<T> extends HTMLAttributes<T> {
 	span?: number;
 	width?: number | string;
 }
-
 export interface ColgroupHTMLAttributes<T> extends HTMLAttributes<T> {
 	span?: number;
 }
-
 export interface DetailsHTMLAttributes<T> extends HTMLAttributes<T> {
 	open?: boolean;
 }
-
 export interface DelHTMLAttributes<T> extends HTMLAttributes<T> {
 	cite?: string;
 	dateTime?: string;
 }
-
 export interface DialogHTMLAttributes<T> extends HTMLAttributes<T> {
 	open?: boolean;
 }
-
 export interface EmbedHTMLAttributes<T> extends HTMLAttributes<T> {
 	height?: number | string;
 	src?: string;
 	type?: string;
 	width?: number | string;
 }
-
 export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
 	disabled?: boolean;
 	form?: string;
 	name?: string;
 }
-
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 	acceptCharset?: string;
 	action?: string;
@@ -1860,11 +1842,9 @@ export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 	noValidate?: boolean;
 	target?: string;
 }
-
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
 	manifest?: string;
 }
-
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	allow?: string;
 	allowFullScreen?: boolean;
@@ -1881,7 +1861,6 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	srcDoc?: string;
 	width?: number | string;
 }
-
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 	alt?: string;
 	crossorigin?: "anonymous" | "use-credentials" | "";
@@ -1893,7 +1872,6 @@ export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 	useMap?: string;
 	width?: number | string;
 }
-
 export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
 	cite?: string;
 	dateTime?: string;
@@ -1935,7 +1913,6 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	onChange?: ChangeEventHandler<T>;
 }
-
 export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
 	autofocus?: boolean;
 	challenge?: string;
@@ -1945,16 +1922,13 @@ export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
 	keyParams?: string;
 	name?: string;
 }
-
 export interface LabelHTMLAttributes<T> extends HTMLAttributes<T> {
 	form?: string;
 	htmlFor?: string;
 }
-
 export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number;
 }
-
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	as?: string;
 	crossorigin?: string;
@@ -1966,15 +1940,12 @@ export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	sizes?: string;
 	type?: string;
 }
-
 export interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
 	name?: string;
 }
-
 export interface MenuHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: string;
 }
-
 export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autoPlay?: boolean;
 	controls?: boolean;
@@ -1987,14 +1958,12 @@ export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 	preload?: string;
 	src?: string;
 }
-
 export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
 	charSet?: string;
 	content?: string;
 	httpEquiv?: string;
 	name?: string;
 }
-
 export interface MeterHTMLAttributes<T> extends HTMLAttributes<T> {
 	form?: string;
 	high?: number;
@@ -2004,11 +1973,9 @@ export interface MeterHTMLAttributes<T> extends HTMLAttributes<T> {
 	optimum?: number;
 	value?: string | string[] | number;
 }
-
 export interface QuoteHTMLAttributes<T> extends HTMLAttributes<T> {
 	cite?: string;
 }
-
 export interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
 	classID?: string;
 	data?: string;
@@ -2020,41 +1987,34 @@ export interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
 	width?: number | string;
 	wmode?: string;
 }
-
 export interface OlHTMLAttributes<T> extends HTMLAttributes<T> {
 	reversed?: boolean;
 	start?: number;
 	type?: '1' | 'a' | 'A' | 'i' | 'I';
 }
-
 export interface OptgroupHTMLAttributes<T> extends HTMLAttributes<T> {
 	disabled?: boolean;
 	label?: string;
 }
-
 export interface OptionHTMLAttributes<T> extends HTMLAttributes<T> {
 	disabled?: boolean;
 	label?: string;
 	selected?: boolean;
 	value?: string | string[] | number;
 }
-
 export interface OutputHTMLAttributes<T> extends HTMLAttributes<T> {
 	form?: string;
 	htmlFor?: string;
 	name?: string;
 }
-
 export interface ParamHTMLAttributes<T> extends HTMLAttributes<T> {
 	name?: string;
 	value?: string | string[] | number;
 }
-
 export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
 	max?: number | string;
 	value?: string | string[] | number;
 }
-
 export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	async?: boolean;
 	charSet?: string;
@@ -2066,7 +2026,6 @@ export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	src?: string;
 	type?: string;
 }
-
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
 	autocomplete?: string;
 	autofocus?: boolean;
@@ -2079,7 +2038,6 @@ export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number;
 	onChange?: ChangeEventHandler<T>;
 }
-
 export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
 	media?: string;
 	sizes?: string;
@@ -2087,20 +2045,17 @@ export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
 	srcSet?: string;
 	type?: string;
 }
-
 export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
 	media?: string;
 	nonce?: string;
 	scoped?: boolean;
 	type?: string;
 }
-
 export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 	cellPadding?: number | string;
 	cellSpacing?: number | string;
 	summary?: string;
 }
-
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autocomplete?: string;
 	autofocus?: boolean;
@@ -2120,7 +2075,6 @@ export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	onChange?: ChangeEventHandler<T>;
 }
-
 export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
 	align?: "left" | "center" | "right" | "justify" | "char";
 	colSpan?: number;
@@ -2128,7 +2082,6 @@ export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
 	rowSpan?: number;
 	scope?: string;
 }
-
 export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
 	align?: "left" | "center" | "right" | "justify" | "char";
 	colSpan?: number;
@@ -2136,11 +2089,9 @@ export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
 	rowSpan?: number;
 	scope?: string;
 }
-
 export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
 	dateTime?: string;
 }
-
 export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
 	default?: boolean;
 	kind?: string;
@@ -2148,14 +2099,12 @@ export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
 	src?: string;
 	srcLang?: string;
 }
-
 export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 	height?: number | string;
 	playsInline?: boolean;
 	poster?: string;
 	width?: number | string;
 }
-
 export interface WebViewHTMLAttributes<T> extends HTMLAttributes<T> {
 	allowFullScreen?: boolean;
 	allowpopups?: boolean;
@@ -2175,7 +2124,6 @@ export interface WebViewHTMLAttributes<T> extends HTMLAttributes<T> {
 	useragent?: string;
 	webpreferences?: string;
 }
-
 //#endregion
 
 //#region Events
@@ -2211,22 +2159,18 @@ export interface SyntheticEvent<T = Element> {
 
 	persist(): void;
 }
-
 export interface ClipboardEvent<T = Element> extends SyntheticEvent<T> {
 	clipboardData: DataTransfer;
 	nativeEvent: Event;
 }
-
 export interface CompositionEvent<T = Element> extends SyntheticEvent<T> {
 	data: string;
 	nativeEvent: Event;
 }
-
 export interface DragEvent<T = Element> extends MouseEvent<T> {
 	dataTransfer: DataTransfer;
 	nativeEvent: Event;
 }
-
 export interface PointerEvent<T = Element> extends MouseEvent<T> {
 	pointerId: number;
 	pressure: number;
@@ -2238,25 +2182,20 @@ export interface PointerEvent<T = Element> extends MouseEvent<T> {
 	isPrimary: boolean;
 	nativeEvent: Event;
 }
-
 export interface FocusEvent<T = Element> extends SyntheticEvent<T> {
 	nativeEvent: Event;
 	relatedTarget: EventTarget;
 	target: EventTarget & T;
 }
-
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormEvent<T = Element> extends SyntheticEvent<T> {
 }
-
 export interface InvalidEvent<T = Element> extends SyntheticEvent<T> {
 	target: EventTarget & T;
 }
-
 export interface ChangeEvent<T = Element> extends SyntheticEvent<T> {
 	target: EventTarget & T;
 }
-
 export interface KeyboardEvent<T = Element> extends SyntheticEvent<T> {
 	altKey: boolean;
 	charCode: number;
@@ -2281,7 +2220,6 @@ export interface KeyboardEvent<T = Element> extends SyntheticEvent<T> {
 	 */
 	getModifierState(key: string): boolean;
 }
-
 export interface MouseEvent<T = Element> extends SyntheticEvent<T> {
 	altKey: boolean;
 	button: number;
@@ -2304,7 +2242,6 @@ export interface MouseEvent<T = Element> extends SyntheticEvent<T> {
 	 */
 	getModifierState(key: string): boolean;
 }
-
 export interface TouchEvent<T = Element> extends SyntheticEvent<T> {
 	altKey: boolean;
 	changedTouches: TouchList;
@@ -2321,7 +2258,6 @@ export interface TouchEvent<T = Element> extends SyntheticEvent<T> {
 	 */
 	getModifierState(key: string): boolean;
 }
-
 export interface UIEvent<T = Element> extends SyntheticEvent<T> {
 	detail: number;
 	nativeEvent: Event;
@@ -2330,7 +2266,6 @@ export interface UIEvent<T = Element> extends SyntheticEvent<T> {
 		document: Document;
 	};
 }
-
 export interface WheelEvent<T = Element> extends MouseEvent<T> {
 	deltaMode: number;
 	deltaX: number;
@@ -2338,14 +2273,12 @@ export interface WheelEvent<T = Element> extends MouseEvent<T> {
 	deltaZ: number;
 	nativeEvent: Event;
 }
-
 export interface AnimationEvent<T = Element> extends SyntheticEvent<T> {
 	animationName: string;
 	elapsedTime: number;
 	nativeEvent: Event;
 	pseudoElement: string;
 }
-
 export interface TransitionEvent<T = Element> extends SyntheticEvent<T> {
 	elapsedTime: number;
 	nativeEvent: Event;
@@ -2375,11 +2308,13 @@ type TransitionEventHandler<T = Element> = EventHandler<TransitionEvent<T>>;
 //#endregion
 
 /* export interface DOMElement<Attr extends HTMLAttributes<Elt> | SVGAttributes<Elt>, Elt extends Element> extends VNode<Attr, string> {
- //type: string
- }*/
+	  //type: string
+}*/
 /* export type DOMFactory<Attr extends DOMAttributes<Elt>, Elt extends Element> = (
- props?: ClassAttributes<Elt> & Attr | null,
- // eslint-disable-next-line fp/no-rest-parameters
- ...children: VNode[]
- ) => DOMElement<Attr, Elt>
- */
+	props?: ClassAttributes<Elt> & Attr | null,
+	// eslint-disable-next-line fp/no-rest-parameters
+	...children: VNode[]
+) => DOMElement<Attr, Elt>
+*/
+
+

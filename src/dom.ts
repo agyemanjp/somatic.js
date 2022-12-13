@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { keys, skip } from "@agyemanjp/standard"
 
-import { attributeConversions, booleanAttributes, isEventKey, svgTags } from "./common"
-import { isIntrinsicElt } from "./element"
 import { stringifyStyle } from "./html"
+import { isIntrinsicElt } from "./element"
+import { svgTags, isEventKey, booleanAttributes, attributeConversions } from "./common"
 import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
 
 export type LeafElement = IntrinsicElement | ValueElement
