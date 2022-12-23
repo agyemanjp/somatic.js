@@ -200,7 +200,7 @@ describe("CORE MODULE", () => {
 				// console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
 				return function (props) {
 					const elt = svgElement as any
-					console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
+					// console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
 					return <svg
 						preserveAspectRatio='xMidYMid meet'
 						{...elt.props}
@@ -524,7 +524,7 @@ describe("CORE MODULE", () => {
 				// console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
 				return function (props) {
 					const elt = svgElement as any
-					console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
+					// console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
 					return <svg
 						preserveAspectRatio='xMidYMid meet'
 						{...elt.props}
@@ -617,7 +617,7 @@ describe("CORE MODULE", () => {
 			}
 			// eslint-disable-next-line @typescript-eslint/ban-types
 			const SplashPage: Component<any> = async function* (props) {
-				console.log(`Starting splash page render`)
+				// console.log(`Starting splash page render`)
 				yield <div>Splash page</div>
 			}
 			const Layout: Component<{ user: User | undefined }> = async function* (props) {

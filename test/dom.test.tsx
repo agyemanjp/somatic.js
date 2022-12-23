@@ -241,7 +241,7 @@ describe("DOM MODULE", () => {
 			assert.strictEqual(dom.tagName.toUpperCase(), "G")
 			// assert.strictEqual(String(dom.className).toUpperCase(), "CLSS")
 
-			console.log(dom.transform)
+			// console.log(dom.transform)
 			assert.deepStrictEqual(dom.getAttribute("transform"), `matrix(0.660991,0,0,0.655918,524.665,744.892)`)
 			assert.strictEqual(dom.childNodes.length, 0)
 		})
