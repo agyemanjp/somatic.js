@@ -7,12 +7,12 @@ import { expect, use } from "chai"
 import * as chaiHTML from "chai-html"
 const cleanup = require('jsdom-global')()
 
-import { IntrinsicElement, DOMAugmented, Component, CSSProperties } from '../dist/types'
-import { createElement, renderAsync, renderToIntrinsicAsync, renderToStringAsync, updateChildrenAsync, applyLeafElementAsync, updateAsync, mountElement } from '../dist/core'
-import { isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
-import { isAugmentedDOM, isTextDOM, createDOMShallow } from '../dist/dom'
-import { StackPanel, CommandBox, View, normalizeHTML } from './_utils'
 import { idProvider } from '../dist/common'
+import { applyLeafElementAsync, createElement, mountElement, renderAsync, renderToIntrinsicAsync, renderToStringAsync, updateAsync, updateChildrenAsync } from '../dist/core'
+import { createDOMShallow, isAugmentedDOM, isTextDOM } from '../dist/dom'
+import { getChildren, isIntrinsicElt, traceToLeafAsync } from '../dist/element'
+import { CSSProperties, Component, DOMAugmented, IntrinsicElement } from '../dist/types'
+import { CommandBox, StackPanel, View, normalizeHTML } from './_utils'
 
 describe("CORE MODULE", () => {
 	use(chaiHTML)
@@ -200,7 +200,7 @@ describe("CORE MODULE", () => {
 				// console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
 				return function (props) {
 					const elt = svgElement as any
-					console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
+					// console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
 					return <svg
 						preserveAspectRatio='xMidYMid meet'
 						{...elt.props}
@@ -524,7 +524,7 @@ describe("CORE MODULE", () => {
 				// console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
 				return function (props) {
 					const elt = svgElement as any
-					console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
+					// console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
 					return <svg
 						preserveAspectRatio='xMidYMid meet'
 						{...elt.props}
@@ -617,7 +617,7 @@ describe("CORE MODULE", () => {
 			}
 			// eslint-disable-next-line @typescript-eslint/ban-types
 			const SplashPage: Component<any> = async function* (props) {
-				console.log(`Starting splash page render`)
+				// console.log(`Starting splash page render`)
 				yield <div>Splash page</div>
 			}
 			const Layout: Component<{ user: User | undefined }> = async function* (props) {
