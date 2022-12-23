@@ -177,7 +177,7 @@ export type CommandBoxProps = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
 CommandBox.isPure = true
 
 export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): AsyncGenerator<JSX.Element, JSX.Element, typeof _props> {
-	console.log(`"${_props.key}" view render start`)
+	// console.log(`"${_props.key}" view render start`)
 
 	const defaultProps = {
 		id: cuid(),
