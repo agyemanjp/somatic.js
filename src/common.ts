@@ -1,4 +1,4 @@
-import * as cuid  from "cuid"
+import * as cuid from "cuid"
 import { Obj } from "@agyemanjp/standard/utility"
 
 /** Names of DOM events. */
