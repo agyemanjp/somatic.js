@@ -10,7 +10,7 @@ import { colorConstants } from "./common"
 /** Main component type */
 export type Component<P extends Obj = Obj> =
 	((props: P & { children?: Children, key?: string }/*, extra: { invalidate: () => void }*/) =>
-		// UIElement generic types below should not be generic type since we don't know their props in advance
+		// UIElement generic  types below should not be generic type since we don't know their props in advance
 		| AsyncGenerator<UIElement, UIElement, typeof props>
 		| Generator<UIElement, UIElement, typeof props>
 		| Promise<UIElement>
