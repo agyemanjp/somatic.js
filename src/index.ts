@@ -452,4 +452,3 @@ export { createElement, Fragment, invalidateUI, mountElement, renderAsync, rende
 export { getChildren, isComponentElt, isEltProper, isIntrinsicElt, normalizeChildren } from "./element"
 export { stringifyAttributes, stringifyStyle } from "./html"
 export * from './types'
-
