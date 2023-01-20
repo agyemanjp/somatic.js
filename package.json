@@ -45,7 +45,7 @@
 	},
 	"homepage": "https://github.com/agyemanjp/somatic.js#readme",
 	"dependencies": {
-		"@agyemanjp/standard": "^4.1.8",
+		"@agyemanjp/standard": "^5.1.2",
 		"cuid": "2.1.8"
 	},
 	"devDependencies": {
