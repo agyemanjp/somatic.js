@@ -1849,8 +1849,9 @@ export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	allow?: string;
 	allowFullScreen?: boolean;
+	allowPaymentRequest?: boolean;
 	allowTransparency?: boolean;
-	frameBorder?: number | string;
+	frameBorder?: number | string; // deprecated
 	height?: number | string;
 	marginHeight?: number;
 	marginWidth?: number;
@@ -1909,35 +1910,36 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 	src?: string;
 	step?: number | string;
 	type?: (
-		| "button" 
-		| "checkbox" 
-		| "color" 
-		| "date" 
-		| "datetime-local" 
-		| "email" 
-		| "file" 
-		| "hidden" 
-		| "image" 
-		| "month" 
-		| "number" 
-		| "password" 
-		| "radio" 
-		| "range" 
-		| "reset" 
-		| "search" 
-		| "submit" 
-		| "tel" 
-		| "text" 
-		| "time" 
-		| "url" 
+		| "button"
+		| "checkbox"
+		| "color"
+		| "date"
+		| "datetime-local"
+		| "email"
+		| "file"
+		| "hidden"
+		| "image"
+		| "month"
+		| "number"
+		| "password"
+		| "radio"
+		| "range"
+		| "reset"
+		| "search"
+		| "submit"
+		| "tel"
+		| "text"
+		| "time"
+		| "url"
 		| "week"
-		
+
 	);
 	value?: string | string[] | number;
 	width?: number | string;
 
 	onChange?: ChangeEventHandler<T>;
 }
+// deprecated
 export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
 	autofocus?: boolean;
 	challenge?: string;
@@ -1956,7 +1958,7 @@ export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	as?: string;
-	crossorigin?: string;
+	crossorigin?: "anonymous" | "use-credentials" | "";
 	href?: string;
 	hrefLang?: string;
 	integrity?: string;
@@ -1975,7 +1977,7 @@ export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autoPlay?: boolean;
 	controls?: boolean;
 	controlsList?: string;
-	crossorigin?: string;
+	crossorigin?: "anonymous" | "use-credentials" | "";
 	loop?: boolean;
 	mediaGroup?: string;
 	muted?: boolean;
@@ -2083,7 +2085,8 @@ export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autocomplete?: string;
-	autofocus?: boolean;
+	autofocus?: "on"
+	| "offert";
 	cols?: number;
 	dirName?: string;
 	disabled?: boolean;
