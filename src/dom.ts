@@ -1,12 +1,11 @@
-/* eslint-disable fp/no-mutation */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/ban-types */
-import { keys, skip } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
-import { isIntrinsicElt } from "./element"
-import { svgTags, isEventKey, booleanAttributes, attributeConversions } from "./common"
+import { isEltProper, isIntrinsicElt } from "./element"
+import { svgTags, isEventKey, eventNames, booleanAttributes, attributeConversions } from "./common"
 import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
+import { keys, skip, first, indexesOf } from "@agyemanjp/standard"
 
 export type LeafElement = IntrinsicElement | ValueElement
 
@@ -17,6 +16,11 @@ export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TE
 export function setAttribute(element: DOMElement, attribName: string, attribVal: any) {
 	// if (typeof value === "string" && value.toUpperCase() === "UNDEFINED") console.log(`Setting ${key} to ${value}`)
 	try {
+		if (attribVal === undefined && !booleanAttributes.includes(attribName.toUpperCase())) {
+			// console.warn(`Ignored setting ${attributeName} on <${element.tagName}> to undefined`)
+			return
+		}
+
 		if (["CLASSNAME", "CLASS"].includes(attribName.toUpperCase())) {
 			if (typeof attribVal === "string") {
 				// The class attribute is set with setAttribute(). This approach:
@@ -27,7 +31,7 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 				//ToDo: Check if setAttributeNS is better to use above and in similar calls
 			}
 			else {
-				console.trace(`Ignored setting class on <${element.tagName}> to non-string value ${attribVal}`)
+				console.warn(`Ignored setting class on <${element.tagName}> to non-string value ${attribVal}`)
 			}
 		}
 		else if (attribName.toUpperCase() === 'STYLE') {
@@ -67,10 +71,11 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 					element.setAttribute(effectiveKey, effectiveVal)
 				}
 				else {
-					// For string values, first set attribute using setAttribute, 
+					// For string or true values, first set attribute using setAttribute, 
 					// for a few cases not handled properly by the assignment that follows
-					if (typeof effectiveVal === "string" || effectiveVal === true)
+					if (typeof effectiveVal === "string" || effectiveVal === true) {
 						element.setAttribute(attribName, effectiveVal)
+					}
 
 					// The <key> property on the element is set directly to <effectiveVal>. This approach works:
 					// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
@@ -78,8 +83,9 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 					// for setting function values which are not event handlers.
 					// It also avoids using setAttribute to set the property to a string form of the value
 					// We assume the input property key is in the correct case as specified in the typings, * E.g., preserveAspectRatio, viewBox, fillRule, readOnly, etc
-					if (effectiveVal !== undefined)
-						(element as any)[attribName] = effectiveVal
+
+					// if (effectiveVal !== undefined)
+					(element as any)[attribName] = effectiveVal
 				}
 			}
 			catch (err) {
@@ -143,7 +149,7 @@ export function emptyContainer(container: Node) {
 	container.textContent = ""
 }
 
-/*function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
+function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
 	const parent = dom.parentNode
 	if (parent) {
 		const index = first(indexesOf(parent.childNodes.entries(), { value: dom }))
@@ -151,18 +157,15 @@ export function emptyContainer(container: Node) {
 		fn(dom)
 		parent.insertBefore(dom, parent.childNodes.item(index))
 	}
-}*/
+}
 
 /** Get ids of peak DOM elements among a list of elements in a tree */
 export function getApexElementIds(elementIds: string[]): string[] {
 	return elementIds.filter(id => {
-		// eslint-disable-next-line fp/no-let
 		let parent = document.getElementById(id)?.parentElement
-		// eslint-disable-next-line fp/no-loops
 		while (parent) {
 			if (elementIds.includes(parent.id))
 				return false
-			// eslint-disable-next-line fp/no-mutation
 			parent = parent.parentElement
 		}
 		return true
@@ -170,13 +173,10 @@ export function getApexElementIds(elementIds: string[]): string[] {
 }
 export function getApexElements(elements: DOMElement[]): DOMElement[] {
 	return elements.filter(elt => {
-		// eslint-disable-next-line fp/no-let
 		let parent = elt.parentElement
-		// eslint-disable-next-line fp/no-loops
 		while (parent) {
 			if (elements.includes(parent))
 				return false
-			// eslint-disable-next-line fp/no-mutation
 			parent = parent.parentElement
 		}
 		return true
