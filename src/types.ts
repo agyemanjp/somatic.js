@@ -1761,9 +1761,19 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	download?: string;
 	href?: string;
+	ping: string;
 	hrefLang?: string;
-	media?: string;
 	rel?: string;
+	referrerpolicy: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 	target?: "_self" | "_blank" | "_parent" | "_top";
 	type?: string;
 }
@@ -1777,6 +1787,17 @@ export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 	hrefLang?: string;
 	media?: string;
 	rel?: string;
+	ping: string;
+	referrerpolicy: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 	shape?: string;
 	target?: "_self" | "_blank" | "_parent" | "_top";
 }
@@ -1793,7 +1814,7 @@ export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
 	form?: string;
 	formAction?: string;
 	formEncType?: string;
-	formMethod?: string;
+	formMethod?: "post" | "get";
 	formNoValidate?: boolean;
 	formTarget?: "_self" | "_blank" | "_parent" | "_top";
 	name?: string;
@@ -1837,7 +1858,27 @@ export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 	action?: string;
 	autocomplete?: "on" | "off";
 	encType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
-	method?: "post" | "get" | "dialog" | "Post" | "Get" | "Dialog" | "POST" | "GET" | "DIALOG"
+	method?: (
+		| "post"
+		| "get"
+		| "dialog"
+		| "Post"
+		| "Get"
+		| "Dialog"
+		| "POST"
+		| "GET"
+		| "DIALOG"
+	);
+	rel: (
+		| "external"
+		| "noopener"
+		| "noreferrer"
+		| "opener"
+		| "prefetch"
+		| "prerender"
+		| "search"
+		| "tag"
+		| string);
 	name?: string;
 	noValidate?: boolean;
 	target?: "_self" | "_blank" | "_parent" | "_top";
@@ -1849,7 +1890,6 @@ export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	allow?: string;
 	allowFullScreen?: boolean;
-	allowPaymentRequest?: boolean;
 	allowTransparency?: boolean;
 	frameBorder?: number | string; // deprecated
 	height?: number | string;
@@ -1861,6 +1901,16 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	seamless?: boolean;
 	src?: string;
 	srcDoc?: string;
+	referrerpolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 	width?: number | string;
 }
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1873,6 +1923,17 @@ export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 	srcSet?: string;
 	useMap?: string;
 	width?: number | string;
+	loading?: "eager" | "lazy";
+	referrerpolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 }
 export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
 	cite?: string;
@@ -1939,7 +2000,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	onChange?: ChangeEventHandler<T>;
 }
-// deprecated
+
 export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
 	autofocus?: boolean;
 	challenge?: string;
@@ -1966,6 +2027,17 @@ export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	rel?: string;
 	sizes?: string;
 	type?: string;
+	title?: string;
+	referrerpolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 }
 export interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
 	name?: string;
@@ -2052,6 +2124,17 @@ export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	nonce?: string;
 	src?: string;
 	type?: string;
+	blocking?: string;
+	referrerpolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 }
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
 	autocomplete?: string;
@@ -2069,6 +2152,8 @@ export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
 	media?: string;
 	sizes?: string;
 	src?: string;
+	height?: number;
+	width?: number;
 	srcSet?: string;
 	type?: string;
 }
@@ -2076,6 +2161,7 @@ export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
 	media?: string;
 	nonce?: string;
 	scoped?: boolean;
+	title?: string;
 	type?: string;
 }
 export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2085,8 +2171,7 @@ export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autocomplete?: string;
-	autofocus?: "on"
-	| "offert";
+	autofocus?: "on" | "off";
 	cols?: number;
 	dirName?: string;
 	disabled?: boolean;
@@ -2099,7 +2184,7 @@ export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 	required?: boolean;
 	rows?: number;
 	value?: string | string[] | number;
-	wrap?: string;
+	wrap?: "soft" | "hard";
 
 	onChange?: ChangeEventHandler<T>;
 }
@@ -2111,18 +2196,25 @@ export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
 	scope?: string;
 }
 export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
+	abbr?: string;
 	align?: "left" | "center" | "right" | "justify" | "char";
 	colSpan?: number;
 	headers?: string;
 	rowSpan?: number;
-	scope?: string;
+	scope?: "row" | "col" | "rowgroup" | "colgroup";
 }
 export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
 	dateTime?: string;
 }
 export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
 	default?: boolean;
-	kind?: string;
+	kind?: (
+		| "subtitles"
+		| "captions"
+		| "descriptions"
+		| "chapters"
+		| "metadata"
+	);
 	label?: string;
 	src?: string;
 	srcLang?: string;
