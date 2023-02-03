@@ -1764,7 +1764,7 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	ping?: string;
 	hrefLang?: string;
 	rel?: string;
-	referrerpolicy?: (
+	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
 		| "origin"
@@ -1788,7 +1788,7 @@ export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 	media?: string;
 	rel?: string;
 	ping: string;
-	referrerpolicy: (
+	referrerPolicy: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
 		| "origin"
@@ -1901,7 +1901,7 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	seamless?: boolean;
 	src?: string;
 	srcDoc?: string;
-	referrerpolicy?: (
+	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
 		| "origin"
@@ -1924,7 +1924,7 @@ export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 	useMap?: string;
 	width?: number | string;
 	loading?: "eager" | "lazy";
-	referrerpolicy?: (
+	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
 		| "origin"
@@ -2028,7 +2028,7 @@ export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	sizes?: string;
 	type?: string;
 	title?: string;
-	referrerpolicy?: (
+	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
 		| "origin"
@@ -2125,7 +2125,7 @@ export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	src?: string;
 	type?: string;
 	blocking?: string;
-	referrerpolicy?: (
+	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
 		| "origin"
