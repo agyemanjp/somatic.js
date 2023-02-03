@@ -1761,10 +1761,10 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	download?: string;
 	href?: string;
-	ping: string;
+	ping?: string;
 	hrefLang?: string;
 	rel?: string;
-	referrerpolicy: (
+	referrerpolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
 		| "origin"
@@ -1885,7 +1885,7 @@ export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
 	manifest?: string;
-	xmlns: string;
+	xmlns?: string;
 }
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	allow?: string;
