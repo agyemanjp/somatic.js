@@ -1,4 +1,4 @@
-name: Publish Major
+name: Publish
 on:
   workflow_dispatch:
 
@@ -6,7 +6,6 @@ env:
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
   GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
-
 
 jobs:
   publish:
@@ -26,7 +25,9 @@ jobs:
           git config --global user.email "${{env.GIT_USER_EMAIL}}"
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm install -g pnpm
+          pnpm install
 
       - name: Check if package version updated
         id: check
@@ -35,5 +36,6 @@ jobs:
       - name: Publish to NPM if new version
         if: steps.check.outputs.is-new-version == 'true'
         run: |
-          npm config set //registry.npmjs.org/:_authToken ${{ env.NPM_TOKEN }}
-          npm publish --access public
+          pnpm config set //registry.npmjs.org/:_authToken ${{ env.NPM_TOKEN }}
+          pnpm publish --access public
+          # pnpm -r publish --no-git-checks --access public

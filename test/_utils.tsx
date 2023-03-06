@@ -1,12 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable fp/no-let */
-/* eslint-disable fp/no-loops */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable fp/no-mutation */
-/* eslint-disable prefer-const */
-
 import { mergeDeep, ArgsType, deepMerge } from "@agyemanjp/standard"
 import * as cuid from "cuid"
 
@@ -23,15 +14,16 @@ export function constructElement(html: string): HTMLElement {
 	return div
 }
 
-/** Remove some attributes from an html element string */
 export function excludeAttributes(target: string, attributes: string[]): string
 export function excludeAttributes(target: HTMLElement, attributes: string[]): HTMLElement
+/** Remove some attributes from an html element string */
 export function excludeAttributes(target: HTMLElement | string, attributes: string[]): string | HTMLElement {
 	const div = constructElement(typeof target === "string" ? target : target.innerHTML)
 	attributes.forEach(a => div.removeAttribute(a))
 	return typeof target === "string" ? div.innerHTML : div
 }
 
+/** Normalize HTML */
 export function normalizeHTML(html: string) {
 	return html //excludeAttributes(html, ["id"])
 		.replace(/( \w*="undefined")/, "") // remove atributes set to the string "undefined"
@@ -176,6 +168,7 @@ export type CommandBoxProps = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {
 }
 CommandBox.isPure = true
 
+/** View component */
 export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): AsyncGenerator<JSX.Element, JSX.Element, typeof _props> {
 	// console.log(`"${_props.key}" view render start`)
 
@@ -194,7 +187,7 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 
 	try {
 		while (true) {
-			let {
+			const {
 				id,
 				key,
 				sourceData,
@@ -225,12 +218,12 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 				) as UIElement
 
 				const clickAction = () => {
-					if (selectionMode && onSelection) onSelection({ selectedIndex: 0 })
+					if (onSelection) onSelection({ selectedIndex: 0 })
 				}
 
 				return renderToIntrinsicAsync(itemElement).then(elt => {
 					// console.log(`rendered intrinsic elt: ${elt as any}`)
-					if (elt && typeof elt === "object" && "props" in elt) {
+					if (elt !== null && typeof elt === "object" && "props" in elt) {
 						const onClick = elt.props.onClick
 						elt.props.onClick = typeof onClick === "function"
 							? () => {
@@ -246,7 +239,8 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 					return elt
 				})
 			}))
-			const newProps = yield <ItemsPanel id={id}
+
+			const newProps = (yield <ItemsPanel id={id}
 				orientation={orientation}
 				itemsAlignH={itemsAlignV}
 				itemsAlignV={itemsAlignH}
@@ -254,16 +248,16 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 				{...htmlProps}>
 
 				{items}
-			</ItemsPanel>
+			</ItemsPanel>) ?? props
 
 			// Update props (including stateful members and extra state) based on injected props
 			props = mergeDeep()(
 				props,
-				newProps ?? {},
+				newProps,
 				{
 					// if sourceData or selectedIndex has changed externally from what was initially passed, reset selectedIndex
-					selectedIndex: (newProps?.sourceData !== props.sourceData) || (props.selectedIndex !== newProps?.selectedIndex)
-						? newProps?.selectedIndex ?? selectedIndex
+					selectedIndex: (newProps.sourceData !== props.sourceData) || (props.selectedIndex !== newProps.selectedIndex)
+						? newProps.selectedIndex ?? selectedIndex
 						: selectedIndex
 				}
 			)
@@ -316,7 +310,7 @@ export const HoverBox: Component<HoverBoxProps> = function (props) {
 
 	const className__ = cuid()
 
-	let { key, id, children, hoverStyle, style, ...htmlProps } = mergeDeep()(defaultProps, props)
+	const { key, id, children, hoverStyle, style, ...htmlProps } = mergeDeep()(defaultProps, props)
 	const child = normalizeChildren(children)[0]
 
 	const styleContent = `.${className__}:hover {${stringifyStyle({ ...hoverStyle }, true)}}`

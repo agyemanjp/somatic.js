@@ -1,7 +1,4 @@
-/* eslint-disable brace-style */
-/* eslint-disable fp/no-mutation */
-/* eslint-disable @typescript-eslint/ban-types */
-import { Obj, hasValue, firstOrDefault, skip, last, shallowEquals, isGenerator, union, SequenceAsync } from "@agyemanjp/standard"
+import { Obj, hasValue, isGenerator, firstOrDefault, SequenceAsync, last, shallowEquals, union, skip } from "@agyemanjp/standard"
 import {
 	Children,
 	ComponentResult, ComponentEltAugmented,
@@ -12,7 +9,7 @@ import {
 export const isEltProper = <P extends Obj>(elt?: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
 	(hasValue(elt) && typeof elt === "object" && "type" in elt && (typeof elt.type === "string" || typeof elt.type === "function"))
 export const isIntrinsicElt = <P extends Obj>(elt: UIElement<P>): elt is IntrinsicElement<P> => isEltProper(elt) && typeof elt.type === "string"
-// export const isFragmentElt = (elt: UIElement): elt is FragmentElement => isEltProper(elt) && elt.type === ""
+export const isFragmentElt = (elt: UIElement): boolean /*elt is FragmentElement*/ => isEltProper(elt) && elt.type === ""
 export const isComponentElt = <P extends Obj>(elt: UIElement<P>): elt is ComponentElt<P> => isEltProper(elt) && typeof elt.type !== "string"
 
 /** Return a copy of a component element augmented with its invocation results
@@ -24,10 +21,10 @@ export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P
 		// If new props were passed, call next() on generator again so latest props is used
 		if (hasValue(newProps)) nextInfo = await generator.next()
 
-		const next: UIElement | undefined = (nextInfo.done === true && nextInfo.value === undefined)
+		const next: UIElement | undefined = (nextInfo.done === true && nextInfo.value === null)
 			? undefined
 			: nextInfo.value
-		return next ? { generator, element: next } : undefined
+		return next === undefined ? undefined : { generator, element: next }
 	}
 
 	const getResultAsync = async (): Promise<ComponentResult> => {
@@ -35,21 +32,23 @@ export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P
 			const next = await getNextAsync(elt.result.generator, {
 				...elt.props, children: elt.children
 			})
-			if (hasValue(next))
+			if (hasValue(next)) {
 				return next
-			else
+			}
+			else {
 				console.trace(`Component generator is done yielding values.\nThis situation is normally unintended, since generator components can yield values infinitely while responding to props changes`)
+			}
 		}
 
 		const resultElt = await elt.type({ ...elt.props, children: elt.children }/*, { invalidate: ()=>{} }*/)
 		if (isGenerator(resultElt)) {
 			// No need to inject props again since call to elt.type above already used them
 			const next = await getNextAsync(resultElt)
-			if (hasValue(next))
-				return next
-			else
+			if (hasValue(next)) { return next }
+			else {
 				// Cannot use a generator component that does not yield at least one value
 				throw new Error(`Component "${elt.type.name}" not yielding values.`)
+			}
 		}
 		else {
 			return { element: resultElt }
@@ -63,8 +62,10 @@ export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P
 export async function traceToLeafAsync(eltUI: UIElement): Promise<RenderingTrace> {
 	// let ret: RenderingTrace | undefined = undefined
 	if (isComponentElt(eltUI)) {
-		if (eltUI.type === undefined)
+		if (typeof eltUI.type === "undefined") {
 			throw "eltUI expected to be component element, but its 'type' property is undefined, in traceToLeafAsync"
+		}
+
 		const eltUIAugmented = eltUI.result ? eltUI as ComponentEltAugmented : await updateResultAsync(eltUI)
 		const eltResult = eltUIAugmented.result.element
 
@@ -80,7 +81,6 @@ export async function traceToLeafAsync(eltUI: UIElement): Promise<RenderingTrace
 		return { componentElts: [], leafElement: eltUI ?? "" }
 	}
 
-	// eslint-disable-next-line fp/no-mutation
 	// (self as any).leafElement = ret.leafElement
 	// console.assert(ret.leafElement !== undefined, `Leaf elt in traceToLeafAsync return is misisng`)
 	// console.log(`Returning leaf elt from traceToLeafAsync: ${ret.leafElement}`)
@@ -91,8 +91,9 @@ export async function traceToLeafAsync(eltUI: UIElement): Promise<RenderingTrace
 /** Gets leaf (intrinsic or value) element */
 export async function getLeafAsync(eltUI: UIElement): Promise<IntrinsicElement | ValueElement> {
 	if (isComponentElt(eltUI)) {
-		if (eltUI.type === undefined)
+		if (typeof eltUI.type === "undefined") {
 			throw "eltUI should be component element, but its 'type' property is undefined, in traceToLeafAsync"
+		}
 
 		const eltUIAugmented = eltUI.result ? eltUI as ComponentEltAugmented : await updateResultAsync(eltUI)
 		const eltResult = eltUIAugmented.result.element
@@ -119,31 +120,34 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 	if (!firstElt) return trace // trace does not contain any component element, i.e., it is already intrinsic
 
 	if (eltComp) {
-		if (firstElt.type !== eltComp.type) // invariant check
+		if (firstElt.type !== eltComp.type) { // invariant check
 			throw new Error(`updateTraceAsync: trace argument not compatible with component element argument`)
+		}
 
 		// Update the trace's 1st component element to match the incoming elt to be used as a starting point
 		Object.assign(firstElt.props, eltComp.props)
 		firstElt.children = eltComp.children
 	}
 
-	if (firstElt.type === undefined)
+	if (typeof firstElt.type === "undefined") {
 		throw "firstElt expected to be component element, but its 'type' property is undefined, in updateTraceAsync"
+	}
 
 	const initialAugElts: (Promise<ComponentEltAugmented> | null)[] = [updateResultAsync(firstElt)]
 	const rendersAugmentedPromises = await new SequenceAsync(trace.componentElts)
 		.skipAsync(1)
 		.reduceAsync(initialAugElts, async (eltPromisesAccum, eltCurrent) => {
 			const lastEltPromise = last(eltPromisesAccum)
-			if (!lastEltPromise) // Last element accumulated for trace must not be null (since the takeWhile combinator below excludes such)
+			if (lastEltPromise === null) {  // Last elt accumulated for trace must not be null (since the takeWhile combinator below excludes such)			
 				throw new Error(`Last element of accumulated trace is null in reducer`)
+			}
 
 			const eltResult = (await lastEltPromise).result.element
 			if (isEltProper(eltResult) && eltResult.type === eltCurrent.type) {
 				const childrenResult = getChildren(eltResult)
 				const childrenCurr = getChildren(eltCurrent)
 
-				const elt = eltResult.type.isPure && childrenCurr.length === 0 && childrenResult.length === 0 && shallowEquals(eltResult.props, eltCurrent.props)
+				const elt = eltResult.type.isPure === true && childrenCurr.length === 0 && childrenResult.length === 0 && shallowEquals(eltResult.props, eltCurrent.props)
 					? Promise.resolve(eltCurrent) // no need to update results
 					: updateResultAsync({
 						...eltCurrent,
@@ -184,8 +188,9 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 	const rendersAugmented = await Promise.all(rendersAugmentedPromises) as ComponentEltAugmented[]
 
 	const lastRendersAugmented = last(rendersAugmented)
-	if (typeof lastRendersAugmented === "object" && lastRendersAugmented.type === undefined)
+	if (typeof lastRendersAugmented === "object" && typeof lastRendersAugmented.type === "undefined") {
 		console.error("lastRendersAugmented is object but has no type property value, in updateTraceAsync")
+	}
 
 	const _trace = await traceToLeafAsync(lastRendersAugmented)
 	return {
@@ -196,8 +201,7 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 
 /** Returns a flattened array of children  */
 export function normalizeChildren(children?: Children): UIElement<Obj<unknown, string>>[] {
-	if (children === undefined)
-		return []
+	if (children === undefined) { return [] }
 	return Array.isArray(children)
 		? children.flat()
 		: [children]

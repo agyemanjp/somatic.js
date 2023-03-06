@@ -1,5 +1,3 @@
-/* eslint-disable fp/no-loops */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as assert from "assert"
 import { isGenerator, pick, unique, stringify } from "@agyemanjp/standard"
 import { ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/types'
@@ -96,20 +94,21 @@ describe("ELEMENT MODULE", () => {
 		})
 		it("should return correct result member for an async generator component", async () => {
 			const Selector: Component<{ selectedIndex?: number, selectedStyle?: CSSProperties }> = function* (props) {
-				// eslint-disable-next-line prefer-const, fp/no-let
-				let { selectedIndex, selectedStyle, children } = props
-				while (true)
+				const { selectedIndex, selectedStyle, children } = props
+
+				const state = { selectedIndex }
+
+				while (true) {
 					yield <StackPanel orientation="vertical" style={{ padding: 0, margin: 0 }} >
-						{(children ? Array.isArray(children) ? children : [children] : []).map((child, index) =>
-							// eslint-disable-next-line fp/no-mutation
+						{(children !== undefined ? Array.isArray(children) ? children : [children] : []).map((child, index) =>
 							<div
-								style={index === selectedIndex ? selectedStyle : {}}
-								// eslint-disable-next-line fp/no-mutation
-								onClick={() => selectedIndex = index}>
+								style={index === state.selectedIndex ? selectedStyle : {}}
+								onClick={() => state.selectedIndex = index}>
 								{child}
 							</div>
 						)}
 					</StackPanel>
+				}
 			}
 			const elt = <Selector selectedStyle={{ color: "orange" }}>
 				<SplashPage />
@@ -172,7 +171,7 @@ describe("ELEMENT MODULE", () => {
 				// </Layout>
 			)
 
-			assert(trace.leafElement !== undefined, `Leaf element is undefined`)
+			assert(typeof trace.leafElement !== "undefined", `Leaf element is undefined`)
 			assert(isIntrinsicElt(trace.leafElement), `Leaf element ${stringify(trace.leafElement)} is not intrinsic`)
 			assert.strictEqual(trace.leafElement.type.toUpperCase(), "DIV")
 		})
