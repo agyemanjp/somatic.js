@@ -1,69 +1,125 @@
-const OFF = 0, WARN = 1, ERROR = 2;
-
 module.exports = {
+	"root": true,
 	"parser": "@typescript-eslint/parser",
-	"plugins": ["@typescript-eslint", "fp"],
+	"parserOptions": { project: ['./tsconfig.json', './test/tsconfig.json'] },
+	"plugins": ["@typescript-eslint", "sonarjs"],
 	"env": { "browser": true, "node": true },
 	"extends": [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:@typescript-eslint/recommended",
+		// "eslint:recommended",
+		// "plugin:@typescript-eslint/eslint-recommended",
+		// "plugin:security/recommended" // 
 	],
 	"rules": {
-		/* typescript */
-		"@typescript-eslint/member-delimiter-style": ["off", {
-			"multiline": {
-				"delimiter": "semi",
-				"requireLast": false
-			},
-			"singleline": {
-				"delimiter": "semi",
-				"requireLast": false
-			}
-		}],
+		/* logic */
+		"array-callback-return": "error",
+		"no-self-compare": "error",
+		"no-self-assign": "error",
+		"no-duplicate-case": "error",
+		"no-func-assign": "error",
+		"no-dupe-else-if": "error",
+		"no-loss-of-precision": "error",
+		"no-constructor-return": "error",
+		"no-async-promise-executor": "error",
+		"for-direction": "error",
+		"no-unreachable": "error",
+		"@typescript-eslint/switch-exhaustiveness-check": "warn",
+		"sonarjs/no-all-duplicated-branches": "error", //All branches in a conditional structure should not have exactly the same implementation
+		"sonarjs/no-element-overwrite": "error", // Collection elements should not be replaced unconditionally
+		"sonarjs/no-empty-collection": "error", // Empty collections should not be accessed or iterated
+		"sonarjs/no-extra-arguments": "error", // Function calls should not pass extra arguments
+		"sonarjs/no-identical-conditions": "error", // Related "if/else if" statements should not have the same condition
+		"sonarjs/no-identical-expressions": "error", // Identical expressions used on both sides of a binary operator
+		"sonarjs/no-collection-size-mischeck": "error", // Testing array/collection size/length is greater than or equal to zero doesn't make sense
+		"sonarjs/no-ignored-return": "error", // Return values from functions without side effects should not be ignored
+		"sonarjs/no-one-iteration-loop": "error", // Loops with at most one iteration should be refactored
+		"sonarjs/no-use-of-empty-return-value": "error", // The output of functions that don't return anything should not be used
+		"sonarjs/non-existent-operator": "error", // Non-existent operators '=+', '=-' and '=!' should not be used
 
-		/* functional */
-		"fp/no-arguments": "warn",
-		//"fp/no-class": "warn",
-		"fp/no-delete": "warn",
-		"fp/no-events": "warn",
-		"fp/no-get-set": "warn",
-		"fp/no-let": "warn",
-		"fp/no-loops": "warn",
-		"fp/no-mutating-assign": "warn",
-		"fp/no-mutating-methods": "warn",
-		"fp/no-mutation": "warn",
-		//"fp/no-nil": "warn",
-		"fp/no-proxy": "warn",
-		"fp/no-rest-parameters": "off",
-		//"fp/no-this": "warn",
-		//"fp/no-throw": "warn",
-		//"fp/no-unused-expression": "warn",
-		"fp/no-valueof-field": "warn",
-
-		/* general */
-		"no-var": "warn",
-		"no-console": "off",
-		//"no-unused-vars": "error",
+		/* style */
+		"init-declarations": ["error", "always"],
+		"sonarjs/prefer-object-literal": "error", // initialize object's properties in its declaration vs setting them one-by-one.
+		"prefer-const": "error",
+		"no-var": "error",
+		"no-param-reassign": "error",
 		"no-unused-expressions": "error",
+		"sonarjs/no-unused-collection": "error", // Collection is populated but its contents never used
+		"eqeqeq": "error", // Use of type-unsafe equality operators such as == and != 
+		"@typescript-eslint/strict-boolean-expressions": "warn", // truthy/falsy boolean expressions
+		"no-mixed-operators": "error", // Use of different operators consecutively without parentheses in an expression
+		"no-cond-assign": "error", // Ambiguous assignment operators in test conditions of if, for, while, and do...while statements
+		"no-labels": "error", // Use of labeled statements
 		"no-unused-labels": "error",
-		"no-await-in-loop": "error",
-		"no-irregular-whitespace": "error",
-		"no-unexpected-multiline": "error",
+		"no-unexpected-multiline": "error", // confusing multiline expressions where a newline looks like it is ending a statement, but is not
+		"no-shadow-restricted-names": "error",
+		"@typescript-eslint/no-shadow": ["error", { "ignoreTypeValueShadow": true }],
+		"arrow-parens": ["error", "as-needed"],
+		"prefer-template": "error",
 		"no-template-curly-in-string": "error",
 		"no-unsafe-negation": "error",
-		"require-atomic-updates": "error",
 		"no-import-assign": "error",
-		"no-unreachable": "error",
-		"init-declarations": ["error", "always"],
-		"no-shadow": "error",
+		"no-global-assign": "error", // modifications to read-only global variables
+		"no-invalid-this": "error",
+		"no-new-wrappers": "error",
+		"no-empty": "error", // empty block statements
+		"max-params": ["error", 3], // max functions parameters count
+		"@typescript-eslint/no-inferrable-types": "error",
+		"@typescript-eslint/prefer-as-const": "error",
+		"@typescript-eslint/ban-ts-comment": "error",
+		"no-return-await": "error",
+		"guard-for-in": "error", // using a for-in loop without filtering the results in the loop
+		"semi": ["error", "never"],
+
+		"sonarjs/prefer-single-boolean-return": "error", // Prefer `return expr` to `if (expr) {return true} else {return false}`
+		"sonarjs/no-collapsible-if": "error", // Collapsible "if" statements should be merged
+		"sonarjs/no-identical-functions": "error", // Functions with identical implementations
+		"sonarjs/no-duplicated-branches": "error", // Two branches in a conditional structure with exactly the same implementation
+		"sonarjs/no-redundant-jump": "error", // Redundant jump (return, break, continue) statements e.g., (x) => { if (x) { console.log("hi"); return; }}
+		"sonarjs/no-redundant-boolean": "error",
+		"sonarjs/no-useless-catch": "error", // "catch" clauses should do more than rethrow
+		// "sonarjs/cognitive-complexity": "error",
+		// "@typescript-eslint/await-thenable": "error",
+		// "@typescript-eslint/naming-convention": "warn",
+
+		"camelcase": ["warn", { "properties": "always", "ignoreImports": true }],
+		"no-await-in-loop": "warn",
+		"require-atomic-updates": "warn",
+		"@typescript-eslint/no-unnecessary-condition": ["warn", { "allowConstantLoopConditions": true }],
+		"sonarjs/no-duplicate-string": "warn", // String literals that are duplicated
+
+		"no-shadow": "off",
+		"no-unused-vars": "off",
+		"@typescript-eslint/no-unused-vars": "off",
+		"@typescript-eslint/no-var-requires": "off", // require statements in import statements.
+		"@typescript-eslint/explicit-module-boundary-types": "off",
+		"@typescript-eslint/no-namespace": "off",
+		"@typescript-eslint/ban-types": "off",
+		"@typescript-eslint/no-empty-function": "off",
+		"@typescript-eslint/no-empty-interface": "off",
 		"no-undef-init": "off",
 
-		/* code style */
-		"semi": ["error", "never"],
-		"brace-style": ["error", "stroustrup"],
-		"camelcase": ["error", { "properties": "always", "ignoreImports": true }],
+		/* formatting */
+		"curly": ["error", "multi-line"], // ensuring that block statements are wrapped in curly braces
+		"brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+		"space-in-parens": ["error", "never"],
 		"block-spacing": ["error", "always"],
-		//"indent": ["warn", "tab"]
-	}
+		"arrow-body-style": ["error", "as-needed"], // use of braces around arrow function body
+		"indent": ["warn", "tab", { "SwitchCase": 1 }],
+		"no-irregular-whitespace": "warn", // invalid whitespace that is not a normal tab and space
+
+		/* comments */
+		"require-jsdoc": ["error", {
+			"require": {
+				"FunctionDeclaration": true,
+				"MethodDefinition": true,
+				"ClassDeclaration": false,
+				"ArrowFunctionExpression": false,
+				"FunctionExpression": false
+			}
+		}],
+		"no-warning-comments": ["error", {
+			"terms": ["todo"], "location": "anywhere"
+		}]
+	},
+	"noInlineConfig": true
 }

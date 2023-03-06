@@ -8,25 +8,6 @@
 		"*",
 		"!*.tsbuildinfo"
 	],
-	"scripts": {
-		"deps": "rm -rf ./node_modules package-lock.json && npm install",
-		"clean": "rm -rf dist/* .eslintcache *.run.json",
-		"lint": "eslint --ext ts --cache 'src/**'",
-		"lintci": "eslint --ext ts --output-file .lint.run.json --format json-standard --cache 'src/**'",
-		"compile": "tsc",
-		"test": "mocha --require ts-node/register test/*.test.*",
-		"testci": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
-		"build": "run-s lint compile test",
-		"buildci": "run-s lintci compile testci",
-		"pubstage": "cp package.json LICENSE README.md dist",
-		"pubpreview": "npm run pubstage && cd dist && npm publish --dry-run && cd ..",
-		"version:patch": "npm version patch && git push --follow-tags",
-		"version:minor": "npm version minor && git push --follow-tags",
-		"version:major": "npm version major && git push --follow-tags",
-		"publish:patch": "run-s build version:patch pubstage && cd dist && npm publish --access public && cd ..",
-		"publish:minor": "run-s build version:minor pubstage && cd dist && npm publish --access public && cd ..",
-		"publish:major": "run-s build version:major pubstage && cd dist && npm publish --access public && cd .."
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/agyemanjp/somatic.js.git"
@@ -44,6 +25,25 @@
 		"url": "https://github.com/agyemanjp/somatic.js/issues"
 	},
 	"homepage": "https://github.com/agyemanjp/somatic.js#readme",
+	"scripts": {
+		"deps": "rm -rf ./node_modules package-lock.json && pnpm install",
+		"clean": "rm -rf dist/* .eslintcache *.run.json",
+		"lint": "eslint --ext ts --cache 'src/**'",
+		"lintci": "eslint --ext ts --output-file .lint.run.json --format json-standard --cache 'src/**'",
+		"compile": "tsc",
+		"test": "mocha --require ts-node/register test/*.test.*",
+		"testci": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
+		"build": "run-s lint compile test",
+		"buildci": "run-s lintci compile testci",
+		"pubstage": "cp package.json LICENSE README.md dist",
+		"pubpreview": "npm run pubstage && cd dist && npm publish --dry-run && cd ..",
+		"version:patch": "npm version patch && git push --follow-tags",
+		"version:minor": "npm version minor && git push --follow-tags",
+		"version:major": "npm version major && git push --follow-tags",
+		"publish:patch": "run-s build version:patch pubstage && cd dist && npm publish --access public && cd ..",
+		"publish:minor": "run-s build version:minor pubstage && cd dist && npm publish --access public && cd ..",
+		"publish:major": "run-s build version:major pubstage && cd dist && npm publish --access public && cd .."
+	},
 	"dependencies": {
 		"@agyemanjp/standard": "^5.1.2",
 		"cuid": "2.1.8"
@@ -51,28 +51,29 @@
 	"devDependencies": {
 		"@types/chai": "4.2.22",
 		"@types/chai-html": "1.3.0",
-		"@types/chalk": "2.2.0",
 		"@types/eslint": "7.2.0",
 		"@types/jsdom": "16.2.1",
 		"@types/jsdom-global": "3.0.2",
 		"@types/mocha": "7.0.2",
 		"@types/node": "14.0.4",
 		"@types/source-map-support": "0.5.1",
-		"@typescript-eslint/eslint-plugin": "3.4.0",
-		"@typescript-eslint/parser": "3.4.0",
+		"@typescript-eslint/eslint-plugin": "5.53.0",
+		"@typescript-eslint/parser": "5.53.0",
 		"chai": "4.3.4",
 		"chai-html": "2.0.1",
 		"chalk": "4.1.2",
-		"eslint": "7.3.1",
+		"eslint": "8.34.0",
 		"eslint-formatter-json-standard": "1.0.0",
 		"eslint-plugin-fp": "2.3.0",
+		"eslint-plugin-sonarjs": "^0.18.0",
+		"eslint-plugin-unicorn": "^45.0.2",
 		"jsdom": "16.7.0",
 		"jsdom-global": "3.0.2",
 		"mocha": "^10.2.0",
 		"mocha-reporter-json-standard": "1.0.0",
 		"npm-run-all": "^4.1.5",
 		"source-map-support": "0.5.19",
-		"ts-node": "10.2.1",
+		"ts-node": "^10.9.1",
 		"typescript": "^4.9.4"
 	}
 }

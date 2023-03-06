@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/ban-types */
+import { keys, skip, first, indexesOf } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
-import { isEltProper, isIntrinsicElt } from "./element"
-import { svgTags, isEventKey, eventNames, booleanAttributes, attributeConversions } from "./common"
+import { isIntrinsicElt } from "./element"
+import { svgTags, isEventKey, booleanAttributes, attributeConversions } from "./common"
 import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
-import { keys, skip, first, indexesOf } from "@agyemanjp/standard"
 
 export type LeafElement = IntrinsicElement | ValueElement
 
@@ -28,7 +26,6 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 				// avoids setting className directly, since that works better for SVG elements,
 				// avoids a type error, since Typescript (incorrectly) types className as read-only 
 				element.setAttribute('class', attribVal)
-				//ToDo: Check if setAttributeNS is better to use above and in similar calls
 			}
 			else {
 				console.warn(`Ignored setting class on <${element.tagName}> to non-string value ${attribVal}`)
@@ -50,12 +47,6 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 		else if (typeof attribVal === 'function' && isEventKey(attribName)) {
 			// const eventName = eventNames[key.toUpperCase() as keyof typeof eventNames];
 			(element as any)[attribName.toLowerCase()] = attribVal
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			// element.addEventListener(eventName, value as any)
-			// element.addEventListener("unload", () => {
-			// 	console.warn(`onloading element ${element}...`)
-			// 	element.removeEventListener(eventName, value)
-			// })
 		}
 		else {
 			const effectiveVal = booleanAttributes.includes(attribName.toUpperCase())
@@ -104,13 +95,20 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
  */
 export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragment | Text {
 	if (isIntrinsicElt(eltUI)) {
-		const dom = svgTags.includes(eltUI.type.toUpperCase())
+		const dom = (svgTags.includes(eltUI.type.toUpperCase())
 			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
-			: eltUI.type === "" ? document.createDocumentFragment()
+			: eltUI.type === ""
+				? document.createDocumentFragment()
 				: document.createElement(eltUI.type)
+		)
+
 		const props = eltUI.props ?? {}
-		if (!(dom instanceof DocumentFragment))
+		if (dom instanceof DocumentFragment) {
+			console.assert(Object.keys(props).length === 0)
+		}
+		else {
 			Object.keys(props).forEach(key => setAttribute(dom, key, props[key]))
+		}
 
 		return dom
 	}
@@ -127,14 +125,26 @@ export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragm
  */
 export function updateDomShallow(eltDOM: DOMElement, eltUI: LeafElement) {
 	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
+		// console.log(`updateDomShallow: Removing all existing attributes of ${eltDOM}`);
+
 		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
 		const props = eltUI.props ?? {}
+
+		// console.log(`updateDomShallow: Setting props ${stringify(props)} on ${eltDOM}`)
 		Object.keys(props).forEach(key => setAttribute(eltDOM, key, props[key]))
 		return eltDOM
 	}
 	else {
 		const newDom = createDOMShallow(eltUI)
-		eltDOM.replaceWith(newDom)
+		// console.log(`updateDomShallow: New dom ${newDom} create to replace ${eltDOM}`)
+
+		if (newDom instanceof DocumentFragment) {
+			eltDOM.replaceWith(...newDom.childNodes)
+		}
+		else {
+			eltDOM.replaceWith(newDom)
+		}
+
 		return newDom
 	}
 }
@@ -149,7 +159,7 @@ export function emptyContainer(container: Node) {
 	container.textContent = ""
 }
 
-function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
+/*function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
 	const parent = dom.parentNode
 	if (parent) {
 		const index = first(indexesOf(parent.childNodes.entries(), { value: dom }))
@@ -157,26 +167,25 @@ function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
 		fn(dom)
 		parent.insertBefore(dom, parent.childNodes.item(index))
 	}
-}
+}*/
 
 /** Get ids of peak DOM elements among a list of elements in a tree */
 export function getApexElementIds(elementIds: string[]): string[] {
 	return elementIds.filter(id => {
 		let parent = document.getElementById(id)?.parentElement
 		while (parent) {
-			if (elementIds.includes(parent.id))
-				return false
+			if (elementIds.includes(parent.id)) { return false }
 			parent = parent.parentElement
 		}
 		return true
 	})
 }
+/** Get peak DOM elements among a list of elements in a tree */
 export function getApexElements(elements: DOMElement[]): DOMElement[] {
 	return elements.filter(elt => {
 		let parent = elt.parentElement
 		while (parent) {
-			if (elements.includes(parent))
-				return false
+			if (elements.includes(parent)) { return false }
 			parent = parent.parentElement
 		}
 		return true

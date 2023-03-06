@@ -159,7 +159,7 @@ export const svgTags = [
 
 	"TEXT",
 	"TEXTPATH",
-	//"TITLE",
+	"TITLE",
 	"TSPAN",
 
 	"UNKNOWN",
@@ -426,17 +426,18 @@ export const colorConstants/*: Record<string, string>*/ = {
 }
 export const colors: Record<string, string> = colorConstants
 
-export function colourNameToHex(colour: string) {
-	return (typeof colors[colour.toLowerCase()] != 'undefined')
+/** Converts color name to its hex color code */
+/*export function colourNameToHex(colour: string) {
+	return (typeof colors[colour.toLowerCase()] !== 'undefined')
 		? colors[colour.toLowerCase()]
 		: colour
-}
+}*/
 
 /** Function that calculates a lighter or darker color of a base color in Hex representation
  * @param hexColor a hex color value such as “#abc” or “#123456” (the hash is optional)
  * @param luminosity the luminosity factor, i.e. -0.1 is 10% darker, 0.2 is 20% lighter, etc
  */
-export function colorLuminance(color: string, luminosity: number) {
+/*export function colorLuminance(color: string, luminosity: number) {
 	if (color === "transparent") {
 		return color
 	}
@@ -458,17 +459,19 @@ export function colorLuminance(color: string, luminosity: number) {
 		const endColor = Math.round(Math.min(Math.max(0, initialColor + (initialColor * luminosity)), 255)).toString(16)
 		return endColor
 	}).join("")
-}
+}*/
 
 class IdProvider {
 	private cache: string[]
 	private pointer: number
 
+	/** */
 	constructor() {
 		this.cache = []
 		this.pointer = 0
 	}
 
+	/** */
 	next() {
 		if (this.pointer >= this.cache.length) {
 			// console.log(`pushing to id provider cache`)
@@ -477,6 +480,7 @@ class IdProvider {
 		return this.cache[this.pointer++]
 	}
 
+	/** */
 	reset() {
 		this.pointer = 0
 	}

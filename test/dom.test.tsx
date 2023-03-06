@@ -1,7 +1,3 @@
-/* eslint-disable brace-style */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('jsdom-global')()
 import * as assert from "assert"
 import { IntrinsicElement } from "../dist/types"

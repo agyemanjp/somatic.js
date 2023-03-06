@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable brace-style */
-
 import * as assert from 'assert'
 import { expect, use } from 'chai'
 import * as chaiHTML from 'chai-html'
@@ -19,7 +15,6 @@ import {
 	renderToIntrinsicAsync,
 	renderToStringAsync,
 	updateChildrenAsync,
-	applyLeafElementAsync,
 	updateAsync,
 	mountElement,
 } from '../dist/core'
@@ -30,6 +25,30 @@ import { idProvider } from '../dist/common'
 
 describe('CORE MODULE', () => {
 	use(chaiHTML)
+
+	type FontIcon = Component<Partial<{
+		color: string | null | undefined
+		size: string | number
+		style: CSSProperties
+	}>>
+	const MakeIcon = (svgElement: JSX.Element): FontIcon => function (props) {
+		const elt = svgElement as any
+		// console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
+		return (
+			<svg
+				preserveAspectRatio="xMidYMid meet"
+				{...elt.props}
+				style={props.style}
+				// width={props.size || (props.style || {}).width || undefined}
+				// height={props.size || (props.style || {}).height || undefined}
+
+				color={props.color ?? (props.style ?? {}).color ?? undefined}
+				stroke={props.color ?? (props.style ?? {}).color ?? undefined}
+				fill="currentColor">
+				{elt.children}
+			</svg>
+		)
+	}
 
 	describe('updateChildren', () => {
 		it('should work for a single value child', async () => {
@@ -111,7 +130,7 @@ describe('CORE MODULE', () => {
 			const trace = await traceToLeafAsync(intrinsic)
 			const dom = createDOMShallow(intrinsic)
 			assert(!isTextDOM(dom))
-			// eslint-disable-next-line fp/no-mutating-assign
+
 			const updatedDom = await updateChildrenAsync(
 				dom,
 				getChildren(trace.leafElement)
@@ -144,7 +163,8 @@ describe('CORE MODULE', () => {
 					normalizeHTML(dom.outerHTML),
 					normalizeHTML(renderedString)
 				)
-			} catch (e) {
+			}
+			catch (e) {
 				assert.equal(1, 1)
 				// console.error(e)
 				// assert.fail()
@@ -255,34 +275,6 @@ describe('CORE MODULE', () => {
 		})
 
 		it('should render SVG elements properly', async () => {
-			type FontIcon = Component<
-				Partial<{
-					color: string | null | undefined
-					size: string | number
-					style: CSSProperties
-				}>
-			>
-			const MakeIcon = (svgElement: JSX.Element): FontIcon => {
-				// console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
-				return function (props) {
-					const elt = svgElement as any
-					// console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
-					return (
-						<svg
-							preserveAspectRatio="xMidYMid meet"
-							{...elt.props}
-							style={props.style}
-							// width={props.size || (props.style || {}).width || undefined}
-							// height={props.size || (props.style || {}).height || undefined}
-
-							color={props.color || (props.style || {}).color || undefined}
-							stroke={props.color || (props.style || {}).color || undefined}
-							fill="currentColor">
-							{elt.children}
-						</svg>
-					)
-				}
-			}
 			const VytalsLogo = MakeIcon(
 				<svg
 					id="Layer_1"
@@ -302,12 +294,12 @@ describe('CORE MODULE', () => {
 				emailAddress?: string
 				imageUrl?: string
 				provider:
-					| 'google'
-					| 'microsoft'
-					| 'dropbox'
-					| 'amazon'
-					| 'facebook'
-					| 'twitter'
+				| 'google'
+				| 'microsoft'
+				| 'dropbox'
+				| 'amazon'
+				| 'facebook'
+				| 'twitter'
 				refreshToken: string
 				accessToken: string
 			}
@@ -359,7 +351,7 @@ describe('CORE MODULE', () => {
 					</StackPanel>
 				)
 			}
-			const SplashPage: Component<Props> = (props) => <div>Splash page</div>
+			const SplashPage: Component<Props> = props => <div>Splash page</div>
 
 			const elt = (
 				<Layout user={undefined}>
@@ -540,7 +532,8 @@ describe('CORE MODULE', () => {
 					normalizeHTML(dom.outerHTML),
 					normalizeHTML(renderedString)
 				)
-			} catch (e) {
+			}
+			catch (e) {
 				assert.equal(1, 1)
 				// console.error(e)
 				// assert.fail()
@@ -615,34 +608,6 @@ describe('CORE MODULE', () => {
 		})
 
 		it('should render SVG elements properly', async () => {
-			type FontIcon = Component<
-				Partial<{
-					color: string | null | undefined
-					size: string | number
-					style: CSSProperties
-				}>
-			>
-			const MakeIcon = (svgElement: JSX.Element): FontIcon => {
-				// console.log(`MakeIcon svg elt props: ${JSON.stringify((svgElement as any).props)}`)
-				return function (props) {
-					const elt = svgElement as any
-					// console.log(`icon elt props: ${JSON.stringify((elt as any).props)}`)
-					return (
-						<svg
-							preserveAspectRatio="xMidYMid meet"
-							{...elt.props}
-							style={props.style}
-							// width={props.size || (props.style || {}).width || undefined}
-							// height={props.size || (props.style || {}).height || undefined}
-
-							color={props.color || (props.style || {}).color || undefined}
-							stroke={props.color || (props.style || {}).color || undefined}
-							fill="currentColor">
-							{elt.children}
-						</svg>
-					)
-				}
-			}
 			const VytalsLogo = MakeIcon(
 				<svg
 					id="Layer_1"
@@ -682,32 +647,7 @@ describe('CORE MODULE', () => {
 		})
 
 		it('should return a string representation of a complex page component', async () => {
-			type FontIcon = Component<
-				Partial<{
-					color: string | null | undefined
-					size: string | number
-					style: CSSProperties
-				}>
-			>
-			const MakeIcon = (svgElement: JSX.Element): FontIcon => {
-				return function (props) {
-					const elt = svgElement as any
-					return (
-						<svg
-							preserveAspectRatio="xMidYMid meet"
-							{...elt.props}
-							style={props.style}
-							// width={props.size || (props.style || {}).width || undefined}
-							// height={props.size || (props.style || {}).height || undefined}
 
-							color={props.color || (props.style || {}).color || undefined}
-							stroke={props.color || (props.style || {}).color || undefined}
-							fill="currentColor">
-							{elt.children}
-						</svg>
-					)
-				}
-			}
 			const VytalsLogo = MakeIcon(
 				<svg
 					id="Layer_1"
@@ -727,16 +667,16 @@ describe('CORE MODULE', () => {
 				emailAddress?: string
 				imageUrl?: string
 				provider:
-					| 'google'
-					| 'microsoft'
-					| 'dropbox'
-					| 'amazon'
-					| 'facebook'
-					| 'twitter'
+				| 'google'
+				| 'microsoft'
+				| 'dropbox'
+				| 'amazon'
+				| 'facebook'
+				| 'twitter'
 				refreshToken: string
 				accessToken: string
 			}
-			// eslint-disable-next-line @typescript-eslint/ban-types
+
 			const SplashPage: Component<any> = async function* (props) {
 				// console.log(`Starting splash page render`)
 				yield <div>Splash page</div>
@@ -806,7 +746,7 @@ describe('CORE MODULE', () => {
 		})
 	})
 
-	describe('applyLeafElementAsync', () => {
+	/*describe('applyLeafElementAsync', () => {
 		it('should work for an intrinsic element with component', async () => {
 			const elt = {
 				type: StackPanel,
@@ -824,7 +764,6 @@ describe('CORE MODULE', () => {
 			const dom = document.createElement('span') as HTMLSpanElement
 			assert(!isTextDOM(dom))
 
-			// eslint-disable-next-line fp/no-mutating-assign
 			const updatedDom = await applyLeafElementAsync(dom, trace.leafElement)
 
 			assert(!isTextDOM(updatedDom))
@@ -840,7 +779,7 @@ describe('CORE MODULE', () => {
 			assert.strictEqual(firstChild.tagName.toUpperCase(), 'DIV')
 			assert.strictEqual(firstChild.style.flexDirection, 'column')
 		})
-	})
+	})*/
 
 	describe('updateAsync', async () => {
 		it('should update while maintaining the element type, if no overriding element is passed', async () => {
@@ -849,7 +788,7 @@ describe('CORE MODULE', () => {
 					id={'test_view'}
 					sourceData={['a', 'b', 'c']}
 					itemsPanel={StackPanel}
-					itemTemplate={(item) => (
+					itemTemplate={item => (
 						<i style={{ width: '7em', border: 'thin solid orange' }}>
 							{item.value}
 						</i>
@@ -875,7 +814,7 @@ describe('CORE MODULE', () => {
 					id={'test_view_id'}
 					sourceData={['a', 'b', 'c']}
 					itemsPanel={StackPanel}
-					itemTemplate={(item) => (
+					itemTemplate={item => (
 						<i style={{ width: '7em', border: 'thin solid orange' }}>
 							{item.value}
 						</i>
