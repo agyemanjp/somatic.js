@@ -1,0 +1,41 @@
+name: Publish
+on:
+  workflow_dispatch:
+
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+  GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 16.x
+
+      - name: Git Configurations
+        run: |
+          git config --global user.name "${{env.GIT_USER_NAME}}"
+          git config --global user.email "${{env.GIT_USER_EMAIL}}"
+
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      - name: Check if package version updated
+        id: check
+        uses: PostHog/check-package-version@v2
+
+      - name: Publish to NPM if new version
+        if: steps.check.outputs.is-new-version == 'true'
+        run: |
+          pnpm config set //registry.npmjs.org/:_authToken ${{ env.NPM_TOKEN }}
+          pnpm publish --access public
+          # pnpm -r publish --no-git-checks --access public

@@ -1,22 +1,20 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-namespace */
-/* eslint-disable fp/no-mutation */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { DigitNonZero, Obj } from "@agyemanjp/standard"
 import { colorConstants } from "./common"
 
-/** Main component type */
-export type Component<P extends Obj = Obj> =
+/** General component type */
+export type Component<P extends Obj = Obj> = ComponentOptions<P> & (
 	((props: P & { children?: Children, key?: string }/*, extra: { invalidate: () => void }*/) =>
-		// UIElement generic  types below should not be generic type since we don't know their props in advance
+		// UIElement generic types below should not be generic type since we don't know their props in advance
 		| AsyncGenerator<UIElement, UIElement, typeof props>
 		| Generator<UIElement, UIElement, typeof props>
 		| Promise<UIElement>
 		| UIElement
 	)
-	& ComponentOptions<P>
+)
+/** Async stateful component type */
+export type ComponentAsyncStateful<P extends Obj = Obj> = ComponentOptions<P> & (
+	(props: P & { children?: Children, key?: string }) => AsyncGenerator<UIElement, UIElement, typeof props>
+)
 
 export interface ComponentOptions<P extends Obj = Obj> {
 	name?: string
@@ -25,25 +23,18 @@ export interface ComponentOptions<P extends Obj = Obj> {
 }
 
 export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a
-// generic type
+
 export interface UIElementBase<P = unknown> {
 	props: P,
 	children?: Children
 }
-
 export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> {
 	type: string
 }
-
-export interface UIElementBase<P = unknown> { props: P, children?: Children }
-export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
-// export interface FragmentElement extends UIElementBase<undefined> { type: "" }
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> {
 	type: Component<P>,
 	result?: ComponentResult
 }
-
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
 
 /** An UI element is, basically, information for a future (component) function invocation,
@@ -51,13 +42,13 @@ export type ValueElement = | null | string | number | bigint | symbol | boolean 
  * A component element produces another component element, recursively,
  * until an intrinsic element is obtained, at which point we can generate an actual node from it
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | /*FragmentElement |*/ ValueElement
 
 export type ComponentResult = {
 	element: UIElement,
 	generator?: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>
 }
+
 export interface ComponentEltAugmented<P extends Obj = Obj> extends ComponentElt<P> {
 	result: ComponentResult
 }
@@ -66,11 +57,12 @@ export interface RenderingTrace {
 	componentElts: ComponentEltAugmented[],
 	leafElement: IntrinsicElement | ValueElement
 }
+
 export type DOMElement = SVGElement | HTMLElement
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
-	alignContent?: (
+	alignContent?: CSSProperty<(
 
 		| "center"
 		| "start"
@@ -87,9 +79,8 @@ export interface CSSProperties {
 		| "stretch"
 		| "safe center"
 		| "unsafe center"
-	);
-	alignItems?: (
-		| GlobalValues
+	)>
+	alignItems?: CSSProperty<(
 		| "normal"
 		| "stretch"
 		| "center"
@@ -102,8 +93,8 @@ export interface CSSProperties {
 		| "last baseline"
 		| "safe center"
 		| "unsafe center"
-	);
-	alignSelf?: (
+	)>
+	alignSelf?: CSSProperty<(
 		| "auto"
 		| "normal"
 		| "center"
@@ -119,7 +110,7 @@ export interface CSSProperties {
 		| "stretch"
 		| "safe center"
 		| "unsafe center"
-	);
+	)>
 	alignmentBaseline?: (
 		| "auto"
 		| "baseline"
@@ -136,23 +127,23 @@ export interface CSSProperties {
 		| "top"
 		| "center"
 		| "bottom"
-	);
-	animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`;
-	animationDelay?: string;
-	animationDirection?: "normal" | "reverse" | "alternate" | "alternate-reverse";
-	animationDuration?: string;
-	animationFillMode?: "none" | "forward" | "backward" | "both";
-	animationIterationCount?: "infinite" | number;
-	animationName?: string;
-	animationPlayState?: "running" | "paused";
-	animationTimingFunction?: CSSEasingFunction;
-	backfaceVisibility?: "visible" | "hidden";
-	background?: string;
-	backgroundAttachment?: "scroll" | "fixed" | "local";
-	backgroundClip?: "border-box" | "padding-box" | "content-box" | "text";
-	backgroundColor?: CSSColor | string;
+	)
+	animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`
+	animationDelay?: string
+	animationDirection?: "normal" | "reverse" | "alternate" | "alternate-reverse"
+	animationDuration?: string
+	animationFillMode?: "none" | "forward" | "backward" | "both"
+	animationIterationCount?: "infinite" | number
+	animationName?: string
+	animationPlayState?: "running" | "paused"
+	animationTimingFunction?: CSSEasingFunction
+	backfaceVisibility?: "visible" | "hidden"
+	background?: string
+	backgroundAttachment?: "scroll" | "fixed" | "local"
+	backgroundClip?: "border-box" | "padding-box" | "content-box" | "text"
+	backgroundColor?: CSSColor | string
 	backgroundImage?: `url(${string})`
-	backgroundOrigin?: "border-box" | "padding-box" | "content-box";
+	backgroundOrigin?: "border-box" | "padding-box" | "content-box"
 	backgroundPosition?: (
 		| "top"
 		| "right"
@@ -160,21 +151,21 @@ export interface CSSProperties {
 		| "left"
 		| "center"
 		| string
-	);
+	)
 	backgroundPositionX?: (
 		| "left"
 		| "center"
 		| "right"
 		| CSSLength
 		| `${"right" | "left"} ${string}`
-	);
+	)
 	backgroundPositionY?: (
 		| "left"
 		| "center"
 		| "right"
 		| CSSLength
 		| `${"right" | "left"} ${string}`
-	);
+	)
 	backgroundRepeat?: (
 		| "repeat-x"
 		| "repeat-y"
@@ -182,53 +173,53 @@ export interface CSSProperties {
 		| "space"
 		| "round"
 		| "no-repeat"
-	);
+	)
 	backgroundSize?: (
 		| "auto"
 		| "cover"
 		| "contain"
 		| string
-	);
-	baselineShift?: CSSLength | "sub" | "super";
-	border?: string | null;
-	borderBottom?: CSSLength;
-	borderBottomColor?: CSSColor;
-	borderBottomLeftRadius?: string | number;
-	borderBottomRightRadius?: string | number;
-	borderBottomStyle?: NamedBorderStyle;
-	borderBottomWidth?: CSSLength;
-	borderCollapse?: "collapse" | "separate";
-	borderColor?: CSSColor;
+	)
+	baselineShift?: CSSLength | "sub" | "super"
+	border?: string | null
+	borderBottom?: CSSLength
+	borderBottomColor?: CSSColor
+	borderBottomLeftRadius?: string | number
+	borderBottomRightRadius?: string | number
+	borderBottomStyle?: NamedBorderStyle
+	borderBottomWidth?: CSSLength
+	borderCollapse?: "collapse" | "separate"
+	borderColor?: CSSColor
 	borderImage?: (
 		| `url(${string}) ${number} ${string}`
 		| string
-	);
-	borderImageOutset?: number | string;
-	borderImageRepeat?: "stretch" | "repeat" | "round" | "space";
-	borderImageSlice?: string | number | CSSLength;
-	borderImageSource?: "none" | `url(${string})`;
-	borderImageWidth?: string | number | CSSLength;
-	borderLeft?: string | CSSLength;
-	borderLeftColor?: CSSColor;
-	borderLeftStyle?: NamedBorderStyle;
-	borderLeftWidth?: NamedBorderWidth | CSSLength;
-	borderRadius?: string | CSSLength;
-	borderRight?: string | CSSLength;
-	borderRightColor?: CSSColor;
-	borderRightStyle?: NamedBorderStyle;
-	borderRightWidth?: NamedBorderWidth | CSSLength;
-	borderSpacing?: string | CSSLength;
-	borderStyle?: NamedBorderStyle;
-	borderTop?: CSSLength | NamedBorderWidth | NamedBorderStyle;
-	borderTopColor?: CSSColor;
-	borderTopLeftRadius?: string | CSSLength;
-	borderTopRightRadius?: string | CSSLength;
-	borderTopStyle?: NamedBorderStyle;
-	borderTopWidth?: NamedBorderStyle | CSSLength;
-	borderWidth?: string | CSSLength;
-	bottom?: CSSLength | "auto";
-	boxShadow?: string | null;
-	boxSizing?: "border-box" | "content-box";
+	)
+	borderImageOutset?: number | string
+	borderImageRepeat?: "stretch" | "repeat" | "round" | "space"
+	borderImageSlice?: string | number | CSSLength
+	borderImageSource?: "none" | `url(${string})`
+	borderImageWidth?: string | number | CSSLength
+	borderLeft?: string | CSSLength
+	borderLeftColor?: CSSColor
+	borderLeftStyle?: NamedBorderStyle
+	borderLeftWidth?: NamedBorderWidth | CSSLength
+	borderRadius?: string | CSSLength
+	borderRight?: string | CSSLength
+	borderRightColor?: CSSColor
+	borderRightStyle?: NamedBorderStyle
+	borderRightWidth?: NamedBorderWidth | CSSLength
+	borderSpacing?: string | CSSLength
+	borderStyle?: NamedBorderStyle
+	borderTop?: CSSLength | NamedBorderWidth | NamedBorderStyle
+	borderTopColor?: CSSColor
+	borderTopLeftRadius?: string | CSSLength
+	borderTopRightRadius?: string | CSSLength
+	borderTopStyle?: NamedBorderStyle
+	borderTopWidth?: NamedBorderStyle | CSSLength
+	borderWidth?: string | CSSLength
+	bottom?: CSSLength | "auto"
+	boxShadow?: string | null
+	boxSizing?: "border-box" | "content-box"
 	breakAfter?: (
 		| "auto"
 		| "avoid"
@@ -242,7 +233,7 @@ export interface CSSProperties {
 		| "verso"
 		| "avoid-column"
 		| "region"
-	);
+	)
 	breakBefore?: (
 		| "auto"
 		| "avoid"
@@ -256,14 +247,14 @@ export interface CSSProperties {
 		| "verso"
 		| "avoid-column"
 		| "region"
-	);
+	)
 	breakInside?: (
 		| "auto"
 		| "avoid"
 		| "avoid-page"
 		| "avoid-column"
 		| "avoid-region"
-	);
+	)
 	captionSide?: (
 		| "top"
 		| "bottom"
@@ -271,7 +262,7 @@ export interface CSSProperties {
 		| "block-end"
 		| "inline-start"
 		| "inline-end"
-	);
+	)
 	clear?: (
 		| "none"
 		| "left"
@@ -279,8 +270,8 @@ export interface CSSProperties {
 		| "both"
 		| "inline-start"
 		| "inline-end"
-	);
-	clip?: string | null;
+	)
+	clip?: string | null
 	clipPath?: (
 		| `url(${string})`
 		| "margin-box"
@@ -292,42 +283,42 @@ export interface CSSProperties {
 		| "view-box"
 		| `inset(${string} ${string})`
 		| `circle(${string} at ${string} ${string})`
-	);
-	clipRule?: "nonzero" | "evenodd" | "inherit";
-	color?: CSSColor | string;
-	colorInterpolationFilters?: string | null;
-	columnCount?: "auto" | number;
-	columnFill?: "auto" | "balance" | "balance-all";
-	columnRule?: NamedBorderStyle | string;
-	columnRuleColor?: CSSColor | string;
-	columnRuleStyle?: NamedBorderStyle;
-	columnRuleWidth?: NamedBorderStyle | CSSLength;
-	columnSpan?: "none" | "all";
-	columnWidth?: "auto" | CSSLength;
+	)
+	clipRule?: "nonzero" | "evenodd" | "inherit"
+	color?: CSSColor | string
+	colorInterpolationFilters?: string | null
+	columnCount?: "auto" | number
+	columnFill?: "auto" | "balance" | "balance-all"
+	columnRule?: NamedBorderStyle | string
+	columnRuleColor?: CSSColor | string
+	columnRuleStyle?: NamedBorderStyle
+	columnRuleWidth?: NamedBorderStyle | CSSLength
+	columnSpan?: "none" | "all"
+	columnWidth?: "auto" | CSSLength
 	columns?: (
 		| CSSLength
 		| "auto"
 		| number
 		| string
-	);
-	content?: string | null;
-	counterIncrement?: string | "none";
-	counterReset?: string | "none";
-	cssFloat?: string | null;
+	)
+	content?: string | null
+	counterIncrement?: string | "none"
+	counterReset?: string | "none"
+	cssFloat?: string | null
 	float?: (
 		| "left"
 		| "right"
 		| "none"
 		| "inline-start"
 		| "inline-end"
-	);
-	cssText?: string;
+	)
+	cssText?: string
 	cursor?: (
 		| CursorKeywords
 		| `url(${string}), ${CursorKeywords}`
 		| `url(${string}) ${number} ${number}, ${CursorKeywords}`
-	);
-	direction?: "ltr" | "rtl";
+	)
+	direction?: "ltr" | "rtl"
 	display?: (
 		| "block"
 		| "inline"
@@ -350,7 +341,7 @@ export interface CSSProperties {
 		| "table"
 		| "table-row"
 		| "list-item"
-	);
+	)
 	dominantBaseline?: (
 		| "auto"
 		| "ideographic"
@@ -362,12 +353,12 @@ export interface CSSProperties {
 		| "text-after-edge"
 		| "text-before-edge"
 		| "text-top"
-	);
-	emptyCells?: "show" | "hide";
-	enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`;
-	fill?: string | null;
-	fillOpacity?: number | `${number}%`;
-	fillRule?: "nonzero" | "evenodd";
+	)
+	emptyCells?: "show" | "hide"
+	enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`
+	fill?: string | null
+	fillOpacity?: number | `${number}%`
+	fillRule?: "nonzero" | "evenodd"
 	filter?: (
 		| `url(${string})`
 		| `blur(${CSSLength})`
@@ -382,7 +373,7 @@ export interface CSSProperties {
 		| `sepia(${number}%)`
 		| string
 		| "none"
-	);
+	)
 	flex?: (
 		| "none"
 		| "auto"
@@ -390,7 +381,7 @@ export interface CSSProperties {
 		| number
 		| CSSLength
 		| string
-	);
+	)
 	flexBasis?: (
 		| "auto"
 		| CSSLength
@@ -398,13 +389,13 @@ export interface CSSProperties {
 		| "max-content"
 		| "fit-content"
 		| "content"
-	);
+	)
 	flexDirection?: (
 		| "row"
 		| "row-reverse"
 		| "column"
 		| "column-reverse"
-	);
+	)
 	flexFlow?: (
 		| "row"
 		| "row-reverse"
@@ -414,13 +405,13 @@ export interface CSSProperties {
 		| "wrap"
 		| "wrap-reverse"
 		//| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`
-	);
-	flexGrow?: number;
-	flexShrink?: number;
-	flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
-	floodColor?: CSSColor;
-	floodOpacity?: number | `${number}%`;
-	font?: string | null;
+	)
+	flexGrow?: number
+	flexShrink?: number
+	flexWrap?: "nowrap" | "wrap" | "wrap-reverse"
+	floodColor?: CSSColor
+	floodOpacity?: number | `${number}%`
+	font?: string | null
 	fontFamily?: (
 		| "serif"
 		| "sans-serif"
@@ -438,12 +429,12 @@ export interface CSSProperties {
 		| string
 		//         | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" |
 		// "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`
-	);
+	)
 	fontFeatureSettings?: (
 		| "normal"
 		| string
 		| `${string} ${"on" | "off" | number}`
-	);
+	)
 	fontSize?: (
 		| "xx-small"
 		| "x-small"
@@ -457,12 +448,12 @@ export interface CSSProperties {
 		| "smaller"
 		| CSSLength
 		| "math"
-	);
+	)
 	fontSizeAdjust?: (
 		| "none"
 		| number
 		| `${"ex-height" | "cap-height" | "ch-width" | "ic-width" | "ic-height"} ${number}`
-	);
+	)
 	fontStretch?: (
 		| "normal"
 		| "ultra-condensed"
@@ -474,13 +465,13 @@ export interface CSSProperties {
 		| "extra-expanded"
 		| "ultra-expanded"
 		| `${number}%`
-	);
+	)
 	fontStyle?: (
 		| "normal"
 		| "italic"
 		| "oblique"
 		| `oblique ${number}deg`
-	);
+	)
 	fontVariant?: (
 		| "normal"
 		| "small-caps"
@@ -506,7 +497,7 @@ export interface CSSProperties {
 		| "full-width"
 		| "proportional-width"
 		| "ruby"
-	);
+	)
 	fontWeight?: (
 		| "normal"
 		| "bold"
@@ -521,25 +512,24 @@ export interface CSSProperties {
 		| 700
 		| 800
 		| 900
-	);
-	glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`;
-	glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`;
+	)
+	glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
+	glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`
 	height?: (
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	);
+	)
 	imeMode?: (
 		| "auto"
 		| "normal"
 		| "active"
 		| "inactive"
 		| "disabled"
-	);
-	justifyContent?: (
-		| GlobalValues
+	)
+	justifyContent?: CSSProperty<(
 		| "center"
 		| "start"
 		| "end"
@@ -554,16 +544,17 @@ export interface CSSProperties {
 		| "stretch"
 		| "safe center"
 		| "unsafe center"
-	);
-	kerning?: "auto" | number | CSSLength;
-	left?: "auto" | CSSLength;
-	readonly length?: CSSLength;
-	letterSpacing?: "normal" | CSSLength;
-	lightingColor?: CSSColor;
-	lineHeight?: "normal" | number | CSSLength;
-	listStyle?: string | null;
-	listStyleImage?: "none" | `url(${string})`;
-	listStylePosition?: "inside" | "outside";
+	)>
+
+	kerning?: "auto" | number | CSSLength
+	left?: "auto" | CSSLength
+	readonly length?: CSSLength
+	letterSpacing?: "normal" | CSSLength
+	lightingColor?: CSSColor
+	lineHeight?: "normal" | number | CSSLength
+	listStyle?: string | null
+	listStyleImage?: "none" | `url(${string})`
+	listStylePosition?: "inside" | "outside"
 	listStyleType?: (
 		| "none"
 		| string
@@ -638,129 +629,129 @@ export interface CSSProperties {
 		| "upper-armenian"
 		| "disclosure-open"
 		| "disclosure-closed"
-	);
+	)
 	margin?: (
 		| number
 		| CSSLength
 		| string
-	);
-	marginBottom?: CSSLength | "auto" | `${number}`;
-	marginLeft?: CSSLength | "auto" | `${number}`;
-	marginRight?: CSSLength | "auto" | `${number}`;
-	marginTop?: CSSLength | "auto" | `${number}`;
-	marker?: string | null;
-	markerEnd?: string | null;
-	markerMid?: string | null;
-	markerStart?: string | null;
-	mask?: string | null;
+	)
+	marginBottom?: CSSLength | "auto" | `${number}`
+	marginLeft?: CSSLength | "auto" | `${number}`
+	marginRight?: CSSLength | "auto" | `${number}`
+	marginTop?: CSSLength | "auto" | `${number}`
+	marker?: string | null
+	markerEnd?: string | null
+	markerMid?: string | null
+	markerStart?: string | null
+	mask?: string | null
 	maxHeight?: (
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	);
+	)
 	maxWidth?: (
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	);
+	)
 	minHeight?: (
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	);
+	)
 	minWidth?: (
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	);
-	// msContentZoomChaining?: string | null;
-	// msContentZoomLimit?: string | null;
-	// msContentZoomLimitMax?: any;
-	// msContentZoomLimitMin?: any;
-	// msContentZoomSnap?: string | null;
-	// msContentZoomSnapPoints?: string | null;
-	// msContentZoomSnapType?: string | null;
-	// msContentZooming?: string | null;
-	// msFlowFrom?: string | null;
-	// msFlowInto?: string | null;
-	// msFontFeatureSettings?: string | null;
-	// msGridColumn?: any;
-	// msGridColumnAlign?: string | null;
-	// msGridColumnSpan?: any;
-	// msGridColumns?: string | null;
-	// msGridRow?: any;
-	// msGridRowAlign?: string | null;
-	// msGridRowSpan?: any;
-	// msGridRows?: string | null;
-	// msHighContrastAdjust?: string | null;
-	// msHyphenateLimitChars?: string | null;
-	// msHyphenateLimitLines?: any;
-	// msHyphenateLimitZone?: any;
-	// msHyphens?: string | null;
-	// msImeAlign?: string | null;
-	// msOverflowStyle?: string | null;
-	// msScrollChaining?: string | null;
-	// msScrollLimit?: string | null;
-	// msScrollLimitXMax?: any;
-	// msScrollLimitXMin?: any;
-	// msScrollLimitYMax?: any;
-	// msScrollLimitYMin?: any;
-	// msScrollRails?: string | null;
-	// msScrollSnapPointsX?: string | null;
-	// msScrollSnapPointsY?: string | null;
-	// msScrollSnapType?: string | null;
-	// msScrollSnapX?: string | null;
-	// msScrollSnapY?: string | null;
-	// msScrollTranslation?: string | null;
-	// msTextCombineHorizontal?: string | null;
-	// msTextSizeAdjust?: any;
-	// msTouchAction?: string | null;
-	// msTouchSelect?: string | null;
-	// msUserSelect?: string | null;
-	// msWrapFlow?: string;
-	// msWrapMargin?: any;
-	// msWrapThrough?: string;
-	opacity?: number | `${number}%`;
-	order?: string | null;
-	orphans?: number;
-	outline?: NamedBorderStyle | string;
-	outlineColor?: CSSColor | "invert";
-	outlineStyle?: NamedBorderStyle;
-	outlineWidth?: NamedBorderWidth | CSSLength;
+	)
+	msContentZoomChaining?: string | null
+	msContentZoomLimit?: string | null
+	msContentZoomLimitMax?: any
+	msContentZoomLimitMin?: any
+	msContentZoomSnap?: string | null
+	msContentZoomSnapPoints?: string | null
+	msContentZoomSnapType?: string | null
+	msContentZooming?: string | null
+	msFlowFrom?: string | null
+	msFlowInto?: string | null
+	msFontFeatureSettings?: string | null
+	msGridColumn?: any
+	msGridColumnAlign?: string | null
+	msGridColumnSpan?: any
+	msGridColumns?: string | null
+	msGridRow?: any
+	msGridRowAlign?: string | null
+	msGridRowSpan?: any
+	msGridRows?: string | null
+	msHighContrastAdjust?: string | null
+	msHyphenateLimitChars?: string | null
+	msHyphenateLimitLines?: any
+	msHyphenateLimitZone?: any
+	msHyphens?: string | null
+	msImeAlign?: string | null
+	msOverflowStyle?: string | null
+	msScrollChaining?: string | null
+	msScrollLimit?: string | null
+	msScrollLimitXMax?: any
+	msScrollLimitXMin?: any
+	msScrollLimitYMax?: any
+	msScrollLimitYMin?: any
+	msScrollRails?: string | null
+	msScrollSnapPointsX?: string | null
+	msScrollSnapPointsY?: string | null
+	msScrollSnapType?: string | null
+	msScrollSnapX?: string | null
+	msScrollSnapY?: string | null
+	msScrollTranslation?: string | null
+	msTextCombineHorizontal?: string | null
+	msTextSizeAdjust?: any
+	msTouchAction?: string | null
+	msTouchSelect?: string | null
+	msUserSelect?: string | null
+	msWrapFlow?: string
+	msWrapMargin?: any
+	msWrapThrough?: string
+	opacity?: number | `${number}%`
+	order?: string | null
+	orphans?: number
+	outline?: NamedBorderStyle | string
+	outlineColor?: CSSColor | "invert"
+	outlineStyle?: NamedBorderStyle
+	outlineWidth?: NamedBorderWidth | CSSLength
 	overflow?: (
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	);
+	)
 	overflowX?: (
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	);
+	)
 	overflowY?: (
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	);
-	padding?: number | CSSLength | string;
-	paddingBottom?: CSSLength;
-	paddingLeft?: CSSLength;
-	paddingRight?: CSSLength;
-	paddingTop?: CSSLength;
+	)
+	padding?: number | CSSLength | string
+	paddingBottom?: CSSLength
+	paddingLeft?: CSSLength
+	paddingRight?: CSSLength
+	paddingTop?: CSSLength
 	pageBreakAfter?: (
 		| "auto"
 		| "always"
@@ -769,7 +760,7 @@ export interface CSSProperties {
 		| "right"
 		| "recto"
 		| "verso"
-	);
+	)
 	pageBreakBefore?: (
 		| "auto"
 		| "always"
@@ -778,10 +769,10 @@ export interface CSSProperties {
 		| "right"
 		| "recto"
 		| "verso"
-	);
-	pageBreakInside?: "auto" | "avoid";
-	perspective?: "none" | CSSLength;
-	perspectiveOrigin?: string | null;
+	)
+	pageBreakInside?: "auto" | "avoid"
+	perspective?: "none" | CSSLength
+	perspectiveOrigin?: string | null
 	pointerEvents?: (
 		| "auto"
 		| "none"
@@ -793,29 +784,29 @@ export interface CSSProperties {
 		| "fill"
 		| "stroke"
 		| "all"
-	);
-	position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null;
+	)
+	position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null
 	quotes?: (
 		| "none"
 		| "auto"
 		| `${string} ${string}`
 		| `${string} ${string} ${string} ${string}`
-	);
-	right?: "auto" | CSSLength;
-	rubyAlign?: "start" | "center" | "space-between" | "space-around";
-	rubyOverhang?: string | null;
-	rubyPosition?: "over" | "under" | "alternate" | "inter-character";
-	stopColor?: "currentColor" | CSSColor;
-	stopOpacity?: number;
-	stroke?: string | null;
-	strokeDasharray?: "none" | "inherit" | string | CSSLength;
-	strokeDashoffset?: CSSLength;
-	strokeLinecap?: "butt" | "round" | "square";
-	strokeLinejoin?: "miter" | "round" | "bevel" | "arcs" | "miter-clip";
-	strokeMiterlimit?: number;
-	strokeOpacity?: `${number}%`;
-	strokeWidth?: CSSLength;
-	tableLayout?: "auto" | "fixed";
+	)
+	right?: "auto" | CSSLength
+	rubyAlign?: "start" | "center" | "space-between" | "space-around"
+	rubyOverhang?: string | null
+	rubyPosition?: "over" | "under" | "alternate" | "inter-character"
+	stopColor?: "currentColor" | CSSColor
+	stopOpacity?: number
+	stroke?: string | null
+	strokeDasharray?: "none" | "inherit" | string | CSSLength
+	strokeDashoffset?: CSSLength
+	strokeLinecap?: "butt" | "round" | "square"
+	strokeLinejoin?: "miter" | "round" | "bevel" | "arcs" | "miter-clip"
+	strokeMiterlimit?: number
+	strokeOpacity?: `${number}%`
+	strokeWidth?: CSSLength
+	tableLayout?: "auto" | "fixed"
 	textAlign?: (
 		| "start"
 		| "end"
@@ -826,7 +817,7 @@ export interface CSSProperties {
 		| "justify-all"
 		| "match-parent"
 		| string
-	);
+	)
 	textAlignLast?: (
 		| "auto"
 		| "start"
@@ -835,20 +826,20 @@ export interface CSSProperties {
 		| "right"
 		| "center"
 		| "justify"
-	);
-	textAnchor?: "start" | "middle" | "end";
-	textDecoration?: string | null;
-	textIndent?: CSSLength;
+	)
+	textAnchor?: "start" | "middle" | "end"
+	textDecoration?: string | null
+	textIndent?: CSSLength
 	textJustify?: (
 		| "auto"
 		| "none"
 		| "inter-word"
 		| "inter-character"
-	);
-	textKashida?: string | null;
-	textKashidaSpace?: string | null;
-	textOverflow?: "clip" | "ellipsis";
-	textShadow?: string | null;
+	)
+	textKashida?: string | null
+	textKashidaSpace?: string | null
+	textOverflow?: "clip" | "ellipsis"
+	textShadow?: string | null
 	textTransform?: (
 		| "none"
 		| "capitalize"
@@ -856,15 +847,15 @@ export interface CSSProperties {
 		| "lowercase"
 		| "full-width"
 		| "full-size-kana"
-	);
+	)
 	textUnderlinePosition?: (
 		| "auto"
 		| "under"
 		| "left"
 		| "right"
 		| `${"auto" | "under" | "left" | "right"} ${"auto" | "under" | "left" | "right"}`
-	);
-	top?: "auto" | CSSLength;
+	)
+	top?: "auto" | CSSLength
 	touchAction?: (
 		| "auto"
 		| "none"
@@ -876,7 +867,7 @@ export interface CSSProperties {
 		| "pan-down"
 		| "pinch-zoom"
 		| "manipulation"
-	);
+	)
 	transform?: (
 		| "none"
 		| string
@@ -895,7 +886,7 @@ export interface CSSProperties {
 		| `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
 		| `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
 		| `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`
-	);
+	)
 	transformOrigin?: (
 		| CSSLength
 		| "left"
@@ -903,8 +894,8 @@ export interface CSSProperties {
 		| "center"
 		| "bottom"
 		| string
-	);
-	transformStyle?: "flat" | "preserve-3d";
+	)
+	transformStyle?: "flat" | "preserve-3d"
 	transition?: (
 		// | `${string} ${CSSTime}`
 		// | `${string} ${CSSTime} ${CSSTime}`
@@ -912,11 +903,11 @@ export interface CSSProperties {
 		// | `${string} ${CSSTime} ${CSSEasingFunction} ${CSSTime}`
 		| `all ${CSSTime} ${CSSEasingFunction}`
 		| string
-	);
-	transitionDelay?: CSSTime | string;
-	transitionDuration?: CSSTime | string;
-	transitionProperty?: "none" | "all" | string;
-	transitionTimingFunction?: CSSEasingFunction;
+	)
+	transitionDelay?: CSSTime | string
+	transitionDuration?: CSSTime | string
+	transitionProperty?: "none" | "all" | string
+	transitionTimingFunction?: CSSEasingFunction
 	unicodeBidi?: (
 		| "normal"
 		| "embed"
@@ -924,7 +915,7 @@ export interface CSSProperties {
 		| "bidi-override"
 		| "isolate-override"
 		| "plaintext"
-	);
+	)
 	verticalAlign?: (
 		| "baseline"
 		| "sub"
@@ -935,76 +926,76 @@ export interface CSSProperties {
 		| "top"
 		| "bottom"
 		| CSSLength
-	);
-	visibility?: "visible" | "hidden" | "collapse";
-	webkitAlignContent?: string | null;
-	webkitAlignItems?: string | null;
-	webkitAlignSelf?: string | null;
-	webkitAnimation?: string | null;
-	webkitAnimationDelay?: string | null;
-	webkitAnimationDirection?: string | null;
-	webkitAnimationDuration?: string | null;
-	webkitAnimationFillMode?: string | null;
-	webkitAnimationIterationCount?: string | null;
-	webkitAnimationName?: string | null;
-	webkitAnimationPlayState?: string | null;
-	webkitAnimationTimingFunction?: string | null;
-	webkitAppearance?: string | null;
-	webkitBackfaceVisibility?: string | null;
-	webkitBackgroundClip?: string | null;
-	webkitBackgroundOrigin?: string | null;
-	webkitBackgroundSize?: string | null;
-	webkitBorderBottomLeftRadius?: string | null;
-	webkitBorderBottomRightRadius?: string | null;
-	webkitBorderImage?: string | null;
-	webkitBorderRadius?: string | null;
-	webkitBorderTopLeftRadius?: string | number | null;
-	webkitBorderTopRightRadius?: string | number | null;
-	webkitBoxAlign?: string | null;
-	webkitBoxDirection?: string | null;
-	webkitBoxFlex?: string | null;
-	webkitBoxOrdinalGroup?: string | null;
-	webkitBoxOrient?: string | null;
-	webkitBoxPack?: string | null;
-	webkitBoxSizing?: string | null;
-	webkitColumnBreakAfter?: string | null;
-	webkitColumnBreakBefore?: string | null;
-	webkitColumnBreakInside?: string | null;
-	webkitColumnCount?: any;
-	webkitColumnGap?: any;
-	webkitColumnRule?: string | null;
-	webkitColumnRuleColor?: any;
-	webkitColumnRuleStyle?: string | null;
-	webkitColumnRuleWidth?: any;
-	webkitColumnSpan?: string | null;
-	webkitColumnWidth?: any;
-	webkitColumns?: string | null;
-	webkitFilter?: string | null;
-	webkitFlex?: string | null;
-	webkitFlexBasis?: string | null;
-	webkitFlexDirection?: string | null;
-	webkitFlexFlow?: string | null;
-	webkitFlexGrow?: string | null;
-	webkitFlexShrink?: string | null;
-	webkitFlexWrap?: string | null;
-	webkitJustifyContent?: string | null;
-	webkitOrder?: string | null;
-	webkitPerspective?: string | null;
-	webkitPerspectiveOrigin?: string | null;
-	webkitTapHighlightColor?: string | null;
-	webkitTextFillColor?: string | null;
-	webkitTextSizeAdjust?: any;
-	webkitTransform?: string | null;
-	webkitTransformOrigin?: string | null;
-	webkitTransformStyle?: string | null;
-	webkitTransition?: string | null;
-	webkitTransitionDelay?: string | null;
-	webkitTransitionDuration?: string | null;
-	webkitTransitionProperty?: string | null;
-	webkitTransitionTimingFunction?: string | null;
-	webkitUserModify?: string | null;
-	webkitUserSelect?: string | null;
-	webkitWritingMode?: string | null;
+	)
+	visibility?: "visible" | "hidden" | "collapse"
+	webkitAlignContent?: string | null
+	webkitAlignItems?: string | null
+	webkitAlignSelf?: string | null
+	webkitAnimation?: string | null
+	webkitAnimationDelay?: string | null
+	webkitAnimationDirection?: string | null
+	webkitAnimationDuration?: string | null
+	webkitAnimationFillMode?: string | null
+	webkitAnimationIterationCount?: string | null
+	webkitAnimationName?: string | null
+	webkitAnimationPlayState?: string | null
+	webkitAnimationTimingFunction?: string | null
+	webkitAppearance?: string | null
+	webkitBackfaceVisibility?: string | null
+	webkitBackgroundClip?: string | null
+	webkitBackgroundOrigin?: string | null
+	webkitBackgroundSize?: string | null
+	webkitBorderBottomLeftRadius?: string | null
+	webkitBorderBottomRightRadius?: string | null
+	webkitBorderImage?: string | null
+	webkitBorderRadius?: string | null
+	webkitBorderTopLeftRadius?: string | number | null
+	webkitBorderTopRightRadius?: string | number | null
+	webkitBoxAlign?: string | null
+	webkitBoxDirection?: string | null
+	webkitBoxFlex?: string | null
+	webkitBoxOrdinalGroup?: string | null
+	webkitBoxOrient?: string | null
+	webkitBoxPack?: string | null
+	webkitBoxSizing?: string | null
+	webkitColumnBreakAfter?: string | null
+	webkitColumnBreakBefore?: string | null
+	webkitColumnBreakInside?: string | null
+	webkitColumnCount?: any
+	webkitColumnGap?: any
+	webkitColumnRule?: string | null
+	webkitColumnRuleColor?: any
+	webkitColumnRuleStyle?: string | null
+	webkitColumnRuleWidth?: any
+	webkitColumnSpan?: string | null
+	webkitColumnWidth?: any
+	webkitColumns?: string | null
+	webkitFilter?: string | null
+	webkitFlex?: string | null
+	webkitFlexBasis?: string | null
+	webkitFlexDirection?: string | null
+	webkitFlexFlow?: string | null
+	webkitFlexGrow?: string | null
+	webkitFlexShrink?: string | null
+	webkitFlexWrap?: string | null
+	webkitJustifyContent?: string | null
+	webkitOrder?: string | null
+	webkitPerspective?: "none" | CSSLength | null
+	webkitPerspectiveOrigin?: string | null
+	webkitTapHighlightColor?: string | null
+	webkitTextFillColor?: string | null
+	webkitTextSizeAdjust?: any
+	webkitTransform?: string | null
+	webkitTransformOrigin?: string | null
+	webkitTransformStyle?: string | null
+	webkitTransition?: string | null
+	webkitTransitionDelay?: string | null
+	webkitTransitionDuration?: string | null
+	webkitTransitionProperty?: string | null
+	webkitTransitionTimingFunction?: string | null
+	webkitUserModify?: string | null
+	webkitUserSelect?: string | null
+	webkitWritingMode?: string | null
 	whiteSpace?: (
 		| "normal"
 		| "nowrap"
@@ -1012,21 +1003,21 @@ export interface CSSProperties {
 		| "pre-wrap"
 		| "pre-line"
 		| "break-spaces"
-	);
-	widows?: number;
+	)
+	widows?: number
 	width?: (
 		| "auto"
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| CSSLength
-	);
-	wordBreak?: "normal" | "break-all" | "keep-all" | "break-word";
-	wordSpacing?: "normal" | CSSLength;
-	wordWrap?: string | null;
-	writingMode?: "horizontal-tb" | "vertical-rl" | "vertical-lr";
-	zIndex?: "auto" | number;
-	zoom?: "normal" | "reset" | `${number}%` | number;
+	)
+	wordBreak?: "normal" | "break-all" | "keep-all" | "break-word"
+	wordSpacing?: "normal" | CSSLength
+	wordWrap?: string | null
+	writingMode?: "horizontal-tb" | "vertical-rl" | "vertical-lr"
+	zIndex?: "auto" | number
+	zoom?: "normal" | "reset" | `${number}%` | number
 
 	/** A shorthand property for the grid-template-rows, grid-template-columns, grid-template-areas, grid-auto-rows, grid-auto-columns, and the grid-auto-flow properties */
 	grid?: string
@@ -1063,37 +1054,39 @@ export interface CSSProperties {
 	gridColumn?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
 
 	/** Specifies the size of the columns, and how many columns in a grid layout */
-	gridTemplateColumns?: string;
+	gridTemplateColumns?: string
 
 	/** Specifies the size of the rows in a grid layout */
-	gridTemplateRows?: string;
+	gridTemplateRows?: string
 
 	/** A shorthand property for the grid-template-rows, grid-template-columns and grid-areas properties
 	 * Default is none
 	 */
-	gridTemplate?: string | null;
+	gridTemplate?: string | null
 
 	/** Specifies the gap between the grid rows */
-	rowGap?: string | null;
+	rowGap?: string | null
 
 	/** Specifies the gap between the columns */
-	columnGap?: string | null;
+	columnGap?: string | null
 
 	/** A shorthand property for the grid-row-gap and grid-column-gap properties
 	 * Either a single CSS length value to both row and column gap
 	 * Or two CSS length values specifying the grid-row-gap grid-column-gap
 	 */
-	gridGap?: string | null;
+	gridGap?: string | null
 
 	/** A shorthand property for the row-gap and the column-gap properties
 	 * Either a single CSS length value for both row and column gap
 	 * Or two CSS length values specifying the row-gap and column-gap
 	 */
-	gap?: string | null;
+	gap?: string | null
 }
 
-export type NamedBorderWidth = "thin" | "medium" | "thick";
-export type NamedBorderStyle = (
+export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
+
+type NamedBorderWidth = "thin" | "medium" | "thick"
+type NamedBorderStyle = (
 	"none"
 	| "hidden"
 	| "dotted"
@@ -1103,8 +1096,8 @@ export type NamedBorderStyle = (
 	| "groove"
 	| "ridge"
 	| "inset"
-	| "outset");
-
+	| "outset"
+)
 type CursorKeywords = (
 	"auto"
 	| "default"
@@ -1145,9 +1138,9 @@ type CursorKeywords = (
 	| "inherit"
 	| "initial"
 	| "revert"
-	| "unset");
-
-export type CSSEasingFunction = (
+	| "unset"
+)
+type CSSEasingFunction = (
 	"linear"
 	| `linear(${number | CSSLength})`
 	| "ease"
@@ -1157,24 +1150,25 @@ export type CSSEasingFunction = (
 	| "step-start"
 	| "step-end"
 	| `steps(${number} ${"start" | "end" | "jump-start" | "jump-end" | "jump-both" | "jump-none"})`
-	| `cubic-bezier(${number},${number},${number},${number})`);
-
-export type CSSTime = `${number}${CSSTimeUnit}`
-export type CSSTimeUnit = (
+	| `cubic-bezier(${number},${number},${number},${number})`
+)
+type CSSTime = `${number}${CSSTimeUnit}`
+type CSSTimeUnit = (
 	| "ms"
 	| "s"
 )
-
-export type GlobalValues = (
-	| "inherit"
-	| "initial"
-	| "revert"
-	| "unset"
-	| "revert-layer"
+export type CSSColor = (
+	| string
+	| keyof typeof colorConstants
+	| "currentcolor"
+	| "transparent"
+	| `#${string}`
+	| `rgb(${number},${number},${number})`
+	| `rgba(${number}, ${number}, ${number}, ${number})`
 )
 
-export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
-export type CSSLength = `${number}${CSSLengthUnit}`;
+export type CSSLength = `${number}${CSSLengthUnit}`
+
 /** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
 export type CSSLengthUnit = (
 	| "%"
@@ -1198,16 +1192,6 @@ export type CSSLengthUnit = (
 	| "vmax" // 1% of the viewport's larger dimension.
 )
 
-export type CSSColor = (
-	| string
-	| keyof typeof colorConstants
-	| "currentcolor"
-	| "transparent"
-	| `#${string}`
-	| `rgb(${number},${number},${number})`
-	| `rgba(${number}, ${number}, ${number}, ${number})`
-)
-
 type SpaceRepeated<S extends string, Max extends DigitNonZero> = Max extends 1 ? S : S | `${S} ${SpaceRepeated<S, Dec<Max>>}`
 type Dec<N extends DigitNonZero> = (N extends 9 ? 8
 	: N extends 8 ? 7
@@ -1229,8 +1213,8 @@ export type PanelProps = Partial<{
 }>
 
 export type IconProps = Partial<{
-	color: string | null | undefined;
-	size: string | number;
+	color: string | null | undefined
+	size: string | number
 	style: CSSProperties
 }>
 
@@ -1239,8 +1223,9 @@ export interface Attributes {
 	key?: string | number | symbol
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ClassAttributes<T> extends Attributes { }
+export interface ClassAttributes<T> extends Attributes {
+}
+
 export type DOMAttributes<T> = {
 	//childrenx?: Somatic.VNode[];
 	// dangerouslySetInnerHTML?: {
@@ -1248,277 +1233,277 @@ export type DOMAttributes<T> = {
 	// }
 
 	// Clipboard Events
-	onCopy?: ClipboardEventHandler<T>;
-	onCopyCapture?: ClipboardEventHandler<T>;
-	onCut?: ClipboardEventHandler<T>;
-	onCutCapture?: ClipboardEventHandler<T>;
-	onPaste?: ClipboardEventHandler<T>;
-	onPasteCapture?: ClipboardEventHandler<T>;
+	onCopy?: ClipboardEventHandler<T>
+	onCopyCapture?: ClipboardEventHandler<T>
+	onCut?: ClipboardEventHandler<T>
+	onCutCapture?: ClipboardEventHandler<T>
+	onPaste?: ClipboardEventHandler<T>
+	onPasteCapture?: ClipboardEventHandler<T>
 
 	// Composition Events
-	onCompositionEnd?: CompositionEventHandler<T>;
-	onCompositionEndCapture?: CompositionEventHandler<T>;
-	onCompositionStart?: CompositionEventHandler<T>;
-	onCompositionStartCapture?: CompositionEventHandler<T>;
-	onCompositionUpdate?: CompositionEventHandler<T>;
-	onCompositionUpdateCapture?: CompositionEventHandler<T>;
+	onCompositionEnd?: CompositionEventHandler<T>
+	onCompositionEndCapture?: CompositionEventHandler<T>
+	onCompositionStart?: CompositionEventHandler<T>
+	onCompositionStartCapture?: CompositionEventHandler<T>
+	onCompositionUpdate?: CompositionEventHandler<T>
+	onCompositionUpdateCapture?: CompositionEventHandler<T>
 
 	// Focus Events
-	onFocus?: FocusEventHandler<T>;
-	onFocusCapture?: FocusEventHandler<T>;
-	onBlur?: FocusEventHandler<T>;
-	onBlurCapture?: FocusEventHandler<T>;
+	onFocus?: FocusEventHandler<T>
+	onFocusCapture?: FocusEventHandler<T>
+	onBlur?: FocusEventHandler<T>
+	onBlurCapture?: FocusEventHandler<T>
 
 	// Form Events
-	onChange?: FormEventHandler<T>;
-	onChangeCapture?: FormEventHandler<T>;
-	onInput?: FormEventHandler<T>;
-	onInputCapture?: FormEventHandler<T>;
-	onReset?: FormEventHandler<T>;
-	onResetCapture?: FormEventHandler<T>;
-	onSubmit?: FormEventHandler<T>;
-	onSubmitCapture?: FormEventHandler<T>;
-	onInvalid?: FormEventHandler<T>;
-	onInvalidCapture?: FormEventHandler<T>;
+	onChange?: FormEventHandler<T>
+	onChangeCapture?: FormEventHandler<T>
+	onInput?: FormEventHandler<T>
+	onInputCapture?: FormEventHandler<T>
+	onReset?: FormEventHandler<T>
+	onResetCapture?: FormEventHandler<T>
+	onSubmit?: FormEventHandler<T>
+	onSubmitCapture?: FormEventHandler<T>
+	onInvalid?: FormEventHandler<T>
+	onInvalidCapture?: FormEventHandler<T>
 
 	// Image Events
-	onLoad?: SomaticEventHandler<T>;
-	onLoadCapture?: SomaticEventHandler<T>;
-	onError?: SomaticEventHandler<T>; // also a Media Event
-	onErrorCapture?: SomaticEventHandler<T>; // also a Media Event
+	onLoad?: SomaticEventHandler<T>
+	onLoadCapture?: SomaticEventHandler<T>
+	onError?: SomaticEventHandler<T> // also a Media Event
+	onErrorCapture?: SomaticEventHandler<T> // also a Media Event
 
 	// Keyboard Events
-	onKeyDown?: KeyboardEventHandler<T>;
-	onKeyDownCapture?: KeyboardEventHandler<T>;
-	onKeyPress?: KeyboardEventHandler<T>;
-	onKeyPressCapture?: KeyboardEventHandler<T>;
-	onKeyUp?: KeyboardEventHandler<T>;
-	onKeyUpCapture?: KeyboardEventHandler<T>;
+	onKeyDown?: KeyboardEventHandler<T>
+	onKeyDownCapture?: KeyboardEventHandler<T>
+	onKeyPress?: KeyboardEventHandler<T>
+	onKeyPressCapture?: KeyboardEventHandler<T>
+	onKeyUp?: KeyboardEventHandler<T>
+	onKeyUpCapture?: KeyboardEventHandler<T>
 
 	// Media Events
-	onAbort?: SomaticEventHandler<T>;
-	onAbortCapture?: SomaticEventHandler<T>;
-	onCanPlay?: SomaticEventHandler<T>;
-	onCanPlayCapture?: SomaticEventHandler<T>;
-	onCanPlayThrough?: SomaticEventHandler<T>;
-	onCanPlayThroughCapture?: SomaticEventHandler<T>;
-	onDurationChange?: SomaticEventHandler<T>;
-	onDurationChangeCapture?: SomaticEventHandler<T>;
-	onEmptied?: SomaticEventHandler<T>;
-	onEmptiedCapture?: SomaticEventHandler<T>;
-	onEncrypted?: SomaticEventHandler<T>;
-	onEncryptedCapture?: SomaticEventHandler<T>;
-	onEnded?: SomaticEventHandler<T>;
-	onEndedCapture?: SomaticEventHandler<T>;
-	onLoadedData?: SomaticEventHandler<T>;
-	onLoadedDataCapture?: SomaticEventHandler<T>;
-	onLoadedMetadata?: SomaticEventHandler<T>;
-	onLoadedMetadataCapture?: SomaticEventHandler<T>;
-	onLoadStart?: SomaticEventHandler<T>;
-	onLoadStartCapture?: SomaticEventHandler<T>;
-	onPause?: SomaticEventHandler<T>;
-	onPauseCapture?: SomaticEventHandler<T>;
-	onPlay?: SomaticEventHandler<T>;
-	onPlayCapture?: SomaticEventHandler<T>;
-	onPlaying?: SomaticEventHandler<T>;
-	onPlayingCapture?: SomaticEventHandler<T>;
-	onProgress?: SomaticEventHandler<T>;
-	onProgressCapture?: SomaticEventHandler<T>;
-	onRateChange?: SomaticEventHandler<T>;
-	onRateChangeCapture?: SomaticEventHandler<T>;
-	onSeeked?: SomaticEventHandler<T>;
-	onSeekedCapture?: SomaticEventHandler<T>;
-	onSeeking?: SomaticEventHandler<T>;
-	onSeekingCapture?: SomaticEventHandler<T>;
-	onStalled?: SomaticEventHandler<T>;
-	onStalledCapture?: SomaticEventHandler<T>;
-	onSuspend?: SomaticEventHandler<T>;
-	onSuspendCapture?: SomaticEventHandler<T>;
-	onTimeUpdate?: SomaticEventHandler<T>;
-	onTimeUpdateCapture?: SomaticEventHandler<T>;
-	onVolumeChange?: SomaticEventHandler<T>;
-	onVolumeChangeCapture?: SomaticEventHandler<T>;
-	onWaiting?: SomaticEventHandler<T>;
-	onWaitingCapture?: SomaticEventHandler<T>;
+	onAbort?: SomaticEventHandler<T>
+	onAbortCapture?: SomaticEventHandler<T>
+	onCanPlay?: SomaticEventHandler<T>
+	onCanPlayCapture?: SomaticEventHandler<T>
+	onCanPlayThrough?: SomaticEventHandler<T>
+	onCanPlayThroughCapture?: SomaticEventHandler<T>
+	onDurationChange?: SomaticEventHandler<T>
+	onDurationChangeCapture?: SomaticEventHandler<T>
+	onEmptied?: SomaticEventHandler<T>
+	onEmptiedCapture?: SomaticEventHandler<T>
+	onEncrypted?: SomaticEventHandler<T>
+	onEncryptedCapture?: SomaticEventHandler<T>
+	onEnded?: SomaticEventHandler<T>
+	onEndedCapture?: SomaticEventHandler<T>
+	onLoadedData?: SomaticEventHandler<T>
+	onLoadedDataCapture?: SomaticEventHandler<T>
+	onLoadedMetadata?: SomaticEventHandler<T>
+	onLoadedMetadataCapture?: SomaticEventHandler<T>
+	onLoadStart?: SomaticEventHandler<T>
+	onLoadStartCapture?: SomaticEventHandler<T>
+	onPause?: SomaticEventHandler<T>
+	onPauseCapture?: SomaticEventHandler<T>
+	onPlay?: SomaticEventHandler<T>
+	onPlayCapture?: SomaticEventHandler<T>
+	onPlaying?: SomaticEventHandler<T>
+	onPlayingCapture?: SomaticEventHandler<T>
+	onProgress?: SomaticEventHandler<T>
+	onProgressCapture?: SomaticEventHandler<T>
+	onRateChange?: SomaticEventHandler<T>
+	onRateChangeCapture?: SomaticEventHandler<T>
+	onSeeked?: SomaticEventHandler<T>
+	onSeekedCapture?: SomaticEventHandler<T>
+	onSeeking?: SomaticEventHandler<T>
+	onSeekingCapture?: SomaticEventHandler<T>
+	onStalled?: SomaticEventHandler<T>
+	onStalledCapture?: SomaticEventHandler<T>
+	onSuspend?: SomaticEventHandler<T>
+	onSuspendCapture?: SomaticEventHandler<T>
+	onTimeUpdate?: SomaticEventHandler<T>
+	onTimeUpdateCapture?: SomaticEventHandler<T>
+	onVolumeChange?: SomaticEventHandler<T>
+	onVolumeChangeCapture?: SomaticEventHandler<T>
+	onWaiting?: SomaticEventHandler<T>
+	onWaitingCapture?: SomaticEventHandler<T>
 
 	// MouseEvents
-	onClick?: MouseEventHandler<T>;
-	onClickCapture?: MouseEventHandler<T>;
-	onContextMenu?: MouseEventHandler<T>;
-	onContextMenuCapture?: MouseEventHandler<T>;
-	onDoubleClick?: MouseEventHandler<T>;
-	onDoubleClickCapture?: MouseEventHandler<T>;
-	onDrag?: DragEventHandler<T>;
-	onDragCapture?: DragEventHandler<T>;
-	onDragEnd?: DragEventHandler<T>;
-	onDragEndCapture?: DragEventHandler<T>;
-	onDragEnter?: DragEventHandler<T>;
-	onDragEnterCapture?: DragEventHandler<T>;
-	onDragExit?: DragEventHandler<T>;
-	onDragExitCapture?: DragEventHandler<T>;
-	onDragLeave?: DragEventHandler<T>;
-	onDragLeaveCapture?: DragEventHandler<T>;
-	onDragOver?: DragEventHandler<T>;
-	onDragOverCapture?: DragEventHandler<T>;
-	onDragStart?: DragEventHandler<T>;
-	onDragStartCapture?: DragEventHandler<T>;
-	onDrop?: DragEventHandler<T>;
-	onDropCapture?: DragEventHandler<T>;
-	onMouseDown?: MouseEventHandler<T>;
-	onMouseDownCapture?: MouseEventHandler<T>;
-	onMouseEnter?: MouseEventHandler<T>;
-	onMouseLeave?: MouseEventHandler<T>;
-	onMouseMove?: MouseEventHandler<T>;
-	onMouseMoveCapture?: MouseEventHandler<T>;
-	onMouseOut?: MouseEventHandler<T>;
-	onMouseOutCapture?: MouseEventHandler<T>;
-	onMouseOver?: MouseEventHandler<T>;
-	onMouseOverCapture?: MouseEventHandler<T>;
-	onMouseUp?: MouseEventHandler<T>;
-	onMouseUpCapture?: MouseEventHandler<T>;
+	onClick?: MouseEventHandler<T>
+	onClickCapture?: MouseEventHandler<T>
+	onContextMenu?: MouseEventHandler<T>
+	onContextMenuCapture?: MouseEventHandler<T>
+	onDoubleClick?: MouseEventHandler<T>
+	onDoubleClickCapture?: MouseEventHandler<T>
+	onDrag?: DragEventHandler<T>
+	onDragCapture?: DragEventHandler<T>
+	onDragEnd?: DragEventHandler<T>
+	onDragEndCapture?: DragEventHandler<T>
+	onDragEnter?: DragEventHandler<T>
+	onDragEnterCapture?: DragEventHandler<T>
+	onDragExit?: DragEventHandler<T>
+	onDragExitCapture?: DragEventHandler<T>
+	onDragLeave?: DragEventHandler<T>
+	onDragLeaveCapture?: DragEventHandler<T>
+	onDragOver?: DragEventHandler<T>
+	onDragOverCapture?: DragEventHandler<T>
+	onDragStart?: DragEventHandler<T>
+	onDragStartCapture?: DragEventHandler<T>
+	onDrop?: DragEventHandler<T>
+	onDropCapture?: DragEventHandler<T>
+	onMouseDown?: MouseEventHandler<T>
+	onMouseDownCapture?: MouseEventHandler<T>
+	onMouseEnter?: MouseEventHandler<T>
+	onMouseLeave?: MouseEventHandler<T>
+	onMouseMove?: MouseEventHandler<T>
+	onMouseMoveCapture?: MouseEventHandler<T>
+	onMouseOut?: MouseEventHandler<T>
+	onMouseOutCapture?: MouseEventHandler<T>
+	onMouseOver?: MouseEventHandler<T>
+	onMouseOverCapture?: MouseEventHandler<T>
+	onMouseUp?: MouseEventHandler<T>
+	onMouseUpCapture?: MouseEventHandler<T>
 
 	// Selection Events
-	onSelect?: SomaticEventHandler<T>;
-	onSelectCapture?: SomaticEventHandler<T>;
+	onSelect?: SomaticEventHandler<T>
+	onSelectCapture?: SomaticEventHandler<T>
 
 	// Touch Events
-	onTouchCancel?: TouchEventHandler<T>;
-	onTouchCancelCapture?: TouchEventHandler<T>;
-	onTouchEnd?: TouchEventHandler<T>;
-	onTouchEndCapture?: TouchEventHandler<T>;
-	onTouchMove?: TouchEventHandler<T>;
-	onTouchMoveCapture?: TouchEventHandler<T>;
-	onTouchStart?: TouchEventHandler<T>;
-	onTouchStartCapture?: TouchEventHandler<T>;
+	onTouchCancel?: TouchEventHandler<T>
+	onTouchCancelCapture?: TouchEventHandler<T>
+	onTouchEnd?: TouchEventHandler<T>
+	onTouchEndCapture?: TouchEventHandler<T>
+	onTouchMove?: TouchEventHandler<T>
+	onTouchMoveCapture?: TouchEventHandler<T>
+	onTouchStart?: TouchEventHandler<T>
+	onTouchStartCapture?: TouchEventHandler<T>
 
 	// Pointer Events
-	onPointerDown?: PointerEventHandler<T>;
-	onPointerDownCapture?: PointerEventHandler<T>;
-	onPointerMove?: PointerEventHandler<T>;
-	onPointerMoveCapture?: PointerEventHandler<T>;
-	onPointerUp?: PointerEventHandler<T>;
-	onPointerUpCapture?: PointerEventHandler<T>;
-	onPointerCancel?: PointerEventHandler<T>;
-	onPointerCancelCapture?: PointerEventHandler<T>;
-	onPointerEnter?: PointerEventHandler<T>;
-	onPointerEnterCapture?: PointerEventHandler<T>;
-	onPointerLeave?: PointerEventHandler<T>;
-	onPointerLeaveCapture?: PointerEventHandler<T>;
-	onPointerOver?: PointerEventHandler<T>;
-	onPointerOverCapture?: PointerEventHandler<T>;
-	onPointerOut?: PointerEventHandler<T>;
-	onPointerOutCapture?: PointerEventHandler<T>;
-	onGotPointerCapture?: PointerEventHandler<T>;
-	onGotPointerCaptureCapture?: PointerEventHandler<T>;
-	onLostPointerCapture?: PointerEventHandler<T>;
-	onLostPointerCaptureCapture?: PointerEventHandler<T>;
+	onPointerDown?: PointerEventHandler<T>
+	onPointerDownCapture?: PointerEventHandler<T>
+	onPointerMove?: PointerEventHandler<T>
+	onPointerMoveCapture?: PointerEventHandler<T>
+	onPointerUp?: PointerEventHandler<T>
+	onPointerUpCapture?: PointerEventHandler<T>
+	onPointerCancel?: PointerEventHandler<T>
+	onPointerCancelCapture?: PointerEventHandler<T>
+	onPointerEnter?: PointerEventHandler<T>
+	onPointerEnterCapture?: PointerEventHandler<T>
+	onPointerLeave?: PointerEventHandler<T>
+	onPointerLeaveCapture?: PointerEventHandler<T>
+	onPointerOver?: PointerEventHandler<T>
+	onPointerOverCapture?: PointerEventHandler<T>
+	onPointerOut?: PointerEventHandler<T>
+	onPointerOutCapture?: PointerEventHandler<T>
+	onGotPointerCapture?: PointerEventHandler<T>
+	onGotPointerCaptureCapture?: PointerEventHandler<T>
+	onLostPointerCapture?: PointerEventHandler<T>
+	onLostPointerCaptureCapture?: PointerEventHandler<T>
 
 	// UI Events
-	onScroll?: UIEventHandler<T>;
-	onScrollCapture?: UIEventHandler<T>;
+	onScroll?: UIEventHandler<T>
+	onScrollCapture?: UIEventHandler<T>
 
 	// Wheel Events
-	onWheel?: WheelEventHandler<T>;
-	onWheelCapture?: WheelEventHandler<T>;
+	onWheel?: WheelEventHandler<T>
+	onWheelCapture?: WheelEventHandler<T>
 
 	// Animation Events
-	onAnimationStart?: AnimationEventHandler<T>;
-	onAnimationStartCapture?: AnimationEventHandler<T>;
-	onAnimationEnd?: AnimationEventHandler<T>;
-	onAnimationEndCapture?: AnimationEventHandler<T>;
-	onAnimationIteration?: AnimationEventHandler<T>;
-	onAnimationIterationCapture?: AnimationEventHandler<T>;
+	onAnimationStart?: AnimationEventHandler<T>
+	onAnimationStartCapture?: AnimationEventHandler<T>
+	onAnimationEnd?: AnimationEventHandler<T>
+	onAnimationEndCapture?: AnimationEventHandler<T>
+	onAnimationIteration?: AnimationEventHandler<T>
+	onAnimationIterationCapture?: AnimationEventHandler<T>
 
 	// Transition Events
-	onTransitionEnd?: TransitionEventHandler<T>;
-	onTransitionEndCapture?: TransitionEventHandler<T>;
+	onTransitionEnd?: TransitionEventHandler<T>
+	onTransitionEndCapture?: TransitionEventHandler<T>
 }
 export type HTMLAttributes<T> = DOMAttributes<T> & {
 	children?: Children
 
 	// React-specific Attributes
-	defaultChecked?: boolean;
-	defaultValue?: string | string[];
-	suppressContentEditableWarning?: boolean;
-	suppressHydrationWarning?: boolean;
+	defaultChecked?: boolean
+	defaultValue?: string | string[]
+	suppressContentEditableWarning?: boolean
+	suppressHydrationWarning?: boolean
 
 	// Standard HTML Attributes
-	accessKey?: string;
-	className?: string;
-	contentEditable?: boolean;
-	contextMenu?: string;
-	dir?: string;
-	draggable?: boolean;
-	hidden?: boolean;
-	id?: string;
-	lang?: string;
-	placeholder?: string;
-	slot?: string;
-	spellCheck?: boolean;
-	style?: CSSProperties;
-	tabIndex?: number;
-	title?: string;
+	accessKey?: string
+	className?: string
+	contentEditable?: boolean
+	contextMenu?: string
+	dir?: string
+	draggable?: boolean
+	hidden?: boolean
+	id?: string
+	lang?: string
+	placeholder?: string
+	slot?: string
+	spellCheck?: boolean
+	style?: CSSProperties
+	tabIndex?: number
+	title?: string
 
 	// Unknown
-	inputMode?: string;
-	is?: string;
-	radioGroup?: string; // <command>, <menuitem>
+	inputMode?: string
+	is?: string
+	radioGroup?: string // <command>, <menuitem>
 
 	// WAI-ARIA
-	role?: string;
+	role?: string
 
 	// RDFa Attributes
-	about?: string;
-	datatype?: string;
-	inlist?: any;
-	prefix?: string;
-	property?: string;
-	resource?: string;
-	typeof?: string;
-	vocab?: string;
+	about?: string
+	datatype?: string
+	inlist?: string
+	prefix?: string
+	property?: string
+	resource?: string
+	typeof?: string
+	vocab?: string
 
 	// Non-standard Attributes
-	autocapitalize?: string;
-	autocorrect?: string;
-	autosave?: string;
-	color?: string;
-	itemProp?: string;
-	itemScope?: boolean;
-	itemType?: string;
-	itemID?: string;
-	itemRef?: string;
-	results?: number;
-	security?: string;
-	unselectable?: 'on' | 'off';
+	autocapitalize?: string
+	autocorrect?: string
+	autosave?: string
+	color?: string
+	itemProp?: string
+	itemScope?: boolean
+	itemType?: string
+	itemID?: string
+	itemRef?: string
+	results?: number
+	security?: string
+	unselectable?: 'on' | 'off'
 }
 export type SVGAttributes<T> = DOMAttributes<T> & {
 	children?: Children
 
 	// Attributes which also defined in HTMLAttributes
 	// See comment in SVGDOMPropertyConfig.js
-	className?: string;
-	color?: string;
-	height?: number | string;
-	id?: string;
-	lang?: string;
-	max?: number | string;
-	media?: string;
-	method?: string;
-	min?: number | string;
-	name?: string;
-	style?: CSSProperties;
-	target?: string;
-	type?: string;
-	width?: number | string;
+	className?: string
+	color?: string
+	height?: number | string
+	id?: string
+	lang?: string
+	max?: number | string
+	media?: string
+	method?: string
+	min?: number | string
+	name?: string
+	style?: CSSProperties
+	target?: string
+	type?: string
+	width?: number | string
 
 	// Other HTML properties supported by SVG elements in browsers
-	role?: string;
-	tabIndex?: number;
+	role?: string
+	tabIndex?: number
 
 	// SVG Specific attributes
-	accentHeight?: number | string;
-	accumulate?: "none" | "sum";
-	additive?: "replace" | "sum";
+	accentHeight?: number | string
+	accumulate?: "none" | "sum"
+	additive?: "replace" | "sum"
 	alignmentBaseline?: "auto" | "baseline" | "before-edge" | "text-before-edge" | "middle" | "central" | "after-edge" |
 	"text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit";
 	allowReorder?: "no" | "yes";
@@ -1758,6 +1743,7 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 	z?: number | string;
 	zoomAndPan?: string;
 }
+
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	download?: string;
 	href?: string;
@@ -1777,8 +1763,10 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	target?: "_self" | "_blank" | "_parent" | "_top";
 	type?: string;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> { }
+
+export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {
+}
+
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 	alt?: string;
 	coords?: string;
@@ -1801,13 +1789,16 @@ export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 	shape?: string;
 	target?: "_self" | "_blank" | "_parent" | "_top";
 }
+
 export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
-	href?: string;
-	target?: string;
+	href?: string
+	target?: string
 }
+
 export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
-	cite?: string;
+	cite?: string
 }
+
 export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
 	autofocus?: boolean;
 	disabled?: boolean;
@@ -1821,38 +1812,47 @@ export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
 	type?: "submit" | "reset" | "button";
 	value?: string | string[] | number;
 }
+
 export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
-	height?: number | string;
-	width?: number | string;
+	height?: number | string
+	width?: number | string
 }
+
 export interface ColHTMLAttributes<T> extends HTMLAttributes<T> {
-	span?: number;
-	width?: number | string;
+	span?: number
+	width?: number | string
 }
+
 export interface ColgroupHTMLAttributes<T> extends HTMLAttributes<T> {
-	span?: number;
+	span?: number
 }
+
 export interface DetailsHTMLAttributes<T> extends HTMLAttributes<T> {
-	open?: boolean;
+	open?: boolean
 }
+
 export interface DelHTMLAttributes<T> extends HTMLAttributes<T> {
-	cite?: string;
-	dateTime?: string;
+	cite?: string
+	dateTime?: string
 }
+
 export interface DialogHTMLAttributes<T> extends HTMLAttributes<T> {
-	open?: boolean;
+	open?: boolean
 }
+
 export interface EmbedHTMLAttributes<T> extends HTMLAttributes<T> {
-	height?: number | string;
-	src?: string;
-	type?: string;
-	width?: number | string;
+	height?: number | string
+	src?: string
+	type?: string
+	width?: number | string
 }
+
 export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
-	disabled?: boolean;
-	form?: string;
-	name?: string;
+	disabled?: boolean
+	form?: string
+	name?: string
 }
+
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 	acceptCharset?: string;
 	action?: string;
@@ -1883,15 +1883,16 @@ export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 	noValidate?: boolean;
 	target?: "_self" | "_blank" | "_parent" | "_top";
 }
+
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
 	manifest?: string;
 	xmlns?: string;
 }
+
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	allow?: string;
 	allowFullScreen?: boolean;
 	allowTransparency?: boolean;
-	frameBorder?: number | string; // deprecated
 	height?: number | string;
 	marginHeight?: number;
 	marginWidth?: number;
@@ -1913,6 +1914,7 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	);
 	width?: number | string;
 }
+
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 	alt?: string;
 	crossorigin?: "anonymous" | "use-credentials" | "";
@@ -1935,9 +1937,10 @@ export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "unsafe-url"
 	);
 }
+
 export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
-	cite?: string;
-	dateTime?: string;
+	cite?: string
+	dateTime?: string
 }
 
 export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1998,25 +2001,28 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number;
 	width?: number | string;
 
-	onChange?: ChangeEventHandler<T>;
+	onChange?: ChangeEventHandler<T>
 }
 
 export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
-	autofocus?: boolean;
-	challenge?: string;
-	disabled?: boolean;
-	form?: string;
-	keyType?: string;
-	keyParams?: string;
-	name?: string;
+	autofocus?: boolean
+	challenge?: string
+	disabled?: boolean
+	form?: string
+	keyType?: string
+	keyParams?: string
+	name?: string
 }
+
 export interface LabelHTMLAttributes<T> extends HTMLAttributes<T> {
-	form?: string;
-	htmlFor?: string;
+	form?: string
+	htmlFor?: string
 }
+
 export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
-	value?: string | string[] | number;
+	value?: string | string[] | number
 }
+
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	as?: string;
 	crossorigin?: "anonymous" | "use-credentials" | "";
@@ -2039,12 +2045,15 @@ export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "unsafe-url"
 	);
 }
+
 export interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
-	name?: string;
+	name?: string
 }
+
 export interface MenuHTMLAttributes<T> extends HTMLAttributes<T> {
-	type?: string;
+	type?: string
 }
+
 export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autoPlay?: boolean;
 	controls?: boolean;
@@ -2057,63 +2066,74 @@ export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 	preload?: string;
 	src?: string;
 }
+
 export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
-	charSet?: string;
-	content?: string;
-	httpEquiv?: string;
-	name?: string;
+	charSet?: string
+	content?: string
+	httpEquiv?: string
+	name?: string
 }
+
 export interface MeterHTMLAttributes<T> extends HTMLAttributes<T> {
-	form?: string;
-	high?: number;
-	low?: number;
-	max?: number | string;
-	min?: number | string;
-	optimum?: number;
-	value?: string | string[] | number;
+	form?: string
+	high?: number
+	low?: number
+	max?: number | string
+	min?: number | string
+	optimum?: number
+	value?: string | string[] | number
 }
+
 export interface QuoteHTMLAttributes<T> extends HTMLAttributes<T> {
-	cite?: string;
+	cite?: string
 }
+
 export interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
-	classID?: string;
-	data?: string;
-	form?: string;
-	height?: number | string;
-	name?: string;
-	type?: string;
-	useMap?: string;
-	width?: number | string;
-	wmode?: string;
+	classID?: string
+	data?: string
+	form?: string
+	height?: number | string
+	name?: string
+	type?: string
+	useMap?: string
+	width?: number | string
+	wmode?: string
 }
+
 export interface OlHTMLAttributes<T> extends HTMLAttributes<T> {
-	reversed?: boolean;
-	start?: number;
-	type?: '1' | 'a' | 'A' | 'i' | 'I';
+	reversed?: boolean
+	start?: number
+	type?: '1' | 'a' | 'A' | 'i' | 'I'
 }
+
 export interface OptgroupHTMLAttributes<T> extends HTMLAttributes<T> {
-	disabled?: boolean;
-	label?: string;
+	disabled?: boolean
+	label?: string
 }
+
 export interface OptionHTMLAttributes<T> extends HTMLAttributes<T> {
-	disabled?: boolean;
-	label?: string;
-	selected?: boolean;
-	value?: string | string[] | number;
+	disabled?: boolean
+	label?: string
+	selected?: boolean
+	value?: string | string[] | number
 }
+
 export interface OutputHTMLAttributes<T> extends HTMLAttributes<T> {
-	form?: string;
-	htmlFor?: string;
-	name?: string;
+	form?: string
+	htmlFor?: string
+	name?: string
 }
+
 export interface ParamHTMLAttributes<T> extends HTMLAttributes<T> {
-	name?: string;
-	value?: string | string[] | number;
+	name?: string
+	value?: string | string[] | number
 }
+
 export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
-	max?: number | string;
-	value?: string | string[] | number;
+	max?: number | string
+	value?: string | string[] | number
 }
+
 export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	async?: boolean;
 	charSet?: string;
@@ -2136,18 +2156,20 @@ export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "unsafe-url"
 	);
 }
+
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
-	autocomplete?: string;
-	autofocus?: boolean;
-	disabled?: boolean;
-	form?: string;
-	multiple?: boolean;
-	name?: string;
-	required?: boolean;
-	size?: number;
-	value?: string | string[] | number;
-	onChange?: ChangeEventHandler<T>;
+	autocomplete?: string
+	autofocus?: boolean
+	disabled?: boolean
+	form?: string
+	multiple?: boolean
+	name?: string
+	required?: boolean
+	size?: number
+	value?: string | string[] | number
+	onChange?: ChangeEventHandler<T>
 }
+
 export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
 	media?: string;
 	sizes?: string;
@@ -2157,6 +2179,7 @@ export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
 	srcSet?: string;
 	type?: string;
 }
+
 export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
 	media?: string;
 	nonce?: string;
@@ -2164,11 +2187,13 @@ export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
 	title?: string;
 	type?: string;
 }
+
 export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
-	cellPadding?: number | string;
-	cellSpacing?: number | string;
-	summary?: string;
+	cellPadding?: number | string
+	cellSpacing?: number | string
+	summary?: string
 }
+
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 	autocomplete?: string;
 	autofocus?: "on" | "off";
@@ -2186,15 +2211,17 @@ export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number;
 	wrap?: "soft" | "hard";
 
-	onChange?: ChangeEventHandler<T>;
+	onChange?: ChangeEventHandler<T>
 }
+
 export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
-	align?: "left" | "center" | "right" | "justify" | "char";
-	colSpan?: number;
-	headers?: string;
-	rowSpan?: number;
-	scope?: string;
+	align?: "left" | "center" | "right" | "justify" | "char"
+	colSpan?: number
+	headers?: string
+	rowSpan?: number
+	scope?: string
 }
+
 export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
 	abbr?: string;
 	align?: "left" | "center" | "right" | "justify" | "char";
@@ -2203,9 +2230,11 @@ export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
 	rowSpan?: number;
 	scope?: "row" | "col" | "rowgroup" | "colgroup";
 }
+
 export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
-	dateTime?: string;
+	dateTime?: string
 }
+
 export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
 	default?: boolean;
 	kind?: (
@@ -2219,43 +2248,46 @@ export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
 	src?: string;
 	srcLang?: string;
 }
+
 export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
-	height?: number | string;
-	playsInline?: boolean;
-	poster?: string;
-	width?: number | string;
+	height?: number | string
+	playsInline?: boolean
+	poster?: string
+	width?: number | string
 }
+
 export interface WebViewHTMLAttributes<T> extends HTMLAttributes<T> {
-	allowFullScreen?: boolean;
-	allowpopups?: boolean;
-	autofocus?: boolean;
-	autosize?: boolean;
-	blinkfeatures?: string;
-	disableblinkfeatures?: string;
-	disableguestresize?: boolean;
-	disablewebsecurity?: boolean;
-	guestinstance?: string;
-	httpreferrer?: string;
-	nodeintegration?: boolean;
-	partition?: string;
-	plugins?: boolean;
-	preload?: string;
-	src?: string;
-	useragent?: string;
-	webpreferences?: string;
+	allowFullScreen?: boolean
+	allowpopups?: boolean
+	autofocus?: boolean
+	autosize?: boolean
+	blinkfeatures?: string
+	disableblinkfeatures?: string
+	disableguestresize?: boolean
+	disablewebsecurity?: boolean
+	guestinstance?: string
+	httpreferrer?: string
+	nodeintegration?: boolean
+	partition?: string
+	plugins?: boolean
+	preload?: string
+	src?: string
+	useragent?: string
+	webpreferences?: string
 }
+
 //#endregion
 
 //#region Events
 export interface SyntheticEvent<T = Element> {
-	bubbles: boolean;
+	bubbles: boolean
 	/** A reference to the element on which the event listener is registered. */
-	currentTarget: EventTarget & T;
-	cancelable: boolean;
-	defaultPrevented: boolean;
-	eventPhase: number;
-	isTrusted: boolean;
-	nativeEvent: Event;
+	currentTarget: EventTarget & T
+	cancelable: boolean
+	defaultPrevented: boolean
+	eventPhase: number
+	isTrusted: boolean
+	nativeEvent: Event
 	// https://github.com/DefinitelyTyped/DefinitelyTyped/pull/12239
 	/**
 	 * A reference to the element from which the event was originally dispatched.
@@ -2263,178 +2295,193 @@ export interface SyntheticEvent<T = Element> {
 	 *
 	 * @see currentTarget
 	 */
-	target: EventTarget;
-	timeStamp: number;
-	type: string;
+	target: EventTarget
+	timeStamp: number
+	type: string
 
-	preventDefault(): void;
+	preventDefault(): void
 
-	isDefaultPrevented(): boolean;
+	isDefaultPrevented(): boolean
 
 	// If you thought this should be `EventTarget & T`, see
 
-	stopPropagation(): void;
+	stopPropagation(): void
 
-	isPropagationStopped(): boolean;
+	isPropagationStopped(): boolean
 
-	persist(): void;
+	persist(): void
 }
+
 export interface ClipboardEvent<T = Element> extends SyntheticEvent<T> {
-	clipboardData: DataTransfer;
-	nativeEvent: Event;
+	clipboardData: DataTransfer
+	nativeEvent: Event
 }
+
 export interface CompositionEvent<T = Element> extends SyntheticEvent<T> {
-	data: string;
-	nativeEvent: Event;
+	data: string
+	nativeEvent: Event
 }
+
 export interface DragEvent<T = Element> extends MouseEvent<T> {
-	dataTransfer: DataTransfer;
-	nativeEvent: Event;
+	dataTransfer: DataTransfer
+	nativeEvent: Event
 }
+
 export interface PointerEvent<T = Element> extends MouseEvent<T> {
-	pointerId: number;
-	pressure: number;
-	tiltX: number;
-	tiltY: number;
-	width: number;
-	height: number;
-	pointerType: 'mouse' | 'pen' | 'touch';
-	isPrimary: boolean;
-	nativeEvent: Event;
+	pointerId: number
+	pressure: number
+	tiltX: number
+	tiltY: number
+	width: number
+	height: number
+	pointerType: 'mouse' | 'pen' | 'touch'
+	isPrimary: boolean
+	nativeEvent: Event
 }
+
 export interface FocusEvent<T = Element> extends SyntheticEvent<T> {
-	nativeEvent: Event;
-	relatedTarget: EventTarget;
-	target: EventTarget & T;
+	nativeEvent: Event
+	relatedTarget: EventTarget
+	target: EventTarget & T
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+
 export interface FormEvent<T = Element> extends SyntheticEvent<T> {
 }
+
 export interface InvalidEvent<T = Element> extends SyntheticEvent<T> {
-	target: EventTarget & T;
+	target: EventTarget & T
 }
+
 export interface ChangeEvent<T = Element> extends SyntheticEvent<T> {
-	target: EventTarget & T;
+	target: EventTarget & T
 }
+
 export interface KeyboardEvent<T = Element> extends SyntheticEvent<T> {
-	altKey: boolean;
-	charCode: number;
-	ctrlKey: boolean;
+	altKey: boolean
+	charCode: number
+	ctrlKey: boolean
 	/**
 	 * See the [DOM Level 3 Events spec](https://www.w3.org/TR/uievents-key/#named-key-attribute-values). for possible
 	 * values
 	 */
-	key: string;
-	keyCode: number;
-	locale: string;
-	location: number;
-	metaKey: boolean;
-	nativeEvent: Event;
-	repeat: boolean;
-	shiftKey: boolean;
-	which: number;
+	key: string
+	keyCode: number
+	locale: string
+	location: number
+	metaKey: boolean
+	nativeEvent: Event
+	repeat: boolean
+	shiftKey: boolean
+	which: number
 
 	/**
 	 * See [DOM Level 3 Events spec](https://www.w3.org/TR/uievents-key/#keys-modifier). for a list of valid
 	 * (case-sensitive) arguments to this method.
 	 */
-	getModifierState(key: string): boolean;
+	getModifierState(key: string): boolean
 }
+
 export interface MouseEvent<T = Element> extends SyntheticEvent<T> {
-	altKey: boolean;
-	button: number;
-	buttons: number;
-	clientX: number;
-	clientY: number;
-	ctrlKey: boolean;
-	metaKey: boolean;
-	nativeEvent: Event;
-	pageX: number;
-	pageY: number;
-	relatedTarget: EventTarget;
-	screenX: number;
-	screenY: number;
-	shiftKey: boolean;
+	altKey: boolean
+	button: number
+	buttons: number
+	clientX: number
+	clientY: number
+	ctrlKey: boolean
+	metaKey: boolean
+	nativeEvent: Event
+	pageX: number
+	pageY: number
+	relatedTarget: EventTarget
+	screenX: number
+	screenY: number
+	shiftKey: boolean
 
 	/**
 	 * See [DOM Level 3 Events spec](https://www.w3.org/TR/uievents-key/#keys-modifier). for a list of valid
 	 * (case-sensitive) arguments to this method.
 	 */
-	getModifierState(key: string): boolean;
+	getModifierState(key: string): boolean
 }
+
 export interface TouchEvent<T = Element> extends SyntheticEvent<T> {
-	altKey: boolean;
-	changedTouches: TouchList;
-	ctrlKey: boolean;
-	metaKey: boolean;
-	nativeEvent: Event;
-	shiftKey: boolean;
-	targetTouches: TouchList;
-	touches: TouchList;
+	altKey: boolean
+	changedTouches: TouchList
+	ctrlKey: boolean
+	metaKey: boolean
+	nativeEvent: Event
+	shiftKey: boolean
+	targetTouches: TouchList
+	touches: TouchList
 
 	/**
 	 * See [DOM Level 3 Events spec](https://www.w3.org/TR/uievents-key/#keys-modifier). for a list of valid
 	 * (case-sensitive) arguments to this method.
 	 */
-	getModifierState(key: string): boolean;
+	getModifierState(key: string): boolean
 }
+
 export interface UIEvent<T = Element> extends SyntheticEvent<T> {
-	detail: number;
-	nativeEvent: Event;
+	detail: number
+	nativeEvent: Event
 	view: {
-		styleMedia: StyleMedia;
-		document: Document;
-	};
+		styleMedia: StyleMedia
+		document: Document
+	}
 }
+
 export interface WheelEvent<T = Element> extends MouseEvent<T> {
-	deltaMode: number;
-	deltaX: number;
-	deltaY: number;
-	deltaZ: number;
-	nativeEvent: Event;
+	deltaMode: number
+	deltaX: number
+	deltaY: number
+	deltaZ: number
+	nativeEvent: Event
 }
+
 export interface AnimationEvent<T = Element> extends SyntheticEvent<T> {
-	animationName: string;
-	elapsedTime: number;
-	nativeEvent: Event;
-	pseudoElement: string;
+	animationName: string
+	elapsedTime: number
+	nativeEvent: Event
+	pseudoElement: string
 }
+
 export interface TransitionEvent<T = Element> extends SyntheticEvent<T> {
-	elapsedTime: number;
-	nativeEvent: Event;
-	propertyName: string;
-	pseudoElement: string;
+	elapsedTime: number
+	nativeEvent: Event
+	propertyName: string
+	pseudoElement: string
 }
 
-export type EventHandler<E extends SyntheticEvent<any>> = { bivarianceHack(event: E): void }["bivarianceHack"];
+export type EventHandler<E extends SyntheticEvent<any>> = { bivarianceHack(event: E): void }["bivarianceHack"]
 
-export type SomaticEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>;
+export type SomaticEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>
 
-type ClipboardEventHandler<T = Element> = EventHandler<ClipboardEvent<T>>;
-type CompositionEventHandler<T = Element> = EventHandler<CompositionEvent<T>>;
-type DragEventHandler<T = Element> = EventHandler<DragEvent<T>>;
-type FocusEventHandler<T = Element> = EventHandler<FocusEvent<T>>;
-type FormEventHandler<T = Element> = EventHandler<FormEvent<T>>;
-type ChangeEventHandler<T = Element> = EventHandler<ChangeEvent<T>>;
-type KeyboardEventHandler<T = Element> = EventHandler<KeyboardEvent<T>>;
-type MouseEventHandler<T = Element> = EventHandler<MouseEvent<T>>;
-type TouchEventHandler<T = Element> = EventHandler<TouchEvent<T>>;
-type PointerEventHandler<T = Element> = EventHandler<PointerEvent<T>>;
-type UIEventHandler<T = Element> = EventHandler<UIEvent<T>>;
-type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>;
-type AnimationEventHandler<T = Element> = EventHandler<AnimationEvent<T>>;
-type TransitionEventHandler<T = Element> = EventHandler<TransitionEvent<T>>;
+type ClipboardEventHandler<T = Element> = EventHandler<ClipboardEvent<T>>
+type CompositionEventHandler<T = Element> = EventHandler<CompositionEvent<T>>
+type DragEventHandler<T = Element> = EventHandler<DragEvent<T>>
+type FocusEventHandler<T = Element> = EventHandler<FocusEvent<T>>
+type FormEventHandler<T = Element> = EventHandler<FormEvent<T>>
+type ChangeEventHandler<T = Element> = EventHandler<ChangeEvent<T>>
+type KeyboardEventHandler<T = Element> = EventHandler<KeyboardEvent<T>>
+type MouseEventHandler<T = Element> = EventHandler<MouseEvent<T>>
+type TouchEventHandler<T = Element> = EventHandler<TouchEvent<T>>
+type PointerEventHandler<T = Element> = EventHandler<PointerEvent<T>>
+type UIEventHandler<T = Element> = EventHandler<UIEvent<T>>
+type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>
+type AnimationEventHandler<T = Element> = EventHandler<AnimationEvent<T>>
+type TransitionEventHandler<T = Element> = EventHandler<TransitionEvent<T>>
 
 //#endregion
 
 /* export interface DOMElement<Attr extends HTMLAttributes<Elt> | SVGAttributes<Elt>, Elt extends Element> extends VNode<Attr, string> {
-	  //type: string
-}*/
+ //type: string
+ }*/
 /* export type DOMFactory<Attr extends DOMAttributes<Elt>, Elt extends Element> = (
-	props?: ClassAttributes<Elt> & Attr | null,
-	// eslint-disable-next-line fp/no-rest-parameters
-	...children: VNode[]
-) => DOMElement<Attr, Elt>
-*/
+ props?: ClassAttributes<Elt> & Attr | null,
+ // eslint-disable-next-line fp/no-rest-parameters
+ ...children: VNode[]
+ ) => DOMElement<Attr, Elt>
+ */
+
 
 

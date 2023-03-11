@@ -1,7 +1,4 @@
-/* eslint-disable fp/no-mutation */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/ban-types */
-import { keys, skip } from "@agyemanjp/standard"
+import { keys, skip, first, indexesOf } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
 import { isIntrinsicElt } from "./element"
@@ -17,6 +14,11 @@ export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TE
 export function setAttribute(element: DOMElement, attribName: string, attribVal: any) {
 	// if (typeof value === "string" && value.toUpperCase() === "UNDEFINED") console.log(`Setting ${key} to ${value}`)
 	try {
+		if (attribVal === undefined && !booleanAttributes.includes(attribName.toUpperCase())) {
+			// console.warn(`Ignored setting ${attributeName} on <${element.tagName}> to undefined`)
+			return
+		}
+
 		if (["CLASSNAME", "CLASS"].includes(attribName.toUpperCase())) {
 			if (typeof attribVal === "string") {
 				// The class attribute is set with setAttribute(). This approach:
@@ -24,10 +26,9 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 				// avoids setting className directly, since that works better for SVG elements,
 				// avoids a type error, since Typescript (incorrectly) types className as read-only 
 				element.setAttribute('class', attribVal)
-				//ToDo: Check if setAttributeNS is better to use above and in similar calls
 			}
 			else {
-				console.trace(`Ignored setting class on <${element.tagName}> to non-string value ${attribVal}`)
+				console.warn(`Ignored setting class on <${element.tagName}> to non-string value ${attribVal}`)
 			}
 		}
 		else if (attribName.toUpperCase() === 'STYLE') {
@@ -46,12 +47,6 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 		else if (typeof attribVal === 'function' && isEventKey(attribName)) {
 			// const eventName = eventNames[key.toUpperCase() as keyof typeof eventNames];
 			(element as any)[attribName.toLowerCase()] = attribVal
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			// element.addEventListener(eventName, value as any)
-			// element.addEventListener("unload", () => {
-			// 	console.warn(`onloading element ${element}...`)
-			// 	element.removeEventListener(eventName, value)
-			// })
 		}
 		else {
 			const effectiveVal = booleanAttributes.includes(attribName.toUpperCase())
@@ -67,10 +62,11 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 					element.setAttribute(effectiveKey, effectiveVal)
 				}
 				else {
-					// For string values, first set attribute using setAttribute, 
+					// For string or true values, first set attribute using setAttribute, 
 					// for a few cases not handled properly by the assignment that follows
-					if (typeof effectiveVal === "string" || effectiveVal === true)
+					if (typeof effectiveVal === "string" || effectiveVal === true) {
 						element.setAttribute(attribName, effectiveVal)
+					}
 
 					// The <key> property on the element is set directly to <effectiveVal>. This approach works:
 					// for setting 'CHECKED', 'VALUE', and 'HTMLFOR' properties;
@@ -78,8 +74,9 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 					// for setting function values which are not event handlers.
 					// It also avoids using setAttribute to set the property to a string form of the value
 					// We assume the input property key is in the correct case as specified in the typings, * E.g., preserveAspectRatio, viewBox, fillRule, readOnly, etc
-					if (effectiveVal !== undefined)
-						(element as any)[attribName] = effectiveVal
+
+					// if (effectiveVal !== undefined)
+					(element as any)[attribName] = effectiveVal
 				}
 			}
 			catch (err) {
@@ -98,13 +95,20 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
  */
 export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragment | Text {
 	if (isIntrinsicElt(eltUI)) {
-		const dom = svgTags.includes(eltUI.type.toUpperCase())
+		const dom = (svgTags.includes(eltUI.type.toUpperCase())
 			? document.createElementNS('http://www.w3.org/2000/svg', eltUI.type)
-			: eltUI.type === "" ? document.createDocumentFragment()
+			: eltUI.type === ""
+				? document.createDocumentFragment()
 				: document.createElement(eltUI.type)
+		)
+
 		const props = eltUI.props ?? {}
-		if (!(dom instanceof DocumentFragment))
+		if (dom instanceof DocumentFragment) {
+			console.assert(Object.keys(props).length === 0)
+		}
+		else {
 			Object.keys(props).forEach(key => setAttribute(dom, key, props[key]))
+		}
 
 		return dom
 	}
@@ -121,14 +125,26 @@ export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragm
  */
 export function updateDomShallow(eltDOM: DOMElement, eltUI: LeafElement) {
 	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
+		// console.log(`updateDomShallow: Removing all existing attributes of ${eltDOM}`);
+
 		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
 		const props = eltUI.props ?? {}
+
+		// console.log(`updateDomShallow: Setting props ${stringify(props)} on ${eltDOM}`)
 		Object.keys(props).forEach(key => setAttribute(eltDOM, key, props[key]))
 		return eltDOM
 	}
 	else {
 		const newDom = createDOMShallow(eltUI)
-		eltDOM.replaceWith(newDom)
+		// console.log(`updateDomShallow: New dom ${newDom} create to replace ${eltDOM}`)
+
+		if (newDom instanceof DocumentFragment) {
+			eltDOM.replaceWith(...newDom.childNodes)
+		}
+		else {
+			eltDOM.replaceWith(newDom)
+		}
+
 		return newDom
 	}
 }
@@ -156,27 +172,20 @@ export function emptyContainer(container: Node) {
 /** Get ids of peak DOM elements among a list of elements in a tree */
 export function getApexElementIds(elementIds: string[]): string[] {
 	return elementIds.filter(id => {
-		// eslint-disable-next-line fp/no-let
 		let parent = document.getElementById(id)?.parentElement
-		// eslint-disable-next-line fp/no-loops
 		while (parent) {
-			if (elementIds.includes(parent.id))
-				return false
-			// eslint-disable-next-line fp/no-mutation
+			if (elementIds.includes(parent.id)) { return false }
 			parent = parent.parentElement
 		}
 		return true
 	})
 }
+/** Get peak DOM elements among a list of elements in a tree */
 export function getApexElements(elements: DOMElement[]): DOMElement[] {
 	return elements.filter(elt => {
-		// eslint-disable-next-line fp/no-let
 		let parent = elt.parentElement
-		// eslint-disable-next-line fp/no-loops
 		while (parent) {
-			if (elements.includes(parent))
-				return false
-			// eslint-disable-next-line fp/no-mutation
+			if (elements.includes(parent)) { return false }
 			parent = parent.parentElement
 		}
 		return true
