@@ -295,12 +295,12 @@ export interface CSSProperties {
 	columnRuleWidth?: NamedBorderStyle | CSSLength
 	columnSpan?: "none" | "all"
 	columnWidth?: "auto" | CSSLength
-	columns?: (
+	columns?: CSSProperty<(
 		| CSSLength
 		| "auto"
 		| number
 		| string
-	)
+	)>
 	content?: string | null
 	counterIncrement?: string | "none"
 	counterReset?: string | "none"
@@ -390,13 +390,13 @@ export interface CSSProperties {
 		| "fit-content"
 		| "content"
 	)
-	flexDirection?: (
+	flexDirection?: CSSProperty<(
 		| "row"
 		| "row-reverse"
 		| "column"
 		| "column-reverse"
-	)
-	flexFlow?: (
+	)>
+	flexFlow?: CSSProperty<(
 		| "row"
 		| "row-reverse"
 		| "column"
@@ -405,10 +405,10 @@ export interface CSSProperties {
 		| "wrap"
 		| "wrap-reverse"
 		//| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`
-	)
-	flexGrow?: number
-	flexShrink?: number
-	flexWrap?: "nowrap" | "wrap" | "wrap-reverse"
+	)>
+	flexGrow?: CSSProperty<(number)>
+	flexShrink?: CSSProperty<(number)>
+	flexWrap?: CSSProperty<("nowrap" | "wrap" | "wrap-reverse")>
 	floodColor?: CSSColor
 	floodOpacity?: number | `${number}%`
 	font?: string | null
@@ -957,45 +957,190 @@ export interface CSSProperties {
 	webkitBoxOrdinalGroup?: string | null
 	webkitBoxOrient?: string | null
 	webkitBoxPack?: string | null
-	webkitBoxSizing?: string | null
-	webkitColumnBreakAfter?: string | null
-	webkitColumnBreakBefore?: string | null
-	webkitColumnBreakInside?: string | null
-	webkitColumnCount?: any
-	webkitColumnGap?: any
-	webkitColumnRule?: string | null
-	webkitColumnRuleColor?: any
-	webkitColumnRuleStyle?: string | null
-	webkitColumnRuleWidth?: any
-	webkitColumnSpan?: string | null
-	webkitColumnWidth?: any
-	webkitColumns?: string | null
-	webkitFilter?: string | null
-	webkitFlex?: string | null
-	webkitFlexBasis?: string | null
-	webkitFlexDirection?: string | null
-	webkitFlexFlow?: string | null
-	webkitFlexGrow?: string | null
-	webkitFlexShrink?: string | null
-	webkitFlexWrap?: string | null
-	webkitJustifyContent?: string | null
-	webkitOrder?: string | null
-	webkitPerspective?: "none" | CSSLength | null
-	webkitPerspectiveOrigin?: string | null
+	webkitBoxSizing?: CSSProperty<("border-box" | "content-box")>
+	webkitColumnBreakAfter?: CSSProperty<(
+		| "auto"
+		| "avoid"
+		| "always"
+		| "all"
+		| "avoid-page"
+		| "page"
+		| "left"
+		| "right"
+		| "recto"
+		| "verso"
+		| "avoid-column"
+		| "region"
+	)>
+	webkitColumnBreakBefore?: CSSProperty<(
+		| "auto"
+		| "avoid"
+		| "always"
+		| "all"
+		| "avoid-page"
+		| "page"
+		| "left"
+		| "right"
+		| "recto"
+		| "verso"
+		| "avoid-column"
+		| "region"
+	)>
+	webkitColumnBreakInside?: CSSProperty<(
+		| "auto"
+		| "avoid"
+		| "avoid-column"
+		| "avoid-page"
+		| "avoid-region"
+	)>
+	webkitColumnCount?: CSSProperty<(number | "auto")>
+	webkitColumnGap?: CSSProperty<(
+		| CSSLength
+		| "normal"
+	)>
+	webkitColumnRule?: CSSProperty<(NamedBorderStyle | string)>
+	webkitColumnRuleColor?: CSSProperty<(CSSColor | string)>
+	webkitColumnRuleStyle?: CSSProperty<(NamedBorderStyle)>
+	webkitColumnRuleWidth?: CSSProperty<(
+		| CSSLength
+		| "thin"
+		| "medium"
+		| "thick"
+	)>
+	webkitColumnSpan?: CSSProperty<("none" | "all")>
+	webkitColumnWidth?: CSSProperty<(CSSLength | "auto" | string)>
+	webkitColumns?: CSSProperty<(
+		| CSSLength
+		| "auto"
+		| number
+		| string
+	)>
+	webkitFilter?: CSSProperty<(
+		| `url(${string})`
+		| `blur(${CSSLength})`
+		| `brightness(${number})`
+		| `contrast(${number}%)`
+		//| `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
+		| `grayscale(${number}%)`
+		| `hue-rotate(${number}deg)`
+		| `invert(${number}%)`
+		| `opacity(${number}%)`
+		| `saturate(${number}%)`
+		| `sepia(${number}%)`
+		| string
+		| "none"
+	)>
+	webkitFlex?: CSSProperty<(
+		| "none"
+		| "auto"
+		| "initial"
+		| number
+		| CSSLength
+		| string
+	)>
+	webkitFlexBasis?: CSSProperty<(
+		| "auto"
+		| CSSLength
+		| "min-content"
+		| "max-content"
+		| "fit-content"
+		| "content"
+	)>
+	webkitFlexDirection?: CSSProperty<(
+		| "row"
+		| "row-reverse"
+		| "column"
+		| "column-reverse"
+	)>
+	webkitFlexFlow?: CSSProperty<(
+		| "row"
+		| "row-reverse"
+		| "column"
+		| "column-reverse"
+		| "nowrap"
+		| "wrap"
+		| "wrap-reverse"
+	)>
+	webkitFlexGrow?: number
+	webkitFlexShrink?: number
+	webkitFlexWrap?: CSSProperty<("nowrap" | "wrap" | "wrap-reverse")>
+	webkitJustifyContent?: CSSProperty<(
+		| "center"
+		| "start"
+		| "end"
+		| "flex-start"
+		| "flex-end"
+		| "left"
+		| "right"
+		| "normal"
+		| "space-between"
+		| "space-around"
+		| "space-evenly"
+		| "stretch"
+		| "safe center"
+		| "unsafe center"
+	)>
+	webkitOrder?: number
+	webkitPerspective?: CSSProperty<("none" | CSSLength | null)>
+	webkitPerspectiveOrigin?: CSSProperty<("x-perspective" | "y-perspective" | string)>
 	webkitTapHighlightColor?: string | null
 	webkitTextFillColor?: string | null
-	webkitTextSizeAdjust?: any
-	webkitTransform?: string | null
-	webkitTransformOrigin?: string | null
-	webkitTransformStyle?: string | null
-	webkitTransition?: string | null
-	webkitTransitionDelay?: string | null
-	webkitTransitionDuration?: string | null
-	webkitTransitionProperty?: string | null
-	webkitTransitionTimingFunction?: string | null
-	webkitUserModify?: string | null
-	webkitUserSelect?: string | null
-	webkitWritingMode?: string | null
+	webkitTextSizeAdjust?: CSSProperty<("none" | "auto" | `${number}%`)>
+	webkitTransform?: CSSProperty<(
+		| "none"
+		| string
+		| `matrix(${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
+		| `matrix3d(${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
+		| `rotate(${number}${"deg" | "grad" | "rad" | "turn"})`
+		| `rotate3d(${number},${number},${number},${number}${"deg" | "grad" | "rad" | "turn"})`
+		| `rotateX(${number}${"deg" | "grad" | "rad" | "turn"})`
+		| `rotateY(${number}${"deg" | "grad" | "rad" | "turn"})`
+		| `rotateZ(${number}${"deg" | "grad" | "rad" | "turn"})`
+		| `scale(${number | `${number}%`}, ${number | `${number}%`})`
+		| `scale3d(${number}, ${number},${number})`
+		| `scaleX(${number})`
+		| `scaleY(${number})`
+		| `scaleZ(${number})`
+		| `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
+		| `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
+		| `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`
+	)>
+	webkitTransformOrigin?: CSSProperty<(
+		| CSSLength
+		| "left"
+		| "right"
+		| "center"
+		| "bottom"
+		| string
+	)>
+	webkitTransformStyle?: CSSProperty<("flat" | "preserve-3d")>
+	webkitTransition?: CSSProperty<(
+		| `all ${CSSTime} ${CSSEasingFunction}`
+		| string
+	)>
+	webkitTransitionDelay?: CSSTime | string
+	webkitTransitionDuration?: CSSTime | string
+	webkitTransitionProperty?: CSSProperty<("none" | "all" | string)>
+	webkitTransitionTimingFunction?: CSSEasingFunction
+	webkitUserModify?: CSSProperty<(
+		| "read-only"
+		| "read-write"
+		| "write-only"
+	)>
+	webkitUserSelect?: CSSProperty<(
+		| "none"
+		| "auto"
+		| "text"
+		| "contain"
+		| "all"
+	)>
+	webkitWritingMode?: CSSProperty<(
+		| "horizontal-tb"
+		| "vertical-rl"
+		| "vertical-lr"
+		| "sideways-rl"
+		| "sideways-lr"
+	)>
 	whiteSpace?: (
 		| "normal"
 		| "nowrap"
