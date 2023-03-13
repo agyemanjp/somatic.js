@@ -1505,268 +1505,289 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 	accumulate?: "none" | "sum"
 	additive?: "replace" | "sum"
 	alignmentBaseline?: "auto" | "baseline" | "before-edge" | "text-before-edge" | "middle" | "central" | "after-edge" |
-	"text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit"
-	allowReorder?: "no" | "yes"
-	alphabetic?: number | string
-	amplitude?: number | string
-	arabicForm?: "initial" | "medial" | "terminal" | "isolated"
-	ascent?: number | string
-	attributeName?: string
-	attributeType?: string
-	autoReverse?: number | string
-	azimuth?: number | string
-	baseFrequency?: number | string
-	baselineShift?: number | string
-	baseProfile?: number | string
-	bbox?: number | string
-	begin?: number | string
-	bias?: number | string
-	by?: number | string
-	calcMode?: number | string
-	capHeight?: number | string
-	clip?: number | string
-	clipPath?: string
-	clipPathUnits?: number | string
-	clipRule?: number | string
-	colorInterpolation?: number | string
-	colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit"
-	colorProfile?: number | string
-	colorRendering?: number | string
-	contentScriptType?: number | string
-	contentStyleType?: number | string
-	cursor?: number | string
-	cx?: number | string
-	cy?: number | string
-	d?: string
-	decelerate?: number | string
-	descent?: number | string
-	diffuseConstant?: number | string
-	direction?: number | string
-	display?: number | string
-	divisor?: number | string
-	dominantBaseline?: number | string
-	dur?: number | string
-	dx?: number | string
-	dy?: number | string
-	edgeMode?: number | string
-	elevation?: number | string
-	enableBackground?: number | string
-	end?: number | string
-	exponent?: number | string
-	externalResourcesRequired?: number | string
-	fill?: string
-	fillOpacity?: number | string
-	fillRule?: "nonzero" | "evenodd" | "inherit"
-	filter?: string
-	filterRes?: number | string
-	filterUnits?: number | string
-	floodColor?: number | string
-	floodOpacity?: number | string
-	focusable?: number | string
-	fontFamily?: string
-	fontSize?: number | string
-	fontSizeAdjust?: number | string
-	fontStretch?: number | string
-	fontStyle?: "normal" | "italic" | "oblique"
-	fontVariant?: "normal" | "small-caps"
-	fontWeight?: number | string
-	format?: number | string
-	from?: number | string
-	fx?: number | string
-	fy?: number | string
-	g1?: number | string
-	g2?: number | string
-	glyphName?: number | string
-	glyphOrientationHorizontal?: number | string
-	glyphOrientationVertical?: number | string
-	glyphRef?: number | string
-	gradientTransform?: string
-	gradientUnits?: string
-	hanging?: number | string
-	horizAdvX?: number | string
-	horizOriginX?: number | string
-	href?: string
-	ideographic?: number | string
-	imageRendering?: number | string
-	in2?: number | string
-	in?: string
-	intercept?: number | string
-	k1?: number | string
-	k2?: number | string
-	k3?: number | string
-	k4?: number | string
-	k?: number | string
-	kernelMatrix?: number | string
-	kernelUnitLength?: number | string
-	kerning?: number | string
-	keyPoints?: number | string
-	keySplines?: number | string
-	keyTimes?: number | string
-	lengthAdjust?: number | string
-	letterSpacing?: number | string
-	lightingColor?: number | string
-	limitingConeAngle?: number | string
-	local?: number | string
-	markerEnd?: string
-	markerHeight?: number | string
-	markerMid?: string
-	markerStart?: string
-	markerUnits?: number | string
-	markerWidth?: number | string
-	mask?: string
-	maskContentUnits?: number | string
-	maskUnits?: number | string
-	mathematical?: number | string
-	mode?: number | string
-	numOctaves?: number | string
-	offset?: number | string
-	opacity?: number | string
-	operator?: number | string
-	order?: number | string
-	orient?: number | string
-	orientation?: number | string
-	origin?: number | string
-	overflow?: number | string
-	overlinePosition?: number | string
-	overlineThickness?: number | string
-	paintOrder?: number | string
-	panose1?: number | string
-	pathLength?: number | string
-	patternContentUnits?: string
-	patternTransform?: number | string
-	patternUnits?: string
-	pointerEvents?: number | string
-	points?: string
-	pointsAtX?: number | string
-	pointsAtY?: number | string
-	pointsAtZ?: number | string
-	preserveAlpha?: number | string
-	preserveAspectRatio?: string
-	primitiveUnits?: number | string
-	r?: number | string
-	radius?: number | string
-	refX?: number | string
-	refY?: number | string
-	renderingIntent?: number | string
-	repeatCount?: number | string
-	repeatDur?: number | string
-	requiredExtensions?: number | string
-	requiredFeatures?: number | string
-	restart?: number | string
-	result?: string
-	rotate?: number | string
-	rx?: number | string
-	ry?: number | string
-	scale?: number | string
-	seed?: number | string
-	shapeRendering?: number | string
-	slope?: number | string
-	spacing?: number | string
-	specularConstant?: number | string
-	specularExponent?: number | string
-	speed?: number | string
-	spreadMethod?: string
-	startOffset?: number | string
-	stdDeviation?: number | string
-	stemh?: number | string
-	stemv?: number | string
-	stitchTiles?: number | string
-	stopColor?: string
-	stopOpacity?: number | string
-	strikethroughPosition?: number | string
-	strikethroughThickness?: number | string
-	string?: number | string
-	stroke?: string
-	strokeDasharray?: string | number
-	strokeDashoffset?: string | number
-	strokeLinecap?: "butt" | "round" | "square" | "inherit"
-	strokeLinejoin?: "miter" | "round" | "bevel" | "inherit"
-	strokeMiterlimit?: number | string
-	strokeOpacity?: number | string
-	strokeWidth?: number | string
-	surfaceScale?: number | string
-	systemLanguage?: number | string
-	tableValues?: number | string
-	targetX?: number | string
-	targetY?: number | string
-	textAnchor?: string
-	textDecoration?: number | string
-	textLength?: number | string
-	textRendering?: number | string
-	to?: number | string
-	transform?: string
-	u1?: number | string
-	u2?: number | string
-	underlinePosition?: number | string
-	underlineThickness?: number | string
-	unicode?: number | string
-	unicodeBidi?: number | string
-	unicodeRange?: number | string
-	unitsPerEm?: number | string
-	vAlphabetic?: number | string
-	values?: string
-	vectorEffect?: number | string
-	version?: string
-	vertAdvY?: number | string
-	vertOriginX?: number | string
-	vertOriginY?: number | string
-	vHanging?: number | string
-	vIdeographic?: number | string
-	viewBox?: string
-	viewTarget?: number | string
-	visibility?: number | string
-	vMathematical?: number | string
-	widths?: number | string
-	wordSpacing?: number | string
-	writingMode?: number | string
-	x1?: number | string
-	x2?: number | string
-	x?: number | string
-	xChannelSelector?: string
-	xHeight?: number | string
-	xlinkActuate?: string
-	xlinkArcrole?: string
-	xlinkHref?: string
-	xlinkRole?: string
-	xlinkShow?: string
-	xlinkTitle?: string
-	xlinkType?: string
-	xmlBase?: string
-	xmlLang?: string
-	xmlns?: string
-	xmlnsXlink?: string
-	xmlSpace?: string
-	y1?: number | string
-	y2?: number | string
-	y?: number | string
-	yChannelSelector?: string
-	z?: number | string
-	zoomAndPan?: string
+	"text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit";
+	allowReorder?: "no" | "yes";
+	alphabetic?: number | string;
+	amplitude?: number | string;
+	arabicForm?: "initial" | "medial" | "terminal" | "isolated";
+	ascent?: number | string;
+	attributeName?: string;
+	attributeType?: string;
+	autoReverse?: number | string;
+	azimuth?: number | string;
+	baseFrequency?: number | string;
+	baselineShift?: number | string;
+	baseProfile?: number | string;
+	bbox?: number | string;
+	begin?: number | string;
+	bias?: number | string;
+	by?: number | string;
+	calcMode?: number | string;
+	capHeight?: number | string;
+	clip?: number | string;
+	clipPath?: string;
+	clipPathUnits?: number | string;
+	clipRule?: number | string;
+	colorInterpolation?: number | string;
+	colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit";
+	colorProfile?: number | string;
+	colorRendering?: number | string;
+	contentScriptType?: number | string;
+	contentStyleType?: number | string;
+	cursor?: number | string;
+	cx?: number | string;
+	cy?: number | string;
+	d?: string;
+	decelerate?: number | string;
+	descent?: number | string;
+	diffuseConstant?: number | string;
+	direction?: number | string;
+	display?: number | string;
+	divisor?: number | string;
+	dominantBaseline?: number | string;
+	dur?: number | string;
+	dx?: number | string;
+	dy?: number | string;
+	edgeMode?: number | string;
+	elevation?: number | string;
+	enableBackground?: number | string;
+	end?: number | string;
+	exponent?: number | string;
+	externalResourcesRequired?: number | string;
+	fill?: string;
+	fillOpacity?: number | string;
+	fillRule?: "nonzero" | "evenodd" | "inherit";
+	filter?: string;
+	filterRes?: number | string;
+	filterUnits?: number | string;
+	floodColor?: number | string;
+	floodOpacity?: number | string;
+	focusable?: number | string;
+	fontFamily?: string;
+	fontSize?: number | string;
+	fontSizeAdjust?: number | string;
+	fontStretch?: number | string;
+	fontStyle?: CSSProperty<"normal" | "italic" | "oblique">;
+	fontVariant?: CSSProperty<"normal" | "small-caps">;
+	fontWeight?: number | string;
+	format?: number | string;
+	from?: number | string;
+	fx?: number | string;
+	fy?: number | string;
+	g1?: number | string;
+	g2?: number | string;
+	glyphName?: number | string;
+	glyphOrientationHorizontal?: number | string;
+	glyphOrientationVertical?: number | string;
+	glyphRef?: number | string;
+	gradientTransform?: string;
+	gradientUnits?: string;
+	hanging?: number | string;
+	horizAdvX?: number | string;
+	horizOriginX?: number | string;
+	href?: string;
+	ideographic?: number | string;
+	imageRendering?: number | string;
+	in2?: number | string;
+	in?: string;
+	intercept?: number | string;
+	k1?: number | string;
+	k2?: number | string;
+	k3?: number | string;
+	k4?: number | string;
+	k?: number | string;
+	kernelMatrix?: number | string;
+	kernelUnitLength?: number | string;
+	kerning?: number | string;
+	keyPoints?: number | string;
+	keySplines?: number | string;
+	keyTimes?: number | string;
+	lengthAdjust?: number | string;
+	letterSpacing?: number | string;
+	lightingColor?: number | string;
+	limitingConeAngle?: number | string;
+	local?: number | string;
+	markerEnd?: string;
+	markerHeight?: number | string;
+	markerMid?: string;
+	markerStart?: string;
+	markerUnits?: number | string;
+	markerWidth?: number | string;
+	mask?: string;
+	maskContentUnits?: number | string;
+	maskUnits?: number | string;
+	mathematical?: number | string;
+	mode?: number | string;
+	numOctaves?: number | string;
+	offset?: number | string;
+	opacity?: number | string;
+	operator?: number | string;
+	order?: number | string;
+	orient?: number | string;
+	orientation?: number | string;
+	origin?: number | string;
+	overflow?: number | string;
+	overlinePosition?: number | string;
+	overlineThickness?: number | string;
+	paintOrder?: number | string;
+	panose1?: number | string;
+	pathLength?: number | string;
+	patternContentUnits?: string;
+	patternTransform?: number | string;
+	patternUnits?: string;
+	pointerEvents?: number | string;
+	points?: string;
+	pointsAtX?: number | string;
+	pointsAtY?: number | string;
+	pointsAtZ?: number | string;
+	preserveAlpha?: number | string;
+	preserveAspectRatio?: string;
+	primitiveUnits?: number | string;
+	r?: number | string;
+	radius?: number | string;
+	refX?: number | string;
+	refY?: number | string;
+	renderingIntent?: number | string;
+	repeatCount?: number | string;
+	repeatDur?: number | string;
+	requiredExtensions?: number | string;
+	requiredFeatures?: number | string;
+	restart?: number | string;
+	result?: string;
+	rotate?: number | string;
+	rx?: number | string;
+	ry?: number | string;
+	scale?: number | string;
+	seed?: number | string;
+	shapeRendering?: number | string;
+	slope?: number | string;
+	spacing?: number | string;
+	specularConstant?: number | string;
+	specularExponent?: number | string;
+	speed?: number | string;
+	spreadMethod?: string;
+	startOffset?: number | string;
+	stdDeviation?: number | string;
+	stemh?: number | string;
+	stemv?: number | string;
+	stitchTiles?: number | string;
+	stopColor?: string;
+	stopOpacity?: number | string;
+	strikethroughPosition?: number | string;
+	strikethroughThickness?: number | string;
+	string?: number | string;
+	stroke?: string;
+	strokeDasharray?: string | number;
+	strokeDashoffset?: string | number;
+	strokeLinecap?: "butt" | "round" | "square" | "inherit";
+	strokeLinejoin?: "miter" | "round" | "bevel" | "inherit";
+	strokeMiterlimit?: number | string;
+	strokeOpacity?: number | string;
+	strokeWidth?: number | string;
+	surfaceScale?: number | string;
+	systemLanguage?: number | string;
+	tableValues?: number | string;
+	targetX?: number | string;
+	targetY?: number | string;
+	textAnchor?: string;
+	textDecoration?: number | string;
+	textLength?: number | string;
+	textRendering?: number | string;
+	to?: number | string;
+	transform?: string;
+	u1?: number | string;
+	u2?: number | string;
+	underlinePosition?: number | string;
+	underlineThickness?: number | string;
+	unicode?: number | string;
+	unicodeBidi?: number | string;
+	unicodeRange?: number | string;
+	unitsPerEm?: number | string;
+	vAlphabetic?: number | string;
+	values?: string;
+	vectorEffect?: number | string;
+	version?: string;
+	vertAdvY?: number | string;
+	vertOriginX?: number | string;
+	vertOriginY?: number | string;
+	vHanging?: number | string;
+	vIdeographic?: number | string;
+	viewBox?: string;
+	viewTarget?: number | string;
+	visibility?: number | string;
+	vMathematical?: number | string;
+	widths?: number | string;
+	wordSpacing?: number | string;
+	writingMode?: number | string;
+	x1?: number | string;
+	x2?: number | string;
+	x?: number | string;
+	xChannelSelector?: string;
+	xHeight?: number | string;
+	xlinkActuate?: string;
+	xlinkArcrole?: string;
+	xlinkHref?: string;
+	xlinkRole?: string;
+	xlinkShow?: string;
+	xlinkTitle?: string;
+	xlinkType?: string;
+	xmlBase?: string;
+	xmlLang?: string;
+	xmlns?: string;
+	xmlnsXlink?: string;
+	xmlSpace?: string;
+	y1?: number | string;
+	y2?: number | string;
+	y?: number | string;
+	yChannelSelector?: string;
+	z?: number | string;
+	zoomAndPan?: string;
 }
 
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
-	download?: string
-	href?: string
-	hrefLang?: string
-	media?: string
-	rel?: string
-	target?: string
-	type?: string
+	download?: string;
+	href?: string;
+	ping?: string;
+	hrefLang?: string;
+	rel?: string;
+	referrerPolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
+	target?: "_self" | "_blank" | "_parent" | "_top";
+	type?: string;
 }
 
 export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 }
 
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
-	alt?: string
-	coords?: string
-	download?: string
-	href?: string
-	hrefLang?: string
-	media?: string
-	rel?: string
-	shape?: string
-	target?: string
+	alt?: string;
+	coords?: string;
+	download?: any;
+	href?: string;
+	hrefLang?: string;
+	media?: string;
+	rel?: string;
+	ping: string;
+	referrerPolicy: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
+	shape?: string;
+	target?: "_self" | "_blank" | "_parent" | "_top";
 }
 
 export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1779,26 +1800,17 @@ export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
-	autofocus?: boolean
-	disabled?: boolean
-	form?: string
-	formAction?: string
-	formEncType?: string
-	formMethod?: string
-	formNoValidate?: boolean
-	formTarget?: string
-	name?: string
-	type?: (
-		/** The button submits the form data to the server. This is the default if the attribute is not specified for buttons associated with a <form>, or if the attribute is an empty or invalid value. */
-		| "submit"
-
-		/** The button resets all the controls to their initial values, like <input type="reset">. (This behavior tends to annoy users.) */
-		| "reset"
-
-		/** The button has no default behavior, and does nothing when pressed by default. It can have client-side scripts listen to the element's events, which are triggered when the events occur. */
-		| "button"
-	)
-	value?: string | string[] | number
+	autofocus?: boolean;
+	disabled?: boolean;
+	form?: string;
+	formAction?: string;
+	formEncType?: string;
+	formMethod?: "post" | "get";
+	formNoValidate?: boolean;
+	formTarget?: "_self" | "_blank" | "_parent" | "_top";
+	name?: string;
+	type?: "submit" | "reset" | "button";
+	value?: string | string[] | number;
 }
 
 export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1842,47 +1854,88 @@ export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
-	acceptCharset?: string
-	action?: string
-	autocomplete?: string
-	encType?: string
-	method?: string
-	name?: string
-	noValidate?: boolean
-	target?: string
+	acceptCharset?: string;
+	action?: string;
+	autocomplete?: "on" | "off";
+	encType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
+	method?: (
+		| "post"
+		| "get"
+		| "dialog"
+		| "Post"
+		| "Get"
+		| "Dialog"
+		| "POST"
+		| "GET"
+		| "DIALOG"
+	);
+	rel: (
+		| "external"
+		| "noopener"
+		| "noreferrer"
+		| "opener"
+		| "prefetch"
+		| "prerender"
+		| "search"
+		| "tag"
+		| string);
+	name?: string;
+	noValidate?: boolean;
+	target?: "_self" | "_blank" | "_parent" | "_top";
 }
 
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
-	manifest?: string
+	manifest?: string;
+	xmlns?: string;
 }
 
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
-	allow?: string
-	allowFullScreen?: boolean
-	allowTransparency?: boolean
-	frameBorder?: number | string
-	height?: number | string
-	marginHeight?: number
-	marginWidth?: number
-	name?: string
-	sandbox?: string
-	scrolling?: string
-	seamless?: boolean
-	src?: string
-	srcDoc?: string
-	width?: number | string
+	allow?: string;
+	allowFullScreen?: boolean;
+	allowTransparency?: boolean;
+	height?: number | string;
+	marginHeight?: number;
+	marginWidth?: number;
+	name?: string;
+	sandbox?: string;
+	scrolling?: string;
+	seamless?: boolean;
+	src?: string;
+	srcDoc?: string;
+	referrerPolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
+	width?: number | string;
 }
 
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
-	alt?: string
-	crossorigin?: "anonymous" | "use-credentials" | ""
-	decoding?: "async" | "auto" | "sync"
-	height?: number | string
-	sizes?: string
-	src?: string
-	srcSet?: string
-	useMap?: string
-	width?: number | string
+	alt?: string;
+	crossorigin?: "anonymous" | "use-credentials" | "";
+	decoding?: "async" | "auto" | "sync";
+	height?: number | string;
+	sizes?: string;
+	src?: string;
+	srcSet?: string;
+	useMap?: string;
+	width?: number | string;
+	loading?: "eager" | "lazy";
+	referrerPolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 }
 
 export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1891,83 +1944,62 @@ export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
-	accept?: string
-	alt?: string
-	autocomplete?: string
-	autofocus?: boolean
-	capture?: boolean | string // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
-	checked?: boolean
-	crossorigin?: string
-	disabled?: boolean
-	form?: string
-	formAction?: string
-	formEncType?: string
-	formMethod?: string
-	formNoValidate?: boolean
-	formTarget?: string
-	height?: number | string
-	list?: string
-	max?: number | string
-	maxLength?: number
-	min?: number | string
-	minLength?: number
-	multiple?: boolean
-	name?: string
-	pattern?: string
-	placeholder?: string
-	readOnly?: boolean
-	required?: boolean
-	size?: number
-	src?: string
-	step?: number | string
+	accept?: string;
+	alt?: string;
+	autocomplete?: string;
+	autofocus?: boolean;
+	capture?: boolean | string; // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
+	checked?: boolean;
+	crossorigin?: string;
+	disabled?: boolean;
+	form?: string;
+	formAction?: string;
+	formEncType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
+	formMethod?: "post" | "get" | "dialog" | "Post" | "Get" | "Dialog" | "POST" | "GET" | "DIALOG"
+	formNoValidate?: boolean;
+	formTarget?: "_self" | "_blank" | "_parent" | "_top";
+	height?: number | string;
+	list?: string;
+	max?: number | string;
+	maxLength?: number;
+	min?: number | string;
+	minLength?: number;
+	multiple?: boolean;
+	name?: string;
+	pattern?: string;
+	placeholder?: string;
+	readOnly?: boolean;
+	required?: boolean;
+	size?: number;
+	src?: string;
+	step?: number | string;
 	type?: (
-		/** A push button with no default behavior displaying the value of the value attribute, empty by default. */
 		| "button"
-		/** A check box allowing single values to be selected/deselected. */
 		| "checkbox"
-		/** A control for specifying a color; opening a color picker when active in supporting browsers. */
 		| "color"
-		/** A control for entering a date (year, month, and day, with no time). Opens a date picker or numeric wheels for year, month, day when active in supporting browsers.  */
 		| "date"
-		/**  A control for entering a date and time, with no time zone. Opens a date picker or numeric wheels for date- and time-components when active in supporting browsers. */
 		| "datetime-local"
-		/**  A field for editing an email address. Looks like a text input, but has validation parameters and relevant keyboard in supporting browsers and devices with dynamic keyboards. */
 		| "email"
-		/**  A control that lets the user select a file. Use the accept attribute to define the types of files that the control can select. */
 		| "file"
-		/**  A control that is not displayed but whose value is submitted to the server. There is an example in the next column, but it's hidden! */
 		| "hidden"
-		/**  A graphical submit button. Displays an image defined by the src attribute. The alt attribute displays if the image src is missing. */
 		| "image"
-		/** A control for entering a month and year, with no time zone. */
 		| "month"
-		/**  A control for entering a number. Displays a spinner and adds default validation. Displays a numeric keypad in some devices with dynamic keypads. */
 		| "number"
-		/**  A single-line text field whose value is obscured. Will alert user if site is not secure. */
 		| "password"
-		/** A radio button, allowing a single value to be selected out of multiple choices with the same name value. */
 		| "radio"
-		/**  A control for entering a number whose exact value is not important. Displays as a range widget defaulting to the middle value. Used in conjunction min and max to define the range of acceptable values. */
 		| "range"
-		/** A button that resets the contents of the form to default values. Not recommended. */
 		| "reset"
-		/**  A single-line text field for entering search strings. Line-breaks are automatically removed from the input value. May include a delete icon in supporting browsers that can be used to clear the field. Displays a search icon instead of enter key on some devices with dynamic keypads. */
 		| "search"
-		/** A button that submits the form.*/
 		| "submit"
-		/**  A control for entering a telephone number. Displays a telephone keypad in some devices with dynamic keypads. */
 		| "tel"
-		/**  The default value. A single-line text field. Line-breaks are automatically removed from the input value. */
 		| "text"
-		/** A control for entering a time value with no time zone. */
 		| "time"
-		/**  A field for entering a URL. Looks like a text input, but has validation parameters and relevant keyboard in supporting browsers and devices with dynamic keyboards. */
 		| "url"
-		/** A control for entering a date consisting of a week-year number and a week number with no time zone. */
 		| "week"
-	)
-	value?: string | string[] | number
-	width?: number | string
+
+	);
+	value?: string | string[] | number;
+	width?: number | string;
 
 	onChange?: ChangeEventHandler<T>
 }
@@ -1992,15 +2024,26 @@ export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
-	as?: string
-	crossorigin?: string
-	href?: string
-	hrefLang?: string
-	integrity?: string
-	media?: string
-	rel?: string
-	sizes?: string
-	type?: string
+	as?: string;
+	crossorigin?: "anonymous" | "use-credentials" | "";
+	href?: string;
+	hrefLang?: string;
+	integrity?: string;
+	media?: string;
+	rel?: string;
+	sizes?: string;
+	type?: string;
+	title?: string;
+	referrerPolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 }
 
 export interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2012,16 +2055,16 @@ export interface MenuHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
-	autoPlay?: boolean
-	controls?: boolean
-	controlsList?: string
-	crossorigin?: string
-	loop?: boolean
-	mediaGroup?: string
-	muted?: boolean
-	playsinline?: boolean
-	preload?: string
-	src?: string
+	autoPlay?: boolean;
+	controls?: boolean;
+	controlsList?: string;
+	crossorigin?: "anonymous" | "use-credentials" | "";
+	loop?: boolean;
+	mediaGroup?: string;
+	muted?: boolean;
+	playsinline?: boolean;
+	preload?: string;
+	src?: string;
 }
 
 export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2092,15 +2135,26 @@ export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
-	async?: boolean
-	charSet?: string
-	crossorigin?: string
-	defer?: boolean
-	integrity?: string
-	noModule?: boolean
-	nonce?: string
-	src?: string
-	type?: string
+	async?: boolean;
+	charSet?: string;
+	crossorigin?: string;
+	defer?: boolean;
+	integrity?: string;
+	noModule?: boolean;
+	nonce?: string;
+	src?: string;
+	type?: string;
+	blocking?: string;
+	referrerPolicy?: (
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url"
+	);
 }
 
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2117,18 +2171,21 @@ export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
-	media?: string
-	sizes?: string
-	src?: string
-	srcSet?: string
-	type?: string
+	media?: string;
+	sizes?: string;
+	src?: string;
+	height?: number;
+	width?: number;
+	srcSet?: string;
+	type?: string;
 }
 
 export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
-	media?: string
-	nonce?: string
-	scoped?: boolean
-	type?: string
+	media?: string;
+	nonce?: string;
+	scoped?: boolean;
+	title?: string;
+	type?: string;
 }
 
 export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2138,21 +2195,21 @@ export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
-	autocomplete?: string
-	autofocus?: boolean
-	cols?: number
-	dirName?: string
-	disabled?: boolean
-	form?: string
-	maxLength?: number
-	minLength?: number
-	name?: string
-	placeholder?: string
-	readOnly?: boolean
-	required?: boolean
-	rows?: number
-	value?: string | string[] | number
-	wrap?: string
+	autocomplete?: string;
+	autofocus?: "on" | "off";
+	cols?: number;
+	dirName?: string;
+	disabled?: boolean;
+	form?: string;
+	maxLength?: number;
+	minLength?: number;
+	name?: string;
+	placeholder?: string;
+	readOnly?: boolean;
+	required?: boolean;
+	rows?: number;
+	value?: string | string[] | number;
+	wrap?: "soft" | "hard";
 
 	onChange?: ChangeEventHandler<T>
 }
@@ -2166,11 +2223,12 @@ export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
-	align?: "left" | "center" | "right" | "justify" | "char"
-	colSpan?: number
-	headers?: string
-	rowSpan?: number
-	scope?: string
+	abbr?: string;
+	align?: "left" | "center" | "right" | "justify" | "char";
+	colSpan?: number;
+	headers?: string;
+	rowSpan?: number;
+	scope?: "row" | "col" | "rowgroup" | "colgroup";
 }
 
 export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2178,11 +2236,17 @@ export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
-	default?: boolean
-	kind?: string
-	label?: string
-	src?: string
-	srcLang?: string
+	default?: boolean;
+	kind?: (
+		| "subtitles"
+		| "captions"
+		| "descriptions"
+		| "chapters"
+		| "metadata"
+	);
+	label?: string;
+	src?: string;
+	srcLang?: string;
 }
 
 export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
