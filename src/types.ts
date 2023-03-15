@@ -181,7 +181,7 @@ export interface CSSProperties {
 		| string
 	)>
 	baselineShift?: CSSLength | "sub" | "super"
-	border?: CSSProperty<(CSSBorderStyle | CSSLength)>
+	border?: CSSProperty<(CSSBorderStyle | CSSLength | string)>
 	borderBottom?: CSSProperty<(CSSLength | CSSBorderStyle)>
 	borderBottomColor?: CSSProperty<CSSColor>
 	borderBottomLeftRadius?: CSSProperty<(CSSLength)>
@@ -635,10 +635,10 @@ export interface CSSProperties {
 		| CSSLength
 		| string
 	)>
-	marginBottom?: CSSLength | "auto"
-	marginLeft?: CSSProperty<(CSSLength | "auto")>
-	marginRight?: CSSProperty<(CSSLength | "auto")>
-	marginTop?: CSSProperty<(CSSLength | "auto")>
+	marginBottom?: CSSProperty<(CSSLength | "auto" | `${number}`)>
+	marginLeft?: CSSProperty<(CSSLength | "auto" | `${number}`)>
+	marginRight?: CSSProperty<(CSSLength | "auto" | `${number}`)>
+	marginTop?: CSSProperty<(CSSLength | "auto" | `${number}`)>
 	marker?: string | null
 	markerEnd?: string | null
 	markerMid?: string | null
