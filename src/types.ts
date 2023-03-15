@@ -111,7 +111,7 @@ export interface CSSProperties {
 		| "safe center"
 		| "unsafe center"
 	)>
-	alignmentBaseline?: (
+	alignmentBaseline?: CSSProperty<(
 		| "auto"
 		| "baseline"
 		| "before-edge"
@@ -127,100 +127,100 @@ export interface CSSProperties {
 		| "top"
 		| "center"
 		| "bottom"
-	)
+	)>
 	animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`
-	animationDelay?: string
-	animationDirection?: "normal" | "reverse" | "alternate" | "alternate-reverse"
-	animationDuration?: string
-	animationFillMode?: "none" | "forward" | "backward" | "both"
-	animationIterationCount?: "infinite" | number
-	animationName?: string
-	animationPlayState?: "running" | "paused"
+	animationDelay?: CSSProperty<(CSSTime)>
+	animationDirection?: CSSProperty<"normal" | "reverse" | "alternate" | "alternate-reverse">
+	animationDuration?: CSSProperty<(CSSTime)>
+	animationFillMode?: CSSProperty<("none" | "forward" | "backward" | "both")>
+	animationIterationCount?: CSSProperty<("infinite" | number)>
+	animationName?: CSSProperty<(string)>
+	animationPlayState?: CSSProperty<("running" | "paused")>
 	animationTimingFunction?: CSSEasingFunction
-	backfaceVisibility?: "visible" | "hidden"
-	background?: string
-	backgroundAttachment?: "scroll" | "fixed" | "local"
-	backgroundClip?: "border-box" | "padding-box" | "content-box" | "text"
-	backgroundColor?: CSSColor | string
-	backgroundImage?: `url(${string})`
-	backgroundOrigin?: "border-box" | "padding-box" | "content-box"
-	backgroundPosition?: (
+	backfaceVisibility?: CSSProperty<("visible" | "hidden")>
+	background?: CSSProperty<(string)>
+	backgroundAttachment?: CSSProperty<("scroll" | "fixed" | "local")>
+	backgroundClip?: CSSProperty<("border-box" | "padding-box" | "content-box" | "text")>
+	backgroundColor?: CSSProperty<(CSSColor | string)>
+	backgroundImage?: CSSProperty<(`url(${string})`)>
+	backgroundOrigin?: CSSProperty<("border-box" | "padding-box" | "content-box")>
+	backgroundPosition?: CSSProperty<(
 		| "top"
 		| "right"
 		| "bottom"
 		| "left"
 		| "center"
 		| string
-	)
-	backgroundPositionX?: (
+	)>
+	backgroundPositionX?: CSSProperty<(
 		| "left"
 		| "center"
 		| "right"
 		| CSSLength
 		| `${"right" | "left"} ${string}`
-	)
-	backgroundPositionY?: (
+	)>
+	backgroundPositionY?: CSSProperty<(
 		| "left"
 		| "center"
 		| "right"
 		| CSSLength
 		| `${"right" | "left"} ${string}`
-	)
-	backgroundRepeat?: (
+	)>
+	backgroundRepeat?: CSSProperty<(
 		| "repeat-x"
 		| "repeat-y"
 		| "repeat"
 		| "space"
 		| "round"
 		| "no-repeat"
-	)
-	backgroundSize?: (
+	)>
+	backgroundSize?: CSSProperty<(
 		| "auto"
 		| "cover"
 		| "contain"
 		| string
-	)
+	)>
 	baselineShift?: CSSLength | "sub" | "super"
-	border?: string | null
-	borderBottom?: CSSLength
-	borderBottomColor?: CSSColor
-	borderBottomLeftRadius?: string | number
-	borderBottomRightRadius?: string | number
-	borderBottomStyle?: NamedBorderStyle
-	borderBottomWidth?: CSSLength
-	borderCollapse?: "collapse" | "separate"
-	borderColor?: CSSColor
-	borderImage?: (
+	border?: CSSProperty<(CSSBorderStyle | CSSLength)>
+	borderBottom?: CSSProperty<(CSSLength | CSSBorderStyle)>
+	borderBottomColor?: CSSProperty<CSSColor>
+	borderBottomLeftRadius?: CSSProperty<(CSSLength)>
+	borderBottomRightRadius?: CSSProperty<(CSSLength)>
+	borderBottomStyle?: CSSProperty<(CSSBorderStyle)>
+	borderBottomWidth?: CSSProperty<(CSSLength)>
+	borderCollapse?: CSSProperty<("collapse" | "separate")>
+	borderColor?: CSSProperty<(CSSColor)>
+	borderImage?: CSSProperty<(
 		| `url(${string}) ${number} ${string}`
 		| string
-	)
-	borderImageOutset?: number | string
-	borderImageRepeat?: "stretch" | "repeat" | "round" | "space"
-	borderImageSlice?: string | number | CSSLength
-	borderImageSource?: "none" | `url(${string})`
-	borderImageWidth?: string | number | CSSLength
-	borderLeft?: string | CSSLength
-	borderLeftColor?: CSSColor
-	borderLeftStyle?: NamedBorderStyle
-	borderLeftWidth?: NamedBorderWidth | CSSLength
-	borderRadius?: string | CSSLength
-	borderRight?: string | CSSLength
-	borderRightColor?: CSSColor
-	borderRightStyle?: NamedBorderStyle
-	borderRightWidth?: NamedBorderWidth | CSSLength
-	borderSpacing?: string | CSSLength
-	borderStyle?: NamedBorderStyle
-	borderTop?: CSSLength | NamedBorderWidth | NamedBorderStyle
-	borderTopColor?: CSSColor
-	borderTopLeftRadius?: string | CSSLength
-	borderTopRightRadius?: string | CSSLength
-	borderTopStyle?: NamedBorderStyle
-	borderTopWidth?: NamedBorderStyle | CSSLength
-	borderWidth?: string | CSSLength
-	bottom?: CSSLength | "auto"
-	boxShadow?: string | null
-	boxSizing?: "border-box" | "content-box"
-	breakAfter?: (
+	)>
+	borderImageOutset?: CSSProperty<(CSSLength | string)>
+	borderImageRepeat?: CSSProperty<("stretch" | "repeat" | "round" | "space")>
+	borderImageSlice?: CSSProperty<(string | number | CSSLength)>
+	borderImageSource?: CSSProperty<("none" | `url(${string})`)>
+	borderImageWidth?: CSSProperty<(string | number | CSSLength)>
+	borderLeft?: CSSProperty<(string | CSSLength | CSSBorderStyle)>
+	borderLeftColor?: CSSProperty<(CSSColor)>
+	borderLeftStyle?: CSSProperty<(CSSBorderStyle)>
+	borderLeftWidth?: CSSProperty<(CSSBorderWidth | CSSLength)>
+	borderRadius?: CSSProperty<(string | CSSLength)>
+	borderRight?: CSSProperty<(string | CSSLength | CSSBorderStyle)>
+	borderRightColor?: CSSProperty<(CSSColor)>
+	borderRightStyle?: CSSProperty<(CSSBorderStyle)>
+	borderRightWidth?: CSSProperty<(CSSBorderWidth | CSSLength)>
+	borderSpacing?: CSSProperty<(string | CSSLength)>
+	borderStyle?: CSSProperty<(CSSBorderStyle)>
+	borderTop?: CSSProperty<(CSSLength | CSSBorderWidth | CSSBorderStyle)>
+	borderTopColor?: CSSProperty<(CSSColor)>
+	borderTopLeftRadius?: CSSProperty<(string | CSSLength)>
+	borderTopRightRadius?: CSSProperty<(string | CSSLength)>
+	borderTopStyle?: CSSProperty<(CSSBorderStyle)>
+	borderTopWidth?: CSSProperty<(CSSBorderStyle | CSSLength)>
+	borderWidth?: CSSProperty<(string | CSSLength | CSSBorderWidth)>
+	bottom?: CSSProperty<(CSSLength | "auto")>
+	boxShadow?: CSSProperty<("none" | CSSLength | CSSColor | string)>
+	boxSizing?: CSSProperty<("border-box" | "content-box")>
+	breakAfter?: CSSProperty<(
 		| "auto"
 		| "avoid"
 		| "always"
@@ -233,8 +233,8 @@ export interface CSSProperties {
 		| "verso"
 		| "avoid-column"
 		| "region"
-	)
-	breakBefore?: (
+	)>
+	breakBefore?: CSSProperty<(
 		| "auto"
 		| "avoid"
 		| "always"
@@ -247,32 +247,32 @@ export interface CSSProperties {
 		| "verso"
 		| "avoid-column"
 		| "region"
-	)
-	breakInside?: (
+	)>
+	breakInside?: CSSProperty<(
 		| "auto"
 		| "avoid"
 		| "avoid-page"
 		| "avoid-column"
 		| "avoid-region"
-	)
-	captionSide?: (
+	)>
+	captionSide?: CSSProperty<(
 		| "top"
 		| "bottom"
 		| "block-start"
 		| "block-end"
 		| "inline-start"
 		| "inline-end"
-	)
-	clear?: (
+	)>
+	clear?: CSSProperty<(
 		| "none"
 		| "left"
 		| "right"
 		| "both"
 		| "inline-start"
 		| "inline-end"
-	)
-	clip?: string | null
-	clipPath?: (
+	)>
+	clip?: CSSProperty<(string | "auto")>
+	clipPath?: CSSProperty<(
 		| `url(${string})`
 		| "margin-box"
 		| "border-box"
@@ -283,43 +283,43 @@ export interface CSSProperties {
 		| "view-box"
 		| `inset(${string} ${string})`
 		| `circle(${string} at ${string} ${string})`
-	)
+	)>
 	clipRule?: "nonzero" | "evenodd" | "inherit"
-	color?: CSSColor | string
-	colorInterpolationFilters?: string | null
-	columnCount?: "auto" | number
-	columnFill?: "auto" | "balance" | "balance-all"
-	columnRule?: NamedBorderStyle | string
-	columnRuleColor?: CSSColor | string
-	columnRuleStyle?: NamedBorderStyle
-	columnRuleWidth?: NamedBorderStyle | CSSLength
-	columnSpan?: "none" | "all"
-	columnWidth?: "auto" | CSSLength
+	color?: CSSColor | "inherit"
+	colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB"
+	columnCount?: CSSProperty<("auto" | number)>
+	columnFill?: CSSProperty<("auto" | "balance" | "balance-all")>
+	columnRule?: CSSProperty<(CSSBorderStyle | string)>
+	columnRuleColor?: CSSProperty<(CSSColor | string)>
+	columnRuleStyle?: CSSProperty<(CSSBorderStyle)>
+	columnRuleWidth?: CSSProperty<(CSSBorderStyle | CSSLength)>
+	columnSpan?: CSSProperty<("none" | "all")>
+	columnWidth?: CSSProperty<("auto" | CSSLength)>
 	columns?: CSSProperty<(
 		| CSSLength
 		| "auto"
 		| number
 		| string
 	)>
-	content?: string | null
-	counterIncrement?: string | "none"
-	counterReset?: string | "none"
+	content?: CSSProperty<(string | null)>
+	counterIncrement?: CSSProperty<(string | "none")>
+	counterReset?: CSSProperty<(string | "none")>
 	cssFloat?: string | null
-	float?: (
+	float?: CSSProperty<(
 		| "left"
 		| "right"
 		| "none"
 		| "inline-start"
 		| "inline-end"
-	)
+	)>
 	cssText?: string
-	cursor?: (
+	cursor?: CSSProperty<(
 		| CursorKeywords
 		| `url(${string}), ${CursorKeywords}`
 		| `url(${string}) ${number} ${number}, ${CursorKeywords}`
-	)
-	direction?: "ltr" | "rtl"
-	display?: (
+	)>
+	direction?: CSSProperty<("ltr" | "rtl")>
+	display?: CSSProperty<(
 		| "block"
 		| "inline"
 		| "inline-block"
@@ -341,7 +341,7 @@ export interface CSSProperties {
 		| "table"
 		| "table-row"
 		| "list-item"
-	)
+	)>
 	dominantBaseline?: (
 		| "auto"
 		| "ideographic"
@@ -354,7 +354,7 @@ export interface CSSProperties {
 		| "text-before-edge"
 		| "text-top"
 	)
-	emptyCells?: "show" | "hide"
+	emptyCells?: CSSProperty<("show" | "hide")>
 	enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`
 	fill?: string | null
 	fillOpacity?: number | `${number}%`
@@ -374,22 +374,22 @@ export interface CSSProperties {
 		| string
 		| "none"
 	)
-	flex?: (
+	flex?: CSSProperty<(
 		| "none"
 		| "auto"
 		| "initial"
 		| number
 		| CSSLength
 		| string
-	)
-	flexBasis?: (
+	)>
+	flexBasis?: CSSProperty<(
 		| "auto"
 		| CSSLength
 		| "min-content"
 		| "max-content"
 		| "fit-content"
 		| "content"
-	)
+	)>
 	flexDirection?: CSSProperty<(
 		| "row"
 		| "row-reverse"
@@ -412,7 +412,7 @@ export interface CSSProperties {
 	floodColor?: CSSColor
 	floodOpacity?: number | `${number}%`
 	font?: string | null
-	fontFamily?: (
+	fontFamily?: CSSProperty<(
 		| "serif"
 		| "sans-serif"
 		| "cursive"
@@ -429,13 +429,13 @@ export interface CSSProperties {
 		| string
 		//         | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" |
 		// "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`
-	)
-	fontFeatureSettings?: (
+	)>
+	fontFeatureSettings?: CSSProperty<(
 		| "normal"
 		| string
 		| `${string} ${"on" | "off" | number}`
-	)
-	fontSize?: (
+	)>
+	fontSize?: CSSProperty<(
 		| "xx-small"
 		| "x-small"
 		| "small"
@@ -448,13 +448,13 @@ export interface CSSProperties {
 		| "smaller"
 		| CSSLength
 		| "math"
-	)
-	fontSizeAdjust?: (
+	)>
+	fontSizeAdjust?: CSSProperty<(
 		| "none"
 		| number
 		| `${"ex-height" | "cap-height" | "ch-width" | "ic-width" | "ic-height"} ${number}`
-	)
-	fontStretch?: (
+	)>
+	fontStretch?: CSSProperty<(
 		| "normal"
 		| "ultra-condensed"
 		| "extra-condensed"
@@ -465,14 +465,14 @@ export interface CSSProperties {
 		| "extra-expanded"
 		| "ultra-expanded"
 		| `${number}%`
-	)
-	fontStyle?: (
+	)>
+	fontStyle?: CSSProperty<(
 		| "normal"
 		| "italic"
 		| "oblique"
 		| `oblique ${number}deg`
-	)
-	fontVariant?: (
+	)>
+	fontVariant?: CSSProperty<(
 		| "normal"
 		| "small-caps"
 		| "all-small-caps"
@@ -497,8 +497,8 @@ export interface CSSProperties {
 		| "full-width"
 		| "proportional-width"
 		| "ruby"
-	)
-	fontWeight?: (
+	)>
+	fontWeight?: CSSProperty<(
 		| "normal"
 		| "bold"
 		| "bolder"
@@ -512,16 +512,16 @@ export interface CSSProperties {
 		| 700
 		| 800
 		| 900
-	)
+	)>
 	glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
 	glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`
-	height?: (
+	height?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	)
+	)>
 	imeMode?: (
 		| "auto"
 		| "normal"
@@ -549,13 +549,13 @@ export interface CSSProperties {
 	kerning?: "auto" | number | CSSLength
 	left?: "auto" | CSSLength
 	readonly length?: CSSLength
-	letterSpacing?: "normal" | CSSLength
+	letterSpacing?: CSSProperty<("normal" | CSSLength)>
 	lightingColor?: CSSColor
-	lineHeight?: "normal" | number | CSSLength
-	listStyle?: string | null
-	listStyleImage?: "none" | `url(${string})`
-	listStylePosition?: "inside" | "outside"
-	listStyleType?: (
+	lineHeight?: CSSProperty<("normal" | number | CSSLength)>
+	listStyle?: CSSProperty<(string | null)>
+	listStyleImage?: CSSProperty<("none" | `url(${string})` | `linear-gradient(${string})`)>
+	listStylePosition?: CSSProperty<("inside" | "outside")>
+	listStyleType?: CSSProperty<(
 		| "none"
 		| string
 		| "disc"
@@ -629,130 +629,197 @@ export interface CSSProperties {
 		| "upper-armenian"
 		| "disclosure-open"
 		| "disclosure-closed"
-	)
-	margin?: (
+	)>
+	margin?: CSSProperty<(
 		| number
 		| CSSLength
 		| string
-	)
-	marginBottom?: CSSLength | "auto" | `${number}`
-	marginLeft?: CSSLength | "auto" | `${number}`
-	marginRight?: CSSLength | "auto" | `${number}`
-	marginTop?: CSSLength | "auto" | `${number}`
+	)>
+	marginBottom?: CSSLength | "auto"
+	marginLeft?: CSSProperty<(CSSLength | "auto")>
+	marginRight?: CSSProperty<(CSSLength | "auto")>
+	marginTop?: CSSProperty<(CSSLength | "auto")>
 	marker?: string | null
 	markerEnd?: string | null
 	markerMid?: string | null
 	markerStart?: string | null
-	mask?: string | null
-	maxHeight?: (
+	mask?: CSSProperty<(string | "none" | null)>
+	maxHeight?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
+		| "none"
 		| CSSLength
-	)
-	maxWidth?: (
+	)>
+	maxWidth?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
+		| "none"
 		| CSSLength
-	)
-	minHeight?: (
+	)>
+	minHeight?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
 		| CSSLength
-	)
-	minWidth?: (
+	)>
+	minWidth?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
 		| CSSLength
-	)
-	msContentZoomChaining?: string | null
+	)>
+	/**	Specifies whether zooming is chained to the next outermost element with zooming capabilities. */
+	msContentZoomChaining?: "none" | "chained" | string | null
+	/** Specifies the minimum and maximum zooming factor. */
 	msContentZoomLimit?: string | null
-	msContentZoomLimitMax?: any
-	msContentZoomLimitMin?: any
-	msContentZoomSnap?: string | null
+	/** Specifies the maximum zooming factor. */
+	msContentZoomLimitMax?: number | string | null
+	/** Specifies the minimum zooming factor. */
+	msContentZoomLimitMin?: number | string | null
+	/** Specifies whether zooming positions are snapped to the nearest zooming factor. */
+	msContentZoomSnap?: "none" | "mandatory" | "proximity" | string | null
+	/** Specifies the positions where zooming is snapped. */
 	msContentZoomSnapPoints?: string | null
-	msContentZoomSnapType?: string | null
-	msContentZooming?: string | null
+	/** Specifies the type of zooming positions that are snapped. */
+	msContentZoomSnapType?: "none" | "mandatory" | "proximity" | string | null
+	/** Specifies whether zooming is enabled. */
+	msContentZooming?: "none" | "zoom" | string | null
+	/** Specifies the name of the object to which content flows. */
 	msFlowFrom?: string | null
+	/** Specifies the name of the element from which content flows. */
 	msFlowInto?: string | null
+	/** Specifies font feature settings. */
 	msFontFeatureSettings?: string | null
-	msGridColumn?: any
-	msGridColumnAlign?: string | null
-	msGridColumnSpan?: any
+	/** Specifies the grid column number of the element. */
+	msGridColumn?: number | string | null
+	/** Specifies the horizontal alignment of an element in a grid column. */
+	msGridColumnAlign?: "start" | "end" | "center" | "stretch" | string | null
+	/** Specifies the number of grid columns that an element spans. */
+	msGridColumnSpan?: number | string | null
+	/** Specifies the width of grid columns. */
 	msGridColumns?: string | null
-	msGridRow?: any
-	msGridRowAlign?: string | null
-	msGridRowSpan?: any
+	/** Specifies the grid row number of the element. */
+	msGridRow?: number | string | null
+	/** Specifies the vertical alignment of an element in a grid row. */
+	msGridRowAlign?: "start" | "end" | "center" | "stretch" | string | null
+	/** Specifies the number of grid rows that an element spans. */
+	msGridRowSpan?: number | string | null
+	/** Specifies the height of grid rows. */
 	msGridRows?: string | null
-	msHighContrastAdjust?: string | null
-	msHyphenateLimitChars?: string | null
-	msHyphenateLimitLines?: any
-	msHyphenateLimitZone?: any
-	msHyphens?: string | null
-	msImeAlign?: string | null
-	msOverflowStyle?: string | null
-	msScrollChaining?: string | null
+	/** Specifies whether and how background color and images are adjusted for high contrast. */
+	msHighContrastAdjust?: "auto" | "none" | "incandescent" | "cold" | "contrast" | "blackwhite" | string | null
+	/** Specifies the number of characters to display before a hyphenation occurs. */
+	msHyphenateLimitChars?: number | string | null
+	/** Specifies the maximum number of lines that can be broken before a hyphenation occurs. */
+	msHyphenateLimitLines?: number | string | null
+	/** Specifies the distance between the end of the hyphenation zone and the end of the line. */
+	msHyphenateLimitZone?: number | string | null
+	/** Specifies how words should be hyphenated. */
+	msHyphens?: "none" | "manual" | "auto" | string | null
+	/** Specifies the alignment of the input method editor (IME) candidate window. */
+	msImeAlign?: "auto" | "before" | "after" | string | null
+	/** Specifies how to handle the overflow content of an element. */
+	msOverflowStyle?: "-ms-autohiding-scrollbar" | "scrollbar" | "scrollbarbutton" | "none" | "scrollbarthumb"
+
+	/** Specifies whether scrolling is chained to the next outermost element with scrolling capabilities. */
+	msScrollChaining?: 'none' | 'chained' | null
+
+	/** Specifies the minimum and maximum scrolling positions. */
 	msScrollLimit?: string | null
-	msScrollLimitXMax?: any
-	msScrollLimitXMin?: any
-	msScrollLimitYMax?: any
-	msScrollLimitYMin?: any
-	msScrollRails?: string | null
+
+	/** Specifies the maximum horizontal scrolling position.
+	 */
+	msScrollLimitXMax?: number | null
+
+	/** Specifies the minimum horizontal scrolling position. */
+	msScrollLimitXMin?: number | null
+
+	/** Specifies the maximum vertical scrolling position. */
+	msScrollLimitYMax?: number | null
+
+	/** Specifies the minimum vertical scrolling position. */
+	msScrollLimitYMin?: number | null
+
+	/** Specifies the type of scrolling rails that are displayed. */
+	msScrollRails?: 'none' | 'railed' | null
+
+	/** Specifies the horizontal positions where scrolling is snapped. */
 	msScrollSnapPointsX?: string | null
+
+	/** Specifies the vertical positions where scrolling is snapped. */
 	msScrollSnapPointsY?: string | null
-	msScrollSnapType?: string | null
-	msScrollSnapX?: string | null
-	msScrollSnapY?: string | null
-	msScrollTranslation?: string | null
-	msTextCombineHorizontal?: string | null
-	msTextSizeAdjust?: any
-	msTouchAction?: string | null
-	msTouchSelect?: string | null
-	msUserSelect?: string | null
-	msWrapFlow?: string
-	msWrapMargin?: any
-	msWrapThrough?: string
-	opacity?: number | `${number}%`
-	order?: string | null
-	orphans?: number
-	outline?: NamedBorderStyle | string
-	outlineColor?: CSSColor | "invert"
-	outlineStyle?: NamedBorderStyle
-	outlineWidth?: NamedBorderWidth | CSSLength
-	overflow?: (
+
+	/** Specifies the type of scrolling snap points. */
+	msScrollSnapType?: 'none' | 'mandatory' | 'proximity' | null
+
+	/** Specifies the horizontal snapping behavior. */
+	msScrollSnapX?: 'none' | 'mandatory' | 'proximity' | null
+
+	/** Specifies the vertical snapping behavior. */
+	msScrollSnapY?: 'none' | 'mandatory' | 'proximity' | null
+
+	/** Specifies the type of CSS transformation to apply during scrolling. */
+	msScrollTranslation?: 'none' | 'translate' | null
+
+	/** Specifies whether multiple text blocks can be combined into a single block. */
+	msTextCombineHorizontal?: 'none' | 'all' | null
+
+	/** Controls the scaling of text in mobile browsers. */
+	msTextSizeAdjust?: 'auto' | 'none' | 'percentage' | null
+
+	/** Specifies the touch actions that are permitted on an element. */
+	msTouchAction?: 'auto' | 'none' | 'pan-x' | 'pan-y' | 'manipulation' | null
+
+	/** Specifies the touch-select behavior. */
+	msTouchSelect?: 'none' | 'text' | 'toggle' | null
+
+	/** Specifies the user-select behavior. */
+	msUserSelect?: 'none' | 'text' | 'all' | 'element' | null
+
+	/** Specifies the flow direction of content around a floating object. */
+	msWrapFlow?: 'auto' | 'both' | 'clear' | 'end' | 'maximum' | 'start' | 'maximum' | null
+
+	/** Specifies the amount of space between wrapped text and the object it flows around. */
+	msWrapMargin?: string | null
+
+	/** Specifies whether the content should wrap around a floating object. */
+	msWrapThrough?: 'none' | 'wrap'
+	opacity?: CSSProperty<(number | `${number}%`)>
+	order?: CSSProperty<(string | null)>
+	orphans?: CSSProperty<(number)>
+	outline?: CSSProperty<(CSSBorderStyle | string)>
+	outlineColor?: CSSProperty<(CSSColor | "invert")>
+	outlineStyle?: CSSProperty<(CSSBorderStyle)>
+	outlineWidth?: CSSProperty<(CSSBorderWidth | CSSLength)>
+	overflow?: CSSProperty<(
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	)
-	overflowX?: (
+	)>
+	overflowX?: CSSProperty<(
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	)
-	overflowY?: (
+	)>
+	overflowY?: CSSProperty<(
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	)
-	padding?: number | CSSLength | string
-	paddingBottom?: CSSLength
-	paddingLeft?: CSSLength
-	paddingRight?: CSSLength
-	paddingTop?: CSSLength
-	pageBreakAfter?: (
+	)>
+	padding?: CSSProperty<(number | CSSLength | string)>
+	paddingBottom?: CSSProperty<(CSSLength)>
+	paddingLeft?: CSSProperty<(CSSLength)>
+	paddingRight?: CSSProperty<(CSSLength)>
+	paddingTop?: CSSProperty<(CSSLength)>
+	pageBreakAfter?: CSSProperty<(
 		| "auto"
 		| "always"
 		| "avoid"
@@ -760,8 +827,8 @@ export interface CSSProperties {
 		| "right"
 		| "recto"
 		| "verso"
-	)
-	pageBreakBefore?: (
+	)>
+	pageBreakBefore?: CSSProperty<(
 		| "auto"
 		| "always"
 		| "avoid"
@@ -769,11 +836,11 @@ export interface CSSProperties {
 		| "right"
 		| "recto"
 		| "verso"
-	)
-	pageBreakInside?: "auto" | "avoid"
-	perspective?: "none" | CSSLength
-	perspectiveOrigin?: string | null
-	pointerEvents?: (
+	)>
+	pageBreakInside?: CSSProperty<("auto" | "avoid")>
+	perspective?: CSSProperty<("none" | CSSLength)>
+	perspectiveOrigin?: CSSProperty<(string | null)>
+	pointerEvents?: CSSProperty<(
 		| "auto"
 		| "none"
 		| "visiblePainted"
@@ -784,18 +851,17 @@ export interface CSSProperties {
 		| "fill"
 		| "stroke"
 		| "all"
-	)
-	position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null
-	quotes?: (
+	)>
+	position?: CSSProperty<("static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null)>
+	quotes?: CSSProperty<(
 		| "none"
 		| "auto"
-		| `${string} ${string}`
-		| `${string} ${string} ${string} ${string}`
-	)
-	right?: "auto" | CSSLength
-	rubyAlign?: "start" | "center" | "space-between" | "space-around"
+		| string
+	)>
+	right?: CSSProperty<("auto" | CSSLength)>
+	rubyAlign?: CSSProperty<("start" | "center" | "space-between" | "space-around")>
 	rubyOverhang?: string | null
-	rubyPosition?: "over" | "under" | "alternate" | "inter-character"
+	rubyPosition?: CSSProperty<("over" | "under" | "alternate" | "inter-character")>
 	stopColor?: "currentColor" | CSSColor
 	stopOpacity?: number
 	stroke?: string | null
@@ -806,8 +872,8 @@ export interface CSSProperties {
 	strokeMiterlimit?: number
 	strokeOpacity?: `${number}%`
 	strokeWidth?: CSSLength
-	tableLayout?: "auto" | "fixed"
-	textAlign?: (
+	tableLayout?: CSSProperty<("auto" | "fixed")>
+	textAlign?: CSSProperty<(
 		| "start"
 		| "end"
 		| "left"
@@ -817,8 +883,8 @@ export interface CSSProperties {
 		| "justify-all"
 		| "match-parent"
 		| string
-	)
-	textAlignLast?: (
+	)>
+	textAlignLast?: CSSProperty<(
 		| "auto"
 		| "start"
 		| "end"
@@ -826,37 +892,38 @@ export interface CSSProperties {
 		| "right"
 		| "center"
 		| "justify"
-	)
+	)>
 	textAnchor?: "start" | "middle" | "end"
-	textDecoration?: string | null
-	textIndent?: CSSLength
-	textJustify?: (
+	textDecoration?: CSSProperty<("none" | "underline" | "overline" | CSSColor)>
+	textIndent?: CSSProperty<(CSSLength | "each-line" | "hanging")>
+	textJustify?: CSSProperty<(
 		| "auto"
 		| "none"
 		| "inter-word"
 		| "inter-character"
-	)
+		| "distribute"
+	)>
 	textKashida?: string | null
 	textKashidaSpace?: string | null
-	textOverflow?: "clip" | "ellipsis"
-	textShadow?: string | null
-	textTransform?: (
+	textOverflow?: CSSProperty<("clip" | "ellipsis")>
+	textShadow?: CSSProperty<(string | null)>
+	textTransform?: CSSProperty<(
 		| "none"
 		| "capitalize"
 		| "uppercase"
 		| "lowercase"
 		| "full-width"
 		| "full-size-kana"
-	)
-	textUnderlinePosition?: (
+	)>
+	textUnderlinePosition?: CSSProperty<(
 		| "auto"
 		| "under"
 		| "left"
 		| "right"
 		| `${"auto" | "under" | "left" | "right"} ${"auto" | "under" | "left" | "right"}`
-	)
-	top?: "auto" | CSSLength
-	touchAction?: (
+	)>
+	top?: CSSProperty<("auto" | CSSLength)>
+	touchAction?: CSSProperty<(
 		| "auto"
 		| "none"
 		| "pan-x"
@@ -867,8 +934,8 @@ export interface CSSProperties {
 		| "pan-down"
 		| "pinch-zoom"
 		| "manipulation"
-	)
-	transform?: (
+	)>
+	transform?: CSSProperty<(
 		| "none"
 		| string
 		| `matrix(${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
@@ -886,37 +953,37 @@ export interface CSSProperties {
 		| `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
 		| `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
 		| `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`
-	)
-	transformOrigin?: (
+	)>
+	transformOrigin?: CSSProperty<(
 		| CSSLength
 		| "left"
 		| "right"
 		| "center"
 		| "bottom"
 		| string
-	)
-	transformStyle?: "flat" | "preserve-3d"
-	transition?: (
+	)>
+	transformStyle?: CSSProperty<("flat" | "preserve-3d")>
+	transition?: CSSProperty<(
 		// | `${string} ${CSSTime}`
 		// | `${string} ${CSSTime} ${CSSTime}`
 		// | `${string} ${CSSTime} ${CSSEasingFunction}`
 		// | `${string} ${CSSTime} ${CSSEasingFunction} ${CSSTime}`
 		| `all ${CSSTime} ${CSSEasingFunction}`
 		| string
-	)
-	transitionDelay?: CSSTime | string
-	transitionDuration?: CSSTime | string
-	transitionProperty?: "none" | "all" | string
-	transitionTimingFunction?: CSSEasingFunction
-	unicodeBidi?: (
+	)>
+	transitionDelay?: CSSProperty<(CSSTime | string)>
+	transitionDuration?: CSSProperty<(CSSTime | string)>
+	transitionProperty?: CSSProperty<("none" | "all" | string)>
+	transitionTimingFunction?: CSSProperty<(CSSEasingFunction)>
+	unicodeBidi?: CSSProperty<(
 		| "normal"
 		| "embed"
 		| "isolate"
 		| "bidi-override"
 		| "isolate-override"
 		| "plaintext"
-	)
-	verticalAlign?: (
+	)>
+	verticalAlign?: CSSProperty<(
 		| "baseline"
 		| "sub"
 		| "super"
@@ -926,221 +993,279 @@ export interface CSSProperties {
 		| "top"
 		| "bottom"
 		| CSSLength
-	)
-	visibility?: "visible" | "hidden" | "collapse"
-	webkitAlignContent?: string | null
-	webkitAlignItems?: string | null
-	webkitAlignSelf?: string | null
+	)>
+	visibility?: CSSProperty<("visible" | "hidden" | "collapse")>
+	/** Aligns the content within a flex container when there is extra space along the cross-axis.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-content
+	 */
+	webkitAlignContent?: CSSProperty<('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch' | 'baseline' | 'safe' | 'unsafe')> | null
+
+	/** Aligns flex items along the cross-axis of the flex container.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
+	 */
+	webkitAlignItems?: CSSProperty<('stretch' | 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'first baseline' | 'last baseline' | 'start' | 'end' | 'self-start' | 'self-end' | 'safe' | 'unsafe')> | null
+
+	/** Aligns a flex item within its flex container.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-self
+	 */
+	webkitAlignSelf?: CSSProperty<('auto' | 'stretch' | 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'first baseline' | 'last baseline' | 'start' | 'end' | 'self-start' | 'self-end' | 'safe' | 'unsafe')> | null
+
+	/** A shorthand property for all the animation-* properties, except animation-play-state.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation
+	 */
 	webkitAnimation?: string | null
-	webkitAnimationDelay?: string | null
-	webkitAnimationDirection?: string | null
-	webkitAnimationDuration?: string | null
-	webkitAnimationFillMode?: string | null
-	webkitAnimationIterationCount?: string | null
-	webkitAnimationName?: string | null
-	webkitAnimationPlayState?: string | null
-	webkitAnimationTimingFunction?: string | null
-	webkitAppearance?: string | null
-	webkitBackfaceVisibility?: string | null
-	webkitBackgroundClip?: string | null
-	webkitBackgroundOrigin?: string | null
+
+	/** Defines a length of time to elapse before an animation starts, allowing an animation to begin execution some time after it is applied.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay
+	 */
+	webkitAnimationDelay?: CSSProperty<(CSSTime)>
+
+	/** Defines whether an animation should run forwards, backwards, or alternating back and forth.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction
+	 */
+	webkitAnimationDirection?: CSSProperty<('normal' | 'reverse' | 'alternate' | 'alternate-reverse')> | null
+
+	/** Defines the length of time that an animation takes to complete one cycle.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-duration
+	 */
+	webkitAnimationDuration?: CSSProperty<(CSSTime)>
+
+	/** Defines how the animation applies styles to its target before and after it is executed.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-fill-mode
+	 */
+	webkitAnimationFillMode?: CSSProperty<('none' | 'forwards' | 'backwards' | 'both')> | null
+
+	/** Defines the number of times an animation cycle should be played before stopping.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-iteration-count
+	 */
+	webkitAnimationIterationCount?: CSSProperty<('infinite' | number)> | null
+
+	/** Specifies the name of the keyframe to use for the animation.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-name
+	 */
+	webkitAnimationName?: CSSProperty<(string)> | null
+
+	/** Defines whether the animation is running or paused.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state
+	 */
+	webkitAnimationPlayState?: CSSProperty<('running' | 'paused')> | null
+
+	/** Specifies the speed curve of an animation.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function
+	 */
+	webkitAnimationTimingFunction?: CSSEasingFunction
+
+
 	webkitBackgroundSize?: string | null
+
 	webkitBorderBottomLeftRadius?: string | null
+
 	webkitBorderBottomRightRadius?: string | null
+
 	webkitBorderImage?: string | null
+
 	webkitBorderRadius?: string | null
+
 	webkitBorderTopLeftRadius?: string | number | null
+
 	webkitBorderTopRightRadius?: string | number | null
-	webkitBoxAlign?: string | null
-	webkitBoxDirection?: string | null
+
+	/** Possible values for the `-webkit-column-break-after` CSS property.
+	 */
+	webkitColumnBreakAfter?: "auto" | "avoid" | "always" | "left" | "right" | "page" | "column" | "avoid-page" | "avoid-column" | null
+
+	/** Possible values for the `-webkit-column-break-before` CSS property.
+	 */
+	webkitColumnBreakBefore?: "auto" | "avoid" | "always" | "left" | "right" | "page" | "column" | "avoid-page" | "avoid-column" | null
+
+	/** Possible values for the `-webkit-column-break-inside` CSS property.
+	 */
+	webkitColumnBreakInside?: "auto" | "avoid" | "avoid-page" | "avoid-column" | null
+
+	/** The number of columns to use for the element.
+	 */
+	webkitColumnCount?: number | null
+
+	/** The gap between columns for a multi-column element.
+	 */
+	webkitColumnGap?: string | null
+
+	/** Possible values for the `-webkit-column-rule-style` CSS property.
+	 */
+	webkitColumnRuleStyle?: "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset" | null
+
+	/** The color of the column rule for a multi-column element.
+	 */
+	webkitColumnRuleColor?: CSSColor | null
+
+	/** The width of the column rule for a multi-column element.
+	 */
+	webkitColumnRuleWidth?: CSSLength | null
+
+	/** Whether the element should span across all columns when using a multi-column layout.
+	 */
+	webkitColumnSpan?: "none" | "all" | null
+
+	/** The width of each column for a multi-column element.
+	 */
+	webkitColumnWidth?: CSSLength | null
+
+	/** Possible values for the `-webkit-box-direction` CSS property.
+	 */
+	webkitBoxDirection?: "normal" | "reverse" | null
+
+	/** Possible values for the `-webkit-box-orient` CSS property.
+	 */
+	webkitBoxOrient?: "horizontal" | "vertical" | "inline-axis" | "block-axis" | null
+
+	/** Possible values for the `-webkit-box-pack` CSS property.
+	 */
+	webkitBoxPack?: "start" | "end" | "center" | "justify" | "distribute" | null
+
+	/** Possible values for the `-webkit-box-align` CSS property.
+	 */
+	webkitBoxAlign?: "start" | "end" | "center" | "baseline" | "stretch" | null
+
+	/** Possible values for the `-webkit-box-flex` CSS property.
+	 */
 	webkitBoxFlex?: string | null
+
+	/** Possible values for the `-webkit-box-ordinal-group` CSS property.
+	 */
 	webkitBoxOrdinalGroup?: string | null
-	webkitBoxOrient?: string | null
-	webkitBoxPack?: string | null
-	webkitBoxSizing?: CSSProperty<("border-box" | "content-box")>
-	webkitColumnBreakAfter?: CSSProperty<(
-		| "auto"
-		| "avoid"
-		| "always"
-		| "all"
-		| "avoid-page"
-		| "page"
-		| "left"
-		| "right"
-		| "recto"
-		| "verso"
-		| "avoid-column"
-		| "region"
-	)>
-	webkitColumnBreakBefore?: CSSProperty<(
-		| "auto"
-		| "avoid"
-		| "always"
-		| "all"
-		| "avoid-page"
-		| "page"
-		| "left"
-		| "right"
-		| "recto"
-		| "verso"
-		| "avoid-column"
-		| "region"
-	)>
-	webkitColumnBreakInside?: CSSProperty<(
-		| "auto"
-		| "avoid"
-		| "avoid-column"
-		| "avoid-page"
-		| "avoid-region"
-	)>
-	webkitColumnCount?: CSSProperty<(number | "auto")>
-	webkitColumnGap?: CSSProperty<(
-		| CSSLength
-		| "normal"
-	)>
-	webkitColumnRule?: CSSProperty<(NamedBorderStyle | string)>
-	webkitColumnRuleColor?: CSSProperty<(CSSColor | string)>
-	webkitColumnRuleStyle?: CSSProperty<(NamedBorderStyle)>
-	webkitColumnRuleWidth?: CSSProperty<(
-		| CSSLength
-		| "thin"
-		| "medium"
-		| "thick"
-	)>
-	webkitColumnSpan?: CSSProperty<("none" | "all")>
-	webkitColumnWidth?: CSSProperty<(CSSLength | "auto" | string)>
-	webkitColumns?: CSSProperty<(
-		| CSSLength
-		| "auto"
-		| number
-		| string
-	)>
-	webkitFilter?: CSSProperty<(
-		| `url(${string})`
-		| `blur(${CSSLength})`
-		| `brightness(${number})`
-		| `contrast(${number}%)`
-		//| `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
-		| `grayscale(${number}%)`
-		| `hue-rotate(${number}deg)`
-		| `invert(${number}%)`
-		| `opacity(${number}%)`
-		| `saturate(${number}%)`
-		| `sepia(${number}%)`
-		| string
-		| "none"
-	)>
-	webkitFlex?: CSSProperty<(
-		| "none"
-		| "auto"
-		| "initial"
-		| number
-		| CSSLength
-		| string
-	)>
-	webkitFlexBasis?: CSSProperty<(
-		| "auto"
-		| CSSLength
-		| "min-content"
-		| "max-content"
-		| "fit-content"
-		| "content"
-	)>
-	webkitFlexDirection?: CSSProperty<(
-		| "row"
-		| "row-reverse"
-		| "column"
-		| "column-reverse"
-	)>
-	webkitFlexFlow?: CSSProperty<(
-		| "row"
-		| "row-reverse"
-		| "column"
-		| "column-reverse"
-		| "nowrap"
-		| "wrap"
-		| "wrap-reverse"
-	)>
-	webkitFlexGrow?: number
-	webkitFlexShrink?: number
-	webkitFlexWrap?: CSSProperty<("nowrap" | "wrap" | "wrap-reverse")>
-	webkitJustifyContent?: CSSProperty<(
-		| "center"
-		| "start"
-		| "end"
+
+	/** Possible values for the `-webkit-box-sizing` CSS property.
+	 */
+	webkitBoxSizing?: "content-box" | "border-box" | null
+
+	/** The appearance of the element.
+	 */
+	webkitAppearance?: string | null
+
+	/** The visibility of the back face of the element when it is facing away from the viewer.
+	 */
+	webkitBackfaceVisibility?: "visible" | "hidden" | null
+
+	/** The part of the element's background to clip.
+	 */
+	webkitBackgroundClip?: "border-box" | "padding-box" | "content-box" | "text" | null
+
+	/** The origin of the element's background image.
+	 */
+	webkitBackgroundOrigin?: "border-box" | "padding-box" | "content-box" | null
+
+
+	/** Specifies the number of columns an element should be divided into	 */
+	webkitColumns?: `${CSSLength} ${number}` | `${number} ${CSSLength}` | `${CSSLength}` | `${number}` | "auto" | "initial" | "inherit" | null
+
+	/** Sets the initial main size of a flex item.
+	 */
+	webkitFlexBasis?: CSSLength | "auto" | "content" | "fit-content" | "max-content" | "min-content" | "initial" | "inherit" | null
+
+	/** The webkitFlexDirection CSS property sets the direction of the main axis of a flex container.
+	 */
+	webkitFlexDirection?: "row" | "row-reverse" | "column" | "column-reverse" | "initial" | "inherit" | null
+
+	/** The webkitFlexFlow CSS property is a shorthand property that sets the values of webkitFlexDirection and webkitFlexWrap.
+	 */
+	webkitFlexFlow?: string | null
+
+	/** The webkitFlexGrow CSS property sets the flex grow factor of a flex item.
+	 */
+	webkitFlexGrow?: number | "initial" | "inherit" | null
+
+	/** The webkitFlexShrink CSS property sets the flex shrink factor of a flex item.
+	 */
+	webkitFlexShrink?: number | "initial" | "inherit" | null
+
+	/** Specifies the filter or effect to apply to an element
+	 */
+	webkitFilter?: string | null
+
+	/** Specifies the size of the flexible items
+	 */
+	webkitFlex?: CSSProperty<"none" | "initial" | "auto" | CSSLength | number> | null
+
+	/** Specifies whether flexible items should wrap or not
+	 */
+	webkitFlexWrap?: CSSProperty<"nowrap" | "wrap" | "wrap-reverse"> | null
+
+	/** Specifies the alignment of flexible items along the main axis
+	 */
+	webkitJustifyContent?: CSSProperty<
 		| "flex-start"
 		| "flex-end"
-		| "left"
-		| "right"
-		| "normal"
+		| "center"
 		| "space-between"
 		| "space-around"
 		| "space-evenly"
-		| "stretch"
-		| "safe center"
-		| "unsafe center"
-	)>
-	webkitOrder?: number
-	webkitPerspective?: CSSProperty<("none" | CSSLength | null)>
-	webkitPerspectiveOrigin?: CSSProperty<("x-perspective" | "y-perspective" | string)>
-	webkitTapHighlightColor?: string | null
-	webkitTextFillColor?: string | null
-	webkitTextSizeAdjust?: CSSProperty<("none" | "auto" | `${number}%`)>
-	webkitTransform?: CSSProperty<(
-		| "none"
-		| string
-		| `matrix(${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
-		| `matrix3d(${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
-		| `rotate(${number}${"deg" | "grad" | "rad" | "turn"})`
-		| `rotate3d(${number},${number},${number},${number}${"deg" | "grad" | "rad" | "turn"})`
-		| `rotateX(${number}${"deg" | "grad" | "rad" | "turn"})`
-		| `rotateY(${number}${"deg" | "grad" | "rad" | "turn"})`
-		| `rotateZ(${number}${"deg" | "grad" | "rad" | "turn"})`
-		| `scale(${number | `${number}%`}, ${number | `${number}%`})`
-		| `scale3d(${number}, ${number},${number})`
-		| `scaleX(${number})`
-		| `scaleY(${number})`
-		| `scaleZ(${number})`
-		| `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
-		| `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
-		| `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`
-	)>
-	webkitTransformOrigin?: CSSProperty<(
-		| CSSLength
-		| "left"
-		| "right"
-		| "center"
-		| "bottom"
-		| string
-	)>
-	webkitTransformStyle?: CSSProperty<("flat" | "preserve-3d")>
-	webkitTransition?: CSSProperty<(
-		| `all ${CSSTime} ${CSSEasingFunction}`
-		| string
-	)>
-	webkitTransitionDelay?: CSSTime | string
-	webkitTransitionDuration?: CSSTime | string
-	webkitTransitionProperty?: CSSProperty<("none" | "all" | string)>
-	webkitTransitionTimingFunction?: CSSEasingFunction
-	webkitUserModify?: CSSProperty<(
-		| "read-only"
-		| "read-write"
-		| "write-only"
-	)>
-	webkitUserSelect?: CSSProperty<(
-		| "none"
-		| "auto"
-		| "text"
-		| "contain"
-		| "all"
-	)>
-	webkitWritingMode?: CSSProperty<(
-		| "horizontal-tb"
-		| "vertical-rl"
-		| "vertical-lr"
-		| "sideways-rl"
-		| "sideways-lr"
-	)>
+	> | null
+
+	/** Specifies the order of a flexible item
+	 */
+	webkitOrder?: CSSProperty<number> | null
+
+	/** Specifies the perspective of an element
+	 */
+	webkitPerspective?: CSSProperty<"none" | CSSLength> | null
+
+	/** Specifies the position of the perspective for the element
+	 */
+	webkitPerspectiveOrigin?: CSSProperty<string> | null
+
+	/** Specifies the color of the highlight when tapping on an element
+	 */
+	webkitTapHighlightColor?: CSSProperty<string> | null
+
+	/** Specifies the color to fill the text of an element
+	 */
+	webkitTextFillColor?: CSSProperty<CSSColor> | null
+
+	/** Specifies whether text size is automatically adjusted based on the size of the container element
+	 */
+	webkitTextSizeAdjust?: CSSProperty<"none" | "auto" | CSSLength> | null
+
+	/** Specifies a 2D or 3D transformation to apply to an element
+	 */
+	webkitTransform?: string | null
+
+	/** Specifies the position of the transform origin for an element
+	 */
+	webkitTransformOrigin?: CSSProperty<string> | null
+
+	/** Specifies how nested elements are displayed in 3D space
+	 */
+	webkitTransformStyle?: CSSProperty<"flat" | "preserve-3d"> | null
+
+	/** Specifies the transition effect to apply to an element
+	 */
+	webkitTransition?: string | null
+
+	/** Specifies the amount of time to delay the start of a transition
+	 */
+	webkitTransitionDelay?: string | null
+
+	/** Specifies the duration of a transition effect
+	 */
+	webkitTransitionDuration?: string | null
+
+	/** Specifies the CSS properties to which a transition effect should be applied
+	 */
+	webkitTransitionProperty?: string | null
+
+	/** Specifies the speed curve of a transition effect
+	 */
+	webkitTransitionTimingFunction?: string | null
+
+	/** Specifies whether the content of an element can be modified by the user
+	 */
+	webkitUserModify?: CSSProperty<"read-only" | "read-write" | "write-only"> | null
+
+	/** Specifies whether an element can be selected by the user
+	 */
+	webkitUserSelect?: CSSProperty<"none" | "text" | "contain" | "all">
+
+	webkitWritingMode?: CSSProperty<"horizontal-tb" | "writing-mode: vertical-rl" | "writing-mode: vertical-lr">
 	whiteSpace?: (
 		| "normal"
 		| "nowrap"
@@ -1230,8 +1355,8 @@ export interface CSSProperties {
 
 export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
 
-type NamedBorderWidth = "thin" | "medium" | "thick"
-type NamedBorderStyle = (
+type CSSBorderWidth = "thin" | "medium" | "thick"
+type CSSBorderStyle = (
 	"none"
 	| "hidden"
 	| "dotted"
