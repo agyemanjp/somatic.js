@@ -213,7 +213,7 @@ export interface CSSProperties {
 	background?: CSSProperty<(string)>
 	backgroundAttachment?: CSSProperty<("scroll" | "fixed" | "local")>
 	backgroundClip?: CSSProperty<("border-box" | "padding-box" | "content-box" | "text")>
-	backgroundColor?: CSSProperty<(CSSColor | string)>
+	backgroundColor?: CSSProperty<(CSSColor | string)> 
 	backgroundImage?: CSSProperty<(`url(${string})`)>
 	backgroundOrigin?: CSSProperty<("border-box" | "padding-box" | "content-box")>
 	backgroundPosition?: CSSProperty<(
