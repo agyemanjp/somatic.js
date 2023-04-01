@@ -140,14 +140,74 @@ export interface CSSProperties {
 		| "center" // Aligns the center of the element's bounding box with the center of the parent's content area.
 		| "bottom" // Aligns the bottom of the element's bounding box with the bottom of the parent's content area.
 	)>
-	animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`
+	/**
+	 * This represents the CSS `animation` property that sets a list of animations for an element.
+	 * It is a shorthand property that combines several animation properties into a single property.
+	 * The animation is created by gradually changing from one set of CSS styles to another.
+	 * @example
+	 * // Apply a simple animation to an element
+	 * animation: slidein 3s ease-in forwards;
+	 */
+	animation?: `${string} ${number} ${
+	// The direction of the animation
+	"normal" | "reverse" | "alternate" | "alternate-reverse"
+	} ${
+	// Controls what happens to the element when the animation is not playing (before it starts, after it ends, or both)
+	"none" | "forward" | "backward" | "both"
+	} ${
+	// Whether the animation is running or paused
+	"running" | "paused"
+	} ${string}`
+	/**
+	 * This represents the animation-delay CSS property that specifies the amount of time to wait before 
+	 * starting an animation after it is applied to an element.
+	 */
 	animationDelay?: CSSProperty<(CSSTime)>
-	animationDirection?: CSSProperty<"normal" | "reverse" | "alternate" | "alternate-reverse">
+	/**
+	 * Specifies whether an animation should be played forwards, backwards, or in alternate cycles.
+	 */
+	animationDirection?: CSSProperty<(
+		| "normal" // The animation should be played forwards.
+		| "reverse" // The animation should be played backwards.
+		| "alternate" // The animation should be played forwards and backwards in alternate cycles.
+		| "alternate-reverse" // The animation should be played backwards and forwards in alternate cycles.
+	)>
+	/**
+	 * This property defines the duration of an animation in seconds or milliseconds.
+	 */
 	animationDuration?: CSSProperty<(CSSTime)>
-	animationFillMode?: CSSProperty<("none" | "forward" | "backward" | "both")>
-	animationIterationCount?: CSSProperty<("infinite" | number)>
+	/**
+	 * This represents the animation-fill-mode CSS property that specifies how a CSS animation should apply styles before and after the animation.
+	 */
+	animationFillMode?: CSSProperty<(
+		| "none" // The animation does not apply any styles to the element before or after the animation.
+		| "forward" // The animation applies the styles defined in the last keyframe after the animation ends.
+		| "backward" // The animation applies the styles defined in the first keyframe before the animation starts.
+		| "both" // The animation applies the styles defined in the first keyframe before the animation starts and the last keyframe after the animation ends.
+	)>
+	/**
+	 * The `animation-iteration-count` CSS property defines the number of times an animation cycle should be played before stopping.
+	 */
+	animationIterationCount?: CSSProperty<(
+		| "infinite" // The animation will repeat indefinitely.
+		| number // The number of times the animation should repeat.
+	)>
+	/**
+	 * Represents the animation-name property that defines the list of animations that apply to the element.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-name
+	 */
 	animationName?: CSSProperty<(string)>
-	animationPlayState?: CSSProperty<("running" | "paused")>
+	/**
+	 * Specifies whether the animation is currently playing or paused.
+	 * MDN reference: https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state
+	 */
+	animationPlayState?: CSSProperty<(
+		| "running" // The animation is playing
+		| "paused" // The animation is paused
+	)>
+	/**
+	 * Defines how an animation progresses over one cycle of its duration.
+	 */
 	animationTimingFunction?: CSSEasingFunction
 	backfaceVisibility?: CSSProperty<("visible" | "hidden")>
 	background?: CSSProperty<(string)>
