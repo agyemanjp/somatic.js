@@ -209,49 +209,106 @@ export interface CSSProperties {
 	 * Defines how an animation progresses over one cycle of its duration.
 	 */
 	animationTimingFunction?: CSSEasingFunction
-	backfaceVisibility?: CSSProperty<("visible" | "hidden")>
+	/**
+	 * Sets whether or not the back face of an element should be visible when facing the viewer.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/backface-visibility|backface-visibility} - MDN reference
+	 */
+	backfaceVisibility?: CSSProperty<(
+		| "visible" // The back face of the element is visible
+		| "hidden" // The back face of the element is hidden
+	)>
+	/**
+	 * Sets one or more background properties of an element.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background|background} - MDN reference
+	 */
 	background?: CSSProperty<(string)>
-	backgroundAttachment?: CSSProperty<("scroll" | "fixed" | "local")>
-	backgroundClip?: CSSProperty<("border-box" | "padding-box" | "content-box" | "text")>
+	/**
+	 * Sets whether the background image scrolls with the containing block or remains fixed.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-attachment|background-attachment} - MDN reference
+	 */
+	backgroundAttachment?: CSSProperty<(
+		| "scroll" // The background image scrolls with the containing block
+		| "fixed" // The background image remains fixed
+		| "local" // The background image scrolls with the element's contents
+	)>
+	/**
+	 * Specifies the painting area of the background of an element.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip|background-clip} - MDN reference
+	 */
+	backgroundClip?: CSSProperty<(
+		| "border-box" // The background extends to the outside edge of the border
+		| "padding-box" // The background extends to the outside edge of the padding
+		| "content-box" // The background extends to the edge of the content box
+		| "text" // The background is painted within the foreground text
+	)>
+	/**
+	 * Sets the background color of an element.
+	 */
 	backgroundColor?: CSSProperty<(CSSColor | string)>
+	/**
+	 * Sets the background image of an element.
+	 */
 	backgroundImage?: CSSProperty<(`url(${string})`)>
-	backgroundOrigin?: CSSProperty<("border-box" | "padding-box" | "content-box")>
+	/**
+	 * Sets the background positioning area of a background image in an element.
+	 */
+	backgroundOrigin?: CSSProperty<(
+		| "border-box" // The background is positioned relative to the border box
+		| "padding-box" // The background is positioned relative to the padding box
+		| "content-box" // The background is positioned relative to the content box
+	)>
+	/**
+	 * Sets the position of the background image within an element.
+	 */
 	backgroundPosition?: CSSProperty<(
-		| "top"
-		| "right"
-		| "bottom"
-		| "left"
-		| "center"
-		| string
+		| "top" // The background image is positioned at the top
+		| "right" // The background image is positioned at the right
+		| "bottom" // The background image is positioned at the bottom
+		| "left" // The background image is positioned at the left
+		| "center" // The background image is centered
 	)>
+	/**
+	 * Sets the horizontal position of the background image within an element.
+	 */
 	backgroundPositionX?: CSSProperty<(
-		| "left"
-		| "center"
-		| "right"
+		| "left" // The background image is positioned at the left
+		| "center" // The background image is centered
+		| "right" // The background image is positioned at the right
 		| CSSLength
 		| `${"right" | "left"} ${string}`
 	)>
+	/**
+	 * Sets the vertical position of the background image within an element.
+	 */
 	backgroundPositionY?: CSSProperty<(
-		| "left"
-		| "center"
-		| "right"
+		| "left" // The background image is positioned at the left
+		| "center" // The background image is centered
+		| "right" // The background image is positioned at the right
 		| CSSLength
 		| `${"right" | "left"} ${string}`
 	)>
+	/**
+	 * Sets how a background image will be repeated or not within an element.
+	 */
 	backgroundRepeat?: CSSProperty<(
-		| "repeat-x"
-		| "repeat-y"
-		| "repeat"
-		| "space"
-		| "round"
-		| "no-repeat"
+		| "repeat-x" // The image is repeated horizontally
+		| "repeat-y" // The image is repeated vertically
+		| "repeat" // The image is repeated in both directions
+		| "space" // The image is repeated as much as possible without clipping
+		| "round" // The image is repeated and sized until all space is filled
+		| "no-repeat" // The image is not repeated
 	)>
+	/**
+	 * Sets the size of the background image within an element.
+	 */
 	backgroundSize?: CSSProperty<(
-		| "auto"
-		| "cover"
-		| "contain"
-		| string
+		| "auto" // The original size of the image
+		| "cover" // The image is scaled to cover all the area of the element
+		| "contain" // The image is scaled to fit inside the element
 	)>
+	/**
+	 * Sets the vertical alignment of an element's baseline relative to its parent's baseline.
+	 */
 	baselineShift?: CSSLength | "sub" | "super"
 	border?: CSSProperty<(CSSBorderStyle | CSSLength | string)>
 	borderBottom?: CSSProperty<(CSSLength | CSSBorderStyle)>
