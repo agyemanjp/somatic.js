@@ -82,53 +82,63 @@ export interface CSSProperties {
 		| "safe center" // Centers items inside a container, taking padding into account
 		| "unsafe center" // Centers items inside a container, ignoring padding
 	)>
+	/**
+	 * This represents the alignItems CSS property that sets the alignment of items along the cross-axis of a flex container.
+	 */
 	alignItems?: CSSProperty<(
-		| "normal"
-		| "stretch"
-		| "center"
-		| "start"
-		| "end"
-		| "flex-start"
-		| "flex-end"
-		| "baseline"
-		| "first baseline"
-		| "last baseline"
-		| "safe center"
-		| "unsafe center"
+		| "normal" // Default value, same as stretch
+		| "stretch" // Stretches items to fill the container
+		| "center" // Centers items
+		| "start" // Aligns items to the start of the container
+		| "end" // Aligns items to the end of the container
+		| "flex-start" // Aligns items to the start of the container, ignoring the flex container's padding
+		| "flex-end" // Aligns items to the end of the container, ignoring the flex container's padding
+		| "baseline" // Aligns items to their baseline
+		| "first baseline" // Aligns the first baseline of items to the container's baseline
+		| "last baseline" // Aligns the last baseline of items to the container's baseline
+		| "safe center" // Centers items inside a container, taking padding into account
+		| "unsafe center" // Centers items inside a container, ignoring padding
 	)>
+	/**
+	 * This represents the alignSelf CSS property that sets the alignment for a flex item when the items are laid out in a flex container.
+	 */
 	alignSelf?: CSSProperty<(
-		| "auto"
-		| "normal"
-		| "center"
-		| "start"
-		| "end"
-		| "self-start"
-		| "self-end"
-		| "flex-start"
-		| "flex-end"
-		| "baseline"
-		| "first baseline"
-		| "last baseline"
-		| "stretch"
-		| "safe center"
-		| "unsafe center"
+		| "auto" // The value is inherited from its parent element.
+		| "normal" // The item is placed in the default position as specified by the layout mode of the parent element.
+		| "center" // The flex item is centered in the cross-axis of the flex container.
+		| "start" // The flex item is aligned to the start of the cross-axis of the flex container.
+		| "end" // The flex item is aligned to the end of the cross-axis of the flex container.
+		| "self-start" // The flex item is aligned to the start of the cross-axis of the flex container if the item's inline-axis is the same as the container's axis; otherwise, it is treated as align-start.
+		| "self-end" // The flex item is aligned to the end of the cross-axis of the flex container if the item's inline-axis is the same as the container's axis; otherwise, it is treated as align-end.
+		| "flex-start" // The flex item is aligned to the start of the cross-axis of the flex container.
+		| "flex-end" // The flex item is aligned to the end of the cross-axis of the flex container.
+		| "baseline" // The flex item is aligned so that its baseline is aligned with the baseline of the parent container.
+		| "first baseline" // The flex item is aligned so that its first text line is aligned with the first baseline of the parent container.
+		| "last baseline" // The flex item is aligned so that its last text line is aligned with the last baseline of the parent container.
+		| "stretch" // The flex item is stretched to fill the cross-axis of the flex container.
+		| "safe center" // The flex item is centered in the safe area of the container.
+		| "unsafe center" // The flex item is centered in the unsafe area of the container.
 	)>
+	/**
+	 * This represents the CSS alignment-baseline property that sets the baseline alignment of an element
+	 * with respect to the element's parent.
+	 */
 	alignmentBaseline?: CSSProperty<(
-		| "auto"
-		| "baseline"
-		| "before-edge"
-		| "text-before-edge"
-		| "middle"
-		| "central"
-		| "after-edge"
-		| "text-after-edge"
-		| "ideographic"
-		| "alphabetic"
-		| "hanging"
-		| "mathematical"
-		| "top"
-		| "center"
-		| "bottom"
+		| "auto" // The baseline alignment depends on the parent element.
+		| "baseline" // Aligns the dominant baseline of the parent element with the corresponding baseline of the element.
+		| "before-edge" // Aligns the before edge of the extent of the element's box with the before-edge of the line box.
+		| "text-before-edge" // Aligns the before edge of the extent of the element's text box with the before-edge of the line box.
+		| "middle" // Aligns the geometric middle of the element with the baseline plus half the x-height of the parent.
+		| "central" // Same as middle, but may be relative to a different point, depending on the script and the rendering mode.
+		| "after-edge" // Aligns the after edge of the extent of the element's box with the after-edge of the line box.
+		| "text-after-edge" // Aligns the after edge of the extent of the element's text box with the after-edge of the line box.
+		| "ideographic" // Aligns the baseline of the element with the ideographic baseline of the parent.
+		| "alphabetic" // Aligns the baseline of the element with the alphabetic baseline of the parent.
+		| "hanging" // Aligns the hanging baseline of the element with the hanging baseline of the parent.
+		| "mathematical" // Aligns the baseline of the element with the mathematical baseline of the parent.
+		| "top" // Aligns the top of the element's bounding box with the top of the parent's content area.
+		| "center" // Aligns the center of the element's bounding box with the center of the parent's content area.
+		| "bottom" // Aligns the bottom of the element's bounding box with the bottom of the parent's content area.
 	)>
 	animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`
 	animationDelay?: CSSProperty<(CSSTime)>
