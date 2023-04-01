@@ -310,6 +310,9 @@ export interface CSSProperties {
 	 * Sets the vertical alignment of an element's baseline relative to its parent's baseline.
 	 */
 	baselineShift?: CSSLength | "sub" | "super"
+	/**
+	 * Sets the width, style, and color of an element's four borders.
+	 */
 	border?: CSSProperty<(CSSBorderStyle | CSSLength | string)>
 	borderBottom?: CSSProperty<(CSSLength | CSSBorderStyle)>
 	borderBottomColor?: CSSProperty<CSSColor>
