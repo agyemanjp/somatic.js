@@ -62,23 +62,25 @@ export type DOMElement = SVGElement | HTMLElement
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
+	/**
+	 * Sets the alignment of items within a flex container when there is extra space in the cross-axis.
+	 */
 	alignContent?: CSSProperty<(
-
-		| "center"
-		| "start"
-		| "end"
-		| "flex-start"
-		| "flex-end"
-		| "normal"
-		| "baseline"
-		| "first baseline"
-		| "last baseline"
-		| "space-between"
-		| "space-around"
-		| "space-evenly"
-		| "stretch"
-		| "safe center"
-		| "unsafe center"
+		| "center" // Centers items
+		| "start" // Aligns items to the start of the container
+		| "end" // Aligns items to the end of the container
+		| "flex-start" // Aligns items to the start of the container, ignoring the flex container's padding
+		| "flex-end" // Aligns items to the end of the container, ignoring the flex container's padding
+		| "normal" // Default value, same as stretch
+		| "baseline" // Aligns items to their baseline
+		| "first baseline" // Aligns the first baseline of items to the container's baseline
+		| "last baseline" // Aligns the last baseline of items to the container's baseline
+		| "space-between" // Distributes items evenly with the first item at the start and last item at the end
+		| "space-around" // Distributes items evenly with equal space around them
+		| "space-evenly" // Distributes items evenly with equal space around them, including the outer edges
+		| "stretch" // Stretches items to fill the container
+		| "safe center" // Centers items inside a container, taking padding into account
+		| "unsafe center" // Centers items inside a container, ignoring padding
 	)>
 	alignItems?: CSSProperty<(
 		| "normal"
