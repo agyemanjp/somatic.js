@@ -199,7 +199,7 @@ export interface CSSProperties {
 	animationName?: CSSProperty<(string)>
 	/**
 	 * Specifies whether the animation is currently playing or paused.
-	 * MDN reference: https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state
 	 */
 	animationPlayState?: CSSProperty<(
 		| "running" // The animation is playing
@@ -313,23 +313,75 @@ export interface CSSProperties {
 	/**
 	 * Sets the width, style, and color of an element's four borders.
 	 */
-	border?: CSSProperty<(CSSBorderStyle | CSSLength | string)>
+	border?: CSSProperty<(CSSBorderStyle | CSSLength | `${CSSBorderStyle} ${CSSColor}`)>
+	/**
+	 * Sets the width and style of an element's bottom border.
+	 */
 	borderBottom?: CSSProperty<(CSSLength | CSSBorderStyle)>
+	/**
+	 * Sets the color of an element's bottom border.
+	 */
 	borderBottomColor?: CSSProperty<CSSColor>
+	/**
+	 * Sets the size of an element's bottom-left corner's border radius.
+	 */
 	borderBottomLeftRadius?: CSSProperty<(CSSLength)>
+	/**
+	 * Sets the size of an element's bottom-right corner's border radius.
+	 */
 	borderBottomRightRadius?: CSSProperty<(CSSLength)>
+	/**
+	 * Sets the style of an element's bottom border.
+	 */
 	borderBottomStyle?: CSSProperty<(CSSBorderStyle)>
+	/**
+	 * Sets the width of an element's bottom border.
+	 */
 	borderBottomWidth?: CSSProperty<(CSSLength)>
-	borderCollapse?: CSSProperty<("collapse" | "separate")>
-	borderColor?: CSSProperty<(CSSColor)>
-	borderImage?: CSSProperty<(
-		| `url(${string}) ${number} ${string}`
-		| string
+	/**
+	 * Sets whether table cell borders are collapsed into a single border or separated.
+	 */
+	borderCollapse?: CSSProperty<(
+		| "collapse" // Borders are collapsed into a single border when possible.
+		| "separate" // Borders are separated and don't overlap.
 	)>
-	borderImageOutset?: CSSProperty<(CSSLength | string)>
+	/**
+	 * The CSS `border-color` property sets the color of an element's border(s). This property can have from one to four values.
+	 * If four values are specified, they apply to the top, right, bottom, and left borders in that order.
+	 */
+	borderColor?: CSSProperty<(CSSColor | CSSColor[])>
+	/**
+	 * CSS property for setting an image as a border of an element.
+	 */
+	borderImage?: CSSProperty<(
+		| `url(${string}) ${number} ${string}` // url([image-source] [top] [right] [bottom] [left])
+		| `linear-gradient(${string}) ${number}` // linear-gradient([direction], [color-stop1], [color-stop2], ...)
+		| `radial-gradient(${string})` // radial-gradient([shape], [starting-color], [ending-color])
+		| `repeating-linear-gradient(${string})` // repeating-linear-gradient([direction], [color-stop1], [color-stop2], ...)
+		| `repeating-radial-gradient(${string})` // repeating-radial-gradient([shape], [starting-color], [ending-color])
+		| `conic-gradient(${string})` // conic-gradient([angle], [starting-color], [ending-color])
+	)>
+	/**
+	 * A CSS property that sets the outward offset of the border image.
+	 * Allows for one to four values of type `<length>` or `<number>`.
+	 */
+	borderImageOutset?: CSSProperty<([
+		CSSLength | number,
+		(CSSLength | number)?,
+		(CSSLength | number)?,
+		(CSSLength | number)?,
+	])>
 	borderImageRepeat?: CSSProperty<("stretch" | "repeat" | "round" | "space")>
 	borderImageSlice?: CSSProperty<(string | number | CSSLength)>
-	borderImageSource?: CSSProperty<("none" | `url(${string})`)>
+	borderImageSource?: CSSProperty<(
+		| "none"
+		| `url(${string})`
+		| `linear-gradient(${string}) ${number}`
+		| `radial-gradient(${string})`
+		| `repeating-linear-gradient(${string})`
+		| `repeating-radial-gradient(${string})`
+		| `conic-gradient(${string})`
+	)>
 	borderImageWidth?: CSSProperty<(string | number | CSSLength)>
 	borderLeft?: CSSProperty<(string | CSSLength | CSSBorderStyle)>
 	borderLeftColor?: CSSProperty<(CSSColor)>
@@ -1560,7 +1612,6 @@ type CSSTimeUnit = (
 	| "s"
 )
 export type CSSColor = (
-	| string
 	| keyof typeof colorConstants
 	| "currentcolor"
 	| "transparent"
