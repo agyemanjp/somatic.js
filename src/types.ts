@@ -362,7 +362,7 @@ export interface CSSProperties {
 		| `conic-gradient(${string})` // conic-gradient([angle], [starting-color], [ending-color])
 	)>
 	/**
-	 * A CSS property that sets the outward offset of the border image.
+	 * The borderImageOutset CSS property specifies the amount by which the border image area extends beyond the border box.
 	 * Allows for one to four values of type `<length>` or `<number>`.
 	 */
 	borderImageOutset?: CSSProperty<([
@@ -371,119 +371,322 @@ export interface CSSProperties {
 		(CSSLength | number)?,
 		(CSSLength | number)?,
 	])>
-	borderImageRepeat?: CSSProperty<("stretch" | "repeat" | "round" | "space")>
-	borderImageSlice?: CSSProperty<(string | number | CSSLength)>
+	/**
+	 * The borderImageRepeat CSS property specifies how the border image is repeated or stretched.
+	 */
+	borderImageRepeat?: CSSProperty<(
+		| "stretch" // Specifies that the border image is stretched to fill the entire border image area.
+		| "repeat" // Specifies that the border image is repeated to fill the entire border image area.
+		| "round" // Specifies that the border image is repeated and stretched to fill the entire border image area, without distortion
+		| "space" //  Specifies that the border image is repeated and spaced out to fill the entire border image area.
+	)>
+	/**
+	 * The borderImageSlice CSS property specifies how the border image is sliced into regions.
+	 */
+	borderImageSlice?: CSSProperty<(
+		| number // A number sets the slice value as a pixel length.
+		| `${number}%` // A percentage value sets the slice value as a percentage of the corresponding dimension of the border image area.
+		| 'fill' // 'fill' is a keyword that sets the slice value to 100% for the corresponding dimension of the border image area.
+		| `${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')}` // The value can be set as a string with one to four values separated by spaces, which represent the slice values for the top, right, bottom, and left sides of the border image, respectively. If less than four values are provided, the missing values are set to the same as the previous value.
+		| `${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')}`
+		| `${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')}`
+	)>
+	/**
+	 * The `border-image-source` property specifies the source image for the border image. It can be either an image file, a gradient, or "none".
+	 */
 	borderImageSource?: CSSProperty<(
-		| "none"
-		| `url(${string})`
-		| `linear-gradient(${string}) ${number}`
-		| `radial-gradient(${string})`
-		| `repeating-linear-gradient(${string})`
-		| `repeating-radial-gradient(${string})`
-		| `conic-gradient(${string})`
+		| "none" // No border image is displayed.
+		| `url(${string})` // Specifies the path to the image file to be used as the border image.
+		| `linear-gradient(${string}) ${number}` // Specifies a linear gradient as the border image.
+		| `radial-gradient(${string})` // Specifies a radial gradient as the border image.
+		| `repeating-linear-gradient(${string})` // Specifies a repeating linear gradient as the border image.
+		| `repeating-radial-gradient(${string})` // Specifies a repeating radial gradient as the border image.
+		| `conic-gradient(${string})` // Specifies a conic gradient as the border image.
 	)>
-	borderImageWidth?: CSSProperty<(string | number | CSSLength)>
-	borderLeft?: CSSProperty<(string | CSSLength | CSSBorderStyle)>
-	borderLeftColor?: CSSProperty<(CSSColor)>
-	borderLeftStyle?: CSSProperty<(CSSBorderStyle)>
-	borderLeftWidth?: CSSProperty<(CSSBorderWidth | CSSLength)>
-	borderRadius?: CSSProperty<(string | CSSLength)>
-	borderRight?: CSSProperty<(string | CSSLength | CSSBorderStyle)>
-	borderRightColor?: CSSProperty<(CSSColor)>
-	borderRightStyle?: CSSProperty<(CSSBorderStyle)>
-	borderRightWidth?: CSSProperty<(CSSBorderWidth | CSSLength)>
-	borderSpacing?: CSSProperty<(string | CSSLength)>
-	borderStyle?: CSSProperty<(CSSBorderStyle)>
-	borderTop?: CSSProperty<(CSSLength | CSSBorderWidth | CSSBorderStyle)>
-	borderTopColor?: CSSProperty<(CSSColor)>
-	borderTopLeftRadius?: CSSProperty<(string | CSSLength)>
-	borderTopRightRadius?: CSSProperty<(string | CSSLength)>
-	borderTopStyle?: CSSProperty<(CSSBorderStyle)>
-	borderTopWidth?: CSSProperty<(CSSBorderStyle | CSSLength)>
-	borderWidth?: CSSProperty<(string | CSSLength | CSSBorderWidth)>
-	bottom?: CSSProperty<(CSSLength | "auto")>
-	boxShadow?: CSSProperty<("none" | CSSLength | CSSColor | string)>
-	boxSizing?: CSSProperty<("border-box" | "content-box")>
+	/**
+	 * The border-image-width CSS property sets the width of an element's border image..
+	 */
+	borderImageWidth?: CSSProperty<(string)>
+	/**
+	 * The border-left CSS property sets the width, style, and color of an element's left border.
+	 */
+	borderLeft?: CSSProperty<(string)>
+	/**
+	 * The border-left-color CSS property sets the color of an element's left border.
+	 */
+	borderLeftColor?: CSSProperty<(
+		CSSColor // The value can be any valid CSS color value (e.g. "red", "#00FF00", "rgb(0, 255, 0)").
+	)>
+	/**
+	 * The border-left-style CSS property sets the style of an element's left border.
+	 */
+	borderLeftStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-left-width CSS property sets the width of an element's left border.
+	 */
+	borderLeftWidth?: CSSProperty<(
+		| CSSBorderWidth // It can also be one of the three predefined CSS keywords: "thin", "medium", or "thick".
+		| CSSLength // The value can be a CSSLength, which is a string with a unit (e.g. "10px", "2em") that sets a fixed width for the left border.
+	)>
+	/**
+	 * The border-radius CSS property sets the rounded corners of an element's outer border edge.
+	 */
+	borderRadius?: CSSProperty<(string)>
+	/**
+	 * The border-right CSS property sets the width, style, and color of an element's right border.
+	 */
+	borderRight?: CSSProperty<(string)>
+	/**
+	 * The border-right-color CSS property sets the color of an element's right border.
+	 */
+	borderRightColor?: CSSProperty<(
+		CSSColor // The value can be any valid CSS color value (e.g. "red", "#00FF00", "rgb(0, 255, 0)").
+	)>
+	/**
+	 * The border-right-style CSS property sets the style of an element's right border.
+	 */
+	borderRightStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-right-width CSS property sets the width of an element's right border.
+	 */
+	borderRightWidth?: CSSProperty<(
+		| CSSBorderWidth // It can also be one of the three predefined CSS keywords: "thin", "medium", or "thick".
+		| CSSLength // The value can be a CSSLength, which is a string with a unit (e.g. "10px", "2em") that sets a fixed width for the right border.
+	)>
+	/**
+	 * The border-spacing CSS property sets the distance between adjacent borders of an HTML table element.
+	 */
+	borderSpacing?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%"),
+		| `${CSSLength} ${CSSLength}` // Two space-separated CSS lengths that represent the horizontal and vertical distances between adjacent borders (e.g. "5px", "10px 20px").
+	)>
+	/**
+	 * The border-style CSS property sets the line style for an element's four borders.
+	 */
+	borderStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-top CSS property sets the width, style, and color of the top border of an element.
+	 */
+	borderTop?: CSSProperty<(string)>
+	/**
+	 * The border-top-color CSS property sets the color of the top border of an element.
+	 */
+	borderTopColor?: CSSProperty<(
+		CSSColor // The value can be any valid CSS color value (e.g. "red", "#00FF00", "rgb(0, 255, 0)").
+	)>
+	/**
+	 * The border-top-left-radius CSS property sets the radii of the top-left border of an element.
+	 */
+	borderTopLeftRadius?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%"),
+		| `${CSSLength} ${CSSLength}` // a space-separated pair of CSS lengths (e.g. "10px 20px", "2em 3em", "3% 4%"). When a single value is provided, it applies to both the horizontal and vertical radii. When a pair of values is provided, the first value applies to the horizontal radius and the second value applies to the vertical radius
+	)>
+	/**
+	 * The border-top-left-radius CSS property sets the radii of the top-right border of an element.
+	 */
+	borderTopRightRadius?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%"),
+		| `${CSSLength} ${CSSLength}` // a space-separated pair of CSS lengths (e.g. "10px 20px", "2em 3em", "3% 4%"). When a single value is provided, it applies to both the horizontal and vertical radii. When a pair of values is provided, the first value applies to the horizontal radius and the second value applies to the vertical radius
+	)>
+	/**
+	 * The border-top-style CSS property sets the line style of the top border of an element.
+	 */
+	borderTopStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-top-width CSS property sets the width of the top border of an element.
+	 */
+	borderTopWidth?: CSSProperty<(
+		| CSSBorderWidth // It can also be one of the three predefined CSS keywords: "thin", "medium", or "thick".
+		| CSSLength // The value can be a CSSLength, which is a string with a unit (e.g. "10px", "2em") that sets a fixed width for the top border.
+	)>
+	/**
+	 * The border-width CSS property sets the width of an element's four borders.
+	 */
+	borderWidth?: CSSProperty<(string)>
+	/**
+	 * The bottom CSS property sets the vertical position of an element relative to the bottom edge of its containing element.
+	 */
+	bottom?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%")
+		| "auto" //  or "auto" to specify automatic positioning.
+	)>
+	/**
+	 * The boxShadow CSS property adds shadow effects to an element.
+	 */
+	boxShadow?: CSSProperty<(string)>
+	/**
+	 * The boxSizing CSS property sets how an element's dimensions are calculated.
+	 */
+	boxSizing?: CSSProperty<(
+		| "border-box" // The value can be "border-box" to include the element's border and padding in its total width and height,
+		| "content-box" // or "content-box" to exclude the border and padding from the total dimensions.
+	)>
+	/**
+	 * Sets the page/column/region break behavior after an element.
+	 */
 	breakAfter?: CSSProperty<(
-		| "auto"
-		| "avoid"
-		| "always"
-		| "all"
-		| "avoid-page"
-		| "page"
-		| "left"
-		| "right"
-		| "recto"
-		| "verso"
-		| "avoid-column"
-		| "region"
+		| "auto" // Default. Automatic page/column/region break behavior.
+		| "avoid" // Avoids any page/column/region break immediately after the element.
+		| "always" // Always breaks to the next page/column/region after the element.
+		| "all" // Always breaks to the next page/column/region, allowing multiple elements on the same page/column/region.
+		| "avoid-page" // Avoids any page break immediately after the element.
+		| "page" // Always breaks to the next page after the element.
+		| "left" // Always breaks to the next left page/column after the element.
+		| "right" // Always breaks to the next right page/column after the element.
+		| "recto" // Always breaks to the next odd-numbered page/column after the element.
+		| "verso" // Always breaks to the next even-numbered page/column after the element.
+		| "avoid-column" // Avoids any column break immediately after the element.
+		| "region" // Always breaks to the next region after the element.
 	)>
+	/**
+	 * The `breakBefore` CSS property sets the page-breaking behavior before an element.
+	 */
 	breakBefore?: CSSProperty<(
-		| "auto"
-		| "avoid"
-		| "always"
-		| "all"
-		| "avoid-page"
-		| "page"
-		| "left"
-		| "right"
-		| "recto"
-		| "verso"
-		| "avoid-column"
-		| "region"
+		| "auto" // Default value. The behavior is determined by the layout mode of the parent element.
+		| "avoid" // Avoids breaks before the element as much as possible.
+		| "always" // Always force a page/column/region break before the element.
+		| "all" // Always force a page/column/region break before the element, but also allows multiple elements to share the same page/column/region.
+		| "avoid-page" // Avoids a page break before the element.
+		| "page" // Always force a page break before the element.
+		| "left" // Force a page break before the element, placing it on the left-hand side of the next page.
+		| "right" // Force a page break before the element, placing it on the right-hand side of the next page.
+		| "recto" // Force a page break before the element, placing it on the next available odd-numbered page.
+		| "verso" // Force a page break before the element, placing it on the next available even-numbered page.
+		| "avoid-column" // Avoids a column break before the element.
+		| "region" // Force a region break before the element, placing it in the next available region.
 	)>
+	/**
+	 * Sets the page, column, or region break behavior inside an element.
+	 */
 	breakInside?: CSSProperty<(
-		| "auto"
-		| "avoid"
-		| "avoid-page"
-		| "avoid-column"
-		| "avoid-region"
+		| "auto" // The default value. The browser will determine if a break is allowed based on other factors, such as available space and the presence of other elements with page/column/region break properties.
+		| "avoid" // A break is avoided inside the element if possible, but allowed if necessary.
+		| "avoid-page" // A break is avoided inside the element, and the element is prevented from straddling a page break.
+		| "avoid-column" // A break is avoided inside the element, and the element is prevented from straddling a column break.
+		| "avoid-region" // A break is avoided inside the element, and the element is prevented from straddling a region break.
 	)>
+	/**
+	 * Sets the placement of a table caption with respect to the table box.
+	 */
 	captionSide?: CSSProperty<(
-		| "top"
-		| "bottom"
-		| "block-start"
-		| "block-end"
-		| "inline-start"
-		| "inline-end"
+		| "top" // The caption is placed above the table box.
+		| "bottom" // The caption is placed below the table box.
+		| "block-start" // The caption is placed above the table box in vertical writing modes, and to the left of the table box in horizontal writing modes.
+		| "block-end" // The caption is placed below the table box in vertical writing modes, and to the right of the table box in horizontal writing modes.
+		| "inline-start" // The caption is placed to the left of the table box in horizontal writing modes, and at the top of the table box in vertical writing modes, before the first row.
+		| "inline-end" // The caption is placed to the right of the table box in horizontal writing modes, and at the bottom of the table box in vertical writing modes, after the last row.
 	)>
+	/**
+	 * Sets the behavior of an element when it clears floating elements.
+	 */
 	clear?: CSSProperty<(
-		| "none"
-		| "left"
-		| "right"
-		| "both"
-		| "inline-start"
-		| "inline-end"
+		| "none" // The default value. The element does not clear any floating elements.
+		| "left" // The element clears any floating elements on the left side.
+		| "right" // The element clears any floating elements on the right side.
+		| "both" //  The element clears any floating elements on both sides.
+		| "inline-start" // The element clears any floating elements on the start side in horizontal writing modes, and on the top side in vertical writing modes.
+		| "inline-end" // The element clears any floating elements on the end side in horizontal writing modes, and on the bottom side in vertical writing modes.
 	)>
-	clip?: CSSProperty<(string | "auto")>
+	/**
+	 * Defines the visible portion of an element, by specifying the rectangular region of an element to display.
+	 */
+	clip?: CSSProperty<("auto" | `rect(${string})`)>
+	/**
+	 * Sets a clipping path on an element. The clipping path restricts the region to which paint can be applied.
+	 */
 	clipPath?: CSSProperty<(
-		| `url(${string})`
-		| "margin-box"
-		| "border-box"
-		| "padding-box"
-		| "content-box"
-		| "fill-box"
-		| "stroke-box"
-		| "view-box"
-		| `inset(${string} ${string})`
-		| `circle(${string} at ${string} ${string})`
+		| `url(${string})` // Reference to a <clipPath> element defined elsewhere in the document.
+		| "margin-box" // The clipping path is applied to the margin box of the element.
+		| "border-box" // The clipping path is applied to the border box of the element.
+		| "padding-box" // The clipping path is applied to the padding box of the element.
+		| "content-box" // The clipping path is applied to the content box of the element.
+		| "fill-box" // The clipping path is applied to the bounding box of the element's fill.
+		| "stroke-box" // The clipping path is applied to the bounding box of the element's stroke.
+		| "view-box" // The clipping path is applied to the viewBox of a <svg> element.
+		| `inset(${string} ${string})` // The clipping path is a rectangle inset from the border box.
+		| `circle(${string} at ${string} ${string})` //  The clipping path is a circle with a given radius and center point.
 	)>
-	clipRule?: "nonzero" | "evenodd" | "inherit"
-	color?: CSSColor | "inherit"
-	colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB"
-	columnCount?: CSSProperty<("auto" | number)>
-	columnFill?: CSSProperty<("auto" | "balance" | "balance-all")>
-	columnRule?: CSSProperty<(CSSBorderStyle | string)>
-	columnRuleColor?: CSSProperty<(CSSColor | string)>
+	/**
+	 * Determines the algorithm used to determine which parts of a shape are included or excluded in the final clipping path.
+	 */
+	clipRule?: (
+		| "nonzero" // Specifies the nonzero winding rule.A point is inside the shape if a line drawn in any direction from the point crosses the shape's path an odd number of times.
+		| "evenodd" // Specifies the even-odd winding rule. A point is inside the shape if a line drawn in any direction from the point crosses the shape's path an odd number of times only if the line also crosses the shape's path a nonzero number of times.
+		| "inherit" // Inherits the clip-rule property from its parent element.
+	)
+	/**
+	 * Sets the foreground color (text color) of an element.
+	 */
+	color?: (
+		| CSSColor // Specifies the color of the text. It can be a keyword, a hexadecimal RGB value, an RGB value, or a color name.
+		| "inherit" // Inherits the color property from its parent element.
+	)
+	/**
+	 * Specifies the color space for operations that are performed by the <filter> element.
+	 */
+	colorInterpolationFilters?: (
+		| "auto" // The filter operation should perform in the default color space.
+		| "sRGB" // The filter operation should perform in the sRGB color space.
+		| "linearRGB" // The filter operation should perform in the linearized RGB color space.
+	)
+	/**
+	 * Specifies the number of columns an element should be divided into.
+	 */
+	columnCount?: CSSProperty<(
+		| "auto"// The number of columns is determined by other properties, such as column - width or width.
+		| number // A positive integer that specifies the number of columns.
+	)>
+	/**
+	 * Specifies how to fill columns with content that is shorter than the height of the column.
+	 */
+	columnFill?: CSSProperty<(
+		| "auto" // The browser decides how to fill the columns.
+		| "balance" // The height of the columns is balanced by adding empty space at the end of the content of the shorter column(s).
+		| "balance-all" // The height of all columns in the element is balanced by adding empty space at the end of the content of the shorter column(s).
+	)>
+	/**
+	 * Sets the style of the rule between columns.
+	 */
+	columnRule?: CSSProperty<(string)>
+	/**
+	 * Sets the color of the rule between columns.
+	 */
+	columnRuleColor?: CSSProperty<(CSSColor)>
+	/**
+	 * Sets the style of the rule between columns.
+	 */
 	columnRuleStyle?: CSSProperty<(CSSBorderStyle)>
+	/**
+	 * Sets the width of the rule between columns.
+	 */
 	columnRuleWidth?: CSSProperty<(CSSBorderStyle | CSSLength)>
-	columnSpan?: CSSProperty<("none" | "all")>
+	/**
+	 * Specifies how many columns an element should span across.
+	 */
+	columnSpan?: CSSProperty<(
+		| "none" // The element should not span across any columns. It will be rendered within a single column.
+		| "all" // The element should span across all columns.
+	)>
+	/**
+	 * Sets the width of columns in a multi-column element.
+	 */
 	columnWidth?: CSSProperty<("auto" | CSSLength)>
+	/**
+	 * A shorthand property that specifies the width and the number of columns in a multi-column element.
+	 */
 	columns?: CSSProperty<(
 		| CSSLength
 		| "auto"
 		| number
-		| string
+		| `${('auto' | `${CSSLength}` | number)} ${('auto' | `${CSSLength}` | number)}`
 	)>
 	content?: CSSProperty<(string | null)>
 	counterIncrement?: CSSProperty<(string | "none")>
