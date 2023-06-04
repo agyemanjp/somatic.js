@@ -1385,22 +1385,61 @@ export interface CSSProperties {
 	/** Aligns the content within a flex container when there is extra space along the cross-axis.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-content
 	 */
-	webkitAlignContent?: CSSProperty<('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch' | 'baseline' | 'safe' | 'unsafe')> | null
+	webkitAlignContent?: CSSProperty<(
+		| 'flex-start'
+		| 'flex-end'
+		| 'center'
+		| 'space-between'
+		| 'space-around'
+		| 'stretch'
+		| 'baseline'
+		| 'safe'
+		| 'unsafe'
+	)> | null
 
 	/** Aligns flex items along the cross-axis of the flex container.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
 	 */
-	webkitAlignItems?: CSSProperty<('stretch' | 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'first baseline' | 'last baseline' | 'start' | 'end' | 'self-start' | 'self-end' | 'safe' | 'unsafe')> | null
+	webkitAlignItems?: CSSProperty<(
+		| 'stretch'
+		| 'flex-start'
+		| 'flex-end'
+		| 'center'
+		| 'baseline'
+		| 'first baseline'
+		| 'last baseline'
+		| 'start'
+		| 'end'
+		| 'self-start'
+		| 'self-end'
+		| 'safe'
+		| 'unsafe'
+	)> | null
 
 	/** Aligns a flex item within its flex container.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-self
 	 */
-	webkitAlignSelf?: CSSProperty<('auto' | 'stretch' | 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'first baseline' | 'last baseline' | 'start' | 'end' | 'self-start' | 'self-end' | 'safe' | 'unsafe')> | null
+	webkitAlignSelf?: CSSProperty<(
+		| 'auto'
+		| 'stretch'
+		| 'flex-start'
+		| 'flex-end'
+		| 'center'
+		| 'baseline'
+		| 'first baseline'
+		| 'last baseline'
+		| 'start'
+		| 'end'
+		| 'self-start'
+		| 'self-end'
+		| 'safe'
+		| 'unsafe'
+	)> | null
 
 	/** A shorthand property for all the animation-* properties, except animation-play-state.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation
 	 */
-	webkitAnimation?: string | null
+	webkitAnimation?: true | false
 
 	/** Defines a length of time to elapse before an animation starts, allowing an animation to begin execution some time after it is applied.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay
@@ -1443,19 +1482,18 @@ export interface CSSProperties {
 	webkitAnimationTimingFunction?: CSSEasingFunction
 
 
-	webkitBackgroundSize?: string | null
+	webkitBackgroundSize?: CSSProperty<('cover' | 'contain')>
 
 	webkitBorderBottomLeftRadius?: string | null
 
 	webkitBorderBottomRightRadius?: string | null
+	webkitBorderImage?: CSSProperty<(string | null)>
 
-	webkitBorderImage?: string | null
+	webkitBorderRadius?: CSSProperty<(number | string | null)>
 
-	webkitBorderRadius?: string | null
+	webkitBorderTopLeftRadius?: string | null
 
-	webkitBorderTopLeftRadius?: string | number | null
-
-	webkitBorderTopRightRadius?: string | number | null
+	webkitBorderTopRightRadius?: string | null
 
 	/** Possible values for the `-webkit-column-break-after` CSS property.
 	 */
@@ -1471,31 +1509,31 @@ export interface CSSProperties {
 
 	/** The number of columns to use for the element.
 	 */
-	webkitColumnCount?: number | null
+	webkitColumnCount?: CSSProperty<(number | "auto")> | null
 
 	/** The gap between columns for a multi-column element.
 	 */
-	webkitColumnGap?: string | null
+	webkitColumnGap?: CSSProperty<(CSSLength | "normal")> | null
 
 	/** Possible values for the `-webkit-column-rule-style` CSS property.
 	 */
-	webkitColumnRuleStyle?: "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset" | null
+	webkitColumnRuleStyle?: CSSProperty<("none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset")> | null
 
 	/** The color of the column rule for a multi-column element.
 	 */
-	webkitColumnRuleColor?: CSSColor | null
+	webkitColumnRuleColor?: CSSProperty<(CSSColor)> | null
 
 	/** The width of the column rule for a multi-column element.
 	 */
-	webkitColumnRuleWidth?: CSSLength | null
+	webkitColumnRuleWidth?: CSSProperty<(CSSLength | "thin" | "medium" | "thick")> | null
 
 	/** Whether the element should span across all columns when using a multi-column layout.
 	 */
-	webkitColumnSpan?: "none" | "all" | null
+	webkitColumnSpan?: CSSProperty<("none" | "all")> | null
 
 	/** The width of each column for a multi-column element.
 	 */
-	webkitColumnWidth?: CSSLength | null
+	webkitColumnWidth?: CSSProperty<(CSSLength | "auto")> | null
 
 	/** Possible values for the `-webkit-box-direction` CSS property.
 	 */
@@ -1515,55 +1553,63 @@ export interface CSSProperties {
 
 	/** Possible values for the `-webkit-box-flex` CSS property.
 	 */
-	webkitBoxFlex?: string | null
+	webkitBoxFlex?: number | "inherit" | null
 
 	/** Possible values for the `-webkit-box-ordinal-group` CSS property.
 	 */
-	webkitBoxOrdinalGroup?: string | null
+	webkitBoxOrdinalGroup?: CSSProperty<(number)> | null
 
 	/** Possible values for the `-webkit-box-sizing` CSS property.
 	 */
-	webkitBoxSizing?: "content-box" | "border-box" | null
+	webkitBoxSizing?: CSSProperty<("content-box" | "border-box")> | null
 
 	/** The appearance of the element.
 	 */
-	webkitAppearance?: string | null
+	webkitAppearance?: CSSProperty<(string)> | null
 
 	/** The visibility of the back face of the element when it is facing away from the viewer.
 	 */
-	webkitBackfaceVisibility?: "visible" | "hidden" | null
+	webkitBackfaceVisibility?: CSSProperty<("visible" | "hidden")> | null
 
 	/** The part of the element's background to clip.
 	 */
-	webkitBackgroundClip?: "border-box" | "padding-box" | "content-box" | "text" | null
+	webkitBackgroundClip?: CSSProperty<("border-box" | "padding-box" | "content-box" | "text")> | null
 
 	/** The origin of the element's background image.
 	 */
-	webkitBackgroundOrigin?: "border-box" | "padding-box" | "content-box" | null
+	webkitBackgroundOrigin?: CSSProperty<("border-box" | "padding-box" | "content-box")> | null
 
 
 	/** Specifies the number of columns an element should be divided into	 */
-	webkitColumns?: `${CSSLength} ${number}` | `${number} ${CSSLength}` | `${CSSLength}` | `${number}` | "auto" | "initial" | "inherit" | null
+	webkitColumns?: CSSProperty<(`${CSSLength} ${number}` | `${number} ${CSSLength}` | `${CSSLength}` | `${number}` | "auto")> | null
 
 	/** Sets the initial main size of a flex item.
 	 */
-	webkitFlexBasis?: CSSLength | "auto" | "content" | "fit-content" | "max-content" | "min-content" | "initial" | "inherit" | null
+	webkitFlexBasis?: CSSProperty<(CSSLength | "auto" | "content" | "fit-content" | "max-content" | "min-content")> | null
 
 	/** The webkitFlexDirection CSS property sets the direction of the main axis of a flex container.
 	 */
-	webkitFlexDirection?: "row" | "row-reverse" | "column" | "column-reverse" | "initial" | "inherit" | null
+	webkitFlexDirection?: CSSProperty<("row" | "row-reverse" | "column" | "column-reverse")> | null
 
 	/** The webkitFlexFlow CSS property is a shorthand property that sets the values of webkitFlexDirection and webkitFlexWrap.
 	 */
-	webkitFlexFlow?: string | null
+	webkitFlexFlow?: CSSProperty<(
+		| "row"
+		| "row-reverse"
+		| "column"
+		| "column-reverse"
+		| "nowrap"
+		| "wrap"
+		| "wrap-reverse"
+	)>
 
 	/** The webkitFlexGrow CSS property sets the flex grow factor of a flex item.
 	 */
-	webkitFlexGrow?: number | "initial" | "inherit" | null
+	webkitFlexGrow?: CSSProperty<(number)> | null
 
 	/** The webkitFlexShrink CSS property sets the flex shrink factor of a flex item.
 	 */
-	webkitFlexShrink?: number | "initial" | "inherit" | null
+	webkitFlexShrink?: CSSProperty<(number)> | null
 
 	/** Specifies the filter or effect to apply to an element
 	 */
@@ -1571,7 +1617,7 @@ export interface CSSProperties {
 
 	/** Specifies the size of the flexible items
 	 */
-	webkitFlex?: CSSProperty<"none" | "initial" | "auto" | CSSLength | number> | null
+	webkitFlex?: CSSProperty<"none" | "auto" | CSSLength | number> | null
 
 	/** Specifies whether flexible items should wrap or not
 	 */
@@ -1653,28 +1699,28 @@ export interface CSSProperties {
 	webkitUserSelect?: CSSProperty<"none" | "text" | "contain" | "all">
 
 	webkitWritingMode?: CSSProperty<"horizontal-tb" | "writing-mode: vertical-rl" | "writing-mode: vertical-lr">
-	whiteSpace?: (
+	whiteSpace?: CSSProperty<(
 		| "normal"
 		| "nowrap"
 		| "pre"
 		| "pre-wrap"
 		| "pre-line"
 		| "break-spaces"
-	)
+	)>
 	widows?: number
-	width?: (
+	width?: CSSProperty<(
 		| "auto"
 		| "max-content"
 		| "min-content"
-		//| `fit-content(${CSSLength})`
+		| `fit-content(${CSSLength})`
 		| CSSLength
-	)
-	wordBreak?: "normal" | "break-all" | "keep-all" | "break-word"
-	wordSpacing?: "normal" | CSSLength
+	)>
+	wordBreak?: CSSProperty<("normal" | "break-all" | "keep-all" | "break-word")>
+	wordSpacing?: CSSProperty<("normal" | CSSLength)>
 	wordWrap?: string | null
-	writingMode?: "horizontal-tb" | "vertical-rl" | "vertical-lr"
-	zIndex?: "auto" | number
-	zoom?: "normal" | "reset" | `${number}%` | number
+	writingMode?: CSSProperty<("horizontal-tb" | "vertical-rl" | "vertical-lr")>
+	zIndex?: CSSProperty<("auto" | number)>
+	zoom?: CSSProperty<("normal" | "reset" | `${number}%` | number)>
 
 	/** A shorthand property for the grid-template-rows, grid-template-columns, grid-template-areas, grid-auto-rows, grid-auto-columns, and the grid-auto-flow properties */
 	grid?: string
@@ -1685,30 +1731,22 @@ export interface CSSProperties {
 	gridArea?: string
 
 	/** Defines on which row-line a grid item will start */
-	gridRowStart?:
-	| "auto" // Default value. The item will be placed following the flow
-	| `span ${number}` // the number of rows the item will span
-	| number // row line
-	| "inherit" | "initial" | "revert" | "unset"
+	gridRowStart?: string
 
 	/** Defines on which column-line a grid item will start. */
-	gridColumnStart?:
-	| "auto" // Default value. The item will be placed following the flow
-	| `span ${number}` // the number of columns the item will span
-	| number // column-line
-	| "inherit" | "initial" | "revert" | "unset"
+	gridColumnStart?: string
 
 	/** Defines how many rows a grid item will span, or on which row-line the item will end */
-	gridRowEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+	gridRowEnd?: string
 
 	/** Defines how many columns a grid item will span, or on which column-line the item will end */
-	gridColumnEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+	gridColumnEnd?: string
 
 	/** A shorthand property for the grid-row-start and the grid-row-end properties */
-	gridRow?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
+	gridRow?: string
 
 	/** A shorthand property for the grid-column-start and the grid-column-end properties */
-	gridColumn?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
+	gridColumn?: string
 
 	/** Specifies the size of the columns, and how many columns in a grid layout */
 	gridTemplateColumns?: string
@@ -1722,10 +1760,10 @@ export interface CSSProperties {
 	gridTemplate?: string | null
 
 	/** Specifies the gap between the grid rows */
-	rowGap?: string | null
+	rowGap?: CSSProperty<(CSSLength | number)>
 
 	/** Specifies the gap between the columns */
-	columnGap?: string | null
+	columnGap?: CSSProperty<(CSSLength | number)>
 
 	/** A shorthand property for the grid-row-gap and grid-column-gap properties
 	 * Either a single CSS length value to both row and column gap
