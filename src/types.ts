@@ -244,7 +244,7 @@ export interface CSSProperties {
 	/**
 	 * Sets the background color of an element.
 	 */
-	backgroundColor?: CSSProperty<(CSSColor | string)>
+	backgroundColor?: CSSProperty<(CSSColor)>
 	/**
 	 * Sets the background image of an element.
 	 */
@@ -313,7 +313,7 @@ export interface CSSProperties {
 	/**
 	 * Sets the width, style, and color of an element's four borders.
 	 */
-	border?: CSSProperty<(CSSBorderStyle | CSSLength | `${CSSBorderStyle} ${CSSColor}`)>
+	border?: string
 	/**
 	 * Sets the width and style of an element's bottom border.
 	 */
@@ -349,7 +349,7 @@ export interface CSSProperties {
 	 * The CSS `border-color` property sets the color of an element's border(s). This property can have from one to four values.
 	 * If four values are specified, they apply to the top, right, bottom, and left borders in that order.
 	 */
-	borderColor?: CSSProperty<(CSSColor | CSSColor[])>
+	borderColor?: string
 	/**
 	 * CSS property for setting an image as a border of an element.
 	 */
@@ -625,10 +625,9 @@ export interface CSSProperties {
 	/**
 	 * Sets the foreground color (text color) of an element.
 	 */
-	color?: (
-		| CSSColor // Specifies the color of the text. It can be a keyword, a hexadecimal RGB value, an RGB value, or a color name.
-		| "inherit" // Inherits the color property from its parent element.
-	)
+	color?: CSSProperty<(
+		CSSColor // Specifies the color of the text. It can be a keyword, a hexadecimal RGB value, an RGB value, or a color name.
+	)>
 	/**
 	 * Specifies the color space for operations that are performed by the <filter> element.
 	 */
@@ -1859,6 +1858,9 @@ export type CSSColor = (
 	| `#${string}`
 	| `rgb(${number},${number},${number})`
 	| `rgba(${number}, ${number}, ${number}, ${number})`
+	| `hsl(${number}, ${number}%, ${number}%)`
+	| `hsla(${number}, ${number}%, ${number}%, ${number})`
+
 )
 
 export type CSSLength = `${number}${CSSLengthUnit}`
