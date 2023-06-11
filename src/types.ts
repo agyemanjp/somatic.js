@@ -62,8 +62,10 @@ export type DOMElement = SVGElement | HTMLElement
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
+	/**
+	 * Sets the alignment of items within a flex container when there is extra space in the cross-axis.
+	 */
 	alignContent?: CSSProperty<(
-
 		| "center"
 		| "start"
 		| "end"
@@ -80,6 +82,9 @@ export interface CSSProperties {
 		| "safe center"
 		| "unsafe center"
 	)>
+	/**
+	 * This represents the alignItems CSS property that sets the alignment of items along the cross-axis of a flex container.
+	 */
 	alignItems?: CSSProperty<(
 		| "normal"
 		| "stretch"
@@ -94,6 +99,9 @@ export interface CSSProperties {
 		| "safe center"
 		| "unsafe center"
 	)>
+	/**
+	 * This represents the alignSelf CSS property that sets the alignment for a flex item when the items are laid out in a flex container.
+	 */
 	alignSelf?: CSSProperty<(
 		| "auto"
 		| "normal"
@@ -111,308 +119,761 @@ export interface CSSProperties {
 		| "safe center"
 		| "unsafe center"
 	)>
-	alignmentBaseline?: (
-		| "auto"
-		| "baseline"
-		| "before-edge"
-		| "text-before-edge"
-		| "middle"
-		| "central"
-		| "after-edge"
-		| "text-after-edge"
-		| "ideographic"
-		| "alphabetic"
-		| "hanging"
-		| "mathematical"
-		| "top"
-		| "center"
-		| "bottom"
-	)
-	animation?: `${string} ${number} ${"normal" | "reverse" | "alternate" | "alternate-reverse"} ${"none" | "forward" | "backward" | "both"} ${"running" | "paused"} ${string}`
-	animationDelay?: string
-	animationDirection?: "normal" | "reverse" | "alternate" | "alternate-reverse"
-	animationDuration?: string
-	animationFillMode?: "none" | "forward" | "backward" | "both"
-	animationIterationCount?: "infinite" | number
-	animationName?: string
-	animationPlayState?: "running" | "paused"
+	/**
+	 * This represents the CSS alignment-baseline property that sets the baseline alignment of an element
+	 * with respect to the element's parent.
+	 */
+	alignmentBaseline?: CSSProperty<(
+		| "auto" // The baseline alignment depends on the parent element.
+		| "baseline" // Aligns the dominant baseline of the parent element with the corresponding baseline of the element.
+		| "before-edge" // Aligns the before edge of the extent of the element's box with the before-edge of the line box.
+		| "text-before-edge" // Aligns the before edge of the extent of the element's text box with the before-edge of the line box.
+		| "middle" // Aligns the geometric middle of the element with the baseline plus half the x-height of the parent.
+		| "central" // Same as middle, but may be relative to a different point, depending on the script and the rendering mode.
+		| "after-edge" // Aligns the after edge of the extent of the element's box with the after-edge of the line box.
+		| "text-after-edge" // Aligns the after edge of the extent of the element's text box with the after-edge of the line box.
+		| "ideographic" // Aligns the baseline of the element with the ideographic baseline of the parent.
+		| "alphabetic" // Aligns the baseline of the element with the alphabetic baseline of the parent.
+		| "hanging" // Aligns the hanging baseline of the element with the hanging baseline of the parent.
+		| "mathematical" // Aligns the baseline of the element with the mathematical baseline of the parent.
+		| "top" // Aligns the top of the element's bounding box with the top of the parent's content area.
+		| "center" // Aligns the center of the element's bounding box with the center of the parent's content area.
+		| "bottom" // Aligns the bottom of the element's bounding box with the bottom of the parent's content area.
+	)>
+	/**
+	 * This represents the CSS `animation` property that sets a list of animations for an element.
+	 * It is a shorthand property that combines several animation properties into a single property.
+	 * The animation is created by gradually changing from one set of CSS styles to another.
+	 * @example
+	 * // Apply a simple animation to an element
+	 * animation: slidein 3s ease-in forwards;
+	 */
+	animation?: `${string} ${number} ${
+	// The direction of the animation
+	"normal" | "reverse" | "alternate" | "alternate-reverse"
+	} ${
+	// Controls what happens to the element when the animation is not playing (before it starts, after it ends, or both)
+	"none" | "forward" | "backward" | "both"
+	} ${
+	// Whether the animation is running or paused
+	"running" | "paused"
+	} ${string}`
+	/**
+	 * This represents the animation-delay CSS property that specifies the amount of time to wait before 
+	 * starting an animation after it is applied to an element.
+	 */
+	animationDelay?: CSSProperty<(CSSTime)>
+	/**
+	 * Specifies whether an animation should be played forwards, backwards, or in alternate cycles.
+	 */
+	animationDirection?: CSSProperty<(
+		| "normal" // The animation should be played forwards.
+		| "reverse" // The animation should be played backwards.
+		| "alternate" // The animation should be played forwards and backwards in alternate cycles.
+		| "alternate-reverse" // The animation should be played backwards and forwards in alternate cycles.
+	)>
+	/**
+	 * This property defines the duration of an animation in seconds or milliseconds.
+	 */
+	animationDuration?: CSSProperty<(CSSTime)>
+	/**
+	 * This represents the animation-fill-mode CSS property that specifies how a CSS animation should apply styles before and after the animation.
+	 */
+	animationFillMode?: CSSProperty<(
+		| "none" // The animation does not apply any styles to the element before or after the animation.
+		| "forward" // The animation applies the styles defined in the last keyframe after the animation ends.
+		| "backward" // The animation applies the styles defined in the first keyframe before the animation starts.
+		| "both" // The animation applies the styles defined in the first keyframe before the animation starts and the last keyframe after the animation ends.
+	)>
+	/**
+	 * The `animation-iteration-count` CSS property defines the number of times an animation cycle should be played before stopping.
+	 */
+	animationIterationCount?: CSSProperty<(
+		| "infinite" // The animation will repeat indefinitely.
+		| number // The number of times the animation should repeat.
+	)>
+	/**
+	 * Represents the animation-name property that defines the list of animations that apply to the element.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-name
+	 */
+	animationName?: CSSProperty<(string)>
+	/**
+	 * Specifies whether the animation is currently playing or paused.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state
+	 */
+	animationPlayState?: CSSProperty<(
+		| "running" // The animation is playing
+		| "paused" // The animation is paused
+	)>
+	/**
+	 * Defines how an animation progresses over one cycle of its duration.
+	 */
 	animationTimingFunction?: CSSEasingFunction
-	backfaceVisibility?: "visible" | "hidden"
-	background?: string
-	backgroundAttachment?: "scroll" | "fixed" | "local"
-	backgroundClip?: "border-box" | "padding-box" | "content-box" | "text"
-	backgroundColor?: CSSColor | string
-	backgroundImage?: `url(${string})`
-	backgroundOrigin?: "border-box" | "padding-box" | "content-box"
-	backgroundPosition?: (
-		| "top"
-		| "right"
-		| "bottom"
-		| "left"
-		| "center"
-		| string
-	)
-	backgroundPositionX?: (
-		| "left"
-		| "center"
-		| "right"
+	/**
+	 * Sets whether or not the back face of an element should be visible when facing the viewer.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/backface-visibility|backface-visibility} - MDN reference
+	 */
+	backfaceVisibility?: CSSProperty<(
+		| "visible" // The back face of the element is visible
+		| "hidden" // The back face of the element is hidden
+	)>
+	/**
+	 * Sets one or more background properties of an element.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background|background} - MDN reference
+	 */
+	background?: CSSProperty<string>
+	/**
+	 * Sets whether the background image scrolls with the containing block or remains fixed.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-attachment|background-attachment} - MDN reference
+	 */
+	backgroundAttachment?: CSSProperty<(
+		| "scroll" // The background image scrolls with the containing block
+		| "fixed" // The background image remains fixed
+		| "local" // The background image scrolls with the element's contents
+	)>
+	/**
+	 * Specifies the painting area of the background of an element.
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip|background-clip} - MDN reference
+	 */
+	backgroundClip?: CSSProperty<(
+		| "border-box" // The background extends to the outside edge of the border
+		| "padding-box" // The background extends to the outside edge of the padding
+		| "content-box" // The background extends to the edge of the content box
+		| "text" // The background is painted within the foreground text
+	)>
+	/**
+	 * Sets the background color of an element.
+	 */
+	backgroundColor?: CSSProperty<(CSSColor)>
+	/**
+	 * Sets the background image of an element.
+	 */
+	backgroundImage?: CSSProperty<(`url(${string})`)>
+	/**
+	 * Sets the background positioning area of a background image in an element.
+	 */
+	backgroundOrigin?: CSSProperty<(
+		| "border-box" // The background is positioned relative to the border box
+		| "padding-box" // The background is positioned relative to the padding box
+		| "content-box" // The background is positioned relative to the content box
+	)>
+	/**
+	 * Sets the position of the background image within an element.
+	 */
+	backgroundPosition?: CSSProperty<(
+		| "top" // The background image is positioned at the top
+		| "right" // The background image is positioned at the right
+		| "bottom" // The background image is positioned at the bottom
+		| "left" // The background image is positioned at the left
+		| "center" // The background image is centered
+	)>
+	/**
+	 * Sets the horizontal position of the background image within an element.
+	 */
+	backgroundPositionX?: CSSProperty<(
+		| "left" // The background image is positioned at the left
+		| "center" // The background image is centered
+		| "right" // The background image is positioned at the right
 		| CSSLength
 		| `${"right" | "left"} ${string}`
-	)
-	backgroundPositionY?: (
-		| "left"
-		| "center"
-		| "right"
+	)>
+	/**
+	 * Sets the vertical position of the background image within an element.
+	 */
+	backgroundPositionY?: CSSProperty<(
+		| "left" // The background image is positioned at the left
+		| "center" // The background image is centered
+		| "right" // The background image is positioned at the right
 		| CSSLength
 		| `${"right" | "left"} ${string}`
-	)
-	backgroundRepeat?: (
-		| "repeat-x"
-		| "repeat-y"
-		| "repeat"
-		| "space"
-		| "round"
-		| "no-repeat"
-	)
-	backgroundSize?: (
-		| "auto"
-		| "cover"
-		| "contain"
-		| string
-	)
+	)>
+	/**
+	 * Sets how a background image will be repeated or not within an element.
+	 */
+	backgroundRepeat?: CSSProperty<(
+		| "repeat-x" // The image is repeated horizontally
+		| "repeat-y" // The image is repeated vertically
+		| "repeat" // The image is repeated in both directions
+		| "space" // The image is repeated as much as possible without clipping
+		| "round" // The image is repeated and sized until all space is filled
+		| "no-repeat" // The image is not repeated
+	)>
+	/**
+	 * Sets the size of the background image within an element.
+	 */
+	backgroundSize?: CSSProperty<(
+		| "auto" // The original size of the image
+		| "cover" // The image is scaled to cover all the area of the element
+		| "contain" // The image is scaled to fit inside the element
+	)>
+	/**
+	 * Sets the vertical alignment of an element's baseline relative to its parent's baseline.
+	 */
 	baselineShift?: CSSLength | "sub" | "super"
-	border?: string | null
-	borderBottom?: CSSLength
-	borderBottomColor?: CSSColor
-	borderBottomLeftRadius?: string | number
-	borderBottomRightRadius?: string | number
-	borderBottomStyle?: NamedBorderStyle
-	borderBottomWidth?: CSSLength
-	borderCollapse?: "collapse" | "separate"
-	borderColor?: CSSColor
-	borderImage?: (
-		| `url(${string}) ${number} ${string}`
-		| string
+	/**
+	 * Sets the width, style, and color of an element's four borders.
+	 */
+	border?: string
+	/**
+	 * Sets the width and style of an element's bottom border.
+	 */
+	borderBottom?: CSSProperty<(CSSLength | CSSBorderStyle)>
+	/**
+	 * Sets the color of an element's bottom border.
+	 */
+	borderBottomColor?: CSSProperty<CSSColor>
+	/**
+	 * Sets the size of an element's bottom-left corner's border radius.
+	 */
+	borderBottomLeftRadius?: CSSProperty<(CSSLength)>
+	/**
+	 * Sets the size of an element's bottom-right corner's border radius.
+	 */
+	borderBottomRightRadius?: CSSProperty<(CSSLength)>
+	/**
+	 * Sets the style of an element's bottom border.
+	 */
+	borderBottomStyle?: CSSProperty<(CSSBorderStyle)>
+	/**
+	 * Sets the width of an element's bottom border.
+	 */
+	borderBottomWidth?: CSSProperty<(CSSLength)>
+	/**
+	 * Sets whether table cell borders are collapsed into a single border or separated.
+	 */
+	borderCollapse?: CSSProperty<(
+		| "collapse" // Borders are collapsed into a single border when possible.
+		| "separate" // Borders are separated and don't overlap.
+	)>
+	/**
+	 * The CSS `border-color` property sets the color of an element's border(s). This property can have from one to four values.
+	 * If four values are specified, they apply to the top, right, bottom, and left borders in that order.
+	 */
+	borderColor?: string
+	/**
+	 * CSS property for setting an image as a border of an element.
+	 */
+	borderImage?: CSSProperty<(
+		| `url(${string}) ${number} ${string}` // url([image-source] [top] [right] [bottom] [left])
+		| `linear-gradient(${string}) ${number}` // linear-gradient([direction], [color-stop1], [color-stop2], ...)
+		| `radial-gradient(${string})` // radial-gradient([shape], [starting-color], [ending-color])
+		| `repeating-linear-gradient(${string})` // repeating-linear-gradient([direction], [color-stop1], [color-stop2], ...)
+		| `repeating-radial-gradient(${string})` // repeating-radial-gradient([shape], [starting-color], [ending-color])
+		| `conic-gradient(${string})` // conic-gradient([angle], [starting-color], [ending-color])
+	)>
+	/**
+	 * The borderImageOutset CSS property specifies the amount by which the border image area extends beyond the border box.
+	 * Allows for one to four values of type `<length>` or `<number>`.
+	 */
+	borderImageOutset?: CSSProperty<([
+		CSSLength | number,
+		(CSSLength | number)?,
+		(CSSLength | number)?,
+		(CSSLength | number)?,
+	])>
+	/**
+	 * The borderImageRepeat CSS property specifies how the border image is repeated or stretched.
+	 */
+	borderImageRepeat?: CSSProperty<(
+		| "stretch" // Specifies that the border image is stretched to fill the entire border image area.
+		| "repeat" // Specifies that the border image is repeated to fill the entire border image area.
+		| "round" // Specifies that the border image is repeated and stretched to fill the entire border image area, without distortion
+		| "space" //  Specifies that the border image is repeated and spaced out to fill the entire border image area.
+	)>
+	/**
+	 * The borderImageSlice CSS property specifies how the border image is sliced into regions.
+	 */
+	borderImageSlice?: CSSProperty<(
+		| number // A number sets the slice value as a pixel length.
+		| `${number}%` // A percentage value sets the slice value as a percentage of the corresponding dimension of the border image area.
+		| 'fill' // 'fill' is a keyword that sets the slice value to 100% for the corresponding dimension of the border image area.
+		| `${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')}` // The value can be set as a string with one to four values separated by spaces, which represent the slice values for the top, right, bottom, and left sides of the border image, respectively. If less than four values are provided, the missing values are set to the same as the previous value.
+		| `${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')}`
+		| `${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')} ${(number | `${number}%` | 'fill')}`
+	)>
+	/**
+	 * The `border-image-source` property specifies the source image for the border image. It can be either an image file, a gradient, or "none".
+	 */
+	borderImageSource?: CSSProperty<(
+		| "none" // No border image is displayed.
+		| `url(${string})` // Specifies the path to the image file to be used as the border image.
+		| `linear-gradient(${string}) ${number}` // Specifies a linear gradient as the border image.
+		| `radial-gradient(${string})` // Specifies a radial gradient as the border image.
+		| `repeating-linear-gradient(${string})` // Specifies a repeating linear gradient as the border image.
+		| `repeating-radial-gradient(${string})` // Specifies a repeating radial gradient as the border image.
+		| `conic-gradient(${string})` // Specifies a conic gradient as the border image.
+	)>
+	/**
+	 * The border-image-width CSS property sets the width of an element's border image..
+	 */
+	borderImageWidth?: CSSProperty<(string)>
+	/**
+	 * The border-left CSS property sets the width, style, and color of an element's left border.
+	 */
+	borderLeft?: CSSProperty<(string)>
+	/**
+	 * The border-left-color CSS property sets the color of an element's left border.
+	 */
+	borderLeftColor?: CSSProperty<(
+		CSSColor // The value can be any valid CSS color value (e.g. "red", "#00FF00", "rgb(0, 255, 0)").
+	)>
+	/**
+	 * The border-left-style CSS property sets the style of an element's left border.
+	 */
+	borderLeftStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-left-width CSS property sets the width of an element's left border.
+	 */
+	borderLeftWidth?: CSSProperty<(
+		| CSSBorderWidth // It can also be one of the three predefined CSS keywords: "thin", "medium", or "thick".
+		| CSSLength // The value can be a CSSLength, which is a string with a unit (e.g. "10px", "2em") that sets a fixed width for the left border.
+	)>
+	/**
+	 * The border-radius CSS property sets the rounded corners of an element's outer border edge.
+	 */
+	borderRadius?: CSSProperty<(string)>
+	/**
+	 * The border-right CSS property sets the width, style, and color of an element's right border.
+	 */
+	borderRight?: CSSProperty<(string)>
+	/**
+	 * The border-right-color CSS property sets the color of an element's right border.
+	 */
+	borderRightColor?: CSSProperty<(
+		CSSColor // The value can be any valid CSS color value (e.g. "red", "#00FF00", "rgb(0, 255, 0)").
+	)>
+	/**
+	 * The border-right-style CSS property sets the style of an element's right border.
+	 */
+	borderRightStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-right-width CSS property sets the width of an element's right border.
+	 */
+	borderRightWidth?: CSSProperty<(
+		| CSSBorderWidth // It can also be one of the three predefined CSS keywords: "thin", "medium", or "thick".
+		| CSSLength // The value can be a CSSLength, which is a string with a unit (e.g. "10px", "2em") that sets a fixed width for the right border.
+	)>
+	/**
+	 * The border-spacing CSS property sets the distance between adjacent borders of an HTML table element.
+	 */
+	borderSpacing?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%"),
+		| `${CSSLength} ${CSSLength}` // Two space-separated CSS lengths that represent the horizontal and vertical distances between adjacent borders (e.g. "5px", "10px 20px").
+	)>
+	/**
+	 * The border-style CSS property sets the line style for an element's four borders.
+	 */
+	borderStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-top CSS property sets the width, style, and color of the top border of an element.
+	 */
+	borderTop?: CSSProperty<(string)>
+	/**
+	 * The border-top-color CSS property sets the color of the top border of an element.
+	 */
+	borderTopColor?: CSSProperty<(
+		CSSColor // The value can be any valid CSS color value (e.g. "red", "#00FF00", "rgb(0, 255, 0)").
+	)>
+	/**
+	 * The border-top-left-radius CSS property sets the radii of the top-left border of an element.
+	 */
+	borderTopLeftRadius?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%"),
+		| `${CSSLength} ${CSSLength}` // a space-separated pair of CSS lengths (e.g. "10px 20px", "2em 3em", "3% 4%"). When a single value is provided, it applies to both the horizontal and vertical radii. When a pair of values is provided, the first value applies to the horizontal radius and the second value applies to the vertical radius
+	)>
+	/**
+	 * The border-top-left-radius CSS property sets the radii of the top-right border of an element.
+	 */
+	borderTopRightRadius?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%"),
+		| `${CSSLength} ${CSSLength}` // a space-separated pair of CSS lengths (e.g. "10px 20px", "2em 3em", "3% 4%"). When a single value is provided, it applies to both the horizontal and vertical radii. When a pair of values is provided, the first value applies to the horizontal radius and the second value applies to the vertical radius
+	)>
+	/**
+	 * The border-top-style CSS property sets the line style of the top border of an element.
+	 */
+	borderTopStyle?: CSSProperty<(
+		CSSBorderStyle // The value can be one of the following border styles: "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", or "outset".
+	)>
+	/**
+	 * The border-top-width CSS property sets the width of the top border of an element.
+	 */
+	borderTopWidth?: CSSProperty<(
+		| CSSBorderWidth // It can also be one of the three predefined CSS keywords: "thin", "medium", or "thick".
+		| CSSLength // The value can be a CSSLength, which is a string with a unit (e.g. "10px", "2em") that sets a fixed width for the top border.
+	)>
+	/**
+	 * The border-width CSS property sets the width of an element's four borders.
+	 */
+	borderWidth?: CSSProperty<(string)>
+	/**
+	 * The bottom CSS property sets the vertical position of an element relative to the bottom edge of its containing element.
+	 */
+	bottom?: CSSProperty<(
+		| CSSLength // The value can be a CSS length (e.g. "10px", "2em", "3%")
+		| "auto" //  or "auto" to specify automatic positioning.
+	)>
+	/**
+	 * The boxShadow CSS property adds shadow effects to an element.
+	 */
+	boxShadow?: CSSProperty<(string)>
+	/**
+	 * The boxSizing CSS property sets how an element's dimensions are calculated.
+	 */
+	boxSizing?: CSSProperty<(
+		| "border-box" // The value can be "border-box" to include the element's border and padding in its total width and height,
+		| "content-box" // or "content-box" to exclude the border and padding from the total dimensions.
+	)>
+	/**
+	 * Sets the page/column/region break behavior after an element.
+	 */
+	breakAfter?: CSSProperty<(
+		| "auto" // Default. Automatic page/column/region break behavior.
+		| "avoid" // Avoids any page/column/region break immediately after the element.
+		| "always" // Always breaks to the next page/column/region after the element.
+		| "all" // Always breaks to the next page/column/region, allowing multiple elements on the same page/column/region.
+		| "avoid-page" // Avoids any page break immediately after the element.
+		| "page" // Always breaks to the next page after the element.
+		| "left" // Always breaks to the next left page/column after the element.
+		| "right" // Always breaks to the next right page/column after the element.
+		| "recto" // Always breaks to the next odd-numbered page/column after the element.
+		| "verso" // Always breaks to the next even-numbered page/column after the element.
+		| "avoid-column" // Avoids any column break immediately after the element.
+		| "region" // Always breaks to the next region after the element.
+	)>
+	/**
+	 * The `breakBefore` CSS property sets the page-breaking behavior before an element.
+	 */
+	breakBefore?: CSSProperty<(
+		| "auto" // Default value. The behavior is determined by the layout mode of the parent element.
+		| "avoid" // Avoids breaks before the element as much as possible.
+		| "always" // Always force a page/column/region break before the element.
+		| "all" // Always force a page/column/region break before the element, but also allows multiple elements to share the same page/column/region.
+		| "avoid-page" // Avoids a page break before the element.
+		| "page" // Always force a page break before the element.
+		| "left" // Force a page break before the element, placing it on the left-hand side of the next page.
+		| "right" // Force a page break before the element, placing it on the right-hand side of the next page.
+		| "recto" // Force a page break before the element, placing it on the next available odd-numbered page.
+		| "verso" // Force a page break before the element, placing it on the next available even-numbered page.
+		| "avoid-column" // Avoids a column break before the element.
+		| "region" // Force a region break before the element, placing it in the next available region.
+	)>
+	/**
+	 * Sets the page, column, or region break behavior inside an element.
+	 */
+	breakInside?: CSSProperty<(
+		| "auto" // The default value. The browser will determine if a break is allowed based on other factors, such as available space and the presence of other elements with page/column/region break properties.
+		| "avoid" // A break is avoided inside the element if possible, but allowed if necessary.
+		| "avoid-page" // A break is avoided inside the element, and the element is prevented from straddling a page break.
+		| "avoid-column" // A break is avoided inside the element, and the element is prevented from straddling a column break.
+		| "avoid-region" // A break is avoided inside the element, and the element is prevented from straddling a region break.
+	)>
+	/**
+	 * Sets the placement of a table caption with respect to the table box.
+	 */
+	captionSide?: CSSProperty<(
+		| "top" // The caption is placed above the table box.
+		| "bottom" // The caption is placed below the table box.
+		| "block-start" // The caption is placed above the table box in vertical writing modes, and to the left of the table box in horizontal writing modes.
+		| "block-end" // The caption is placed below the table box in vertical writing modes, and to the right of the table box in horizontal writing modes.
+		| "inline-start" // The caption is placed to the left of the table box in horizontal writing modes, and at the top of the table box in vertical writing modes, before the first row.
+		| "inline-end" // The caption is placed to the right of the table box in horizontal writing modes, and at the bottom of the table box in vertical writing modes, after the last row.
+	)>
+	/**
+	 * Sets the behavior of an element when it clears floating elements.
+	 */
+	clear?: CSSProperty<(
+		| "none" // The default value. The element does not clear any floating elements.
+		| "left" // The element clears any floating elements on the left side.
+		| "right" // The element clears any floating elements on the right side.
+		| "both" //  The element clears any floating elements on both sides.
+		| "inline-start" // The element clears any floating elements on the start side in horizontal writing modes, and on the top side in vertical writing modes.
+		| "inline-end" // The element clears any floating elements on the end side in horizontal writing modes, and on the bottom side in vertical writing modes.
+	)>
+	/**
+	 * Defines the visible portion of an element, by specifying the rectangular region of an element to display.
+	 */
+	clip?: CSSProperty<("auto" | `rect(${string})`)>
+	/**
+	 * Sets a clipping path on an element. The clipping path restricts the region to which paint can be applied.
+	 */
+	clipPath?: CSSProperty<(
+		| `url(${string})` // Reference to a <clipPath> element defined elsewhere in the document.
+		| "margin-box" // The clipping path is applied to the margin box of the element.
+		| "border-box" // The clipping path is applied to the border box of the element.
+		| "padding-box" // The clipping path is applied to the padding box of the element.
+		| "content-box" // The clipping path is applied to the content box of the element.
+		| "fill-box" // The clipping path is applied to the bounding box of the element's fill.
+		| "stroke-box" // The clipping path is applied to the bounding box of the element's stroke.
+		| "view-box" // The clipping path is applied to the viewBox of a <svg> element.
+		| `inset(${string} ${string})` // The clipping path is a rectangle inset from the border box.
+		| `circle(${string} at ${string} ${string})` //  The clipping path is a circle with a given radius and center point.
+	)>
+	/**
+	 * Determines the algorithm used to determine which parts of a shape are included or excluded in the final clipping path.
+	 */
+	clipRule?: (
+		| "nonzero" // Specifies the nonzero winding rule.A point is inside the shape if a line drawn in any direction from the point crosses the shape's path an odd number of times.
+		| "evenodd" // Specifies the even-odd winding rule. A point is inside the shape if a line drawn in any direction from the point crosses the shape's path an odd number of times only if the line also crosses the shape's path a nonzero number of times.
+		| "inherit" // Inherits the clip-rule property from its parent element.
 	)
-	borderImageOutset?: number | string
-	borderImageRepeat?: "stretch" | "repeat" | "round" | "space"
-	borderImageSlice?: string | number | CSSLength
-	borderImageSource?: "none" | `url(${string})`
-	borderImageWidth?: string | number | CSSLength
-	borderLeft?: string | CSSLength
-	borderLeftColor?: CSSColor
-	borderLeftStyle?: NamedBorderStyle
-	borderLeftWidth?: NamedBorderWidth | CSSLength
-	borderRadius?: string | CSSLength
-	borderRight?: string | CSSLength
-	borderRightColor?: CSSColor
-	borderRightStyle?: NamedBorderStyle
-	borderRightWidth?: NamedBorderWidth | CSSLength
-	borderSpacing?: string | CSSLength
-	borderStyle?: NamedBorderStyle
-	borderTop?: CSSLength | NamedBorderWidth | NamedBorderStyle
-	borderTopColor?: CSSColor
-	borderTopLeftRadius?: string | CSSLength
-	borderTopRightRadius?: string | CSSLength
-	borderTopStyle?: NamedBorderStyle
-	borderTopWidth?: NamedBorderStyle | CSSLength
-	borderWidth?: string | CSSLength
-	bottom?: CSSLength | "auto"
-	boxShadow?: string | null
-	boxSizing?: "border-box" | "content-box"
-	breakAfter?: (
-		| "auto"
-		| "avoid"
-		| "always"
-		| "all"
-		| "avoid-page"
-		| "page"
-		| "left"
-		| "right"
-		| "recto"
-		| "verso"
-		| "avoid-column"
-		| "region"
+	/**
+	 * Sets the foreground color (text color) of an element.
+	 */
+	color?: CSSProperty<(
+		CSSColor // Specifies the color of the text. It can be a keyword, a hexadecimal RGB value, an RGB value, or a color name.
+	)>
+	/**
+	 * Specifies the color space for operations that are performed by the <filter> element.
+	 */
+	colorInterpolationFilters?: (
+		| "auto" // The filter operation should perform in the default color space.
+		| "sRGB" // The filter operation should perform in the sRGB color space.
+		| "linearRGB" // The filter operation should perform in the linearized RGB color space.
 	)
-	breakBefore?: (
-		| "auto"
-		| "avoid"
-		| "always"
-		| "all"
-		| "avoid-page"
-		| "page"
-		| "left"
-		| "right"
-		| "recto"
-		| "verso"
-		| "avoid-column"
-		| "region"
-	)
-	breakInside?: (
-		| "auto"
-		| "avoid"
-		| "avoid-page"
-		| "avoid-column"
-		| "avoid-region"
-	)
-	captionSide?: (
-		| "top"
-		| "bottom"
-		| "block-start"
-		| "block-end"
-		| "inline-start"
-		| "inline-end"
-	)
-	clear?: (
-		| "none"
-		| "left"
-		| "right"
-		| "both"
-		| "inline-start"
-		| "inline-end"
-	)
-	clip?: string | null
-	clipPath?: (
-		| `url(${string})`
-		| "margin-box"
-		| "border-box"
-		| "padding-box"
-		| "content-box"
-		| "fill-box"
-		| "stroke-box"
-		| "view-box"
-		| `inset(${string} ${string})`
-		| `circle(${string} at ${string} ${string})`
-	)
-	clipRule?: "nonzero" | "evenodd" | "inherit"
-	color?: CSSColor | string
-	colorInterpolationFilters?: string | null
-	columnCount?: "auto" | number
-	columnFill?: "auto" | "balance" | "balance-all"
-	columnRule?: NamedBorderStyle | string
-	columnRuleColor?: CSSColor | string
-	columnRuleStyle?: NamedBorderStyle
-	columnRuleWidth?: NamedBorderStyle | CSSLength
-	columnSpan?: "none" | "all"
-	columnWidth?: "auto" | CSSLength
-	columns?: (
-		| CSSLength
-		| "auto"
-		| number
-		| string
-	)
-	content?: string | null
-	counterIncrement?: string | "none"
-	counterReset?: string | "none"
-	cssFloat?: string | null
-	float?: (
-		| "left"
-		| "right"
-		| "none"
-		| "inline-start"
-		| "inline-end"
-	)
-	cssText?: string
-	cursor?: (
-		| CursorKeywords
-		| `url(${string}), ${CursorKeywords}`
-		| `url(${string}) ${number} ${number}, ${CursorKeywords}`
-	)
-	direction?: "ltr" | "rtl"
-	display?: (
-		| "block"
-		| "inline"
-		| "inline-block"
-		| "flex"
-		| "inline-flex"
-		| "grid"
-		| "inline-grid"
-		| "flow-root"
-		| "none"
-		| "contents"
-		| "block flow"
-		| "inline flow"
-		| "inline flow-root"
-		| "block flex"
-		| "inline flex"
-		| "block grid"
-		| "inline grid"
-		| "block flow-root"
-		| "table"
-		| "table-row"
-		| "list-item"
-	)
+	/**
+	 * Specifies the number of columns an element should be divided into.
+	 */
+	columnCount?: CSSProperty<(
+		| "auto"// The number of columns is determined by other properties, such as column - width or width.
+		| number // A positive integer that specifies the number of columns.
+	)>
+	/**
+	 * Specifies how to fill columns with content that is shorter than the height of the column.
+	 */
+	columnFill?: CSSProperty<(
+		| "auto" // The browser decides how to fill the columns.
+		| "balance" // The height of the columns is balanced by adding empty space at the end of the content of the shorter column(s).
+		| "balance-all" // The height of all columns in the element is balanced by adding empty space at the end of the content of the shorter column(s).
+	)>
+	/**
+	 * Sets the style of the rule between columns.
+	 */
+	columnRule?: CSSProperty<(string)>
+	/**
+	 * Sets the color of the rule between columns.
+	 */
+	columnRuleColor?: CSSProperty<(CSSColor)>
+	/**
+	 * Sets the style of the rule between columns.
+	 */
+	columnRuleStyle?: CSSProperty<(CSSBorderStyle)>
+	/**
+	 * Sets the width of the rule between columns.
+	 */
+	columnRuleWidth?: CSSProperty<(CSSBorderStyle | CSSLength)>
+	/**
+	 * Specifies how many columns an element should span across.
+	 */
+	columnSpan?: CSSProperty<(
+		| "none" // The element should not span across any columns. It will be rendered within a single column.
+		| "all" // The element should span across all columns.
+	)>
+	/**
+	 * Sets the width of columns in a multi-column element.
+	 */
+	columnWidth?: CSSProperty<("auto" | CSSLength)>
+	/**
+	 * A shorthand property that specifies the width and the number of columns in a multi-column element.
+	 */
+	columns?: CSSProperty<(
+		| CSSLength // Specifies a fixed column width using a CSS length value.
+		| "auto" // Automatically determines the column width.
+		| number // Specifies the column count.
+		| `${('auto' | `${CSSLength}` | number)} ${('auto' | `${CSSLength}` | number)}` // Specifies both column width and count.
+	)>
+	content?: CSSProperty<(string | null)>
+	/**
+	 * The counterIncrement property specifies the increment or decrement of one or more CSS counters.
+	 */
+	counterIncrement?: CSSProperty<(string | "none")>
+	/**
+	 * The counterReset property specifies the initial value of one or more CSS counters.
+	 */
+	counterReset?: CSSProperty<(string | "none")> // Specifies the initial value of CSS counters.
+	/**
+	 * The cssFloat property specifies the positioning of an element in relation to surrounding elements.
+	 */
+	cssFloat?: string | null // Specifies the positioning of an element.
+	/**
+	 * The float property specifies the positioning of an element in relation to surrounding elements.
+	 */
+	float?: CSSProperty<(
+		| "left" // Positions the element to the left of surrounding elements.
+		| "right" // Positions the element to the right of surrounding elements.
+		| "none" // Does not float the element.
+		| "inline-start" // Positions the element at the start of a line, within the text flow.
+		| "inline-end" // Positions the element at the end of a line, within the text flow.
+	)>
+	/**
+	 * The cssText property represents the serialized form of the CSS declarations of an element.
+	 */
+	cssText?: string // Represents the serialized form of CSS declarations of an element.
+	cursor?: CSSProperty<(
+		| CursorKeywords // Specifies a predefined cursor keyword.
+		| `url(${string}), ${CursorKeywords}` // Specifies a custom cursor image and fallback keyword.
+		| `url(${string}) ${number} ${number}, ${CursorKeywords}` // Specifies a custom cursor image with hotspot coordinates and fallback keyword.
+	)>
+	/**
+	 * The direction property specifies the direction of the text content within an element.
+	 */
+	direction?: CSSProperty<("ltr" | "rtl")> // Specifies the direction of the text content.
+	/**
+	 * The display property specifies the type of rendering box used for an element.
+	 */
+	display?: CSSProperty<(
+		| "block" // Displays an element as a block-level element.
+		| "inline" // Displays an element as an inline-level element.
+		| "inline-block" // Displays an element as an inline-level block container.
+		| "flex" // Displays an element as a block-level flex container.
+		| "inline-flex" // Displays an element as an inline-level flex container.
+		| "grid" // Displays an element as a block-level grid container.
+		| "inline-grid" // Displays an element as an inline-level grid container.
+		| "flow-root" // Establishes a new block formatting context for its contents.
+		| "none" // Does not display an element.
+		| "contents" // Makes the element's children appear as if they were direct children of the element's parent.
+		| "block flow" // Behaves as a block container that establishes a new block formatting context for its contents.
+		| "inline flow" // Behaves as an inline container that establishes a new block formatting context for its contents.
+		| "inline flow-root" // Behaves as an inline container that establishes a new block formatting context for its contents.
+		| "block flex" // Behaves as a block container that establishes a new flex formatting context for its contents.
+		| "inline flex" // Behaves as an inline container that establishes a new flex formatting context for its contents.
+		| "block grid" // Behaves as a block container that establishes a new grid formatting context for its contents.
+		| "inline grid" // Behaves as an inline container that establishes a new grid formatting context for its contents.
+		| "block flow-root" // Behaves as a block container that establishes a new block formatting context for its contents.
+		| "table" // Behaves as a block-level table.
+		| "table-row" // Behaves as a block-level table row.
+		| "list-item" // Behaves as a block-level element and generates a principal box for the list item.
+	)>
+	/**
+	 * The dominantBaseline property specifies the dominant baseline alignment for text.
+	 */
 	dominantBaseline?: (
-		| "auto"
-		| "ideographic"
-		| "alphabetic"
-		| "hanging"
-		| "mathematical"
-		| "central"
-		| "middle"
-		| "text-after-edge"
-		| "text-before-edge"
-		| "text-top"
+		| "auto" // Aligns the text baseline automatically based on the content.
+		| "ideographic" // Aligns the text baseline to the ideographic baseline.
+		| "alphabetic" // Aligns the text baseline to the alphabetic baseline.
+		| "hanging" // Aligns the text baseline to the hanging baseline.
+		| "mathematical" // Aligns the text baseline to the mathematical baseline.
+		| "central" // Aligns the text baseline to the central baseline.
+		| "middle" // Aligns the text baseline to the middle baseline.
+		| "text-after-edge" // Aligns the text baseline to the after-edge baseline.
+		| "text-before-edge" // Aligns the text baseline to the before-edge baseline.
+		| "text-top" // Aligns the text baseline to the top of the em square.
 	)
-	emptyCells?: "show" | "hide"
-	enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`
-	fill?: string | null
-	fillOpacity?: number | `${number}%`
-	fillRule?: "nonzero" | "evenodd"
+	/**
+	 * The emptyCells property specifies whether or not to display borders and background on empty cells in a table.
+	 */
+	emptyCells?: CSSProperty<("show" | "hide")> // Specifies whether to display borders and background on empty cells in a table.
+	/**
+	 * The enableBackground property specifies the background blending behavior for an element.
+	 */
+	enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}` // Specifies the background blending behavior for an element.
+	/**
+	 * The fill property specifies the color or URL to use for filling an element's shape.
+	 */
+	fill?: string | null // Specifies the color or URL for filling an element's shape.
+	/**
+	 * The fillOpacity property specifies the opacity of the fill color for an element's shape.
+	 */
+	fillOpacity?: number | `${number}%` // Specifies the opacity of the fill color for an element's shape.
+	/**
+	 * The fillRule property specifies the algorithm to determine the inside part of a shape for filling.
+	 */
+	fillRule?: "nonzero" | "evenodd" // Specifies the algorithm to determine the inside part of a shape for filling.
+	/**
+	 * The filter property applies visual effects to an element.
+	 */
 	filter?: (
-		| `url(${string})`
-		| `blur(${CSSLength})`
-		| `brightness(${number})`
-		| `contrast(${number}%)`
+		| `url(${string})` // Specifies a URL reference to an SVG filter.
+		| `blur(${CSSLength})` // Applies a blur effect to the element.
+		| `brightness(${number})` // Adjusts the brightness of the element.
+		| `contrast(${number}%)` // Adjusts the contrast of the element.
 		//| `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
-		| `grayscale(${number}%)`
-		| `hue-rotate(${number}deg)`
-		| `invert(${number}%)`
-		| `opacity(${number}%)`
-		| `saturate(${number}%)`
-		| `sepia(${number}%)`
-		| string
-		| "none"
+		| `grayscale(${number}%)` // Converts the element to grayscale.
+		| `hue-rotate(${number}deg)` // Rotates the hue of the element.
+		| `invert(${number}%)` // Inverts the colors of the element.
+		| `opacity(${number}%)` // Adjusts the opacity of the element.
+		| `saturate(${number}%)` // Adjusts the saturation of the element.
+		| `sepia(${number}%)` // Applies a sepia tone effect to the element.
+		| `${string}` // A custom filter value.
+		| "none" // Disables any filters applied to the element.
 	)
-	flex?: (
-		| "none"
-		| "auto"
-		| "initial"
-		| number
-		| CSSLength
-		| string
-	)
-	flexBasis?: (
-		| "auto"
-		| CSSLength
-		| "min-content"
-		| "max-content"
-		| "fit-content"
-		| "content"
-	)
-	flexDirection?: (
-		| "row"
-		| "row-reverse"
-		| "column"
-		| "column-reverse"
-	)
-	flexFlow?: (
-		| "row"
-		| "row-reverse"
-		| "column"
-		| "column-reverse"
-		| "nowrap"
-		| "wrap"
-		| "wrap-reverse"
-		//| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`
-	)
-	flexGrow?: number
-	flexShrink?: number
-	flexWrap?: "nowrap" | "wrap" | "wrap-reverse"
-	floodColor?: CSSColor
-	floodOpacity?: number | `${number}%`
-	font?: string | null
-	fontFamily?: (
+	/**
+	 * The flex property specifies the ability for a flex item to grow or shrink to fit available space.
+	 */
+	flex?: CSSProperty<(
+		| "none" // Disables flex growth and shrinking.
+		| "auto" // Enables flex growth and shrinking based on available space.
+		| "initial" // Sets the initial flex grow and shrink values to 0.
+		| number // Specifies the flex grow value as a number.
+		| CSSLength // Specifies the flex basis as a length value.
+		| string // A custom flex value.
+	)>
+	/**
+	 * The flexBasis property specifies the initial size of a flex item in a flex container.
+	 */
+	flexBasis?: CSSProperty<(
+		| "auto" // Sets the initial size based on the item's content or the item's flex-grow value.
+		| CSSLength // Specifies the initial size as a length value.
+		| "min-content" // Sets the initial size based on the minimum content size of the item.
+		| "max-content" // Sets the initial size based on the maximum content size of the item.
+		| "fit-content" // Sets the initial size based on the fit-content size of the item.
+		| "content" // Sets the initial size based on the item's content size.
+	)>
+	/**
+	 * The flexDirection property specifies the direction of the main axis in a flex container.
+	 */
+	flexDirection?: CSSProperty<(
+		| "row" // Displays the flex container as a row, with the main axis flowing from left to right.
+		| "row-reverse" // Displays the flex container as a row, with the main axis flowing from right to left.
+		| "column" // Displays the flex container as a column, with the main axis flowing from top to bottom.
+		| "column-reverse" // Displays the flex container as a column, with the main axis flowing from bottom to top.
+	)>
+	/**
+	 * The flexFlow property is a shorthand property for setting both the flex-direction and flex-wrap properties.
+	 */
+	flexFlow?: CSSProperty<(
+		| "row" // Displays the flex container as a row, with the main axis flowing from left to right.
+		| "row-reverse" // Displays the flex container as a row, with the main axis flowing from right to left.
+		| "column" // Displays the flex container as a column, with the main axis flowing from top to bottom.
+		| "column-reverse" // Displays the flex container as a column, with the main axis flowing from bottom to top.
+		| "nowrap" // The flex items are displayed in a single line, and the flex container is not wrapped.
+		| "wrap" // The flex items are displayed in multiple lines, and the flex container is wrapped.
+		| "wrap-reverse" // The flex items are displayed in multiple lines, and the flex container is wrapped in reverse order.
+		| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}` // Custom combination of flex direction and wrap.
+	)>
+	/**
+	 * The flexGrow property specifies the ability for a flex item to grow if necessary.
+	 */
+	flexGrow?: CSSProperty<(number)> // Specifies the ability for a flex item to grow if necessary.
+	/**
+	 * The flexShrink property specifies the ability for a flex item to shrink if necessary.
+	 */
+	flexShrink?: CSSProperty<(number)> // Specifies the ability for a flex item to shrink if necessary.
+	/**
+	 * The flexWrap property specifies whether flex items are forced onto one line or can wrap onto multiple lines.
+	 */
+	flexWrap?: CSSProperty<("nowrap" | "wrap" | "wrap-reverse")> // Specifies whether flex items are forced onto one line or can wrap onto multiple lines.
+	/**
+	 * The floodColor property specifies the color to be used for the `flood` operation in SVG filter effects.
+	 */
+	floodColor?: CSSColor // Specifies the color to be used for the `flood` operation in SVG filter effects.
+	/**
+	 * The floodOpacity property specifies the opacity of the `flood` operation in SVG filter effects.
+	 */
+	floodOpacity?: number | `${number}%` // Specifies the opacity of the `flood` operation in SVG filter effects.
+	/**
+	 * The font property specifies the font styling for an element.
+	 */
+	font?: string | null // Specifies the font styling for an element.
+	/**
+	 * The fontFamily property specifies the font family for an element.
+	 */
+	fontFamily?: CSSProperty<(
 		| "serif"
 		| "sans-serif"
 		| "cursive"
@@ -426,16 +887,13 @@ export interface CSSProperties {
 		| "emoji"
 		| "math"
 		| "fangsong"
-		| string
-		//         | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" |
-		// "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`
-	)
-	fontFeatureSettings?: (
-		| "normal"
-		| string
-		| `${string} ${"on" | "off" | number}`
-	)
-	fontSize?: (
+		| `${string} `
+	)>
+	/**
+	 * The fontFamily property specifies the font family for an element.
+	 */
+	fontFeatureSettings?: CSSProperty<string> // Specifies the font family for an element.
+	fontSize?: CSSProperty<(
 		| "xx-small"
 		| "x-small"
 		| "small"
@@ -448,13 +906,13 @@ export interface CSSProperties {
 		| "smaller"
 		| CSSLength
 		| "math"
-	)
-	fontSizeAdjust?: (
+	)>
+	fontSizeAdjust?: CSSProperty<(
 		| "none"
 		| number
 		| `${"ex-height" | "cap-height" | "ch-width" | "ic-width" | "ic-height"} ${number}`
-	)
-	fontStretch?: (
+	)>
+	fontStretch?: CSSProperty<(
 		| "normal"
 		| "ultra-condensed"
 		| "extra-condensed"
@@ -465,14 +923,14 @@ export interface CSSProperties {
 		| "extra-expanded"
 		| "ultra-expanded"
 		| `${number}%`
-	)
-	fontStyle?: (
+	)>
+	fontStyle?: CSSProperty<(
 		| "normal"
 		| "italic"
 		| "oblique"
 		| `oblique ${number}deg`
-	)
-	fontVariant?: (
+	)>
+	fontVariant?: CSSProperty<(
 		| "normal"
 		| "small-caps"
 		| "all-small-caps"
@@ -497,8 +955,8 @@ export interface CSSProperties {
 		| "full-width"
 		| "proportional-width"
 		| "ruby"
-	)
-	fontWeight?: (
+	)>
+	fontWeight?: CSSProperty<(
 		| "normal"
 		| "bold"
 		| "bolder"
@@ -512,16 +970,16 @@ export interface CSSProperties {
 		| 700
 		| 800
 		| 900
-	)
+	)>
 	glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
 	glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`
-	height?: (
+	height?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	)
+	)>
 	imeMode?: (
 		| "auto"
 		| "normal"
@@ -549,13 +1007,13 @@ export interface CSSProperties {
 	kerning?: "auto" | number | CSSLength
 	left?: "auto" | CSSLength
 	readonly length?: CSSLength
-	letterSpacing?: "normal" | CSSLength
+	letterSpacing?: CSSProperty<("normal" | CSSLength)>
 	lightingColor?: CSSColor
-	lineHeight?: "normal" | number | CSSLength
-	listStyle?: string | null
-	listStyleImage?: "none" | `url(${string})`
-	listStylePosition?: "inside" | "outside"
-	listStyleType?: (
+	lineHeight?: CSSProperty<("normal" | number | CSSLength)>
+	listStyle?: CSSProperty<(string | null)>
+	listStyleImage?: CSSProperty<("none" | `url(${string})` | `linear-gradient(${string})`)>
+	listStylePosition?: CSSProperty<("inside" | "outside")>
+	listStyleType?: CSSProperty<(
 		| "none"
 		| string
 		| "disc"
@@ -629,130 +1087,197 @@ export interface CSSProperties {
 		| "upper-armenian"
 		| "disclosure-open"
 		| "disclosure-closed"
-	)
-	margin?: (
+	)>
+	margin?: CSSProperty<(
 		| number
 		| CSSLength
 		| string
-	)
-	marginBottom?: CSSLength | "auto" | `${number}`
-	marginLeft?: CSSLength | "auto" | `${number}`
-	marginRight?: CSSLength | "auto" | `${number}`
-	marginTop?: CSSLength | "auto" | `${number}`
+	)>
+	marginBottom?: CSSProperty<(CSSLength | "auto" | `${number}`)>
+	marginLeft?: CSSProperty<(CSSLength | "auto" | `${number}`)>
+	marginRight?: CSSProperty<(CSSLength | "auto" | `${number}`)>
+	marginTop?: CSSProperty<(CSSLength | "auto" | `${number}`)>
 	marker?: string | null
 	markerEnd?: string | null
 	markerMid?: string | null
 	markerStart?: string | null
-	mask?: string | null
-	maxHeight?: (
+	mask?: CSSProperty<(string | "none" | null)>
+	maxHeight?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
+		| "none"
 		| CSSLength
-	)
-	maxWidth?: (
+	)>
+	maxWidth?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
+		| "none"
 		| CSSLength
-	)
-	minHeight?: (
+	)>
+	minHeight?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
 		| CSSLength
-	)
-	minWidth?: (
+	)>
+	minWidth?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
-		| "auto"
 		| CSSLength
-	)
-	msContentZoomChaining?: string | null
+	)>
+	/**	Specifies whether zooming is chained to the next outermost element with zooming capabilities. */
+	msContentZoomChaining?: "none" | "chained" | string | null
+	/** Specifies the minimum and maximum zooming factor. */
 	msContentZoomLimit?: string | null
-	msContentZoomLimitMax?: any
-	msContentZoomLimitMin?: any
-	msContentZoomSnap?: string | null
+	/** Specifies the maximum zooming factor. */
+	msContentZoomLimitMax?: number | string | null
+	/** Specifies the minimum zooming factor. */
+	msContentZoomLimitMin?: number | string | null
+	/** Specifies whether zooming positions are snapped to the nearest zooming factor. */
+	msContentZoomSnap?: "none" | "mandatory" | "proximity" | string | null
+	/** Specifies the positions where zooming is snapped. */
 	msContentZoomSnapPoints?: string | null
-	msContentZoomSnapType?: string | null
-	msContentZooming?: string | null
+	/** Specifies the type of zooming positions that are snapped. */
+	msContentZoomSnapType?: "none" | "mandatory" | "proximity" | string | null
+	/** Specifies whether zooming is enabled. */
+	msContentZooming?: "none" | "zoom" | string | null
+	/** Specifies the name of the object to which content flows. */
 	msFlowFrom?: string | null
+	/** Specifies the name of the element from which content flows. */
 	msFlowInto?: string | null
+	/** Specifies font feature settings. */
 	msFontFeatureSettings?: string | null
-	msGridColumn?: any
-	msGridColumnAlign?: string | null
-	msGridColumnSpan?: any
+	/** Specifies the grid column number of the element. */
+	msGridColumn?: number | string | null
+	/** Specifies the horizontal alignment of an element in a grid column. */
+	msGridColumnAlign?: "start" | "end" | "center" | "stretch" | string | null
+	/** Specifies the number of grid columns that an element spans. */
+	msGridColumnSpan?: number | string | null
+	/** Specifies the width of grid columns. */
 	msGridColumns?: string | null
-	msGridRow?: any
-	msGridRowAlign?: string | null
-	msGridRowSpan?: any
+	/** Specifies the grid row number of the element. */
+	msGridRow?: number | string | null
+	/** Specifies the vertical alignment of an element in a grid row. */
+	msGridRowAlign?: "start" | "end" | "center" | "stretch" | string | null
+	/** Specifies the number of grid rows that an element spans. */
+	msGridRowSpan?: number | string | null
+	/** Specifies the height of grid rows. */
 	msGridRows?: string | null
-	msHighContrastAdjust?: string | null
-	msHyphenateLimitChars?: string | null
-	msHyphenateLimitLines?: any
-	msHyphenateLimitZone?: any
-	msHyphens?: string | null
-	msImeAlign?: string | null
-	msOverflowStyle?: string | null
-	msScrollChaining?: string | null
+	/** Specifies whether and how background color and images are adjusted for high contrast. */
+	msHighContrastAdjust?: "auto" | "none" | "incandescent" | "cold" | "contrast" | "blackwhite" | string | null
+	/** Specifies the number of characters to display before a hyphenation occurs. */
+	msHyphenateLimitChars?: number | string | null
+	/** Specifies the maximum number of lines that can be broken before a hyphenation occurs. */
+	msHyphenateLimitLines?: number | string | null
+	/** Specifies the distance between the end of the hyphenation zone and the end of the line. */
+	msHyphenateLimitZone?: number | string | null
+	/** Specifies how words should be hyphenated. */
+	msHyphens?: "none" | "manual" | "auto" | string | null
+	/** Specifies the alignment of the input method editor (IME) candidate window. */
+	msImeAlign?: "auto" | "before" | "after" | string | null
+	/** Specifies how to handle the overflow content of an element. */
+	msOverflowStyle?: "-ms-autohiding-scrollbar" | "scrollbar" | "scrollbarbutton" | "none" | "scrollbarthumb"
+
+	/** Specifies whether scrolling is chained to the next outermost element with scrolling capabilities. */
+	msScrollChaining?: 'none' | 'chained' | null
+
+	/** Specifies the minimum and maximum scrolling positions. */
 	msScrollLimit?: string | null
-	msScrollLimitXMax?: any
-	msScrollLimitXMin?: any
-	msScrollLimitYMax?: any
-	msScrollLimitYMin?: any
-	msScrollRails?: string | null
+
+	/** Specifies the maximum horizontal scrolling position.
+	 */
+	msScrollLimitXMax?: number | null
+
+	/** Specifies the minimum horizontal scrolling position. */
+	msScrollLimitXMin?: number | null
+
+	/** Specifies the maximum vertical scrolling position. */
+	msScrollLimitYMax?: number | null
+
+	/** Specifies the minimum vertical scrolling position. */
+	msScrollLimitYMin?: number | null
+
+	/** Specifies the type of scrolling rails that are displayed. */
+	msScrollRails?: 'none' | 'railed' | null
+
+	/** Specifies the horizontal positions where scrolling is snapped. */
 	msScrollSnapPointsX?: string | null
+
+	/** Specifies the vertical positions where scrolling is snapped. */
 	msScrollSnapPointsY?: string | null
-	msScrollSnapType?: string | null
-	msScrollSnapX?: string | null
-	msScrollSnapY?: string | null
-	msScrollTranslation?: string | null
-	msTextCombineHorizontal?: string | null
-	msTextSizeAdjust?: any
-	msTouchAction?: string | null
-	msTouchSelect?: string | null
-	msUserSelect?: string | null
-	msWrapFlow?: string
-	msWrapMargin?: any
-	msWrapThrough?: string
-	opacity?: number | `${number}%`
-	order?: string | null
-	orphans?: number
-	outline?: NamedBorderStyle | string
-	outlineColor?: CSSColor | "invert"
-	outlineStyle?: NamedBorderStyle
-	outlineWidth?: NamedBorderWidth | CSSLength
-	overflow?: (
+
+	/** Specifies the type of scrolling snap points. */
+	msScrollSnapType?: 'none' | 'mandatory' | 'proximity' | null
+
+	/** Specifies the horizontal snapping behavior. */
+	msScrollSnapX?: 'none' | 'mandatory' | 'proximity' | null
+
+	/** Specifies the vertical snapping behavior. */
+	msScrollSnapY?: 'none' | 'mandatory' | 'proximity' | null
+
+	/** Specifies the type of CSS transformation to apply during scrolling. */
+	msScrollTranslation?: 'none' | 'translate' | null
+
+	/** Specifies whether multiple text blocks can be combined into a single block. */
+	msTextCombineHorizontal?: 'none' | 'all' | null
+
+	/** Controls the scaling of text in mobile browsers. */
+	msTextSizeAdjust?: 'auto' | 'none' | 'percentage' | null
+
+	/** Specifies the touch actions that are permitted on an element. */
+	msTouchAction?: 'auto' | 'none' | 'pan-x' | 'pan-y' | 'manipulation' | null
+
+	/** Specifies the touch-select behavior. */
+	msTouchSelect?: 'none' | 'text' | 'toggle' | null
+
+	/** Specifies the user-select behavior. */
+	msUserSelect?: 'none' | 'text' | 'all' | 'element' | null
+
+	/** Specifies the flow direction of content around a floating object. */
+	msWrapFlow?: 'auto' | 'both' | 'clear' | 'end' | 'maximum' | 'start' | 'maximum' | null
+
+	/** Specifies the amount of space between wrapped text and the object it flows around. */
+	msWrapMargin?: string | null
+
+	/** Specifies whether the content should wrap around a floating object. */
+	msWrapThrough?: 'none' | 'wrap'
+	opacity?: CSSProperty<(number | `${number}%`)>
+	order?: CSSProperty<(string | null)>
+	orphans?: CSSProperty<(number)>
+	outline?: CSSProperty<(CSSBorderStyle | string)>
+	outlineColor?: CSSProperty<(CSSColor | "invert")>
+	outlineStyle?: CSSProperty<(CSSBorderStyle)>
+	outlineWidth?: CSSProperty<(CSSBorderWidth | CSSLength)>
+	overflow?: CSSProperty<(
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	)
-	overflowX?: (
+	)>
+	overflowX?: CSSProperty<(
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	)
-	overflowY?: (
+	)>
+	overflowY?: CSSProperty<(
 		| "visible"
 		| "hidden"
 		| "clip"
 		| "scroll"
 		| "auto"
-	)
-	padding?: number | CSSLength | string
-	paddingBottom?: CSSLength
-	paddingLeft?: CSSLength
-	paddingRight?: CSSLength
-	paddingTop?: CSSLength
-	pageBreakAfter?: (
+	)>
+	padding?: CSSProperty<(number | CSSLength | string)>
+	paddingBottom?: CSSProperty<(CSSLength)>
+	paddingLeft?: CSSProperty<(CSSLength)>
+	paddingRight?: CSSProperty<(CSSLength)>
+	paddingTop?: CSSProperty<(CSSLength)>
+	pageBreakAfter?: CSSProperty<(
 		| "auto"
 		| "always"
 		| "avoid"
@@ -760,8 +1285,8 @@ export interface CSSProperties {
 		| "right"
 		| "recto"
 		| "verso"
-	)
-	pageBreakBefore?: (
+	)>
+	pageBreakBefore?: CSSProperty<(
 		| "auto"
 		| "always"
 		| "avoid"
@@ -769,11 +1294,11 @@ export interface CSSProperties {
 		| "right"
 		| "recto"
 		| "verso"
-	)
-	pageBreakInside?: "auto" | "avoid"
-	perspective?: "none" | CSSLength
-	perspectiveOrigin?: string | null
-	pointerEvents?: (
+	)>
+	pageBreakInside?: CSSProperty<("auto" | "avoid")>
+	perspective?: CSSProperty<("none" | CSSLength)>
+	perspectiveOrigin?: CSSProperty<(string | null)>
+	pointerEvents?: CSSProperty<(
 		| "auto"
 		| "none"
 		| "visiblePainted"
@@ -784,18 +1309,17 @@ export interface CSSProperties {
 		| "fill"
 		| "stroke"
 		| "all"
-	)
-	position?: "static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null
-	quotes?: (
+	)>
+	position?: CSSProperty<("static" /*default*/ | "fixed" | "absolute" | "relative" | "sticky" | null)>
+	quotes?: CSSProperty<(
 		| "none"
 		| "auto"
-		| `${string} ${string}`
-		| `${string} ${string} ${string} ${string}`
-	)
-	right?: "auto" | CSSLength
-	rubyAlign?: "start" | "center" | "space-between" | "space-around"
+		| string
+	)>
+	right?: CSSProperty<("auto" | CSSLength)>
+	rubyAlign?: CSSProperty<("start" | "center" | "space-between" | "space-around")>
 	rubyOverhang?: string | null
-	rubyPosition?: "over" | "under" | "alternate" | "inter-character"
+	rubyPosition?: CSSProperty<("over" | "under" | "alternate" | "inter-character")>
 	stopColor?: "currentColor" | CSSColor
 	stopOpacity?: number
 	stroke?: string | null
@@ -806,8 +1330,8 @@ export interface CSSProperties {
 	strokeMiterlimit?: number
 	strokeOpacity?: `${number}%`
 	strokeWidth?: CSSLength
-	tableLayout?: "auto" | "fixed"
-	textAlign?: (
+	tableLayout?: CSSProperty<("auto" | "fixed")>
+	textAlign?: CSSProperty<(
 		| "start"
 		| "end"
 		| "left"
@@ -817,8 +1341,8 @@ export interface CSSProperties {
 		| "justify-all"
 		| "match-parent"
 		| string
-	)
-	textAlignLast?: (
+	)>
+	textAlignLast?: CSSProperty<(
 		| "auto"
 		| "start"
 		| "end"
@@ -826,37 +1350,38 @@ export interface CSSProperties {
 		| "right"
 		| "center"
 		| "justify"
-	)
+	)>
 	textAnchor?: "start" | "middle" | "end"
-	textDecoration?: string | null
-	textIndent?: CSSLength
-	textJustify?: (
+	textDecoration?: CSSProperty<("none" | "underline" | "overline" | CSSColor)>
+	textIndent?: CSSProperty<(CSSLength | "each-line" | "hanging")>
+	textJustify?: CSSProperty<(
 		| "auto"
 		| "none"
 		| "inter-word"
 		| "inter-character"
-	)
+		| "distribute"
+	)>
 	textKashida?: string | null
 	textKashidaSpace?: string | null
-	textOverflow?: "clip" | "ellipsis"
-	textShadow?: string | null
-	textTransform?: (
+	textOverflow?: CSSProperty<("clip" | "ellipsis")>
+	textShadow?: CSSProperty<(string | null)>
+	textTransform?: CSSProperty<(
 		| "none"
 		| "capitalize"
 		| "uppercase"
 		| "lowercase"
 		| "full-width"
 		| "full-size-kana"
-	)
-	textUnderlinePosition?: (
+	)>
+	textUnderlinePosition?: CSSProperty<(
 		| "auto"
 		| "under"
 		| "left"
 		| "right"
 		| `${"auto" | "under" | "left" | "right"} ${"auto" | "under" | "left" | "right"}`
-	)
-	top?: "auto" | CSSLength
-	touchAction?: (
+	)>
+	top?: CSSProperty<("auto" | CSSLength)>
+	touchAction?: CSSProperty<(
 		| "auto"
 		| "none"
 		| "pan-x"
@@ -867,8 +1392,8 @@ export interface CSSProperties {
 		| "pan-down"
 		| "pinch-zoom"
 		| "manipulation"
-	)
-	transform?: (
+	)>
+	transform?: CSSProperty<(
 		| "none"
 		| string
 		| `matrix(${number}, ${number}, ${number}, ${number}, ${number}, ${number})`
@@ -886,37 +1411,37 @@ export interface CSSProperties {
 		| `skew(${`${number}${"deg" | "grad" | "rad" | "turn"}` | `${number}${"deg" | "grad" | "rad" | "turn"}, ${number}${"deg" | "grad" | "rad" | "turn"}`})`
 		| `skewX(${number}${"deg" | "grad" | "rad" | "turn"})`
 		| `skewY(${number}${"deg" | "grad" | "rad" | "turn"})`
-	)
-	transformOrigin?: (
+	)>
+	transformOrigin?: CSSProperty<(
 		| CSSLength
 		| "left"
 		| "right"
 		| "center"
 		| "bottom"
 		| string
-	)
-	transformStyle?: "flat" | "preserve-3d"
-	transition?: (
+	)>
+	transformStyle?: CSSProperty<("flat" | "preserve-3d")>
+	transition?: CSSProperty<(
 		// | `${string} ${CSSTime}`
 		// | `${string} ${CSSTime} ${CSSTime}`
 		// | `${string} ${CSSTime} ${CSSEasingFunction}`
 		// | `${string} ${CSSTime} ${CSSEasingFunction} ${CSSTime}`
 		| `all ${CSSTime} ${CSSEasingFunction}`
 		| string
-	)
-	transitionDelay?: CSSTime | string
-	transitionDuration?: CSSTime | string
-	transitionProperty?: "none" | "all" | string
-	transitionTimingFunction?: CSSEasingFunction
-	unicodeBidi?: (
+	)>
+	transitionDelay?: CSSProperty<(CSSTime | string)>
+	transitionDuration?: CSSProperty<(CSSTime | string)>
+	transitionProperty?: CSSProperty<("none" | "all" | string)>
+	transitionTimingFunction?: CSSProperty<(CSSEasingFunction)>
+	unicodeBidi?: CSSProperty<(
 		| "normal"
 		| "embed"
 		| "isolate"
 		| "bidi-override"
 		| "isolate-override"
 		| "plaintext"
-	)
-	verticalAlign?: (
+	)>
+	verticalAlign?: CSSProperty<(
 		| "baseline"
 		| "sub"
 		| "super"
@@ -926,98 +1451,347 @@ export interface CSSProperties {
 		| "top"
 		| "bottom"
 		| CSSLength
-	)
-	visibility?: "visible" | "hidden" | "collapse"
-	webkitAlignContent?: string | null
-	webkitAlignItems?: string | null
-	webkitAlignSelf?: string | null
-	webkitAnimation?: string | null
-	webkitAnimationDelay?: string | null
-	webkitAnimationDirection?: string | null
-	webkitAnimationDuration?: string | null
-	webkitAnimationFillMode?: string | null
-	webkitAnimationIterationCount?: string | null
-	webkitAnimationName?: string | null
-	webkitAnimationPlayState?: string | null
-	webkitAnimationTimingFunction?: string | null
-	webkitAppearance?: string | null
-	webkitBackfaceVisibility?: string | null
-	webkitBackgroundClip?: string | null
-	webkitBackgroundOrigin?: string | null
-	webkitBackgroundSize?: string | null
+	)>
+	visibility?: CSSProperty<("visible" | "hidden" | "collapse")>
+	/** Aligns the content within a flex container when there is extra space along the cross-axis.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-content
+	 */
+	webkitAlignContent?: CSSProperty<(
+		| 'flex-start'
+		| 'flex-end'
+		| 'center'
+		| 'space-between'
+		| 'space-around'
+		| 'stretch'
+		| 'baseline'
+		| 'safe'
+		| 'unsafe'
+	)> | null
+
+	/** Aligns flex items along the cross-axis of the flex container.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
+	 */
+	webkitAlignItems?: CSSProperty<(
+		| 'stretch'
+		| 'flex-start'
+		| 'flex-end'
+		| 'center'
+		| 'baseline'
+		| 'first baseline'
+		| 'last baseline'
+		| 'start'
+		| 'end'
+		| 'self-start'
+		| 'self-end'
+		| 'safe'
+		| 'unsafe'
+	)> | null
+
+	/** Aligns a flex item within its flex container.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-self
+	 */
+	webkitAlignSelf?: CSSProperty<(
+		| 'auto'
+		| 'stretch'
+		| 'flex-start'
+		| 'flex-end'
+		| 'center'
+		| 'baseline'
+		| 'first baseline'
+		| 'last baseline'
+		| 'start'
+		| 'end'
+		| 'self-start'
+		| 'self-end'
+		| 'safe'
+		| 'unsafe'
+	)> | null
+
+	/** A shorthand property for all the animation-* properties, except animation-play-state.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation
+	 */
+	webkitAnimation?: true | false
+
+	/** Defines a length of time to elapse before an animation starts, allowing an animation to begin execution some time after it is applied.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay
+	 */
+	webkitAnimationDelay?: CSSProperty<(CSSTime)>
+
+	/** Defines whether an animation should run forwards, backwards, or alternating back and forth.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction
+	 */
+	webkitAnimationDirection?: CSSProperty<('normal' | 'reverse' | 'alternate' | 'alternate-reverse')> | null
+
+	/** Defines the length of time that an animation takes to complete one cycle.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-duration
+	 */
+	webkitAnimationDuration?: CSSProperty<(CSSTime)>
+
+	/** Defines how the animation applies styles to its target before and after it is executed.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-fill-mode
+	 */
+	webkitAnimationFillMode?: CSSProperty<('none' | 'forwards' | 'backwards' | 'both')> | null
+
+	/** Defines the number of times an animation cycle should be played before stopping.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-iteration-count
+	 */
+	webkitAnimationIterationCount?: CSSProperty<('infinite' | number)> | null
+
+	/** Specifies the name of the keyframe to use for the animation.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-name
+	 */
+	webkitAnimationName?: CSSProperty<(string)> | null
+
+	/** Defines whether the animation is running or paused.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state
+	 */
+	webkitAnimationPlayState?: CSSProperty<('running' | 'paused')> | null
+
+	/** Specifies the speed curve of an animation.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function
+	 */
+	webkitAnimationTimingFunction?: CSSEasingFunction
+
+
+	webkitBackgroundSize?: CSSProperty<('cover' | 'contain')>
+
 	webkitBorderBottomLeftRadius?: string | null
+
 	webkitBorderBottomRightRadius?: string | null
-	webkitBorderImage?: string | null
-	webkitBorderRadius?: string | null
-	webkitBorderTopLeftRadius?: string | number | null
-	webkitBorderTopRightRadius?: string | number | null
-	webkitBoxAlign?: string | null
-	webkitBoxDirection?: string | null
-	webkitBoxFlex?: string | null
-	webkitBoxOrdinalGroup?: string | null
-	webkitBoxOrient?: string | null
-	webkitBoxPack?: string | null
-	webkitBoxSizing?: string | null
-	webkitColumnBreakAfter?: string | null
-	webkitColumnBreakBefore?: string | null
-	webkitColumnBreakInside?: string | null
-	webkitColumnCount?: any
-	webkitColumnGap?: any
-	webkitColumnRule?: string | null
-	webkitColumnRuleColor?: any
-	webkitColumnRuleStyle?: string | null
-	webkitColumnRuleWidth?: any
-	webkitColumnSpan?: string | null
-	webkitColumnWidth?: any
-	webkitColumns?: string | null
+	webkitBorderImage?: CSSProperty<(string | null)>
+
+	webkitBorderRadius?: CSSProperty<(number | string | null)>
+
+	webkitBorderTopLeftRadius?: string | null
+
+	webkitBorderTopRightRadius?: string | null
+
+	/** Possible values for the `-webkit-column-break-after` CSS property.
+	 */
+	webkitColumnBreakAfter?: "auto" | "avoid" | "always" | "left" | "right" | "page" | "column" | "avoid-page" | "avoid-column" | null
+
+	/** Possible values for the `-webkit-column-break-before` CSS property.
+	 */
+	webkitColumnBreakBefore?: "auto" | "avoid" | "always" | "left" | "right" | "page" | "column" | "avoid-page" | "avoid-column" | null
+
+	/** Possible values for the `-webkit-column-break-inside` CSS property.
+	 */
+	webkitColumnBreakInside?: "auto" | "avoid" | "avoid-page" | "avoid-column" | null
+
+	/** The number of columns to use for the element.
+	 */
+	webkitColumnCount?: CSSProperty<(number | "auto")> | null
+
+	/** The gap between columns for a multi-column element.
+	 */
+	webkitColumnGap?: CSSProperty<(CSSLength | "normal")> | null
+
+	/** Possible values for the `-webkit-column-rule-style` CSS property.
+	 */
+	webkitColumnRuleStyle?: CSSProperty<("none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset")> | null
+
+	/** The color of the column rule for a multi-column element.
+	 */
+	webkitColumnRuleColor?: CSSProperty<(CSSColor)> | null
+
+	/** The width of the column rule for a multi-column element.
+	 */
+	webkitColumnRuleWidth?: CSSProperty<(CSSLength | "thin" | "medium" | "thick")> | null
+
+	/** Whether the element should span across all columns when using a multi-column layout.
+	 */
+	webkitColumnSpan?: CSSProperty<("none" | "all")> | null
+
+	/** The width of each column for a multi-column element.
+	 */
+	webkitColumnWidth?: CSSProperty<(CSSLength | "auto")> | null
+
+	/** Possible values for the `-webkit-box-direction` CSS property.
+	 */
+	webkitBoxDirection?: "normal" | "reverse" | null
+
+	/** Possible values for the `-webkit-box-orient` CSS property.
+	 */
+	webkitBoxOrient?: "horizontal" | "vertical" | "inline-axis" | "block-axis" | null
+
+	/** Possible values for the `-webkit-box-pack` CSS property.
+	 */
+	webkitBoxPack?: "start" | "end" | "center" | "justify" | "distribute" | null
+
+	/** Possible values for the `-webkit-box-align` CSS property.
+	 */
+	webkitBoxAlign?: "start" | "end" | "center" | "baseline" | "stretch" | null
+
+	/** Possible values for the `-webkit-box-flex` CSS property.
+	 */
+	webkitBoxFlex?: number | "inherit" | null
+
+	/** Possible values for the `-webkit-box-ordinal-group` CSS property.
+	 */
+	webkitBoxOrdinalGroup?: CSSProperty<(number)> | null
+
+	/** Possible values for the `-webkit-box-sizing` CSS property.
+	 */
+	webkitBoxSizing?: CSSProperty<("content-box" | "border-box")> | null
+
+	/** The appearance of the element.
+	 */
+	webkitAppearance?: CSSProperty<(string)> | null
+
+	/** The visibility of the back face of the element when it is facing away from the viewer.
+	 */
+	webkitBackfaceVisibility?: CSSProperty<("visible" | "hidden")> | null
+
+	/** The part of the element's background to clip.
+	 */
+	webkitBackgroundClip?: CSSProperty<("border-box" | "padding-box" | "content-box" | "text")> | null
+
+	/** The origin of the element's background image.
+	 */
+	webkitBackgroundOrigin?: CSSProperty<("border-box" | "padding-box" | "content-box")> | null
+
+
+	/** Specifies the number of columns an element should be divided into	 */
+	webkitColumns?: CSSProperty<(`${CSSLength} ${number}` | `${number} ${CSSLength}` | `${CSSLength}` | `${number}` | "auto")> | null
+
+	/** Sets the initial main size of a flex item.
+	 */
+	webkitFlexBasis?: CSSProperty<(CSSLength | "auto" | "content" | "fit-content" | "max-content" | "min-content")> | null
+
+	/** The webkitFlexDirection CSS property sets the direction of the main axis of a flex container.
+	 */
+	webkitFlexDirection?: CSSProperty<("row" | "row-reverse" | "column" | "column-reverse")> | null
+
+	/** The webkitFlexFlow CSS property is a shorthand property that sets the values of webkitFlexDirection and webkitFlexWrap.
+	 */
+	webkitFlexFlow?: CSSProperty<(
+		| "row"
+		| "row-reverse"
+		| "column"
+		| "column-reverse"
+		| "nowrap"
+		| "wrap"
+		| "wrap-reverse"
+	)>
+
+	/** The webkitFlexGrow CSS property sets the flex grow factor of a flex item.
+	 */
+	webkitFlexGrow?: CSSProperty<(number)> | null
+
+	/** The webkitFlexShrink CSS property sets the flex shrink factor of a flex item.
+	 */
+	webkitFlexShrink?: CSSProperty<(number)> | null
+
+	/** Specifies the filter or effect to apply to an element
+	 */
 	webkitFilter?: string | null
-	webkitFlex?: string | null
-	webkitFlexBasis?: string | null
-	webkitFlexDirection?: string | null
-	webkitFlexFlow?: string | null
-	webkitFlexGrow?: string | null
-	webkitFlexShrink?: string | null
-	webkitFlexWrap?: string | null
-	webkitJustifyContent?: string | null
-	webkitOrder?: string | null
-	webkitPerspective?: "none" | CSSLength | null
-	webkitPerspectiveOrigin?: string | null
-	webkitTapHighlightColor?: string | null
-	webkitTextFillColor?: string | null
-	webkitTextSizeAdjust?: any
+
+	/** Specifies the size of the flexible items
+	 */
+	webkitFlex?: CSSProperty<"none" | "auto" | CSSLength | number> | null
+
+	/** Specifies whether flexible items should wrap or not
+	 */
+	webkitFlexWrap?: CSSProperty<"nowrap" | "wrap" | "wrap-reverse"> | null
+
+	/** Specifies the alignment of flexible items along the main axis
+	 */
+	webkitJustifyContent?: CSSProperty<
+		| "flex-start"
+		| "flex-end"
+		| "center"
+		| "space-between"
+		| "space-around"
+		| "space-evenly"
+	> | null
+
+	/** Specifies the order of a flexible item
+	 */
+	webkitOrder?: CSSProperty<number> | null
+
+	/** Specifies the perspective of an element
+	 */
+	webkitPerspective?: CSSProperty<"none" | CSSLength> | null
+
+	/** Specifies the position of the perspective for the element
+	 */
+	webkitPerspectiveOrigin?: CSSProperty<string> | null
+
+	/** Specifies the color of the highlight when tapping on an element
+	 */
+	webkitTapHighlightColor?: CSSProperty<string> | null
+
+	/** Specifies the color to fill the text of an element
+	 */
+	webkitTextFillColor?: CSSProperty<CSSColor> | null
+
+	/** Specifies whether text size is automatically adjusted based on the size of the container element
+	 */
+	webkitTextSizeAdjust?: CSSProperty<"none" | "auto" | CSSLength> | null
+
+	/** Specifies a 2D or 3D transformation to apply to an element
+	 */
 	webkitTransform?: string | null
-	webkitTransformOrigin?: string | null
-	webkitTransformStyle?: string | null
+
+	/** Specifies the position of the transform origin for an element
+	 */
+	webkitTransformOrigin?: CSSProperty<string> | null
+
+	/** Specifies how nested elements are displayed in 3D space
+	 */
+	webkitTransformStyle?: CSSProperty<"flat" | "preserve-3d"> | null
+
+	/** Specifies the transition effect to apply to an element
+	 */
 	webkitTransition?: string | null
+
+	/** Specifies the amount of time to delay the start of a transition
+	 */
 	webkitTransitionDelay?: string | null
+
+	/** Specifies the duration of a transition effect
+	 */
 	webkitTransitionDuration?: string | null
+
+	/** Specifies the CSS properties to which a transition effect should be applied
+	 */
 	webkitTransitionProperty?: string | null
+
+	/** Specifies the speed curve of a transition effect
+	 */
 	webkitTransitionTimingFunction?: string | null
-	webkitUserModify?: string | null
-	webkitUserSelect?: string | null
-	webkitWritingMode?: string | null
-	whiteSpace?: (
+
+	/** Specifies whether the content of an element can be modified by the user
+	 */
+	webkitUserModify?: CSSProperty<"read-only" | "read-write" | "write-only"> | null
+
+	/** Specifies whether an element can be selected by the user
+	 */
+	webkitUserSelect?: CSSProperty<"none" | "text" | "contain" | "all">
+
+	webkitWritingMode?: CSSProperty<"horizontal-tb" | "writing-mode: vertical-rl" | "writing-mode: vertical-lr">
+	whiteSpace?: CSSProperty<(
 		| "normal"
 		| "nowrap"
 		| "pre"
 		| "pre-wrap"
 		| "pre-line"
 		| "break-spaces"
-	)
+	)>
 	widows?: number
-	width?: (
+	width?: CSSProperty<(
 		| "auto"
 		| "max-content"
 		| "min-content"
-		//| `fit-content(${CSSLength})`
+		| `fit-content(${CSSLength})`
 		| CSSLength
-	)
-	wordBreak?: "normal" | "break-all" | "keep-all" | "break-word"
-	wordSpacing?: "normal" | CSSLength
+	)>
+	wordBreak?: CSSProperty<("normal" | "break-all" | "keep-all" | "break-word")>
+	wordSpacing?: CSSProperty<("normal" | CSSLength)>
 	wordWrap?: string | null
-	writingMode?: "horizontal-tb" | "vertical-rl" | "vertical-lr"
-	zIndex?: "auto" | number
-	zoom?: "normal" | "reset" | `${number}%` | number
+	writingMode?: CSSProperty<("horizontal-tb" | "vertical-rl" | "vertical-lr")>
+	zIndex?: CSSProperty<("auto" | number)>
+	zoom?: CSSProperty<("normal" | "reset" | `${number}%` | number)>
 
 	/** A shorthand property for the grid-template-rows, grid-template-columns, grid-template-areas, grid-auto-rows, grid-auto-columns, and the grid-auto-flow properties */
 	grid?: string
@@ -1028,30 +1802,22 @@ export interface CSSProperties {
 	gridArea?: string
 
 	/** Defines on which row-line a grid item will start */
-	gridRowStart?:
-	| "auto" // Default value. The item will be placed following the flow
-	| `span ${number}` // the number of rows the item will span
-	| number // row line
-	| "inherit" | "initial" | "revert" | "unset"
+	gridRowStart?: string
 
 	/** Defines on which column-line a grid item will start. */
-	gridColumnStart?:
-	| "auto" // Default value. The item will be placed following the flow
-	| `span ${number}` // the number of columns the item will span
-	| number // column-line
-	| "inherit" | "initial" | "revert" | "unset"
+	gridColumnStart?: string
 
 	/** Defines how many rows a grid item will span, or on which row-line the item will end */
-	gridRowEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+	gridRowEnd?: string
 
 	/** Defines how many columns a grid item will span, or on which column-line the item will end */
-	gridColumnEnd?: "auto" | number | `span ${number}` | "inherit" | "initial" | "revert" | "unset"
+	gridColumnEnd?: string
 
 	/** A shorthand property for the grid-row-start and the grid-row-end properties */
-	gridRow?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
+	gridRow?: string
 
 	/** A shorthand property for the grid-column-start and the grid-column-end properties */
-	gridColumn?: `${"auto" | number | `span ${number}`} ${"auto" | number | `span ${number}`}`
+	gridColumn?: string
 
 	/** Specifies the size of the columns, and how many columns in a grid layout */
 	gridTemplateColumns?: string
@@ -1065,10 +1831,10 @@ export interface CSSProperties {
 	gridTemplate?: string | null
 
 	/** Specifies the gap between the grid rows */
-	rowGap?: string | null
+	rowGap?: CSSProperty<(CSSLength | number)>
 
 	/** Specifies the gap between the columns */
-	columnGap?: string | null
+	columnGap?: CSSProperty<(CSSLength | number)>
 
 	/** A shorthand property for the grid-row-gap and grid-column-gap properties
 	 * Either a single CSS length value to both row and column gap
@@ -1085,8 +1851,8 @@ export interface CSSProperties {
 
 export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
 
-type NamedBorderWidth = "thin" | "medium" | "thick"
-type NamedBorderStyle = (
+type CSSBorderWidth = "thin" | "medium" | "thick"
+type CSSBorderStyle = (
 	"none"
 	| "hidden"
 	| "dotted"
@@ -1158,13 +1924,15 @@ type CSSTimeUnit = (
 	| "s"
 )
 export type CSSColor = (
-	| string
 	| keyof typeof colorConstants
 	| "currentcolor"
 	| "transparent"
 	| `#${string}`
 	| `rgb(${number},${number},${number})`
 	| `rgba(${number}, ${number}, ${number}, ${number})`
+	| `hsl(${number}, ${number}%, ${number}%)`
+	| `hsla(${number}, ${number}%, ${number}%, ${number})`
+
 )
 
 export type CSSLength = `${number}${CSSLengthUnit}`
