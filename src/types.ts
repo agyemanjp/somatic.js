@@ -66,58 +66,58 @@ export interface CSSProperties {
 	 * Sets the alignment of items within a flex container when there is extra space in the cross-axis.
 	 */
 	alignContent?: CSSProperty<(
-		| "center" // Centers items
-		| "start" // Aligns items to the start of the container
-		| "end" // Aligns items to the end of the container
-		| "flex-start" // Aligns items to the start of the container, ignoring the flex container's padding
-		| "flex-end" // Aligns items to the end of the container, ignoring the flex container's padding
-		| "normal" // Default value, same as stretch
-		| "baseline" // Aligns items to their baseline
-		| "first baseline" // Aligns the first baseline of items to the container's baseline
-		| "last baseline" // Aligns the last baseline of items to the container's baseline
-		| "space-between" // Distributes items evenly with the first item at the start and last item at the end
-		| "space-around" // Distributes items evenly with equal space around them
-		| "space-evenly" // Distributes items evenly with equal space around them, including the outer edges
-		| "stretch" // Stretches items to fill the container
-		| "safe center" // Centers items inside a container, taking padding into account
-		| "unsafe center" // Centers items inside a container, ignoring padding
+		| "center"
+		| "start"
+		| "end"
+		| "flex-start"
+		| "flex-end"
+		| "normal"
+		| "baseline"
+		| "first baseline"
+		| "last baseline"
+		| "space-between"
+		| "space-around"
+		| "space-evenly"
+		| "stretch"
+		| "safe center"
+		| "unsafe center"
 	)>
 	/**
 	 * This represents the alignItems CSS property that sets the alignment of items along the cross-axis of a flex container.
 	 */
 	alignItems?: CSSProperty<(
-		| "normal" // Default value, same as stretch
-		| "stretch" // Stretches items to fill the container
-		| "center" // Centers items
-		| "start" // Aligns items to the start of the container
-		| "end" // Aligns items to the end of the container
-		| "flex-start" // Aligns items to the start of the container, ignoring the flex container's padding
-		| "flex-end" // Aligns items to the end of the container, ignoring the flex container's padding
-		| "baseline" // Aligns items to their baseline
-		| "first baseline" // Aligns the first baseline of items to the container's baseline
-		| "last baseline" // Aligns the last baseline of items to the container's baseline
-		| "safe center" // Centers items inside a container, taking padding into account
-		| "unsafe center" // Centers items inside a container, ignoring padding
+		| "normal"
+		| "stretch"
+		| "center"
+		| "start"
+		| "end"
+		| "flex-start"
+		| "flex-end"
+		| "baseline"
+		| "first baseline"
+		| "last baseline"
+		| "safe center"
+		| "unsafe center"
 	)>
 	/**
 	 * This represents the alignSelf CSS property that sets the alignment for a flex item when the items are laid out in a flex container.
 	 */
 	alignSelf?: CSSProperty<(
-		| "auto" // The value is inherited from its parent element.
-		| "normal" // The item is placed in the default position as specified by the layout mode of the parent element.
-		| "center" // The flex item is centered in the cross-axis of the flex container.
-		| "start" // The flex item is aligned to the start of the cross-axis of the flex container.
-		| "end" // The flex item is aligned to the end of the cross-axis of the flex container.
-		| "self-start" // The flex item is aligned to the start of the cross-axis of the flex container if the item's inline-axis is the same as the container's axis; otherwise, it is treated as align-start.
-		| "self-end" // The flex item is aligned to the end of the cross-axis of the flex container if the item's inline-axis is the same as the container's axis; otherwise, it is treated as align-end.
-		| "flex-start" // The flex item is aligned to the start of the cross-axis of the flex container.
-		| "flex-end" // The flex item is aligned to the end of the cross-axis of the flex container.
-		| "baseline" // The flex item is aligned so that its baseline is aligned with the baseline of the parent container.
-		| "first baseline" // The flex item is aligned so that its first text line is aligned with the first baseline of the parent container.
-		| "last baseline" // The flex item is aligned so that its last text line is aligned with the last baseline of the parent container.
-		| "stretch" // The flex item is stretched to fill the cross-axis of the flex container.
-		| "safe center" // The flex item is centered in the safe area of the container.
-		| "unsafe center" // The flex item is centered in the unsafe area of the container.
+		| "auto"
+		| "normal"
+		| "center"
+		| "start"
+		| "end"
+		| "self-start"
+		| "self-end"
+		| "flex-start"
+		| "flex-end"
+		| "baseline"
+		| "first baseline"
+		| "last baseline"
+		| "stretch"
+		| "safe center"
+		| "unsafe center"
 	)>
 	/**
 	 * This represents the CSS alignment-baseline property that sets the baseline alignment of an element
@@ -221,7 +221,7 @@ export interface CSSProperties {
 	 * Sets one or more background properties of an element.
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background|background} - MDN reference
 	 */
-	background?: CSSProperty<(string)>
+	background?: CSSProperty<string>
 	/**
 	 * Sets whether the background image scrolls with the containing block or remains fixed.
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-attachment|background-attachment} - MDN reference
@@ -682,122 +682,197 @@ export interface CSSProperties {
 	 * A shorthand property that specifies the width and the number of columns in a multi-column element.
 	 */
 	columns?: CSSProperty<(
-		| CSSLength
-		| "auto"
-		| number
-		| `${('auto' | `${CSSLength}` | number)} ${('auto' | `${CSSLength}` | number)}`
+		| CSSLength // Specifies a fixed column width using a CSS length value.
+		| "auto" // Automatically determines the column width.
+		| number // Specifies the column count.
+		| `${('auto' | `${CSSLength}` | number)} ${('auto' | `${CSSLength}` | number)}` // Specifies both column width and count.
 	)>
 	content?: CSSProperty<(string | null)>
+	/**
+	 * The counterIncrement property specifies the increment or decrement of one or more CSS counters.
+	 */
 	counterIncrement?: CSSProperty<(string | "none")>
-	counterReset?: CSSProperty<(string | "none")>
-	cssFloat?: string | null
+	/**
+	 * The counterReset property specifies the initial value of one or more CSS counters.
+	 */
+	counterReset?: CSSProperty<(string | "none")> // Specifies the initial value of CSS counters.
+	/**
+	 * The cssFloat property specifies the positioning of an element in relation to surrounding elements.
+	 */
+	cssFloat?: string | null // Specifies the positioning of an element.
+	/**
+	 * The float property specifies the positioning of an element in relation to surrounding elements.
+	 */
 	float?: CSSProperty<(
-		| "left"
-		| "right"
-		| "none"
-		| "inline-start"
-		| "inline-end"
+		| "left" // Positions the element to the left of surrounding elements.
+		| "right" // Positions the element to the right of surrounding elements.
+		| "none" // Does not float the element.
+		| "inline-start" // Positions the element at the start of a line, within the text flow.
+		| "inline-end" // Positions the element at the end of a line, within the text flow.
 	)>
-	cssText?: string
+	/**
+	 * The cssText property represents the serialized form of the CSS declarations of an element.
+	 */
+	cssText?: string // Represents the serialized form of CSS declarations of an element.
 	cursor?: CSSProperty<(
-		| CursorKeywords
-		| `url(${string}), ${CursorKeywords}`
-		| `url(${string}) ${number} ${number}, ${CursorKeywords}`
+		| CursorKeywords // Specifies a predefined cursor keyword.
+		| `url(${string}), ${CursorKeywords}` // Specifies a custom cursor image and fallback keyword.
+		| `url(${string}) ${number} ${number}, ${CursorKeywords}` // Specifies a custom cursor image with hotspot coordinates and fallback keyword.
 	)>
-	direction?: CSSProperty<("ltr" | "rtl")>
+	/**
+	 * The direction property specifies the direction of the text content within an element.
+	 */
+	direction?: CSSProperty<("ltr" | "rtl")> // Specifies the direction of the text content.
+	/**
+	 * The display property specifies the type of rendering box used for an element.
+	 */
 	display?: CSSProperty<(
-		| "block"
-		| "inline"
-		| "inline-block"
-		| "flex"
-		| "inline-flex"
-		| "grid"
-		| "inline-grid"
-		| "flow-root"
-		| "none"
-		| "contents"
-		| "block flow"
-		| "inline flow"
-		| "inline flow-root"
-		| "block flex"
-		| "inline flex"
-		| "block grid"
-		| "inline grid"
-		| "block flow-root"
-		| "table"
-		| "table-row"
-		| "list-item"
+		| "block" // Displays an element as a block-level element.
+		| "inline" // Displays an element as an inline-level element.
+		| "inline-block" // Displays an element as an inline-level block container.
+		| "flex" // Displays an element as a block-level flex container.
+		| "inline-flex" // Displays an element as an inline-level flex container.
+		| "grid" // Displays an element as a block-level grid container.
+		| "inline-grid" // Displays an element as an inline-level grid container.
+		| "flow-root" // Establishes a new block formatting context for its contents.
+		| "none" // Does not display an element.
+		| "contents" // Makes the element's children appear as if they were direct children of the element's parent.
+		| "block flow" // Behaves as a block container that establishes a new block formatting context for its contents.
+		| "inline flow" // Behaves as an inline container that establishes a new block formatting context for its contents.
+		| "inline flow-root" // Behaves as an inline container that establishes a new block formatting context for its contents.
+		| "block flex" // Behaves as a block container that establishes a new flex formatting context for its contents.
+		| "inline flex" // Behaves as an inline container that establishes a new flex formatting context for its contents.
+		| "block grid" // Behaves as a block container that establishes a new grid formatting context for its contents.
+		| "inline grid" // Behaves as an inline container that establishes a new grid formatting context for its contents.
+		| "block flow-root" // Behaves as a block container that establishes a new block formatting context for its contents.
+		| "table" // Behaves as a block-level table.
+		| "table-row" // Behaves as a block-level table row.
+		| "list-item" // Behaves as a block-level element and generates a principal box for the list item.
 	)>
+	/**
+	 * The dominantBaseline property specifies the dominant baseline alignment for text.
+	 */
 	dominantBaseline?: (
-		| "auto"
-		| "ideographic"
-		| "alphabetic"
-		| "hanging"
-		| "mathematical"
-		| "central"
-		| "middle"
-		| "text-after-edge"
-		| "text-before-edge"
-		| "text-top"
+		| "auto" // Aligns the text baseline automatically based on the content.
+		| "ideographic" // Aligns the text baseline to the ideographic baseline.
+		| "alphabetic" // Aligns the text baseline to the alphabetic baseline.
+		| "hanging" // Aligns the text baseline to the hanging baseline.
+		| "mathematical" // Aligns the text baseline to the mathematical baseline.
+		| "central" // Aligns the text baseline to the central baseline.
+		| "middle" // Aligns the text baseline to the middle baseline.
+		| "text-after-edge" // Aligns the text baseline to the after-edge baseline.
+		| "text-before-edge" // Aligns the text baseline to the before-edge baseline.
+		| "text-top" // Aligns the text baseline to the top of the em square.
 	)
-	emptyCells?: CSSProperty<("show" | "hide")>
-	enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}`
-	fill?: string | null
-	fillOpacity?: number | `${number}%`
-	fillRule?: "nonzero" | "evenodd"
+	/**
+	 * The emptyCells property specifies whether or not to display borders and background on empty cells in a table.
+	 */
+	emptyCells?: CSSProperty<("show" | "hide")> // Specifies whether to display borders and background on empty cells in a table.
+	/**
+	 * The enableBackground property specifies the background blending behavior for an element.
+	 */
+	enableBackground?: "accumulate" | `${number} ${number} ${number} ${number}` // Specifies the background blending behavior for an element.
+	/**
+	 * The fill property specifies the color or URL to use for filling an element's shape.
+	 */
+	fill?: string | null // Specifies the color or URL for filling an element's shape.
+	/**
+	 * The fillOpacity property specifies the opacity of the fill color for an element's shape.
+	 */
+	fillOpacity?: number | `${number}%` // Specifies the opacity of the fill color for an element's shape.
+	/**
+	 * The fillRule property specifies the algorithm to determine the inside part of a shape for filling.
+	 */
+	fillRule?: "nonzero" | "evenodd" // Specifies the algorithm to determine the inside part of a shape for filling.
+	/**
+	 * The filter property applies visual effects to an element.
+	 */
 	filter?: (
-		| `url(${string})`
-		| `blur(${CSSLength})`
-		| `brightness(${number})`
-		| `contrast(${number}%)`
+		| `url(${string})` // Specifies a URL reference to an SVG filter.
+		| `blur(${CSSLength})` // Applies a blur effect to the element.
+		| `brightness(${number})` // Adjusts the brightness of the element.
+		| `contrast(${number}%)` // Adjusts the contrast of the element.
 		//| `drop-shadow(${CSSLength} ${CSSLength} ${CSSLength} ${CSSColor})`
-		| `grayscale(${number}%)`
-		| `hue-rotate(${number}deg)`
-		| `invert(${number}%)`
-		| `opacity(${number}%)`
-		| `saturate(${number}%)`
-		| `sepia(${number}%)`
-		| string
-		| "none"
+		| `grayscale(${number}%)` // Converts the element to grayscale.
+		| `hue-rotate(${number}deg)` // Rotates the hue of the element.
+		| `invert(${number}%)` // Inverts the colors of the element.
+		| `opacity(${number}%)` // Adjusts the opacity of the element.
+		| `saturate(${number}%)` // Adjusts the saturation of the element.
+		| `sepia(${number}%)` // Applies a sepia tone effect to the element.
+		| `${string}` // A custom filter value.
+		| "none" // Disables any filters applied to the element.
 	)
+	/**
+	 * The flex property specifies the ability for a flex item to grow or shrink to fit available space.
+	 */
 	flex?: CSSProperty<(
-		| "none"
-		| "auto"
-		| "initial"
-		| number
-		| CSSLength
-		| string
+		| "none" // Disables flex growth and shrinking.
+		| "auto" // Enables flex growth and shrinking based on available space.
+		| "initial" // Sets the initial flex grow and shrink values to 0.
+		| number // Specifies the flex grow value as a number.
+		| CSSLength // Specifies the flex basis as a length value.
+		| string // A custom flex value.
 	)>
+	/**
+	 * The flexBasis property specifies the initial size of a flex item in a flex container.
+	 */
 	flexBasis?: CSSProperty<(
-		| "auto"
-		| CSSLength
-		| "min-content"
-		| "max-content"
-		| "fit-content"
-		| "content"
+		| "auto" // Sets the initial size based on the item's content or the item's flex-grow value.
+		| CSSLength // Specifies the initial size as a length value.
+		| "min-content" // Sets the initial size based on the minimum content size of the item.
+		| "max-content" // Sets the initial size based on the maximum content size of the item.
+		| "fit-content" // Sets the initial size based on the fit-content size of the item.
+		| "content" // Sets the initial size based on the item's content size.
 	)>
+	/**
+	 * The flexDirection property specifies the direction of the main axis in a flex container.
+	 */
 	flexDirection?: CSSProperty<(
-		| "row"
-		| "row-reverse"
-		| "column"
-		| "column-reverse"
+		| "row" // Displays the flex container as a row, with the main axis flowing from left to right.
+		| "row-reverse" // Displays the flex container as a row, with the main axis flowing from right to left.
+		| "column" // Displays the flex container as a column, with the main axis flowing from top to bottom.
+		| "column-reverse" // Displays the flex container as a column, with the main axis flowing from bottom to top.
 	)>
+	/**
+	 * The flexFlow property is a shorthand property for setting both the flex-direction and flex-wrap properties.
+	 */
 	flexFlow?: CSSProperty<(
-		| "row"
-		| "row-reverse"
-		| "column"
-		| "column-reverse"
-		| "nowrap"
-		| "wrap"
-		| "wrap-reverse"
-		//| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}`
+		| "row" // Displays the flex container as a row, with the main axis flowing from left to right.
+		| "row-reverse" // Displays the flex container as a row, with the main axis flowing from right to left.
+		| "column" // Displays the flex container as a column, with the main axis flowing from top to bottom.
+		| "column-reverse" // Displays the flex container as a column, with the main axis flowing from bottom to top.
+		| "nowrap" // The flex items are displayed in a single line, and the flex container is not wrapped.
+		| "wrap" // The flex items are displayed in multiple lines, and the flex container is wrapped.
+		| "wrap-reverse" // The flex items are displayed in multiple lines, and the flex container is wrapped in reverse order.
+		| `${"row" | "row-reverse" | "column" | "column-reverse"} ${"nowrap" | "wrap" | "wrap-reverse"}` // Custom combination of flex direction and wrap.
 	)>
-	flexGrow?: CSSProperty<(number)>
-	flexShrink?: CSSProperty<(number)>
-	flexWrap?: CSSProperty<("nowrap" | "wrap" | "wrap-reverse")>
-	floodColor?: CSSColor
-	floodOpacity?: number | `${number}%`
-	font?: string | null
+	/**
+	 * The flexGrow property specifies the ability for a flex item to grow if necessary.
+	 */
+	flexGrow?: CSSProperty<(number)> // Specifies the ability for a flex item to grow if necessary.
+	/**
+	 * The flexShrink property specifies the ability for a flex item to shrink if necessary.
+	 */
+	flexShrink?: CSSProperty<(number)> // Specifies the ability for a flex item to shrink if necessary.
+	/**
+	 * The flexWrap property specifies whether flex items are forced onto one line or can wrap onto multiple lines.
+	 */
+	flexWrap?: CSSProperty<("nowrap" | "wrap" | "wrap-reverse")> // Specifies whether flex items are forced onto one line or can wrap onto multiple lines.
+	/**
+	 * The floodColor property specifies the color to be used for the `flood` operation in SVG filter effects.
+	 */
+	floodColor?: CSSColor // Specifies the color to be used for the `flood` operation in SVG filter effects.
+	/**
+	 * The floodOpacity property specifies the opacity of the `flood` operation in SVG filter effects.
+	 */
+	floodOpacity?: number | `${number}%` // Specifies the opacity of the `flood` operation in SVG filter effects.
+	/**
+	 * The font property specifies the font styling for an element.
+	 */
+	font?: string | null // Specifies the font styling for an element.
+	/**
+	 * The fontFamily property specifies the font family for an element.
+	 */
 	fontFamily?: CSSProperty<(
 		| "serif"
 		| "sans-serif"
@@ -812,15 +887,12 @@ export interface CSSProperties {
 		| "emoji"
 		| "math"
 		| "fangsong"
-		| string
-		//         | `${string} ${"serif" | "sans-serif" | "cursive" | "fantasy" | "monospace" | "system-ui" | "ui-serif" |
-		// "ui-sans-serif" | "ui-monospace" | "ui-rounded" | "emoji" | "math" | "fangsong"}`
+		| `${string} `
 	)>
-	fontFeatureSettings?: CSSProperty<(
-		| "normal"
-		| string
-		| `${string} ${"on" | "off" | number}`
-	)>
+	/**
+	 * The fontFamily property specifies the font family for an element.
+	 */
+	fontFeatureSettings?: CSSProperty<string> // Specifies the font family for an element.
 	fontSize?: CSSProperty<(
 		| "xx-small"
 		| "x-small"
