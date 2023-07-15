@@ -28,7 +28,7 @@
 	"scripts": {
 		"deps": "rm -rf ./node_modules package-lock.json && pnpm install",
 		"clean": "rm -rf dist/* .eslintcache *.run.json",
-		"lint": "eslint --ext ts --cache 'src/**'",
+		"lint": "eslint --ext ts --cache \"src/**/*\"",
 		"lintci": "eslint --ext ts --output-file .lint.run.json --format json-standard --cache 'src/**'",
 		"compile": "tsc",
 		"test": "mocha --require ts-node/register test/*.test.*",
