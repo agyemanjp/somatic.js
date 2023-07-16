@@ -1,7 +1,7 @@
 require('jsdom-global')()
 import * as assert from "assert"
-import { IntrinsicElement } from "../dist/types"
-import { renderAsync } from "../dist/core"
+import { IntrinsicElement } from "../dist/src/types"
+import { renderAsync } from "../dist/src/core"
 import {
 	createDOMShallow,
 	updateDomShallow,
@@ -11,8 +11,8 @@ import {
 	emptyContainer,
 	isAugmentedDOM,
 	isTextDOM
-} from '../dist/dom'
-import { traceToLeafAsync, isIntrinsicElt } from "../dist/element"
+} from '../dist/src/dom'
+import { traceToLeafAsync, isIntrinsicElt } from "../dist/src/element"
 import { StackPanel, CommandBox, View } from "./_utils"
 
 

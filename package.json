@@ -35,6 +35,8 @@
 		"testci": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
 		"build": "run-s lint compile test",
 		"buildci": "run-s lintci compile testci",
+		"bundleicons": "rollup -c",
+		"iconpreview": "http-server -a localhost -p 1234 -o icons/static/index.html",
 		"pubstage": "cp package.json LICENSE README.md dist",
 		"pubpreview": "npm run pubstage && cd dist && npm publish --dry-run && cd ..",
 		"version:patch": "npm version patch && git push --follow-tags",
@@ -46,9 +48,14 @@
 	},
 	"dependencies": {
 		"@agyemanjp/standard": "^5.1.2",
-		"cuid": "2.1.8"
+		"@paralleldrive/cuid2": "^2.2.1",
+		"@rollup/plugin-commonjs": "^25.0.3"
 	},
 	"devDependencies": {
+		
+		"@rollup/plugin-json": "^6.0.0",
+		"@rollup/plugin-node-resolve": "^15.1.0",
+		"@rollup/plugin-typescript": "^11.1.2",
 		"@types/chai": "4.2.22",
 		"@types/chai-html": "1.3.0",
 		"@types/eslint": "7.2.0",
