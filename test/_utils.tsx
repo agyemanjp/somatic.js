@@ -1,11 +1,11 @@
 import { ArgsType, deepMerge, mergeDeep } from "@agyemanjp/standard"
 import * as cuid from "@paralleldrive/cuid2"
 
-import "../dist"; // for globals e.g., JSX
-import { createElement, renderToIntrinsicAsync } from "../dist/src/core"
-import { normalizeChildren } from "../dist/src/element"
-import { stringifyStyle } from "../dist/src/html"
-import { ButtonHTMLAttributes, CSSProperties, Component, HtmlProps, PanelProps, SVGAttributes, UIElement } from "../dist/src/types"
+import "../dist" // for globals e.g., JSX
+import { createElement, renderToIntrinsicAsync } from "../dist/core"
+import { normalizeChildren } from "../dist/element"
+import { stringifyStyle } from "../dist/html"
+import { ButtonHTMLAttributes, CSSProperties, Component, HtmlProps, PanelProps, SVGAttributes, UIElement } from "../dist/types"
 
 /** Create html element from html string; Requires <document> object to exist */
 export function constructElement(html: string): HTMLElement {
