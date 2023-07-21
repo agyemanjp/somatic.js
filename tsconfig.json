@@ -30,6 +30,6 @@
 	},
 	"include": [
 		"./src",
-		"./icons"],
+		"./icons", "./components"],
 	"exclude": []
 }
