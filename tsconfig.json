@@ -30,6 +30,7 @@
 	},
 	"include": [
 		"./src",
-	],
+		"./icons"
+, "rollup.config.js"	],
 	"exclude": []
 }

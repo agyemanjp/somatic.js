@@ -5,7 +5,7 @@ import json from "@rollup/plugin-json"
 
 export default [
     {
-        input: "preview/icon-preview.tsx",
+        input: "icons/preview/icon-preview.tsx",
         output: {dir: 'dist/public', format: 'esm'},
         preserveEntrySignatures: false,
         context: "window",
