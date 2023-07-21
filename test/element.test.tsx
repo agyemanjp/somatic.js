@@ -1,10 +1,10 @@
 import * as assert from "assert"
 import { isGenerator, pick, unique, stringify } from "@agyemanjp/standard"
-import { ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/types'
-import { isEltProper, isIntrinsicElt, isComponentElt, updateResultAsync, traceToLeafAsync, updateTraceAsync, getChildren } from '../dist/element'
+import { ComponentElt, Component, IntrinsicElement, CSSProperties } from '../dist/src'
+import { isEltProper, isIntrinsicElt, isComponentElt, updateResultAsync, traceToLeafAsync, updateTraceAsync, getChildren } from '../dist/src/element'
 
 import { StackPanel } from './_utils'
-import { createElement } from "../dist/core"
+import { createElement } from "../dist/src"
 
 interface User {
 	id: string

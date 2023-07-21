@@ -8,7 +8,7 @@ import {
 	DOMAugmented,
 	Component,
 	CSSProperties,
-} from '../dist/types'
+} from '../dist/src'
 import {
 	createElement,
 	renderAsync,
@@ -17,11 +17,11 @@ import {
 	updateChildrenAsync,
 	updateAsync,
 	mountElement,
-} from '../dist/core'
-import { isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
-import { isAugmentedDOM, isTextDOM, createDOMShallow } from '../dist/dom'
+} from '../dist/src/core'
+import { isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/src/element'
+import { isAugmentedDOM, isTextDOM, createDOMShallow } from '../dist/src/dom'
 import { StackPanel, CommandBox, View, normalizeHTML } from './_utils'
-import { idProvider } from '../dist/common'
+import { idProvider } from '../dist/src/common'
 
 describe('CORE MODULE', () => {
 	use(chaiHTML)
