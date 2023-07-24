@@ -1,11 +1,8 @@
 import { ArgsType, deepMerge, mergeDeep } from "@agyemanjp/standard"
 import * as cuid from "@paralleldrive/cuid2"
-
-import "../dist/src" // for globals e.g., JSX
-import { createElement, renderToIntrinsicAsync } from "../dist/src"
-import { normalizeChildren } from "../dist/src"
-import { stringifyStyle } from "../dist/src"
-import { ButtonHTMLAttributes, CSSProperties, Component, HtmlProps, PanelProps, SVGAttributes, UIElement } from "../dist/src"
+import { createElement, renderToIntrinsicAsync } from "../dist/core"
+import { normalizeChildren } from "../dist/element"
+import { Component, PanelProps, HtmlProps, CSSProperties, ButtonHTMLAttributes, SVGAttributes, UIElement } from "../dist/types"
 
 /** Create html element from html string; Requires <document> object to exist */
 export function constructElement(html: string): HTMLElement {
