@@ -3,6 +3,7 @@ import * as cuid from "@paralleldrive/cuid2"
 import { createElement, renderToIntrinsicAsync } from "../dist/core"
 import { normalizeChildren } from "../dist/element"
 import { Component, PanelProps, HtmlProps, CSSProperties, ButtonHTMLAttributes, SVGAttributes, UIElement } from "../dist/types"
+import { stringifyStyle } from "../dist"
 
 /** Create html element from html string; Requires <document> object to exist */
 export function constructElement(html: string): HTMLElement {

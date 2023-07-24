@@ -11,8 +11,7 @@ import {
 	renderToIntrinsicAsync,
 	renderToStringAsync,
 	updateAsync,
-	updateChildrenAsync,
-} from '../dist/core'
+} from '../dist'
 import { createDOMShallow, isAugmentedDOM, isTextDOM } from '../dist/dom'
 import { getChildren, traceToLeafAsync } from '../dist/element'
 import {
@@ -22,6 +21,7 @@ import {
 	IntrinsicElement,
 } from '../dist/types'
 import { CommandBox, StackPanel, View, normalizeHTML } from './_utils'
+import { updateChildrenAsync } from '../dist/core'
 
 describe('CORE MODULE', () => {
 	use(chaiHTML)
