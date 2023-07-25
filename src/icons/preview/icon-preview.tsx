@@ -21,8 +21,8 @@ import * as Icons from '../index'
 				alignContent: "space-evenly"
 			}}>
 
-				{/* eslint-disable-next-line react/jsx-key */}
-				{Object.entries(Icons).map(([key, ico]) => (<div id={key}
+				{Object.entries(Icons).map(([key, ico]) => (<div
+					id={key}
 					style={{
 						alignContent: "center",
 						border: "1px solid",

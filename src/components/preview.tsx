@@ -1,5 +1,3 @@
-
-
 import { createElement, mountElement } from '../core'
 import { CarouselPanel } from './index'
 

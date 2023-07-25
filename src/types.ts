@@ -1005,13 +1005,13 @@ export interface CSSProperties {
 		| "break-spaces"
 	)
 	widows?: number
-	width?: (
+	width?: CSSProperty<(
 		| "auto"
 		| "max-content"
 		| "min-content"
-		//| `fit-content(${CSSLength})`
+		| `fit-content(${CSSLength})`
 		| CSSLength
-	)
+	)>
 	wordBreak?: "normal" | "break-all" | "keep-all" | "break-word"
 	wordSpacing?: "normal" | CSSLength
 	wordWrap?: string | null
