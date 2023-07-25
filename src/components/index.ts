@@ -1,1 +1,1 @@
-// components
+export * from './panels'
