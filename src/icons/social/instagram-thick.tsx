@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const InstagramThick = create(
-	<svg width="16px"
+	<svg
+		width="16px"
 		height="16px"
 		viewBox="0 0 16 16"
 		xmlns="http://www.w3.org/2000/svg"

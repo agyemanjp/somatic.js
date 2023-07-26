@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const OptionsIndigo = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		x="0px" y="0px"
@@ -13,24 +14,32 @@ export const OptionsIndigo = create(
 			style={{ fill: "#7A61C9" }}
 			d="M496,320.8c0,96.8-78.4,175.2-175.2,175.2H175.2C78.4,496,0,417.6,0,320.8V175.2
 	C0,78.4,78.4,0,175.2,0h145.6C417.6,0,496,78.4,496,175.2V320.8z" />
-		<path style={{ fill: "#6752C1" }} d="M0,175.2C0,78.4,78.4,0,175.2,0h145.6C417.6,0,496,78.4,496,175.2v145.6
+		<path
+			style={{ fill: "#6752C1" }} d="M0,175.2C0,78.4,78.4,0,175.2,0h145.6C417.6,0,496,78.4,496,175.2v145.6
 	c0,96.8-78.4,175.2-175.2,175.2" />
 		<g>
-			<path style={{ fill: "#5349B7" }}
+			<path
+				style={{ fill: "#5349B7" }}
 				d="M320.8,0C417.6,0,496,78.4,496,175.2v145.6c0,96.8-78.4,175.2-175.2,175.2" />
-			<path style={{ fill: "#5349B7" }} d="M162.4,248h-5.6c-8.8,0-15.2,7.2-15.2,16s7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
+			<path
+				style={{ fill: "#5349B7" }} d="M162.4,248h-5.6c-8.8,0-15.2,7.2-15.2,16s7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
 		S170.4,248,162.4,248z" />
-			<path style={{ fill: "#5349B7" }} d="M250.4,248h-5.6c-8.8,0-15.2,7.2-15.2,16s7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
+			<path
+				style={{ fill: "#5349B7" }} d="M250.4,248h-5.6c-8.8,0-15.2,7.2-15.2,16s7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
 		S259.2,248,250.4,248z" />
-			<path style={{ fill: "#5349B7" }} d="M339.2,248h-5.6c-8.8,0-15.2,7.2-15.2,16s7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
+			<path
+				style={{ fill: "#5349B7" }} d="M339.2,248h-5.6c-8.8,0-15.2,7.2-15.2,16s7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
 		S348,248,339.2,248z" />
 		</g>
 		<g>
-			<path style={{ fill: "#FFFFFF" }} d="M162.4,232h-5.6c-8.8,0-15.2,7.2-15.2,16c0,8.8,7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
+			<path
+				style={{ fill: "#FFFFFF" }} d="M162.4,232h-5.6c-8.8,0-15.2,7.2-15.2,16c0,8.8,7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
 		S170.4,232,162.4,232z" />
-			<path style={{ fill: "#FFFFFF" }} d="M250.4,232h-5.6c-8.8,0-15.2,7.2-15.2,16c0,8.8,7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
+			<path
+				style={{ fill: "#FFFFFF" }} d="M250.4,232h-5.6c-8.8,0-15.2,7.2-15.2,16c0,8.8,7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
 		S259.2,232,250.4,232z" />
-			<path style={{ fill: "#FFFFFF" }} d="M339.2,232h-5.6c-8.8,0-15.2,7.2-15.2,16c0,8.8,7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
+			<path
+				style={{ fill: "#FFFFFF" }} d="M339.2,232h-5.6c-8.8,0-15.2,7.2-15.2,16c0,8.8,7.2,16,15.2,16h5.6c8.8,0,15.2-7.2,15.2-16
 		S348,232,339.2,232z" />
 		</g>
 	</svg>
@@ -38,7 +47,8 @@ export const OptionsIndigo = create(
 
 
 export const OptionsLines = create(
-	<svg width="512px"
+	<svg
+		width="512px"
 		height="512px"
 		viewBox="0 0 512 512"
 		xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +65,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<line x1="64"
+		<line
+			x1="64"
 			y1="128" x2="304" y2="128"
 			style={{
 				fill: "none",
@@ -64,7 +75,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<line x1="368" y1="384" x2="448" y2="384"
+		<line
+			x1="368" y1="384" x2="448" y2="384"
 			style={{
 				fill: "none",
 				stroke: "#000",
@@ -72,7 +84,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<line x1="64" y1="384" x2="304" y2="384"
+		<line
+			x1="64" y1="384" x2="304" y2="384"
 			style={{
 				fill: "none",
 				stroke: "#000",
@@ -80,7 +93,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<line x1="208" y1="256" x2="448" y2="256"
+		<line
+			x1="208" y1="256" x2="448" y2="256"
 			style={{
 				fill: "none",
 				stroke: "#000",
@@ -88,7 +102,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<line x1="64" y1="256" x2="144" y2="256"
+		<line
+			x1="64" y1="256" x2="144" y2="256"
 			style={{
 				fill: "none",
 				stroke: "#000",
@@ -96,7 +111,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<circle cx="336" cy="128" r="32"
+		<circle
+			cx="336" cy="128" r="32"
 			style={{
 				fill: "none",
 				stroke: "#000",
@@ -104,7 +120,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<circle cx="176" cy="256" r="32"
+		<circle
+			cx="176" cy="256" r="32"
 			style={{
 				fill: "none",
 				stroke: "#000",
@@ -112,7 +129,8 @@ export const OptionsLines = create(
 				strokeLinejoin: "round",
 				strokeWidth: "32px"
 			}} />
-		<circle cx="336" cy="384" r="32"
+		<circle
+			cx="336" cy="384" r="32"
 			style={{
 				fill: "none",
 				stroke: "#000",
@@ -125,7 +143,8 @@ export const OptionsLines = create(
 
 
 export const OptionsBlocks = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		x="0px" y="0px"

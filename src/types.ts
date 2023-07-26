@@ -2292,7 +2292,6 @@ export interface SyntheticEvent<T = Element> {
 	/**
 	 * A reference to the element from which the event was originally dispatched.
 	 * This might be a child element to the element on which the event listener is registered.
-	 *
 	 * @see currentTarget
 	 */
 	target: EventTarget

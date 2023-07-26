@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const CancelCircled1 = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		viewBox="0 0 475.2 475.2"

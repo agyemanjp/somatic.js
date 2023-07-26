@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const HeartThick = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		id="Layer_1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -27,7 +28,8 @@ export const HeartThick = create(
 )
 
 export const HeartThin = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		id="Capa_1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"

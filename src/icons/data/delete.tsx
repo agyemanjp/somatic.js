@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const Delete = create(
-	<svg width="1024px"
+	<svg
+		width="1024px"
 		height="1024px"
 		viewBox="0 0 1024 1024"
 		xmlns="http://www.w3.org/2000/svg"

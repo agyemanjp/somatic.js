@@ -3,7 +3,8 @@ import { create } from "../utils.js"
 
 export const Swap = create(
 	<svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
-		<g fill="none"
+		<g
+			fill="none"
 			fillRule="evenodd"
 			stroke="currentColor"
 			strokeLinecap="round"

@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const SortAscending = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		x="0px" y="0px"
@@ -10,7 +11,8 @@ export const SortAscending = create(
 		style={{ enableBackground: "0 0 32 32" }}
 		xmlSpace="preserve">
 		<line fill="none" stroke="#000000" strokeWidth="2" strokeMiterlimit="10" x1="22" y1="26.1" x2="22" y2="5" />
-		<polyline fill="none"
+		<polyline
+			fill="none"
 			stroke="#000000"
 			strokeWidth="2"
 			strokeMiterlimit="10"
@@ -25,13 +27,15 @@ export const SortAscending = create(
 )
 
 export const SortDescending = create(
-	<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+	<svg
+		version="1.1" xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		viewBox="0 0 32 32"
 		style={{ enableBackground: "0 0 32 32" }}
 		xmlSpace="preserve">
 		<line fill="none" stroke="#000000" strokeWidth="2" strokeMiterlimit="10" x1="22" y1="26.1" x2="22" y2="5" />
-		<polyline fill="none"
+		<polyline
+			fill="none"
 			stroke="#000000"
 			strokeWidth="2"
 			strokeMiterlimit="10"
@@ -46,7 +50,8 @@ export const SortDescending = create(
 )
 
 export const SortThick = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		id="Capa_1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -69,7 +74,8 @@ export const SortThick = create(
 )
 
 export const SortThin = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		id="Capa_1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"

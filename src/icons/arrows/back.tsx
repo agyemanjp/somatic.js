@@ -2,12 +2,14 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const BackArrowRectagular = create(
-	<svg xmlns="http://www.w3.org/2000/svg"
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
 		viewBox="0 0 24 24"
 		stroke="currentColor"
 		strokeWidth="2">
-		<path strokeLinecap="round"
+		<path
+			strokeLinecap="round"
 			strokeLinejoin="round"
 			d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
 	</svg>
@@ -15,7 +17,8 @@ export const BackArrowRectagular = create(
 
 
 export const BackArrowRounded = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		x="0px" y="0px"

@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const PlayStoreThick = create(
-	<svg width="24px"
+	<svg
+		width="24px"
 		height="24px"
 		viewBox="0 0 24 24"
 		xmlns="http://www.w3.org/2000/svg">

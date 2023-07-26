@@ -2,7 +2,8 @@ import { createElement } from "../../index.js"
 import { create } from "../utils.js"
 
 export const PreviousArrow = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		x="0px" y="0px"
@@ -24,7 +25,8 @@ export const PreviousArrow = create(
 )
 
 export const PreviousArrowHollow = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		x="0px" y="0px"
@@ -63,7 +65,8 @@ export const PreviousArrowHollow = create(
 
 
 export const PrevArrowToSolidWall = create(
-	<svg version="1.1"
+	<svg
+		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		x="0px" y="0px"
