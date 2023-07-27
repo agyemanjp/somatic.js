@@ -1,6 +1,9 @@
 
-import { createElement, mountElement } from '../..'
-import * as Icons from '../index'
+// import { createElement, mountElement } from '../src'
+// import * as Icons from '../src/icons/index'
+
+import { createElement, mountElement } from "../dist"
+import * as Icons from "../dist/icons"
 
 
 (async () => {
@@ -20,6 +23,10 @@ import * as Icons from '../index'
 				justifyContent: "space-evenly",
 				alignContent: "space-evenly"
 			}}>
+				<div style={{ display: "flex", height: "20%" }}>
+					<p>Icon</p>
+					<p>Components</p>
+				</div>
 
 				{Object.entries(Icons).map(([key, ico]) => (<div
 					id={key}

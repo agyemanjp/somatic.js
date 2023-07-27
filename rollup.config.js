@@ -1,11 +1,11 @@
-import typescript from "@rollup/plugin-typescript"
-import {nodeResolve} from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import json from "@rollup/plugin-json"
+import { nodeResolve } from "@rollup/plugin-node-resolve"
+import typescript from "@rollup/plugin-typescript"
 
 export default [
     {
-        input: ["src/icons/preview/icon-preview.tsx", "src/components/preview.tsx"],
+        input: "test/icon-preview.test.tsx",
         output: {dir: 'dist/public', format: 'esm'},
         preserveEntrySignatures: false,
         context: "window",
@@ -17,6 +17,7 @@ export default [
                 target: "ES2017",
                 module: "esnext",
                 outDir: "dist/public"
-            }),]
+            })
+            ,]
     }
 ]
