@@ -82,8 +82,8 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 				<div
 					style={{
 						border: "thin solid silver",
-						// width: orientation === "horizontal" ? `calc(100% - (2 * ${chevronSize}))` : "unset",
-						// height: orientation === "vertical" ? `calc(100% - 2 * ${chevronSize})` : "unset",
+						width: orientation === "horizontal" ? `calc(100% - (2 * ${chevronSize}))` : "unset",
+						height: orientation === "vertical" ? `calc(100% - 2 * ${chevronSize})` : "unset",
 						justifyContent: "center",
 						alignItems: "center",
 						overflow: "hidden"

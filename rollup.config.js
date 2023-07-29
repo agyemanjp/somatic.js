@@ -5,7 +5,7 @@ import typescript from "@rollup/plugin-typescript"
 
 export default [
     {
-        input: "test/icon-preview.test.tsx",
+        input: "src/preview.tsx",
         output: {dir: 'dist/public', format: 'esm'},
         preserveEntrySignatures: false,
         context: "window",

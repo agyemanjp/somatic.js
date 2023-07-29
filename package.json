@@ -36,7 +36,7 @@
 		"build": "run-s lint compile test",
 		"buildci": "run-s lintci compile testci",
 		"bundle": "rollup -c --bundleConfigAsCjs",
-		"iconpreview": "http-server -c-1 -a localhost -p 1234 -o src/icons/static/index.html",
+		"preview": "http-server -c-1 -a localhost -p 1234 -o src/index.html",
 		"componentspreview": "http-server -a localhost -p 1234 -o src/components/preview.html",
 		"pubstage": "cp package.json LICENSE README.md dist",
 		"pubpreview": "pnpm run pubstage && cd dist && pnpm publish --dry-run && cd ..",

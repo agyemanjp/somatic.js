@@ -515,13 +515,13 @@ export interface CSSProperties {
 	)
 	glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
 	glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`
-	height?: (
+	height?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	)
+	)>
 	imeMode?: (
 		| "auto"
 		| "normal"
@@ -1167,7 +1167,7 @@ export type CSSColor = (
 	| `rgba(${number}, ${number}, ${number}, ${number})`
 )
 
-export type CSSLength = `${number}${CSSLengthUnit}`
+export type CSSLength = `${number}${CSSLengthUnit}` | `calc(${string})`
 
 /** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
 export type CSSLengthUnit = (
