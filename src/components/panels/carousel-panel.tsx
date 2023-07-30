@@ -1,13 +1,14 @@
 
 import { deepMerge } from '@agyemanjp/standard'
 import * as cuid from '@paralleldrive/cuid2'
-import { StackPanel } from './stack-panel'
-import { ChevronLeft, ChevronUp, ChevronRight, ChevronDown } from '../../icons'
-import { PanelProps, HtmlProps, CSSLength, Component, Children } from '../../types'
 import { createElement, invalidateUI } from '../..'
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from '../../icons'
+import { CSSLength, Children, Component, HtmlProps, PanelProps } from '../../types'
+import { StackPanel } from './stack-panel'
 
 export type CarouselPanelProps = PanelProps & HtmlProps & {
-	chevronSize?: CSSLength
+	chevronSize?: CSSLength,
+	wrapAround?: boolean
 }
 
 export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
@@ -15,6 +16,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 		id: cuid.createId(),
 		orientation: 'horizontal',
 		chevronSize: '1em',
+		wrapAround: false,
 		style: {
 			border: 'thin solid gray',
 			overflow: 'hidden',
@@ -29,6 +31,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 		itemsAlignH,
 		itemsAlignV,
 		chevronSize,
+		wrapAround,
 		style,
 		children,
 		...htmlProps
@@ -38,7 +41,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 		if (_state.itemIndex > 0) {
 			_state.itemIndex--
 		}
-		else {
+		else if (wrapAround) {
 			_state.itemIndex = items.length - 1
 		}
 
@@ -49,7 +52,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 		if (items.length > _state.itemIndex + 1) {
 			_state.itemIndex++
 		}
-		else {
+		else if (wrapAround) {
 			_state.itemIndex = 0
 		}
 

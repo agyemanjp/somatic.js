@@ -16,7 +16,7 @@ import * as Icons from './icons'
 			}}>
 				<div style={{ display: "flex", height: "20%" }}>
 					<p id="iconLabel">Icons</p>
-					<p id="componentLabel" style={{paddingLeft: "10px"}}>Components</p>
+					<p id="componentLabel" style={{ paddingLeft: "10px" }}>Components</p>
 				</div>
 				{/* Icons Container */}
 				<div
@@ -48,7 +48,7 @@ import * as Icons from './icons'
 				<div id="componentsContainer" style={{ display: 'none' }}>
 					<p>Carousel Panel</p>
 					<div style={{ height: '100px' }}>
-						<CarouselPanel chevronSize='50px' id='carousel' style={{ height: "300px", width: "300px" }}>
+						<CarouselPanel wrapAround={true} chevronSize='50px' id='carousel' style={{ height: "500px", width: "auto", alignItems: "center", justifyContent: "center", display: "flex" }}>
 							<div><img src="https://craftinginterpreters.com/image/chunks-of-bytecode/ast.png" /></div>
 							<div><img src="https://www.digitalocean.com/_next/static/media/default-avatar.14b0d31d.jpeg" /></div>
 							<div>Some sample text</div>
