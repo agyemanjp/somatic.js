@@ -515,13 +515,13 @@ export interface CSSProperties {
 	)
 	glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
 	glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`
-	height?: (
+	height?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	)
+	)>
 	imeMode?: (
 		| "auto"
 		| "normal"
@@ -1005,13 +1005,13 @@ export interface CSSProperties {
 		| "break-spaces"
 	)
 	widows?: number
-	width?: (
+	width?: CSSProperty<(
 		| "auto"
 		| "max-content"
 		| "min-content"
-		//| `fit-content(${CSSLength})`
+		| `fit-content(${CSSLength})`
 		| CSSLength
-	)
+	)>
 	wordBreak?: "normal" | "break-all" | "keep-all" | "break-word"
 	wordSpacing?: "normal" | CSSLength
 	wordWrap?: string | null
@@ -1167,7 +1167,7 @@ export type CSSColor = (
 	| `rgba(${number}, ${number}, ${number}, ${number})`
 )
 
-export type CSSLength = `${number}${CSSLengthUnit}`
+export type CSSLength = `${number}${CSSLengthUnit}` | `calc(${string})`
 
 /** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
 export type CSSLengthUnit = (
@@ -2292,7 +2292,6 @@ export interface SyntheticEvent<T = Element> {
 	/**
 	 * A reference to the element from which the event was originally dispatched.
 	 * This might be a child element to the element on which the event listener is registered.
-	 *
 	 * @see currentTarget
 	 */
 	target: EventTarget
