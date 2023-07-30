@@ -1,5 +1,5 @@
 
-import { CarouselPanel } from "./components/panels/carousel-panel"
+import { MediaSet } from "./components"
 import { createElement, mountElement } from "./core"
 import * as Icons from './icons'
 
@@ -46,7 +46,7 @@ import * as Icons from './icons'
 				</div>
 				{/** Components Container */}
 				<div id="componentsContainer" style={{ display: 'none' }}>
-					<p>Carousel Panel</p>
+					{/* <p>Carousel Panel</p>
 					<div style={{ height: '100px' }}>
 						<CarouselPanel wrapAround={true} chevronSize='50px' id='carousel' style={{ height: "500px", width: "auto", alignItems: "center", justifyContent: "center", display: "flex" }}>
 							<div><img src="https://craftinginterpreters.com/image/chunks-of-bytecode/ast.png" /></div>
@@ -54,6 +54,9 @@ import * as Icons from './icons'
 							<div>Some sample text</div>
 							<div><button>A button</button></div>
 						</CarouselPanel>
+					</div> */}
+					<div style={{height: "500px"}}>
+						<MediaSet/>
 					</div>
 				</div>
 
