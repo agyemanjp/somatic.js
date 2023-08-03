@@ -1,4 +1,5 @@
 
+import { LayersPanel } from "./components"
 import { CarouselPanel } from "./components/panels/carousel-panel"
 import { createElement, mountElement } from "./core"
 import * as Icons from './icons'
@@ -45,15 +46,23 @@ import * as Icons from './icons'
 					</div>))}
 				</div>
 				{/** Components Container */}
-				<div id="componentsContainer" style={{ display: 'none' }}>
+				<div id="componentsContainer" style={{ display: 'block' }}>
 					<p>Carousel Panel</p>
-					<div style={{ height: '100px' }}>
-						<CarouselPanel wrapAround={true} chevronSize='50px' id='carousel' style={{ height: "500px", width: "auto", alignItems: "center", justifyContent: "center", display: "flex" }}>
+					<div>
+						<CarouselPanel wrapAround={true} chevronSize='50px' id='carousel' style={{ height: '300px', width: "490px", alignItems: "center", justifyContent: "center", display: "flex" }}>
 							<div><img src="https://craftinginterpreters.com/image/chunks-of-bytecode/ast.png" /></div>
 							<div><img src="https://www.digitalocean.com/_next/static/media/default-avatar.14b0d31d.jpeg" /></div>
 							<div>Some sample text</div>
 							<div><button>A button</button></div>
 						</CarouselPanel>
+					</div>
+					<p>Layers Panel</p>
+					<div >
+						<LayersPanel style={{ height: "300px", width: "300px", marginTop: "20px" }}>
+							<div style={{ height: "300px", width: "100px", backgroundColor: 'red' }}></div>
+							<div style={{ height: "200px", width: "200px", backgroundColor: 'blue' }}></div>
+							<div style={{ backgroundColor: 'green', height: "200px", width: "300px" }}></div>
+						</LayersPanel>
 					</div>
 				</div>
 
