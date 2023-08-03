@@ -2,13 +2,20 @@ module.exports = {
 	"root": true,
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": { project: ['./tsconfig.json', './test/tsconfig.json'] },
-	"plugins": ["@typescript-eslint", "sonarjs"],
+	"plugins": ["@typescript-eslint", "sonarjs", "jsdoc", "react"],
 	"env": { "browser": true, "node": true },
 	"extends": [
 		"plugin:@typescript-eslint/recommended",
+		"plugin:react/recommended",
+		"plugin:jsdoc/recommended"
 		// "eslint:recommended",
 		// "plugin:@typescript-eslint/eslint-recommended",
 		// "plugin:security/recommended" // 
+	],
+	"overrides": [
+		{
+			"files": ["./**/*.js", "./**/*.ts"],
+		}
 	],
 	"rules": {
 		/* logic */
@@ -24,6 +31,18 @@ module.exports = {
 		"for-direction": "error",
 		"no-unreachable": "error",
 		"@typescript-eslint/switch-exhaustiveness-check": "warn",
+		"sonarjs/no-all-duplicated-branches": "error", //All branches in a conditional structure should not have exactly the same implementation
+		"sonarjs/no-element-overwrite": "error", // Collection elements should not be replaced unconditionally
+		"sonarjs/no-empty-collection": "error", // Empty collections should not be accessed or iterated
+		"sonarjs/no-extra-arguments": "error", // Function calls should not pass extra arguments
+		"sonarjs/no-identical-conditions": "error", // Related "if/else if" statements should not have the same condition
+		"sonarjs/no-identical-expressions": "error", // Identical expressions used on both sides of a binary operator
+		"sonarjs/no-collection-size-mischeck": "error", // Testing array/collection size/length is greater than or equal to zero doesn't make sense
+		"sonarjs/no-ignored-return": "error", // Return values from functions without side effects should not be ignored
+		"sonarjs/no-one-iteration-loop": "error", // Loops with at most one iteration should be refactored
+		"sonarjs/no-use-of-empty-return-value": "error", // The output of functions that don't return anything should not be used
+		"sonarjs/non-existent-operator": "error", // Non-existent operators '=+', '=-' and '=!' should not be used
+
 		"sonarjs/no-all-duplicated-branches": "error", //All branches in a conditional structure should not have exactly the same implementation
 		"sonarjs/no-element-overwrite": "error", // Collection elements should not be replaced unconditionally
 		"sonarjs/no-empty-collection": "error", // Empty collections should not be accessed or iterated
@@ -86,7 +105,6 @@ module.exports = {
 		"require-atomic-updates": "warn",
 		"@typescript-eslint/no-unnecessary-condition": ["warn", { "allowConstantLoopConditions": true }],
 		"sonarjs/no-duplicate-string": "warn", // String literals that are duplicated
-
 		"no-shadow": "off",
 		"no-unused-vars": "off",
 		"@typescript-eslint/no-unused-vars": "off",
@@ -108,18 +126,47 @@ module.exports = {
 		"no-irregular-whitespace": "warn", // invalid whitespace that is not a normal tab and space
 
 		/* comments */
-		"require-jsdoc": ["error", {
+		"jsdoc/require-jsdoc": ["off", {
 			"require": {
 				"FunctionDeclaration": true,
 				"MethodDefinition": true,
 				"ClassDeclaration": false,
 				"ArrowFunctionExpression": false,
 				"FunctionExpression": false
-			}
+			},
+			"contexts": [
+				// "ExportNamedDeclaration",
+				"TSInterfaceDeclaration",
+				"TSTypeAliasDeclaration",
+				{ "context": ":not(TSTypeLiteral) > TSPropertySignature" },
+				"PropertyDefinition"
+			],
+			"exemptEmptyConstructors": true
 		}],
 		"no-warning-comments": ["error", {
 			"terms": ["todo"], "location": "anywhere"
-		}]
+		}],
+		"jsdoc/require-param": "off",
+		"jsdoc/require-param-type": "off",
+		"jsdoc/check-param-names": "off",
+		"jsdoc/require-param-description": "warn",
+		"jsdoc/require-returns": "off",
+		"jsdoc/require-returns-type": "off",
+		"jsdoc/multiline-blocks": ["error", { "noZeroLineText": false }],
+		"jsdoc/newline-after-description": "off",
+		"no-warning-comments": ["warn", { "terms": ["todo"], "location": "anywhere" }],
+
+		/* jsx */
+		"react/jsx-first-prop-new-line": "error",
+		"react/react-in-jsx-scope": "off",
+		"react/jsx-key": "off",
+		"react/no-unknown-property": "warn",
+		"react/prop-types": "off",
+
+		"sonarjs/no-ignored-return": "warn",
+	},
+	"settings": {
+		"jsdoc": {}
 	},
 	"noInlineConfig": true
 }

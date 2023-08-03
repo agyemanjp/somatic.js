@@ -1,22 +1,14 @@
 require('jsdom-global')()
 import * as assert from "assert"
-import { IntrinsicElement } from "../dist/types"
+
+import { CommandBox, StackPanel, View } from "./_utils"
+
+
+import { Set } from '@agyemanjp/standard'
 import { renderAsync } from "../dist/core"
-import {
-	createDOMShallow,
-	updateDomShallow,
-	getApexElements,
-	setAttribute,
-	truncateChildNodes,
-	emptyContainer,
-	isAugmentedDOM,
-	isTextDOM
-} from '../dist/dom'
-import { traceToLeafAsync, isIntrinsicElt } from "../dist/element"
-import { StackPanel, CommandBox, View } from "./_utils"
-
-
-import { Set, except } from '@agyemanjp/standard'
+import { createDOMShallow, emptyContainer, getApexElements, isAugmentedDOM, isTextDOM, setAttribute, truncateChildNodes, updateDomShallow } from "../dist/dom"
+import { isIntrinsicElt, traceToLeafAsync } from "../dist/element"
+import { IntrinsicElement } from "../dist/types"
 
 
 /*describe("isAugmentedDOM", () => {

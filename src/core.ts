@@ -1,5 +1,5 @@
 import { hasValue, prependSpaceIfNotEmpty, stringify } from "@agyemanjp/standard"
-import * as cuid from "cuid"
+import * as cuid from "@paralleldrive/cuid2"
 import { stringifyAttributes } from "./html"
 import { createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync, isFragmentElt } from "./element"
@@ -89,7 +89,7 @@ export async function renderToStringAsync(elt: UIElement): Promise<string> {
  * @returns The updated DOM element, which is updated in-place
  */
 export async function updateAsync(dom: DOMAugmented/* | Text*/, elt?: UIElement): Promise<(DOMAugmented | DocumentFragment | Text)> {
-	const invocationId = cuid()
+	const invocationId = cuid.createId()
 
 	// console.log(`UpdateAsync ${invocationId} starting...`)
 	// console.log(`UpdateAsync ${invocationId}: dom=${dom}`)

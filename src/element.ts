@@ -13,7 +13,7 @@ export const isFragmentElt = (elt: UIElement): boolean /*elt is FragmentElement*
 export const isComponentElt = <P extends Obj>(elt: UIElement<P>): elt is ComponentElt<P> => isEltProper(elt) && typeof elt.type !== "string"
 
 /** Return a copy of a component element augmented with its invocation results
- * @argument elt The input component element (possibly with a result member, which is recomputed)
+ * @param elt The input component element (possibly with a result member, which is recomputed)
  */
 export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P>): Promise<ComponentEltAugmented<P>> {
 	const getNextAsync = async (generator: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>, newProps?: any): Promise<ComponentResult | undefined> => {
@@ -111,8 +111,8 @@ export async function getLeafAsync(eltUI: UIElement): Promise<IntrinsicElement |
 }
 
 /** Return an updated render-to-leaf trace, to reflect a changed state of the world. Does not mutate input trace
- * @argument trace The original rendering trace to update. If intrinsic, it is returned as is.
- * @argument eltComp A UI element that, if passed, is used as the starting point of the trace, instead of the trace's 1st element
+ * @param trace The original rendering trace to update. If intrinsic, it is returned as is.
+ * @param eltComp A UI element that, if passed, is used as the starting point of the trace, instead of the trace's 1st element
  * @returns A promise of the updated trace
  */
 export async function updateTraceAsync(trace: RenderingTrace, eltComp?: ComponentElt): Promise<RenderingTrace> {
