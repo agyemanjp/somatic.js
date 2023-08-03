@@ -3,25 +3,25 @@ import { expect, use } from 'chai'
 import * as chaiHTML from 'chai-html'
 const cleanup = require('jsdom-global')()
 
-import {
-	IntrinsicElement,
-	DOMAugmented,
-	Component,
-	CSSProperties,
-} from '../dist/types'
+import { idProvider } from '../dist/common'
 import {
 	createElement,
+	mountElement,
 	renderAsync,
 	renderToIntrinsicAsync,
 	renderToStringAsync,
-	updateChildrenAsync,
 	updateAsync,
-	mountElement,
-} from '../dist/core'
-import { isIntrinsicElt, traceToLeafAsync, getChildren } from '../dist/element'
-import { isAugmentedDOM, isTextDOM, createDOMShallow } from '../dist/dom'
-import { StackPanel, CommandBox, View, normalizeHTML } from './_utils'
-import { idProvider } from '../dist/common'
+} from '../dist'
+import { createDOMShallow, isAugmentedDOM, isTextDOM } from '../dist/dom'
+import { getChildren, traceToLeafAsync } from '../dist/element'
+import {
+	CSSProperties,
+	Component,
+	DOMAugmented,
+	IntrinsicElement,
+} from '../dist/types'
+import { CommandBox, StackPanel, View, normalizeHTML } from './_utils'
+import { updateChildrenAsync } from '../dist/core'
 
 describe('CORE MODULE', () => {
 	use(chaiHTML)

@@ -1,11 +1,9 @@
-import { mergeDeep, ArgsType, deepMerge } from "@agyemanjp/standard"
-import * as cuid from "cuid"
-
+import { ArgsType, deepMerge, mergeDeep } from "@agyemanjp/standard"
+import * as cuid from "@paralleldrive/cuid2"
 import { createElement, renderToIntrinsicAsync } from "../dist/core"
 import { normalizeChildren } from "../dist/element"
-import { stringifyStyle } from "../dist/html"
-import { ButtonHTMLAttributes, Component, CSSProperties, HtmlProps, PanelProps, SVGAttributes, UIElement } from "../dist/types"
-import "../dist" // for globals e.g., JSX
+import { Component, PanelProps, HtmlProps, CSSProperties, ButtonHTMLAttributes, SVGAttributes, UIElement } from "../dist/types"
+import { stringifyStyle } from "../dist"
 
 /** Create html element from html string; Requires <document> object to exist */
 export function constructElement(html: string): HTMLElement {
@@ -173,7 +171,7 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 	// console.log(`"${_props.key}" view render start`)
 
 	const defaultProps = {
-		id: cuid(),
+		id: cuid.createId(),
 		selectedIndex: 0,
 		itemsPanel: StackPanel,
 		itemsPanelStyle: {},
@@ -305,10 +303,10 @@ export const HoverBox: Component<HoverBoxProps> = function (props) {
 			margin: 0
 		} as CSSProperties,
 		hoverStyle: {},
-		id: cuid()
+		id: cuid.createId()
 	}
 
-	const className__ = cuid()
+	const className__ = cuid.createId()
 
 	const { key, id, children, hoverStyle, style, ...htmlProps } = mergeDeep()(defaultProps, props)
 	const child = normalizeChildren(children)[0]
