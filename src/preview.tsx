@@ -46,17 +46,8 @@ import * as Icons from './icons'
 				</div>
 				{/** Components Container */}
 				<div id="componentsContainer" style={{ display: 'none' }}>
-					{/* <p>Carousel Panel</p>
-					<div style={{ height: '100px' }}>
-						<CarouselPanel wrapAround={true} chevronSize='50px' id='carousel' style={{ height: "500px", width: "auto", alignItems: "center", justifyContent: "center", display: "flex" }}>
-							<div><img src="https://craftinginterpreters.com/image/chunks-of-bytecode/ast.png" /></div>
-							<div><img src="https://www.digitalocean.com/_next/static/media/default-avatar.14b0d31d.jpeg" /></div>
-							<div>Some sample text</div>
-							<div><button>A button</button></div>
-						</CarouselPanel>
-					</div> */}
-					<div style={{height: "500px"}}>
-						<MediaSet/>
+					<div style={{ height: "200px" }}>
+						<MediaSet orientation="horizontal" style={{}} uploadPreset="ww7cfxbx" cloudName="cubegh" />
 					</div>
 				</div>
 

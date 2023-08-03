@@ -50,6 +50,7 @@
 	"dependencies": {
 		"@agyemanjp/standard": "^5.1.2",
 		"@paralleldrive/cuid2": "^2.2.1",
+		"cropperjs": "^1.5.13",
 		"tslib": "^2.6.1"
 	},
 	"devDependencies": {
