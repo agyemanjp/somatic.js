@@ -95,7 +95,7 @@ export const MediaSet: Component<MediaSetProps> = function* (_props) {
 		return response.json()
 	}
 
-	const handleDrop = (event: DragEvent) => {
+	const handleFileDrop = (event: DragEvent) => {
 		event.preventDefault()
 
 		const files = Array.from(event.dataTransfer.files) as File[]
@@ -110,6 +110,45 @@ export const MediaSet: Component<MediaSetProps> = function* (_props) {
 			}
 			invalidateUI([id])
 		}
+	}
+
+	let dragSrcEl: HTMLElement | null = null
+
+	const handleDragStart = (e: any) => {
+		dragSrcEl = e.currentTarget as HTMLElement
+		e.dataTransfer.effectAllowed = 'move'
+		e.dataTransfer.setData('text/html', e.currentTarget.outerHTML)
+	}
+
+	const handleDragOver = (e: any) => {
+		if (Boolean(e.preventDefault)) {
+			e.preventDefault()
+		}
+		e.currentTarget.classList.add('over')
+		e.dataTransfer.dropEffect = 'move'
+	}
+
+	const handleDragEnd = (e: any) => {
+		e.currentTarget.classList.remove('over')
+	}
+
+	const handleDrop = (e: any) => {
+		if (Boolean(e.stopPropagation)) {
+			e.stopPropagation()
+		}
+
+		if (dragSrcEl && dragSrcEl !== e.currentTarget) {
+			dragSrcEl.parentNode?.removeChild(dragSrcEl)
+
+			e.currentTarget.parentElement?.insertBefore(dragSrcEl, e.currentTarget)
+
+			dragSrcEl.addEventListener('dragstart', handleDragStart, false)
+			dragSrcEl.addEventListener('dragover', handleDragOver, false)
+			dragSrcEl.addEventListener('drop', handleDrop, false)
+			dragSrcEl.addEventListener('dragend', handleDragEnd, false)
+		}
+
+		e.currentTarget.classList.remove('over')
 	}
 
 	while (true) {
@@ -146,7 +185,7 @@ export const MediaSet: Component<MediaSetProps> = function* (_props) {
 
 
 					<div
-						onDrop={handleDrop}
+						onDrop={handleFileDrop}
 						style={itemsStyle}
 						onDragOver={(event: DragEvent) => event.preventDefault()}>
 						{state.mediaItems.map((mediaItem, index) => (
@@ -182,7 +221,12 @@ export const MediaSet: Component<MediaSetProps> = function* (_props) {
 											}
 										})
 									}
-								}}>
+								}}
+								draggable={true}
+								onDragStart={handleDragStart}
+								onDragOver={handleDragOver}
+								onDrop={handleDrop}
+								onDragEnd={handleDragEnd}>
 								{mediaItem.type.startsWith('image') ?
 									<img src={URL.createObjectURL(mediaItem)} alt={`Media ${index}`} style={{ width: '50%', height: 'auto' }} />
 									:
