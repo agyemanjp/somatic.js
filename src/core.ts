@@ -7,14 +7,11 @@ import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAu
 import { selfClosingTags } from "./common"
 
 
-export const Fragment = ""
-export type Fragment = typeof Fragment
-
 /** JSX is transformed into calls of this function */
 export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
 	if (typeof type !== "string" && typeof type !== "function") { console.warn(`Type argument has invalid type ${typeof type}`) }
 
-	return { type, props: props ?? {}, children: (children ?? []).flat() }
+	return { type, props: props ?? {}, children: children.flat() }
 }
 
 /** Render a UI element into a DOM node (augmented with information used for subsequent updates) */
@@ -91,18 +88,7 @@ export async function renderToStringAsync(elt: UIElement): Promise<string> {
 export async function updateAsync(dom: DOMAugmented/* | Text*/, elt?: UIElement): Promise<(DOMAugmented | DocumentFragment | Text)> {
 	const invocationId = cuid()
 
-	// console.log(`UpdateAsync ${invocationId} starting...`)
-	// console.log(`UpdateAsync ${invocationId}: dom=${dom}`)
-	// console.log(`UpdateAsync ${invocationId}: elt=${String(elt)}`)
-	/*console.log(`UpdateAsync ${invocationId}: elt.type=${isEltProper(elt)
-		? typeof elt.type === "string"
-			? `"${elt.type}"`
-			: elt.type.name
-		: String(undefined)}`
-	)*/
 	if (isTextDOM(dom)) { throw `UpdateAsync ${invocationId}: Dom ${dom} is text` }
-
-	// console.log(`Applying intrinsic leaf element ${stringify(eltLeaf)} to dom ${dom}}`)
 
 	const newTrace = elt === undefined
 		? await updateTraceAsync(dom.renderTrace)
@@ -140,18 +126,6 @@ export async function updateAsync(dom: DOMAugmented/* | Text*/, elt?: UIElement)
 		return (dom.replaceWith(replacement)), replacement
 	}
 
-	/** Update input DOM element to reflect input leaf UI element (type, props, and children)
-	 * Posibly mutates the input node
-	 */
-	/*async function applyLeafElementAsync(dom: DOMElement, eltLeaf: RenderingTrace["leafElement"]): Promise<DOMAugmented | Text> {
-		const updatedDOM = updateDomShallow(dom, eltLeaf)
-		console.assert(updatedDOM === dom)
-		if (isIntrinsicElt(eltLeaf) && !isTextDOM(updatedDOM)) {
-			const domWithChildren = await updateChildrenAsync(updatedDOM, getChildren(eltLeaf))
-			console.assert(domWithChildren === updatedDOM)
-		}
-		return updatedDOM
-	}*/
 	/** Checks for compatibility between a DOM and UI element */
 	function areCompatible(_dom: DOMAugmented | Text, _elt: UIElement) {
 		if (isTextDOM(_dom)) return false // DOM element is just a text element
@@ -262,7 +236,7 @@ async function invalidationHandlerAsync(eventInfo: Event) {
 	// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
 	const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
 	invalidatedElementIds.push(..._invalidatedElementIds)
-	if (daemon === undefined) {
+	if (typeof daemon === "undefined") {
 		daemon = setInterval(async () => {
 			if (invalidatedElementIds.length === 0 && daemon) {
 				clearInterval(daemon)

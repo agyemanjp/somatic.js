@@ -107,9 +107,10 @@ export const StackPanel: Component<PanelProps & HtmlProps> = function (props) {
 
 **A stateful async generator function component:**
 ```typescript
+import * as cuid from "cuid"
 import { createElement, PanelProps, HtmlProps, Component, CSSProperties, UIElement, renderToIntrinsicAsync, invalidateUI } from '@agyemanjp/somatic'
 import { ArgsType, mergeDeep, deepMerge } from "@agyemanjp/standard"
-import * as cuid from "cuid"
+
 import { StackPanel } from "./stack-panel"
 
 export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): AsyncGenerator<JSX.Element, JSX.Element, typeof _props> {
@@ -175,7 +176,7 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 			})
 		}))
 
-		const newProps = yield <ItemsPanel id={id}
+		const newProps = (yield <ItemsPanel id={id}
 			orientation={orientation}
 			itemsAlignH={itemsAlignV}
 			itemsAlignV={itemsAlignH}
@@ -183,19 +184,15 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 			{...htmlProps}>
 
 			{items}
-		</ItemsPanel>
+		</ItemsPanel>) ?? props
 
 		// Update props (including stateful members and extra state) based on injected props
-		props = mergeDeep()(
-			props,
-			newProps ?? {},
-			{
-				// if sourceData or selectedIndex has changed externally from what was initially passed, reset selectedIndex
-				selectedIndex: (newProps?.sourceData !== props.sourceData) || (props.selectedIndex !== newProps?.selectedIndex)
-					? newProps?.selectedIndex ?? selectedIndex
-					: selectedIndex
-			}
-		)
+		props = mergeDeep()(props, newProps, {
+			// if sourceData or selectedIndex has changed externally from what was initially passed, reset selectedIndex
+			selectedIndex: (newProps?.sourceData !== props.sourceData) || (props.selectedIndex !== newProps?.selectedIndex)
+				? newProps?.selectedIndex ?? selectedIndex
+				: selectedIndex
+		})
 	}	
 }
 
