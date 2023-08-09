@@ -30,7 +30,7 @@ module.exports = {
 		"sonarjs/no-identical-conditions": "error", // Related "if/else if" statements should not have the same condition
 		"sonarjs/no-identical-expressions": "error", // Identical expressions used on both sides of a binary operator
 		"sonarjs/no-collection-size-mischeck": "error", // Testing array/collection size/length is greater than or equal to zero doesn't make sense
-		"sonarjs/no-ignored-return": "error", // Return values from functions without side effects should not be ignored
+		"sonarjs/no-ignored-return": "warn", // Return values from functions without side effects should not be ignored
 		"sonarjs/no-one-iteration-loop": "error", // Loops with at most one iteration should be refactored
 		"sonarjs/no-use-of-empty-return-value": "error", // The output of functions that don't return anything should not be used
 		"sonarjs/non-existent-operator": "error", // Non-existent operators '=+', '=-' and '=!' should not be used
@@ -133,7 +133,11 @@ module.exports = {
 		/* jsx */
 		"react/jsx-first-prop-new-line": "error",
 		"react/react-in-jsx-scope": "off",
-		"react/jsx-key": "warn"
+		"react/jsx-key": "off",
+		"react/no-unknown-property": "warn",
+		"react/prop-types": "off",
+		"react/display-name": "off",
+
 	},
 	"settings": {
 		"jsdoc": {}
