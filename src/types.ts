@@ -11,62 +11,37 @@ export type Component<P extends Obj = Obj> = ComponentOptions<P> & (
 		| UIElement
 	)
 )
+
 /** Async stateful component type */
 export type ComponentAsyncStateful<P extends Obj = Obj> = ComponentOptions<P> & (
 	(props: P & { children?: Children, key?: string }) => AsyncGenerator<UIElement, UIElement, typeof props>
 )
 
-/**
- *
- */
 export interface ComponentOptions<P extends Obj = Obj> {
-
 	name?: string
-
 	isPure?: boolean
-
 	defaultProps?: Partial<P>
 }
 
 export const Fragment = ""
-/**
- *
- */
 export type Fragment = typeof Fragment
 
-/**
- *
- */
 export type Children = UIElement | UIElement[]
 
-/**
- *
- */
 export interface UIElementBase<P = unknown> {
-
 	props: P,
-
 	children?: Children
 }
-/**
- *
- */
-export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> {
 
+export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> {
 	type: string
 }
-/**
- *
- */
+
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> {
-
 	type: Component<P>,
-
 	result?: ComponentResult
 }
-/**
- *
- */
+
 export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
 
 /** An UI element is, basically, information for a future (component) function invocation,
@@ -76,39 +51,22 @@ export type ValueElement = | null | string | number | bigint | symbol | boolean 
  */
 export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | /*FragmentElement |*/ ValueElement
 
-/**
- *
- */
 export type ComponentResult = {
 	element: UIElement,
 	generator?: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>
 }
 
-/**
- *
- */
 export interface ComponentEltAugmented<P extends Obj = Obj> extends ComponentElt<P> {
-
 	result: ComponentResult
 }
 
-/**
- *
- */
 export interface RenderingTrace {
-
 	componentElts: ComponentEltAugmented[],
-
 	leafElement: IntrinsicElement | ValueElement
 }
 
-/**
- *
- */
 export type DOMElement = SVGElement | HTMLElement
-/**
- *
- */
+
 export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties1 {
@@ -3519,26 +3477,18 @@ type CSSGridLine = (
 	| `${CSSGridTrackSize}`
 )*/
 
-/**
- *
- */
+
 export type HtmlProps = Partial<HTMLAttributes<HTMLElement>>
-/**
- *
- */
+
 export type StyleProps = { style?: CSSProperties }
-/**
- *
- */
+
 export type PanelProps = Partial<{
 	itemsAlignH: "start" | "end" | "center" | "stretch" | "uniform" | "dock",
 	itemsAlignV: "start" | "end" | "center" | "stretch" | "uniform" | "dock",
 	orientation: "vertical" | "horizontal"
 }>
 
-/**
- *
- */
+
 export type IconProps = Partial<{
 	color: string | null | undefined
 	size: string | number
@@ -3546,23 +3496,17 @@ export type IconProps = Partial<{
 }>
 
 //#region Attributes
-/**
- *
- */
+
 export interface Attributes {
 
 	key?: string | number | symbol
 }
 
-/**
- *
- */
+
 export interface ClassAttributes<T> extends Attributes {
 }
 
-/**
- *
- */
+
 export type DOMAttributes<T> = {
 	//childrenx?: Somatic.VNode[];
 	// dangerouslySetInnerHTML?: {
@@ -3755,9 +3699,7 @@ export type DOMAttributes<T> = {
 	onTransitionEnd?: TransitionEventHandler<T>
 	onTransitionEndCapture?: TransitionEventHandler<T>
 }
-/**
- *
- */
+
 export type HTMLAttributes<T> = DOMAttributes<T> & {
 	children?: Children
 
@@ -3816,9 +3758,7 @@ export type HTMLAttributes<T> = DOMAttributes<T> & {
 	security?: string
 	unselectable?: 'on' | 'off'
 }
-/**
- *
- */
+
 export type SVGAttributes<T> = DOMAttributes<T> & {
 	children?: Children
 
@@ -4087,9 +4027,7 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 	zoomAndPan?: string
 }
 
-/**
- *
- */
+
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	download?: string
@@ -4107,15 +4045,11 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: string
 }
 
-/**
- *
- */
+
 export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 }
 
-/**
- *
- */
+
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	alt?: string
@@ -4137,9 +4071,7 @@ export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 	target?: string
 }
 
-/**
- *
- */
+
 export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	href?: string
@@ -4147,17 +4079,13 @@ export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
 	target?: string
 }
 
-/**
- *
- */
+
 export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	cite?: string
 }
 
-/**
- *
- */
+
 export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
 	autofocus?: boolean
 	disabled?: boolean
@@ -4181,9 +4109,7 @@ export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
 	value?: string | string[] | number
 }
 
-/**
- *
- */
+
 export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	height?: number | string
@@ -4191,9 +4117,7 @@ export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
 	width?: number | string
 }
 
-/**
- *
- */
+
 export interface ColHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	span?: number
@@ -4201,25 +4125,19 @@ export interface ColHTMLAttributes<T> extends HTMLAttributes<T> {
 	width?: number | string
 }
 
-/**
- *
- */
+
 export interface ColgroupHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	span?: number
 }
 
-/**
- *
- */
+
 export interface DetailsHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	open?: boolean
 }
 
-/**
- *
- */
+
 export interface DelHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	cite?: string
@@ -4227,17 +4145,13 @@ export interface DelHTMLAttributes<T> extends HTMLAttributes<T> {
 	dateTime?: string
 }
 
-/**
- *
- */
+
 export interface DialogHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	open?: boolean
 }
 
-/**
- *
- */
+
 export interface EmbedHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	height?: number | string
@@ -4249,9 +4163,7 @@ export interface EmbedHTMLAttributes<T> extends HTMLAttributes<T> {
 	width?: number | string
 }
 
-/**
- *
- */
+
 export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	disabled?: boolean
@@ -4261,9 +4173,7 @@ export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
 	name?: string
 }
 
-/**
- *
- */
+
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	acceptCharset?: string
@@ -4283,17 +4193,13 @@ export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 	target?: string
 }
 
-/**
- *
- */
+
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	manifest?: string
 }
 
-/**
- *
- */
+
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	allow?: string
@@ -4325,9 +4231,7 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 	width?: number | string
 }
 
-/**
- *
- */
+
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	alt?: string
@@ -4349,9 +4253,7 @@ export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 	width?: number | string
 }
 
-/**
- *
- */
+
 export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	cite?: string
@@ -4359,9 +4261,7 @@ export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
 	dateTime?: string
 }
 
-/**
- *
- */
+
 export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	accept?: string
@@ -4477,9 +4377,7 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 	onChange?: ChangeEventHandler<T>
 }
 
-/**
- *
- */
+
 export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	autofocus?: boolean
@@ -4497,9 +4395,7 @@ export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
 	name?: string
 }
 
-/**
- *
- */
+
 export interface LabelHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	form?: string
@@ -4507,17 +4403,13 @@ export interface LabelHTMLAttributes<T> extends HTMLAttributes<T> {
 	htmlFor?: string
 }
 
-/**
- *
- */
+
 export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	value?: string | string[] | number
 }
 
-/**
- *
- */
+
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	as?: string
@@ -4539,25 +4431,19 @@ export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: string
 }
 
-/**
- *
- */
+
 export interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	name?: string
 }
 
-/**
- *
- */
+
 export interface MenuHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	type?: string
 }
 
-/**
- *
- */
+
 export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	autoPlay?: boolean
@@ -4581,9 +4467,7 @@ export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
 	src?: string
 }
 
-/**
- *
- */
+
 export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	charSet?: string
@@ -4595,9 +4479,7 @@ export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
 	name?: string
 }
 
-/**
- *
- */
+
 export interface MeterHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	form?: string
@@ -4615,17 +4497,13 @@ export interface MeterHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number
 }
 
-/**
- *
- */
+
 export interface QuoteHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	cite?: string
 }
 
-/**
- *
- */
+
 export interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	classID?: string
@@ -4647,9 +4525,7 @@ export interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
 	wmode?: string
 }
 
-/**
- *
- */
+
 export interface OlHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	reversed?: boolean
@@ -4659,9 +4535,7 @@ export interface OlHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: '1' | 'a' | 'A' | 'i' | 'I'
 }
 
-/**
- *
- */
+
 export interface OptgroupHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	disabled?: boolean
@@ -4669,9 +4543,7 @@ export interface OptgroupHTMLAttributes<T> extends HTMLAttributes<T> {
 	label?: string
 }
 
-/**
- *
- */
+
 export interface OptionHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	disabled?: boolean
@@ -4683,9 +4555,7 @@ export interface OptionHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number
 }
 
-/**
- *
- */
+
 export interface OutputHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	form?: string
@@ -4695,9 +4565,7 @@ export interface OutputHTMLAttributes<T> extends HTMLAttributes<T> {
 	name?: string
 }
 
-/**
- *
- */
+
 export interface ParamHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	name?: string
@@ -4705,9 +4573,7 @@ export interface ParamHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number
 }
 
-/**
- *
- */
+
 export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	max?: number | string
@@ -4715,9 +4581,7 @@ export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
 	value?: string | string[] | number
 }
 
-/**
- *
- */
+
 export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	async?: boolean
@@ -4739,9 +4603,7 @@ export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: string
 }
 
-/**
- *
- */
+
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	autocomplete?: string
@@ -4765,9 +4627,7 @@ export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
 	onChange?: ChangeEventHandler<T>
 }
 
-/**
- *
- */
+
 export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	media?: string
@@ -4781,9 +4641,7 @@ export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: string
 }
 
-/**
- *
- */
+
 export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	media?: string
@@ -4795,9 +4653,7 @@ export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
 	type?: string
 }
 
-/**
- *
- */
+
 export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	cellPadding?: number | string
@@ -4807,9 +4663,7 @@ export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 	summary?: string
 }
 
-/**
- *
- */
+
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	autocomplete?: string
@@ -4846,9 +4700,7 @@ export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
 	onChange?: ChangeEventHandler<T>
 }
 
-/**
- *
- */
+
 export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	align?: "left" | "center" | "right" | "justify" | "char"
@@ -4862,9 +4714,7 @@ export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
 	scope?: string
 }
 
-/**
- *
- */
+
 export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	align?: "left" | "center" | "right" | "justify" | "char"
@@ -4878,17 +4728,13 @@ export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
 	scope?: string
 }
 
-/**
- *
- */
+
 export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	dateTime?: string
 }
 
-/**
- *
- */
+
 export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	default?: boolean
@@ -4902,9 +4748,7 @@ export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
 	srcLang?: string
 }
 
-/**
- *
- */
+
 export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 
 	height?: number | string
@@ -4916,9 +4760,7 @@ export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 	width?: number | string
 }
 
-/**
- *
- */
+
 export interface WebViewHTMLAttributes<T> extends HTMLAttributes<T> {
 
 	allowFullScreen?: boolean
@@ -4959,9 +4801,7 @@ export interface WebViewHTMLAttributes<T> extends HTMLAttributes<T> {
 //#endregion
 
 //#region Events
-/**
- *
- */
+
 export interface SyntheticEvent<T = Element> {
 
 	bubbles: boolean
@@ -5002,9 +4842,7 @@ export interface SyntheticEvent<T = Element> {
 	persist(): void
 }
 
-/**
- *
- */
+
 export interface ClipboardEvent<T = Element> extends SyntheticEvent<T> {
 
 	clipboardData: DataTransfer
@@ -5012,9 +4850,7 @@ export interface ClipboardEvent<T = Element> extends SyntheticEvent<T> {
 	nativeEvent: Event
 }
 
-/**
- *
- */
+
 export interface CompositionEvent<T = Element> extends SyntheticEvent<T> {
 
 	data: string
@@ -5022,9 +4858,7 @@ export interface CompositionEvent<T = Element> extends SyntheticEvent<T> {
 	nativeEvent: Event
 }
 
-/**
- *
- */
+
 export interface DragEvent<T = Element> extends MouseEvent<T> {
 
 	dataTransfer: DataTransfer
@@ -5032,9 +4866,7 @@ export interface DragEvent<T = Element> extends MouseEvent<T> {
 	nativeEvent: Event
 }
 
-/**
- *
- */
+
 export interface PointerEvent<T = Element> extends MouseEvent<T> {
 
 	pointerId: number
@@ -5056,9 +4888,7 @@ export interface PointerEvent<T = Element> extends MouseEvent<T> {
 	nativeEvent: Event
 }
 
-/**
- *
- */
+
 export interface FocusEvent<T = Element> extends SyntheticEvent<T> {
 
 	nativeEvent: Event
@@ -5068,31 +4898,23 @@ export interface FocusEvent<T = Element> extends SyntheticEvent<T> {
 	target: EventTarget & T
 }
 
-/**
- *
- */
+
 export interface FormEvent<T = Element> extends SyntheticEvent<T> {
 }
 
-/**
- *
- */
+
 export interface InvalidEvent<T = Element> extends SyntheticEvent<T> {
 
 	target: EventTarget & T
 }
 
-/**
- *
- */
+
 export interface ChangeEvent<T = Element> extends SyntheticEvent<T> {
 
 	target: EventTarget & T
 }
 
-/**
- *
- */
+
 export interface KeyboardEvent<T = Element> extends SyntheticEvent<T> {
 
 	altKey: boolean
@@ -5127,9 +4949,7 @@ export interface KeyboardEvent<T = Element> extends SyntheticEvent<T> {
 	getModifierState(key: string): boolean
 }
 
-/**
- *
- */
+
 export interface MouseEvent<T = Element> extends SyntheticEvent<T> {
 
 	altKey: boolean
@@ -5166,9 +4986,7 @@ export interface MouseEvent<T = Element> extends SyntheticEvent<T> {
 	getModifierState(key: string): boolean
 }
 
-/**
- *
- */
+
 export interface TouchEvent<T = Element> extends SyntheticEvent<T> {
 
 	altKey: boolean
@@ -5193,9 +5011,7 @@ export interface TouchEvent<T = Element> extends SyntheticEvent<T> {
 	getModifierState(key: string): boolean
 }
 
-/**
- *
- */
+
 export interface UIEvent<T = Element> extends SyntheticEvent<T> {
 
 	detail: number
@@ -5208,9 +5024,7 @@ export interface UIEvent<T = Element> extends SyntheticEvent<T> {
 	}
 }
 
-/**
- *
- */
+
 export interface WheelEvent<T = Element> extends MouseEvent<T> {
 
 	deltaMode: number
@@ -5224,9 +5038,7 @@ export interface WheelEvent<T = Element> extends MouseEvent<T> {
 	nativeEvent: Event
 }
 
-/**
- *
- */
+
 export interface AnimationEvent<T = Element> extends SyntheticEvent<T> {
 
 	animationName: string
@@ -5238,9 +5050,7 @@ export interface AnimationEvent<T = Element> extends SyntheticEvent<T> {
 	pseudoElement: string
 }
 
-/**
- *
- */
+
 export interface TransitionEvent<T = Element> extends SyntheticEvent<T> {
 
 	elapsedTime: number
@@ -5252,71 +5062,39 @@ export interface TransitionEvent<T = Element> extends SyntheticEvent<T> {
 	pseudoElement: string
 }
 
-/**
- *
- */
+
 export type EventHandler<E extends SyntheticEvent<any>> = { bivarianceHack(event: E): void }["bivarianceHack"]
 
-/**
- *
- */
+
 export type SomaticEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>
 
-/**
- *
- */
+
 type ClipboardEventHandler<T = Element> = EventHandler<ClipboardEvent<T>>
-/**
- *
- */
+
 type CompositionEventHandler<T = Element> = EventHandler<CompositionEvent<T>>
-/**
- *
- */
+
 type DragEventHandler<T = Element> = EventHandler<DragEvent<T>>
-/**
- *
- */
+
 type FocusEventHandler<T = Element> = EventHandler<FocusEvent<T>>
-/**
- *
- */
+
 type FormEventHandler<T = Element> = EventHandler<FormEvent<T>>
-/**
- *
- */
+
 type ChangeEventHandler<T = Element> = EventHandler<ChangeEvent<T>>
-/**
- *
- */
+
 type KeyboardEventHandler<T = Element> = EventHandler<KeyboardEvent<T>>
-/**
- *
- */
+
 type MouseEventHandler<T = Element> = EventHandler<MouseEvent<T>>
-/**
- *
- */
+
 type TouchEventHandler<T = Element> = EventHandler<TouchEvent<T>>
-/**
- *
- */
+
 type PointerEventHandler<T = Element> = EventHandler<PointerEvent<T>>
-/**
- *
- */
+
 type UIEventHandler<T = Element> = EventHandler<UIEvent<T>>
-/**
- *
- */
+
 type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>
-/**
- *
- */
+
 type AnimationEventHandler<T = Element> = EventHandler<AnimationEvent<T>>
-/**
- *
- */
+
 type TransitionEventHandler<T = Element> = EventHandler<TransitionEvent<T>>
 
 //#endregion

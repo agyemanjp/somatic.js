@@ -51,6 +51,7 @@ module.exports = {
 		"no-unused-labels": "error",
 		"no-unexpected-multiline": "error", // confusing multiline expressions where a newline looks like it is ending a statement, but is not
 		"no-shadow-restricted-names": "error",
+		"@typescript-eslint/no-namespace": ["off"],
 		"@typescript-eslint/no-shadow": ["error", { "ignoreTypeValueShadow": true }],
 		"arrow-parens": ["error", "as-needed"],
 		"prefer-template": "error",
@@ -144,3 +145,4 @@ module.exports = {
 	},
 	"noInlineConfig": true
 }
+

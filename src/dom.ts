@@ -90,8 +90,7 @@ export function setAttribute(element: DOMElement, attribName: string, attribVal:
 }
 
 /** Create a shallow DOM element based on the passed intrinsic element or primitive value.
- * @returns A non-text DOM element (without children) when passed an intrinsic element (that possibly has children)
- * @returns A text DOM element when passed a primitive value
+ * @returns A non-text DOM element (without children) when passed an intrinsic element (that possibly has children); A text DOM element when passed a primitive value
  */
 export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragment | Text {
 	if (isIntrinsicElt(eltUI)) {
@@ -102,7 +101,7 @@ export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragm
 				: document.createElement(eltUI.type)
 		)
 
-		const props = eltUI.props ?? {}
+		const props = eltUI.props //?? {}
 		if (dom instanceof DocumentFragment) {
 			console.assert(Object.keys(props).length === 0)
 		}
@@ -128,7 +127,7 @@ export function updateDomShallow(eltDOM: DOMElement, eltUI: LeafElement) {
 		// console.log(`updateDomShallow: Removing all existing attributes of ${eltDOM}`);
 
 		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
-		const props = eltUI.props ?? {}
+		const props = eltUI.props //?? {}
 
 		// console.log(`updateDomShallow: Setting props ${stringify(props)} on ${eltDOM}`)
 		Object.keys(props).forEach(key => setAttribute(eltDOM, key, props[key]))

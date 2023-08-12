@@ -7,12 +7,15 @@ import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAu
 import { selfClosingTags } from "./common"
 
 
-/** JSX is transformed into calls of this function */
+/** JSX is transformed into calls of this function
+ * @returns UI Element corresponding to input
+ */
 export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
 	if (typeof type !== "string" && typeof type !== "function") { console.warn(`Type argument has invalid type ${typeof type}`) }
 
 	return { type, props: props ?? {}, children: children.flat() }
 }
+export const Fragment = ""
 
 /** Render a UI element into a DOM node (augmented with information used for subsequent updates) */
 export async function renderAsync(elt: UIElement): Promise<(DOMAugmented | DocumentFragment | Text)> {
@@ -279,3 +282,5 @@ export async function mountElement(element: UIElement, container: Element) {
 
 /** DOM update/refresh interval. This value seems to work best when tested; Don't change without a good reason */
 const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 14
+
+

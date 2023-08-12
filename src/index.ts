@@ -57,7 +57,7 @@ declare global {
 		interface IntrinsicElements {
 			/** Represents the root (top-level element) of an HTML document, so it is also referred to as the root element. 
 			 * All other elements must be descendants of this element.
-			 * */
+			 */
 			html: Intrinsic<HtmlHTMLAttributes<HTMLHtmlElement>>
 			/** Represents the content of an HTML document. There can be only one <body> element in a document. */
 			body: HTMLAttributes<HTMLBodyElement>
@@ -70,13 +70,13 @@ declare global {
 			/** Specifies relationships between the current document and an external resource. 
 			 * This element is most commonly used to link to CSS, but is also used to establish site icons 
 			 * (both "favicon" style icons and icons for the home screen and apps on mobile devices) among other things. 
-			 * */
+			 */
 			link: LinkHTMLAttributes<HTMLLinkElement>
 			/** Represents Metadata that cannot be represented by other HTML meta-related elements, like base, link, script, style or title. */
 			meta: MetaHTMLAttributes<HTMLMetaElement>
 			/** Contains style information for a document, or part of a document. 
 			 * It contains CSS, which is applied to the contents of the document containing the <style> element. 
-			 * */
+			 */
 			style: Intrinsic<StyleHTMLAttributes<HTMLStyleElement>>
 			/** Defines the document's title that is shown in a Browser's title bar or a page's tab. 
 			 * It only contains text; tags within the element are ignored. 
@@ -282,7 +282,7 @@ declare global {
 			sub: HTMLAttributes<HTMLElement>
 			/** Specifies inline text which is to be displayed as superscript for solely typographical reasons.
 			 * Superscripts are usually rendered with a raised baseline using smaller text
-			*/
+			 */
 			sup: HTMLAttributes<HTMLElement>
 			/** The <time> HTML element represents a specific period in time. 
 			 * It may include the datetime attribute to translate dates into machine-readable format, 
