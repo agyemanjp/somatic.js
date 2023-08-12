@@ -23,6 +23,7 @@ jobs:
       - name: Install
         run: |
           npm install -g pnpm
+          pnpm store prune
           pnpm install
         
       - name: Compile
