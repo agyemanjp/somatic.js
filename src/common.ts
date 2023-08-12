@@ -426,40 +426,6 @@ export const colorConstants/*: Record<string, string>*/ = {
 }
 export const colors: Record<string, string> = colorConstants
 
-/** Converts color name to its hex color code */
-/*export function colourNameToHex(colour: string) {
-	return (typeof colors[colour.toLowerCase()] !== 'undefined')
-		? colors[colour.toLowerCase()]
-		: colour
-}*/
-
-/** Function that calculates a lighter or darker color of a base color in Hex representation
- * @param hexColor a hex color value such as “#abc” or “#123456” (the hash is optional)
- * @param luminosity the luminosity factor, i.e. -0.1 is 10% darker, 0.2 is 20% lighter, etc
- */
-/*export function colorLuminance(color: string, luminosity: number) {
-	if (color === "transparent") {
-		return color
-	}
-	const sanitizedColor = colourNameToHex(color).replace(/[^0-9a-f]/gi, '')
-	const hexColor = sanitizedColor.length >= 6
-		?
-		sanitizedColor
-		:
-		sanitizedColor[0] +
-		sanitizedColor[0] +
-		sanitizedColor[1] +
-		sanitizedColor[1] +
-		sanitizedColor[2] +
-		sanitizedColor[2]
-
-	// Convert to decimal and change luminosity
-	return "#" + [0, 1, 2].map(i => {
-		const initialColor = parseInt(hexColor.substr(i * 2, 2), 16)
-		const endColor = Math.round(Math.min(Math.max(0, initialColor + (initialColor * luminosity)), 255)).toString(16)
-		return endColor
-	}).join("")
-}*/
 
 class IdProvider {
 	private cache: string[]

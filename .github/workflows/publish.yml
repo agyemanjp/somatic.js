@@ -1,41 +1,60 @@
 name: Publish
+
 on:
   workflow_dispatch:
+    branches:
+      - master
 
-env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
-  GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+    inputs:
+      increment_type:
+        description: 'Type of version increment'
+        required: true
+        default: 'patch'
+        options: ['patch', 'minor', 'major']
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.5.0
+        uses: actions/checkout@v3.5.3
+        with:
+          ref: master
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v3.5.1
         with:
           node-version: 16.x
 
-      - name: Git Configurations
+      - name: Build and test
         run: |
-          git config --global user.name "${{env.GIT_USER_NAME}}"
-          git config --global user.email "${{env.GIT_USER_EMAIL}}"
-
-      - name: Install dependencies
-        run: |
-          npm install -g pnpm
+          npm install -g pnpm semver
           pnpm install
+          pnpm run build
+          pnpm run test
 
-      - name: Check if package version updated
-        id: check
-        uses: PostHog/check-package-version@v2
-
-      - name: Publish to NPM if new version
-        if: steps.check.outputs.is-new-version == 'true'
+      - name: Bump version
+        id: bump_version
         run: |
-          pnpm config set //registry.npmjs.org/:_authToken ${{ env.NPM_TOKEN }}
-          pnpm publish --access public
-          # pnpm -r publish --no-git-checks --access public
+          echo "CURRENT_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "INCREMENT_TYPE=${{ github.event.inputs.increment_type }}" >> $GITHUB_ENV
+          echo "NEW_VERSION=$(semver -i $CURRENT_VERSION $INCREMENT_TYPE)" >> $GITHUB_ENV
+          echo $NEW_VERSION
+        # git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+        # git config --global user.name "${{ secrets.GIT_USER_NAME }}"
+        # git tag $NEW_VERSION
+        # git push origin $NEW_VERSION
+
+      - name: Publish to NPM
+        run: |
+          cp package.json README.md LICENSE ./dist
+          echo "{\"version\": \"$NEW_VERSION\"}" > dist/package.json
+          cd dist
+          pnpm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+          npm publish --dry-run
+          cd ..
+
+# npm publish --access public
