@@ -24,8 +24,6 @@ jobs:
         run: |
           npm install -g pnpm
           echo "Installed pnpm"
-          pnpm config set store-dir ~/pnpm
-          pnpm store prune
           echo "Pruned pnpm store"
           pnpm install
           echo "Install deps with pnpm"
