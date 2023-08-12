@@ -101,7 +101,7 @@ export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragm
 				: document.createElement(eltUI.type)
 		)
 
-		const props = eltUI.props //?? {}
+		const props = eltUI.props ?? {}
 		if (dom instanceof DocumentFragment) {
 			console.assert(Object.keys(props).length === 0)
 		}
@@ -127,7 +127,7 @@ export function updateDomShallow(eltDOM: DOMElement, eltUI: LeafElement) {
 		// console.log(`updateDomShallow: Removing all existing attributes of ${eltDOM}`);
 
 		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
-		const props = eltUI.props //?? {}
+		const props = eltUI.props ?? {}
 
 		// console.log(`updateDomShallow: Setting props ${stringify(props)} on ${eltDOM}`)
 		Object.keys(props).forEach(key => setAttribute(eltDOM, key, props[key]))

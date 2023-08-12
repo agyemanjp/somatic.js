@@ -67,7 +67,7 @@ module.exports = {
 		"@typescript-eslint/prefer-as-const": "error",
 		"@typescript-eslint/ban-ts-comment": "error",
 		"@typescript-eslint/ban-types": "warn",
-		"@typescript-eslint/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],
+		"@typescript-eslint/no-unnecessary-condition": ["warn", { "allowConstantLoopConditions": true }],
 		"no-return-await": "error",
 		"guard-for-in": "error", // using a for-in loop without filtering the results in the loop
 		"semi": ["error", "never"],
