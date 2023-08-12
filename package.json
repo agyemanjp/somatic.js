@@ -26,7 +26,7 @@
 	},
 	"homepage": "https://github.com/agyemanjp/somatic.js#readme",
 	"scripts": {
-		"deps": "rm -rf ./node_modules package-lock.json && pnpm install",
+		"deps": "rm -rf ./node_modules package-lock.json pnpm-lock.yaml yarn.lock && pnpm install",
 		"clean": "rm -rf dist/* .eslintcache *.run.json",
 		"lint": "eslint --ext ts --cache 'src/**'",
 		"lintci": "eslint --ext ts --output-file .lint.run.json --format json-standard --cache 'src/**'",
