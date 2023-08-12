@@ -23,7 +23,9 @@ jobs:
       - name: Install
         run: |
           npm install -g pnpm
+          echo "Installed pnpm"
           pnpm store prune
+          echo "Pruned pnpm store"
           npm install
         # pnpm install
         
