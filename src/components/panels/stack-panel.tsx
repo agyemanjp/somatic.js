@@ -13,7 +13,6 @@ export const StackPanel: Component<StackPanelProps> = props => {
 		itemsAlignV,
 		children,
 		style,
-		id,
 		...htmlProps
 	} = props
 
@@ -52,7 +51,7 @@ export const StackPanel: Component<StackPanelProps> = props => {
 	// console.log(`Rendering StackPanel, id = ${id}, props = ${stringify(props)}`)
 
 	return <div
-		id={id} {...htmlProps}
+		{...htmlProps}
 		style={{
 			...style,
 			display: "flex",

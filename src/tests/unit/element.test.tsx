@@ -145,12 +145,10 @@ describe("ELEMENT MODULE", () => {
 			)
 
 			assert.strictEqual(typeof trace.leafElement, "object")
-			// console.log(`trace.leafElement = ${_stringify(trace.leafElement)}`)
+			console.log(`trace.leafElement = ${stringify(trace.leafElement)}`)
 			assert.deepStrictEqual(trace.leafElement, {
 				type: "div",
 				props: {
-					// id: undefined,
-					// title: undefined,
 					style: {
 						alignItems: 'initial',
 						display: 'flex',
