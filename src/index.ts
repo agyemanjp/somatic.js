@@ -27,7 +27,13 @@ import {
 	ThHTMLAttributes
 } from "./types"
 
+
+
 declare global {
+	/** The namespace for using JSX in TypeScript/JavaScript files.
+	 @property {string} Element The type for a JSX element.
+	 @property {string} IntrinsicElements The type for the collection of intrinsic elements that can be used in JSX.
+	 */
 	export namespace JSX {
 		type Element = (
 			| AsyncGenerator<Element, Element>

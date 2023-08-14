@@ -2,9 +2,7 @@ name: Default
 
 on:
   push:
-  #   branches: [ dev ]
   pull_request:
-  # branches: [ dev ]
     types: ['synchronize']
 
 jobs:
@@ -13,10 +11,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.5.0
+        uses: actions/checkout@v3.5.3
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3.5.1
+        uses: actions/setup-node@v3.7.0
         with:
           node-version: 16.x
 
@@ -25,18 +25,18 @@ jobs:
           npm install -g pnpm
           pnpm install
         
-      - name: Build
+      - name: Compile
         run: pnpm run compile
         
-      - name: Run Lint Check
+      - name: Lint
         run: pnpm run lintci
         continue-on-error: true
         
-      - name: Run Test Check
+      - name: Test
         run: pnpm run testci
         continue-on-error: true
          
-      - name: Annotate code checks
+      - name: Annotate
         uses: agyemanjp/ci-checks-action@v2.1.1
         with:
           ghToken: "${{ secrets.GITHUB_TOKEN }}"
