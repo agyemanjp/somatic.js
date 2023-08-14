@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import { isEventKey } from '../dist/common'
+import { isEventKey } from '../../common'
 
 describe("isEventKey", () => {
 	it("should return <true> for 'onClick'", () => {

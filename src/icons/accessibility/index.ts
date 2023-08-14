@@ -1,3 +1,3 @@
-export * from "./closed-caption.js"
-export * from "./ear.js"
-export * from "./wheelchair.js"
+export * from "./closed-caption"
+export * from "./ear"
+export * from "./wheelchair"

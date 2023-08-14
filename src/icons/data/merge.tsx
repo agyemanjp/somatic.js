@@ -1,5 +1,5 @@
-import { createElement } from "../../index.js"
-import { create } from "../utils.js"
+import { createElement } from "../../index"
+import { create } from "../utils"
 
 export const Merge = create(
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

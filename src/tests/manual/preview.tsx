@@ -1,6 +1,7 @@
-import { CarouselPanel } from './components/panels/carousel-panel'
-import { createElement, mountElement } from './core'
-import * as Icons from './icons'
+import { createElement, mountElement } from '../../core'
+import { CarouselPanel } from '../../components/panels/carousel-panel'
+import * as Icons from '../../icons'
+
 
 function Preview() {
 	const handleClick = (tab: string) => {
@@ -29,8 +30,7 @@ function Preview() {
 				padding: '20px',
 				justifyContent: 'space-evenly',
 				alignContent: 'space-evenly',
-			}}
-		>
+			}}>
 			{Object.entries(Icons).map(([key, ico]) => (
 				<div
 					id={key}
@@ -42,8 +42,8 @@ function Preview() {
 						paddingTop: '10px',
 						paddingBottom: '50px',
 						height: '60px',
-					}}
-				>
+					}}>
+
 					{createElement(ico, {})}
 					<p>{key}</p>
 				</div>
@@ -92,7 +92,8 @@ function Preview() {
 			if (!rootContainerNode) {
 				throw new Error(`Root container with id root not found`)
 			}
-			await mountElement(<Preview/>, rootContainerNode)
+			console.log(`Mounting`)
+			await mountElement(<Preview />, rootContainerNode)
 		})
 	}
 })()

@@ -1,9 +1,10 @@
 import * as assert from "assert"
 import { isGenerator, pick, unique, stringify } from "@agyemanjp/standard"
-import { createElement } from "../dist/core"
-import { isComponentElt, isEltProper, updateResultAsync, getChildren, traceToLeafAsync, isIntrinsicElt, updateTraceAsync } from "../dist/element"
-import { Component, ComponentElt, CSSProperties, IntrinsicElement } from "../dist/types"
-import { StackPanel } from "./_utils"
+
+import { createElement } from "../../core"
+import { isComponentElt, isEltProper, updateResultAsync, getChildren, traceToLeafAsync, isIntrinsicElt, updateTraceAsync } from "../../element"
+import { Component, ComponentElt, CSSProperties, IntrinsicElement } from "../../types"
+import { StackPanel } from "../../components"
 
 interface User {
 	id: string
@@ -18,7 +19,8 @@ const SplashPage: Component = () => <div>Splash page</div>
 const Layout: Component<{ user: User | undefined }> = function (props) {
 	const { user, children } = props
 	return <StackPanel id="root" orientation="vertical" style={{ padding: 0, margin: 0 }}>
-		<StackPanel id="header"
+		<StackPanel
+			id="header"
 			itemsAlignH="uniform"
 			itemsAlignV="center"
 			style={{ backgroundColor: "purple", width: "100vw", height: "10vh" }}>

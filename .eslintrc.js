@@ -115,6 +115,7 @@ module.exports = {
 		"@typescript-eslint/no-empty-function": "off",
 		"@typescript-eslint/no-empty-interface": "off",
 		"no-undef-init": "off",
+		"sonarjs/no-ignored-return": "warn",
 
 		/* formatting */
 		"curly": ["error", "multi-line"], // ensuring that block statements are wrapped in curly braces
@@ -146,6 +147,7 @@ module.exports = {
 		"no-warning-comments": ["error", {
 			"terms": ["todo"], "location": "anywhere"
 		}],
+		"jsdoc/require-yields": "off",
 		"jsdoc/require-param": "off",
 		"jsdoc/require-param-type": "off",
 		"jsdoc/check-param-names": "off",
@@ -162,8 +164,7 @@ module.exports = {
 		"react/jsx-key": "off",
 		"react/no-unknown-property": "warn",
 		"react/prop-types": "off",
-
-		"sonarjs/no-ignored-return": "warn",
+		"react/display-name": "off",
 	},
 	"settings": {
 		"jsdoc": {}

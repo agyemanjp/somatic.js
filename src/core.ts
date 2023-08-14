@@ -257,7 +257,7 @@ export function invalidateUI(invalidatedElementIds?: string[], reason?: string) 
 /** Handler for invalidateUI event, as a separate fn to avoid problems with creating a new fn reference each time is it used */
 async function invalidationHandlerAsync(eventInfo: Event) {
 	const invalidatedElementIds: string[] = []
-	let daemon: NodeJS.Timeout | undefined = undefined
+	let daemon = undefined as NodeJS.Timeout | undefined
 
 	// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
 	const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []

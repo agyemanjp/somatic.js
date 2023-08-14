@@ -5,7 +5,7 @@ import { PanelProps, HtmlProps, Component } from "../../types"
 export type StackPanelProps = PanelProps & HtmlProps & {
 }
 
-export const StackPanel: Component<StackPanelProps> = function (props) {
+export const StackPanel: Component<StackPanelProps> = props => {
 	const {
 		key,
 		orientation,
@@ -71,7 +71,5 @@ StackPanel.isPure = true
 
 // const elt = createElement(StackPanel, { itemsAlignH: "stretch", x: 1 }, createElement("div", {}))
 // const elt1 = createElement(StackPanel, { itemsAlignHX: "stretch" }, createElement("div", {}))
-
 // const x = <div />
-
 // const y = <StackPanel />

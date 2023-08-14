@@ -1,5 +1,5 @@
-import { createElement } from "../../index.js"
-import { create } from "../utils.js"
+import { createElement } from "../../index"
+import { create } from "../utils"
 
 export const RingsConcentric = create(
 	<svg
