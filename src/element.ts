@@ -201,25 +201,9 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 
 /** Returns a flattened array of children  */
 export function normalizeChildren(children?: Children): UIElement<Obj<unknown, string>>[] {
-	// console.log(`getChildren: starting on ${JSON.stringify(children, null, 2)}`)
-
-	if (children === undefined) {
-		console.log(`getChildren: children is undefined, returning []`)
-		return []
-	}
-
-	if (Array.isArray(children)) {
-		console.log(`getChildren: children is array, returning children.flat(): ${children.flat()}`)
-		return children.flat()
-	}
-	else {
-		console.log(`getChildren: children is not array, returning [children]: ${[children]}`)
-		return [children]
-	}
-
-	// return Array.isArray(children)
-	// 	? children.flat()
-	// 	: [children]
+	return Array.isArray(children)
+		? children.flat()
+		: [children]
 }
 
 /** Returns normalized children of an element  */
