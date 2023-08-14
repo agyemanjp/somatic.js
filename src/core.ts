@@ -1,14 +1,11 @@
 import { hasValue, prependSpaceIfNotEmpty, stringify } from "@agyemanjp/standard"
 import * as cuid from "@paralleldrive/cuid2"
+
 import { stringifyAttributes } from "./html"
 import { createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync, isFragmentElt } from "./element"
 import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, DOMAugmented } from "./types"
 import { selfClosingTags } from "./common"
-
-
-export const Fragment = ""
-export type Fragment = typeof Fragment
 
 /** JSX is transformed into calls of this function */
 export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
@@ -305,3 +302,4 @@ export async function mountElement(element: UIElement, container: Element) {
 
 /** DOM update/refresh interval. This value seems to work best when tested; Don't change without a good reason */
 const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 14
+export const fragment = ""

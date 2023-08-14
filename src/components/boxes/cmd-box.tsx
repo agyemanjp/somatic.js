@@ -39,7 +39,7 @@ export const CommandBox: Component<CommandBoxProps> = function (props) {
 	const hoverStyle: CSSProperties = (hoverEffect === "invert"
 		? {
 			color: style.backgroundColor ?? defaultProps.style.backgroundColor,
-			borderColor: style.backgroundColor ?? style.background ?? defaultProps.style.backgroundColor,
+			borderColor: style.backgroundColor ?? (style.background as any) ?? defaultProps.style.backgroundColor,
 			backgroundColor: style.color ?? defaultProps.style.color,
 		}
 		: {
