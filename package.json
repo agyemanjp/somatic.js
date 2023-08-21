@@ -37,7 +37,7 @@
 		"test-units-ci": "mocha --require ts-node/register src/test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
 		"test-manual": "http-server -c-1 -a localhost -p 4321 -o dist/tests/manual/preview.html",
 		"test": "run-p test-units test-manual",
-		"test-ci": "run-p test-units-ci"
+		"testci": "run-p test-units-ci"
 	},
 	"dependencies": {
 		"@agyemanjp/standard": "^5.1.2",
