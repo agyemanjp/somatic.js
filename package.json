@@ -34,7 +34,7 @@
 		"bundle": "webpack",
 		"build": "run-s compile bundle && cp src/tests/manual/preview.html dist/tests/manual",
 		"test-units": "mocha --require ts-node/register src/tests/unit/*.test.*",
-		"test-units-ci": "mocha --require ts-node/register src/test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
+		"test-units-ci": "mocha --require ts-node/register src/tests/unit/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
 		"test-manual": "http-server -c-1 -a localhost -p 4321 -o dist/tests/manual/preview.html",
 		"test": "run-p test-units test-manual",
 		"testci": "run-p test-units-ci"
