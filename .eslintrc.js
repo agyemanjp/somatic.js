@@ -1,7 +1,7 @@
 module.exports = {
 	"root": true,
 	"parser": "@typescript-eslint/parser",
-	"parserOptions": { project: ['./tsconfig.json', './test/tsconfig.json'] },
+	"parserOptions": { project: ['./tsconfig.json'] },
 	"plugins": ["@typescript-eslint", "sonarjs", "jsdoc", "react"],
 	"env": { "browser": true, "node": true },
 	"extends": [
