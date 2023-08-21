@@ -1,6 +1,9 @@
 dist
 node_modules
 
+*.LICENSE.txt
+/tests/manual/*.js
+
 *.log
 *-report.json
 *.run.json

@@ -1,13 +1,18 @@
 module.exports = {
 	"root": true,
 	"parser": "@typescript-eslint/parser",
-	"parserOptions": { project: ['./tsconfig.json', './test/tsconfig.json'] },
+	"parserOptions": { project: ['./tsconfig.json'] },
 	"plugins": ["@typescript-eslint", "sonarjs", "jsdoc", "react"],
 	"env": { "browser": true, "node": true },
 	"extends": [
 		"plugin:@typescript-eslint/recommended",
 		"plugin:react/recommended",
 		"plugin:jsdoc/recommended"
+	],
+	"overrides": [
+		{
+			"files": ["./**/*.js", "./**/*.ts"],
+		}
 	],
 	"rules": {
 		/* logic */
@@ -31,6 +36,18 @@ module.exports = {
 		"sonarjs/no-identical-expressions": "error", // Identical expressions used on both sides of a binary operator
 		"sonarjs/no-collection-size-mischeck": "error", // Testing array/collection size/length is greater than or equal to zero doesn't make sense
 		"sonarjs/no-ignored-return": "warn", // Return values from functions without side effects should not be ignored
+		"sonarjs/no-one-iteration-loop": "error", // Loops with at most one iteration should be refactored
+		"sonarjs/no-use-of-empty-return-value": "error", // The output of functions that don't return anything should not be used
+		"sonarjs/non-existent-operator": "error", // Non-existent operators '=+', '=-' and '=!' should not be used
+
+		"sonarjs/no-all-duplicated-branches": "error", //All branches in a conditional structure should not have exactly the same implementation
+		"sonarjs/no-element-overwrite": "error", // Collection elements should not be replaced unconditionally
+		"sonarjs/no-empty-collection": "error", // Empty collections should not be accessed or iterated
+		"sonarjs/no-extra-arguments": "error", // Function calls should not pass extra arguments
+		"sonarjs/no-identical-conditions": "error", // Related "if/else if" statements should not have the same condition
+		"sonarjs/no-identical-expressions": "error", // Identical expressions used on both sides of a binary operator
+		"sonarjs/no-collection-size-mischeck": "error", // Testing array/collection size/length is greater than or equal to zero doesn't make sense
+		"sonarjs/no-ignored-return": "error", // Return values from functions without side effects should not be ignored
 		"sonarjs/no-one-iteration-loop": "error", // Loops with at most one iteration should be refactored
 		"sonarjs/no-use-of-empty-return-value": "error", // The output of functions that don't return anything should not be used
 		"sonarjs/non-existent-operator": "error", // Non-existent operators '=+', '=-' and '=!' should not be used
@@ -93,6 +110,7 @@ module.exports = {
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/no-empty-function": "off",
 		"no-undef-init": "off",
+		"sonarjs/no-ignored-return": "warn",
 
 		/* formatting */
 		"curly": ["error", "multi-line"], // ensuring that block statements are wrapped in curly braces
@@ -138,7 +156,6 @@ module.exports = {
 		"react/no-unknown-property": "warn",
 		"react/prop-types": "off",
 		"react/display-name": "off",
-
 	},
 	"settings": {
 		"jsdoc": {}

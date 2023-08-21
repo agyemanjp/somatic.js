@@ -22,6 +22,8 @@ export interface ComponentOptions<P extends Obj = Obj> {
 	defaultProps?: Partial<P>
 }
 
+export type Fragment = ""
+
 export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a
 
 export interface UIElementBase<P = unknown> {
@@ -138,20 +140,25 @@ export interface CSSProperties {
 	animationPlayState?: "running" | "paused"
 	animationTimingFunction?: CSSEasingFunction
 	backfaceVisibility?: "visible" | "hidden"
-	background?: string
+
+	/** Sets all background style properties at once, such as color, image, origin and size, or repeat method. 
+	 * Component properties not set in the background shorthand property value declaration are set to their default values.
+	 */
+	background?: CSSProperty<string>
+
 	backgroundAttachment?: "scroll" | "fixed" | "local"
 	backgroundClip?: "border-box" | "padding-box" | "content-box" | "text"
-	backgroundColor?: CSSColor | string
+	backgroundColor?: CSSProperty<CSSColor>
 	backgroundImage?: `url(${string})`
-	backgroundOrigin?: "border-box" | "padding-box" | "content-box"
-	backgroundPosition?: (
+	backgroundOrigin?: CSSProperty<"border-box" | "padding-box" | "content-box">
+	backgroundPosition?: CSSProperty<(
 		| "top"
 		| "right"
 		| "bottom"
 		| "left"
 		| "center"
 		| string
-	)
+	)>
 	backgroundPositionX?: (
 		| "left"
 		| "center"
@@ -189,7 +196,7 @@ export interface CSSProperties {
 	borderBottomStyle?: NamedBorderStyle
 	borderBottomWidth?: CSSLength
 	borderCollapse?: "collapse" | "separate"
-	borderColor?: CSSColor
+	borderColor?: CSSProperty<CSSColor>
 	borderImage?: (
 		| `url(${string}) ${number} ${string}`
 		| string
@@ -285,7 +292,7 @@ export interface CSSProperties {
 		| `circle(${string} at ${string} ${string})`
 	)
 	clipRule?: "nonzero" | "evenodd" | "inherit"
-	color?: CSSColor | string
+	color?: CSSProperty<CSSColor>
 	colorInterpolationFilters?: string | null
 	columnCount?: "auto" | number
 	columnFill?: "auto" | "balance" | "balance-all"
@@ -515,13 +522,13 @@ export interface CSSProperties {
 	)
 	glyphOrientationHorizontal?: `${number} ${"deg" | "grad" | "rad"}`
 	glyphOrientationVertical?: `${number} ${"deg" | "grad" | "rad"}`
-	height?: (
+	height?: CSSProperty<(
 		| "max-content"
 		| "min-content"
 		//| `fit-content(${CSSLength})`
 		| "auto"
 		| CSSLength
-	)
+	)>
 	imeMode?: (
 		| "auto"
 		| "normal"
@@ -828,7 +835,31 @@ export interface CSSProperties {
 		| "justify"
 	)
 	textAnchor?: "start" | "middle" | "end"
-	textDecoration?: string | null
+
+	/** The appearance of decorative lines on text. 
+	 * It is a shorthand for text-decoration-line, text-decoration-color, text-decoration-style, and 
+	 * the newer text-decoration-thickness property 
+	 */
+	textDecoration?: (
+		| CSSProperties["textDecorationLine"]
+		| `${CSSProperties["textDecorationLine"]} ${CSSProperties["textDecorationColor"]}`
+		| `${CSSProperties["textDecorationLine"]} ${CSSProperties["textDecorationStyle"]}`
+		| `${CSSProperties["textDecorationLine"]} ${CSSProperties["textDecorationStyle"]} ${CSSProperties["textDecorationColor"]}`
+		// | `${CSSProperties["textDecorationLine"]} ${CSSProperties["textDecorationStyle"]} ${CSSProperties["textDecorationColor"]} ${CSSProperties["s"]}`
+	)
+
+	/** Style of the lines specified by text-decoration-line */
+	textDecorationStyle?: CSSProperty<'solid' | 'double' | 'dotted' | 'dashed' | 'wavy'>
+
+	/** Kind of decoration that is used on text in an element, such as an underline or overline */
+	textDecorationLine?: CSSProperty<'none' | 'underline' | 'overline' | 'line-through' | 'underline overline' | 'underline line-through'>
+
+	/** Stroke thickness of the decoration line that is used on text in an element, such as a line-through, underline, or overline. */
+	textDecorationThickness?: CSSProperty<CSSLength>
+
+	/** Color of decorations added to text by text-decoration-line. */
+	textDecorationColor?: CSSProperty<CSSColor>
+
 	textIndent?: CSSLength
 	textJustify?: (
 		| "auto"
@@ -1005,13 +1036,13 @@ export interface CSSProperties {
 		| "break-spaces"
 	)
 	widows?: number
-	width?: (
+	width?: CSSProperty<(
 		| "auto"
 		| "max-content"
 		| "min-content"
-		//| `fit-content(${CSSLength})`
+		| `fit-content(${CSSLength})`
 		| CSSLength
-	)
+	)>
 	wordBreak?: "normal" | "break-all" | "keep-all" | "break-word"
 	wordSpacing?: "normal" | CSSLength
 	wordWrap?: string | null
@@ -1062,7 +1093,10 @@ export interface CSSProperties {
 	/** A shorthand property for the grid-template-rows, grid-template-columns and grid-areas properties
 	 * Default is none
 	 */
-	gridTemplate?: string | null
+	gridTemplate?: string | null,
+
+	gridAutoRows?: string
+	gridAutoColumns?: string
 
 	/** Specifies the gap between the grid rows */
 	rowGap?: string | null
@@ -1081,6 +1115,8 @@ export interface CSSProperties {
 	 * Or two CSS length values specifying the row-gap and column-gap
 	 */
 	gap?: string | null
+
+	objectFit?: CSSProperty<string>
 }
 
 export type CSSProperty<T> = T | "inherit" | "initial" | "revert" | "unset"
@@ -1158,7 +1194,7 @@ type CSSTimeUnit = (
 	| "s"
 )
 export type CSSColor = (
-	| string
+	// | string
 	| keyof typeof colorConstants
 	| "currentcolor"
 	| "transparent"
@@ -1167,7 +1203,7 @@ export type CSSColor = (
 	| `rgba(${number}, ${number}, ${number}, ${number})`
 )
 
-export type CSSLength = `${number}${CSSLengthUnit}`
+export type CSSLength = `${number}${CSSLengthUnit}` | `calc(${string})`
 
 /** CSS Length units. See https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units */
 export type CSSLengthUnit = (
@@ -1505,251 +1541,251 @@ export type SVGAttributes<T> = DOMAttributes<T> & {
 	accumulate?: "none" | "sum"
 	additive?: "replace" | "sum"
 	alignmentBaseline?: "auto" | "baseline" | "before-edge" | "text-before-edge" | "middle" | "central" | "after-edge" |
-	"text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit";
-	allowReorder?: "no" | "yes";
-	alphabetic?: number | string;
-	amplitude?: number | string;
-	arabicForm?: "initial" | "medial" | "terminal" | "isolated";
-	ascent?: number | string;
-	attributeName?: string;
-	attributeType?: string;
-	autoReverse?: number | string;
-	azimuth?: number | string;
-	baseFrequency?: number | string;
-	baselineShift?: number | string;
-	baseProfile?: number | string;
-	bbox?: number | string;
-	begin?: number | string;
-	bias?: number | string;
-	by?: number | string;
-	calcMode?: number | string;
-	capHeight?: number | string;
-	clip?: number | string;
-	clipPath?: string;
-	clipPathUnits?: number | string;
-	clipRule?: number | string;
-	colorInterpolation?: number | string;
-	colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit";
-	colorProfile?: number | string;
-	colorRendering?: number | string;
-	contentScriptType?: number | string;
-	contentStyleType?: number | string;
-	cursor?: number | string;
-	cx?: number | string;
-	cy?: number | string;
-	d?: string;
-	decelerate?: number | string;
-	descent?: number | string;
-	diffuseConstant?: number | string;
-	direction?: number | string;
-	display?: number | string;
-	divisor?: number | string;
-	dominantBaseline?: number | string;
-	dur?: number | string;
-	dx?: number | string;
-	dy?: number | string;
-	edgeMode?: number | string;
-	elevation?: number | string;
-	enableBackground?: number | string;
-	end?: number | string;
-	exponent?: number | string;
-	externalResourcesRequired?: number | string;
-	fill?: string;
-	fillOpacity?: number | string;
-	fillRule?: "nonzero" | "evenodd" | "inherit";
-	filter?: string;
-	filterRes?: number | string;
-	filterUnits?: number | string;
-	floodColor?: number | string;
-	floodOpacity?: number | string;
-	focusable?: number | string;
-	fontFamily?: string;
-	fontSize?: number | string;
-	fontSizeAdjust?: number | string;
-	fontStretch?: number | string;
-	fontStyle?: CSSProperty<"normal" | "italic" | "oblique">;
-	fontVariant?: CSSProperty<"normal" | "small-caps">;
-	fontWeight?: number | string;
-	format?: number | string;
-	from?: number | string;
-	fx?: number | string;
-	fy?: number | string;
-	g1?: number | string;
-	g2?: number | string;
-	glyphName?: number | string;
-	glyphOrientationHorizontal?: number | string;
-	glyphOrientationVertical?: number | string;
-	glyphRef?: number | string;
-	gradientTransform?: string;
-	gradientUnits?: string;
-	hanging?: number | string;
-	horizAdvX?: number | string;
-	horizOriginX?: number | string;
-	href?: string;
-	ideographic?: number | string;
-	imageRendering?: number | string;
-	in2?: number | string;
-	in?: string;
-	intercept?: number | string;
-	k1?: number | string;
-	k2?: number | string;
-	k3?: number | string;
-	k4?: number | string;
-	k?: number | string;
-	kernelMatrix?: number | string;
-	kernelUnitLength?: number | string;
-	kerning?: number | string;
-	keyPoints?: number | string;
-	keySplines?: number | string;
-	keyTimes?: number | string;
-	lengthAdjust?: number | string;
-	letterSpacing?: number | string;
-	lightingColor?: number | string;
-	limitingConeAngle?: number | string;
-	local?: number | string;
-	markerEnd?: string;
-	markerHeight?: number | string;
-	markerMid?: string;
-	markerStart?: string;
-	markerUnits?: number | string;
-	markerWidth?: number | string;
-	mask?: string;
-	maskContentUnits?: number | string;
-	maskUnits?: number | string;
-	mathematical?: number | string;
-	mode?: number | string;
-	numOctaves?: number | string;
-	offset?: number | string;
-	opacity?: number | string;
-	operator?: number | string;
-	order?: number | string;
-	orient?: number | string;
-	orientation?: number | string;
-	origin?: number | string;
-	overflow?: number | string;
-	overlinePosition?: number | string;
-	overlineThickness?: number | string;
-	paintOrder?: number | string;
-	panose1?: number | string;
-	pathLength?: number | string;
-	patternContentUnits?: string;
-	patternTransform?: number | string;
-	patternUnits?: string;
-	pointerEvents?: number | string;
-	points?: string;
-	pointsAtX?: number | string;
-	pointsAtY?: number | string;
-	pointsAtZ?: number | string;
-	preserveAlpha?: number | string;
-	preserveAspectRatio?: string;
-	primitiveUnits?: number | string;
-	r?: number | string;
-	radius?: number | string;
-	refX?: number | string;
-	refY?: number | string;
-	renderingIntent?: number | string;
-	repeatCount?: number | string;
-	repeatDur?: number | string;
-	requiredExtensions?: number | string;
-	requiredFeatures?: number | string;
-	restart?: number | string;
-	result?: string;
-	rotate?: number | string;
-	rx?: number | string;
-	ry?: number | string;
-	scale?: number | string;
-	seed?: number | string;
-	shapeRendering?: number | string;
-	slope?: number | string;
-	spacing?: number | string;
-	specularConstant?: number | string;
-	specularExponent?: number | string;
-	speed?: number | string;
-	spreadMethod?: string;
-	startOffset?: number | string;
-	stdDeviation?: number | string;
-	stemh?: number | string;
-	stemv?: number | string;
-	stitchTiles?: number | string;
-	stopColor?: string;
-	stopOpacity?: number | string;
-	strikethroughPosition?: number | string;
-	strikethroughThickness?: number | string;
-	string?: number | string;
-	stroke?: string;
-	strokeDasharray?: string | number;
-	strokeDashoffset?: string | number;
-	strokeLinecap?: "butt" | "round" | "square" | "inherit";
-	strokeLinejoin?: "miter" | "round" | "bevel" | "inherit";
-	strokeMiterlimit?: number | string;
-	strokeOpacity?: number | string;
-	strokeWidth?: number | string;
-	surfaceScale?: number | string;
-	systemLanguage?: number | string;
-	tableValues?: number | string;
-	targetX?: number | string;
-	targetY?: number | string;
-	textAnchor?: string;
-	textDecoration?: number | string;
-	textLength?: number | string;
-	textRendering?: number | string;
-	to?: number | string;
-	transform?: string;
-	u1?: number | string;
-	u2?: number | string;
-	underlinePosition?: number | string;
-	underlineThickness?: number | string;
-	unicode?: number | string;
-	unicodeBidi?: number | string;
-	unicodeRange?: number | string;
-	unitsPerEm?: number | string;
-	vAlphabetic?: number | string;
-	values?: string;
-	vectorEffect?: number | string;
-	version?: string;
-	vertAdvY?: number | string;
-	vertOriginX?: number | string;
-	vertOriginY?: number | string;
-	vHanging?: number | string;
-	vIdeographic?: number | string;
-	viewBox?: string;
-	viewTarget?: number | string;
-	visibility?: number | string;
-	vMathematical?: number | string;
-	widths?: number | string;
-	wordSpacing?: number | string;
-	writingMode?: number | string;
-	x1?: number | string;
-	x2?: number | string;
-	x?: number | string;
-	xChannelSelector?: string;
-	xHeight?: number | string;
-	xlinkActuate?: string;
-	xlinkArcrole?: string;
-	xlinkHref?: string;
-	xlinkRole?: string;
-	xlinkShow?: string;
-	xlinkTitle?: string;
-	xlinkType?: string;
-	xmlBase?: string;
-	xmlLang?: string;
-	xmlns?: string;
-	xmlnsXlink?: string;
-	xmlSpace?: string;
-	y1?: number | string;
-	y2?: number | string;
-	y?: number | string;
-	yChannelSelector?: string;
-	z?: number | string;
-	zoomAndPan?: string;
+	"text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit"
+	allowReorder?: "no" | "yes"
+	alphabetic?: number | string
+	amplitude?: number | string
+	arabicForm?: "initial" | "medial" | "terminal" | "isolated"
+	ascent?: number | string
+	attributeName?: string
+	attributeType?: string
+	autoReverse?: number | string
+	azimuth?: number | string
+	baseFrequency?: number | string
+	baselineShift?: number | string
+	baseProfile?: number | string
+	bbox?: number | string
+	begin?: number | string
+	bias?: number | string
+	by?: number | string
+	calcMode?: number | string
+	capHeight?: number | string
+	clip?: number | string
+	clipPath?: string
+	clipPathUnits?: number | string
+	clipRule?: number | string
+	colorInterpolation?: number | string
+	colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit"
+	colorProfile?: number | string
+	colorRendering?: number | string
+	contentScriptType?: number | string
+	contentStyleType?: number | string
+	cursor?: number | string
+	cx?: number | string
+	cy?: number | string
+	d?: string
+	decelerate?: number | string
+	descent?: number | string
+	diffuseConstant?: number | string
+	direction?: number | string
+	display?: number | string
+	divisor?: number | string
+	dominantBaseline?: number | string
+	dur?: number | string
+	dx?: number | string
+	dy?: number | string
+	edgeMode?: number | string
+	elevation?: number | string
+	enableBackground?: number | string
+	end?: number | string
+	exponent?: number | string
+	externalResourcesRequired?: number | string
+	fill?: string
+	fillOpacity?: number | string
+	fillRule?: "nonzero" | "evenodd" | "inherit"
+	filter?: string
+	filterRes?: number | string
+	filterUnits?: number | string
+	floodColor?: number | string
+	floodOpacity?: number | string
+	focusable?: number | string
+	fontFamily?: string
+	fontSize?: number | string
+	fontSizeAdjust?: number | string
+	fontStretch?: number | string
+	fontStyle?: CSSProperty<"normal" | "italic" | "oblique">
+	fontVariant?: CSSProperty<"normal" | "small-caps">
+	fontWeight?: number | string
+	format?: number | string
+	from?: number | string
+	fx?: number | string
+	fy?: number | string
+	g1?: number | string
+	g2?: number | string
+	glyphName?: number | string
+	glyphOrientationHorizontal?: number | string
+	glyphOrientationVertical?: number | string
+	glyphRef?: number | string
+	gradientTransform?: string
+	gradientUnits?: string
+	hanging?: number | string
+	horizAdvX?: number | string
+	horizOriginX?: number | string
+	href?: string
+	ideographic?: number | string
+	imageRendering?: number | string
+	in2?: number | string
+	in?: string
+	intercept?: number | string
+	k1?: number | string
+	k2?: number | string
+	k3?: number | string
+	k4?: number | string
+	k?: number | string
+	kernelMatrix?: number | string
+	kernelUnitLength?: number | string
+	kerning?: number | string
+	keyPoints?: number | string
+	keySplines?: number | string
+	keyTimes?: number | string
+	lengthAdjust?: number | string
+	letterSpacing?: number | string
+	lightingColor?: number | string
+	limitingConeAngle?: number | string
+	local?: number | string
+	markerEnd?: string
+	markerHeight?: number | string
+	markerMid?: string
+	markerStart?: string
+	markerUnits?: number | string
+	markerWidth?: number | string
+	mask?: string
+	maskContentUnits?: number | string
+	maskUnits?: number | string
+	mathematical?: number | string
+	mode?: number | string
+	numOctaves?: number | string
+	offset?: number | string
+	opacity?: number | string
+	operator?: number | string
+	order?: number | string
+	orient?: number | string
+	orientation?: number | string
+	origin?: number | string
+	overflow?: number | string
+	overlinePosition?: number | string
+	overlineThickness?: number | string
+	paintOrder?: number | string
+	panose1?: number | string
+	pathLength?: number | string
+	patternContentUnits?: string
+	patternTransform?: number | string
+	patternUnits?: string
+	pointerEvents?: number | string
+	points?: string
+	pointsAtX?: number | string
+	pointsAtY?: number | string
+	pointsAtZ?: number | string
+	preserveAlpha?: number | string
+	preserveAspectRatio?: string
+	primitiveUnits?: number | string
+	r?: number | string
+	radius?: number | string
+	refX?: number | string
+	refY?: number | string
+	renderingIntent?: number | string
+	repeatCount?: number | string
+	repeatDur?: number | string
+	requiredExtensions?: number | string
+	requiredFeatures?: number | string
+	restart?: number | string
+	result?: string
+	rotate?: number | string
+	rx?: number | string
+	ry?: number | string
+	scale?: number | string
+	seed?: number | string
+	shapeRendering?: number | string
+	slope?: number | string
+	spacing?: number | string
+	specularConstant?: number | string
+	specularExponent?: number | string
+	speed?: number | string
+	spreadMethod?: string
+	startOffset?: number | string
+	stdDeviation?: number | string
+	stemh?: number | string
+	stemv?: number | string
+	stitchTiles?: number | string
+	stopColor?: string
+	stopOpacity?: number | string
+	strikethroughPosition?: number | string
+	strikethroughThickness?: number | string
+	string?: number | string
+	stroke?: string
+	strokeDasharray?: string | number
+	strokeDashoffset?: string | number
+	strokeLinecap?: "butt" | "round" | "square" | "inherit"
+	strokeLinejoin?: "miter" | "round" | "bevel" | "inherit"
+	strokeMiterlimit?: number | string
+	strokeOpacity?: number | string
+	strokeWidth?: number | string
+	surfaceScale?: number | string
+	systemLanguage?: number | string
+	tableValues?: number | string
+	targetX?: number | string
+	targetY?: number | string
+	textAnchor?: string
+	textDecoration?: number | string
+	textLength?: number | string
+	textRendering?: number | string
+	to?: number | string
+	transform?: string
+	u1?: number | string
+	u2?: number | string
+	underlinePosition?: number | string
+	underlineThickness?: number | string
+	unicode?: number | string
+	unicodeBidi?: number | string
+	unicodeRange?: number | string
+	unitsPerEm?: number | string
+	vAlphabetic?: number | string
+	values?: string
+	vectorEffect?: number | string
+	version?: string
+	vertAdvY?: number | string
+	vertOriginX?: number | string
+	vertOriginY?: number | string
+	vHanging?: number | string
+	vIdeographic?: number | string
+	viewBox?: string
+	viewTarget?: number | string
+	visibility?: number | string
+	vMathematical?: number | string
+	widths?: number | string
+	wordSpacing?: number | string
+	writingMode?: number | string
+	x1?: number | string
+	x2?: number | string
+	x?: number | string
+	xChannelSelector?: string
+	xHeight?: number | string
+	xlinkActuate?: string
+	xlinkArcrole?: string
+	xlinkHref?: string
+	xlinkRole?: string
+	xlinkShow?: string
+	xlinkTitle?: string
+	xlinkType?: string
+	xmlBase?: string
+	xmlLang?: string
+	xmlns?: string
+	xmlnsXlink?: string
+	xmlSpace?: string
+	y1?: number | string
+	y2?: number | string
+	y?: number | string
+	yChannelSelector?: string
+	z?: number | string
+	zoomAndPan?: string
 }
 
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
-	download?: string;
-	href?: string;
-	ping?: string;
-	hrefLang?: string;
-	rel?: string;
+	download?: string
+	href?: string
+	ping?: string
+	hrefLang?: string
+	rel?: string
 	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
@@ -1759,23 +1795,23 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "strict-origin"
 		| "strict-origin-when-cross-origin"
 		| "unsafe-url"
-	);
-	target?: "_self" | "_blank" | "_parent" | "_top";
-	type?: string;
+	)
+	target?: "_self" | "_blank" | "_parent" | "_top"
+	type?: string
 }
 
 export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 }
 
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
-	alt?: string;
-	coords?: string;
-	download?: any;
-	href?: string;
-	hrefLang?: string;
-	media?: string;
-	rel?: string;
-	ping: string;
+	alt?: string
+	coords?: string
+	download?: any
+	href?: string
+	hrefLang?: string
+	media?: string
+	rel?: string
+	ping: string
 	referrerPolicy: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
@@ -1785,9 +1821,9 @@ export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "strict-origin"
 		| "strict-origin-when-cross-origin"
 		| "unsafe-url"
-	);
-	shape?: string;
-	target?: "_self" | "_blank" | "_parent" | "_top";
+	)
+	shape?: string
+	target?: "_self" | "_blank" | "_parent" | "_top"
 }
 
 export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1800,17 +1836,17 @@ export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export type ButtonHTMLAttributes<T> = HTMLAttributes<T> & {
-	autofocus?: boolean;
-	disabled?: boolean;
-	form?: string;
-	formAction?: string;
-	formEncType?: string;
-	formMethod?: "post" | "get";
-	formNoValidate?: boolean;
-	formTarget?: "_self" | "_blank" | "_parent" | "_top";
-	name?: string;
-	type?: "submit" | "reset" | "button";
-	value?: string | string[] | number;
+	autofocus?: boolean
+	disabled?: boolean
+	form?: string
+	formAction?: string
+	formEncType?: string
+	formMethod?: "post" | "get"
+	formNoValidate?: boolean
+	formTarget?: "_self" | "_blank" | "_parent" | "_top"
+	name?: string
+	type?: "submit" | "reset" | "button"
+	value?: string | string[] | number
 }
 
 export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1854,10 +1890,10 @@ export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
-	acceptCharset?: string;
-	action?: string;
-	autocomplete?: "on" | "off";
-	encType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
+	acceptCharset?: string
+	action?: string
+	autocomplete?: "on" | "off"
+	encType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain"
 	method?: (
 		| "post"
 		| "get"
@@ -1868,7 +1904,7 @@ export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "POST"
 		| "GET"
 		| "DIALOG"
-	);
+	)
 	rel: (
 		| "external"
 		| "noopener"
@@ -1878,30 +1914,30 @@ export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "prerender"
 		| "search"
 		| "tag"
-		| string);
-	name?: string;
-	noValidate?: boolean;
-	target?: "_self" | "_blank" | "_parent" | "_top";
+		| string)
+	name?: string
+	noValidate?: boolean
+	target?: "_self" | "_blank" | "_parent" | "_top"
 }
 
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
-	manifest?: string;
-	xmlns?: string;
+	manifest?: string
+	xmlns?: string
 }
 
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
-	allow?: string;
-	allowFullScreen?: boolean;
-	allowTransparency?: boolean;
-	height?: number | string;
-	marginHeight?: number;
-	marginWidth?: number;
-	name?: string;
-	sandbox?: string;
-	scrolling?: string;
-	seamless?: boolean;
-	src?: string;
-	srcDoc?: string;
+	allow?: string
+	allowFullScreen?: boolean
+	allowTransparency?: boolean
+	height?: number | string
+	marginHeight?: number
+	marginWidth?: number
+	name?: string
+	sandbox?: string
+	scrolling?: string
+	seamless?: boolean
+	src?: string
+	srcDoc?: string
 	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
@@ -1911,21 +1947,21 @@ export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "strict-origin"
 		| "strict-origin-when-cross-origin"
 		| "unsafe-url"
-	);
-	width?: number | string;
+	)
+	width?: number | string
 }
 
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
-	alt?: string;
-	crossorigin?: "anonymous" | "use-credentials" | "";
-	decoding?: "async" | "auto" | "sync";
-	height?: number | string;
-	sizes?: string;
-	src?: string;
-	srcSet?: string;
-	useMap?: string;
-	width?: number | string;
-	loading?: "eager" | "lazy";
+	alt?: string
+	crossorigin?: "anonymous" | "use-credentials" | ""
+	decoding?: "async" | "auto" | "sync"
+	height?: number | string
+	sizes?: string
+	src?: string
+	srcSet?: string
+	useMap?: string
+	width?: number | string
+	loading?: "eager" | "lazy"
 	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
@@ -1935,7 +1971,7 @@ export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "strict-origin"
 		| "strict-origin-when-cross-origin"
 		| "unsafe-url"
-	);
+	)
 }
 
 export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1944,35 +1980,35 @@ export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
-	accept?: string;
-	alt?: string;
-	autocomplete?: string;
-	autofocus?: boolean;
-	capture?: boolean | string; // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
-	checked?: boolean;
-	crossorigin?: string;
-	disabled?: boolean;
-	form?: string;
-	formAction?: string;
-	formEncType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
+	accept?: string
+	alt?: string
+	autocomplete?: string
+	autofocus?: boolean
+	capture?: boolean | string // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
+	checked?: boolean
+	crossorigin?: string
+	disabled?: boolean
+	form?: string
+	formAction?: string
+	formEncType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain"
 	formMethod?: "post" | "get" | "dialog" | "Post" | "Get" | "Dialog" | "POST" | "GET" | "DIALOG"
-	formNoValidate?: boolean;
-	formTarget?: "_self" | "_blank" | "_parent" | "_top";
-	height?: number | string;
-	list?: string;
-	max?: number | string;
-	maxLength?: number;
-	min?: number | string;
-	minLength?: number;
-	multiple?: boolean;
-	name?: string;
-	pattern?: string;
-	placeholder?: string;
-	readOnly?: boolean;
-	required?: boolean;
-	size?: number;
-	src?: string;
-	step?: number | string;
+	formNoValidate?: boolean
+	formTarget?: "_self" | "_blank" | "_parent" | "_top"
+	height?: number | string
+	list?: string
+	max?: number | string
+	maxLength?: number
+	min?: number | string
+	minLength?: number
+	multiple?: boolean
+	name?: string
+	pattern?: string
+	placeholder?: string
+	readOnly?: boolean
+	required?: boolean
+	size?: number
+	src?: string
+	step?: number | string
 	type?: (
 		| "button"
 		| "checkbox"
@@ -1997,9 +2033,9 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "url"
 		| "week"
 
-	);
-	value?: string | string[] | number;
-	width?: number | string;
+	)
+	value?: string | string[] | number
+	width?: number | string
 
 	onChange?: ChangeEventHandler<T>
 }
@@ -2024,16 +2060,16 @@ export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
-	as?: string;
-	crossorigin?: "anonymous" | "use-credentials" | "";
-	href?: string;
-	hrefLang?: string;
-	integrity?: string;
-	media?: string;
-	rel?: string;
-	sizes?: string;
-	type?: string;
-	title?: string;
+	as?: string
+	crossorigin?: "anonymous" | "use-credentials" | ""
+	href?: string
+	hrefLang?: string
+	integrity?: string
+	media?: string
+	rel?: string
+	sizes?: string
+	type?: string
+	title?: string
 	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
@@ -2043,7 +2079,7 @@ export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "strict-origin"
 		| "strict-origin-when-cross-origin"
 		| "unsafe-url"
-	);
+	)
 }
 
 export interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2055,16 +2091,16 @@ export interface MenuHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
-	autoPlay?: boolean;
-	controls?: boolean;
-	controlsList?: string;
-	crossorigin?: "anonymous" | "use-credentials" | "";
-	loop?: boolean;
-	mediaGroup?: string;
-	muted?: boolean;
-	playsinline?: boolean;
-	preload?: string;
-	src?: string;
+	autoPlay?: boolean
+	controls?: boolean
+	controlsList?: string
+	crossorigin?: "anonymous" | "use-credentials" | ""
+	loop?: boolean
+	mediaGroup?: string
+	muted?: boolean
+	playsinline?: boolean
+	preload?: string
+	src?: string
 }
 
 export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2135,16 +2171,16 @@ export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
-	async?: boolean;
-	charSet?: string;
-	crossorigin?: string;
-	defer?: boolean;
-	integrity?: string;
-	noModule?: boolean;
-	nonce?: string;
-	src?: string;
-	type?: string;
-	blocking?: string;
+	async?: boolean
+	charSet?: string
+	crossorigin?: string
+	defer?: boolean
+	integrity?: string
+	noModule?: boolean
+	nonce?: string
+	src?: string
+	type?: string
+	blocking?: string
 	referrerPolicy?: (
 		| "no-referrer"
 		| "no-referrer-when-downgrade"
@@ -2154,7 +2190,7 @@ export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
 		| "strict-origin"
 		| "strict-origin-when-cross-origin"
 		| "unsafe-url"
-	);
+	)
 }
 
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2171,21 +2207,21 @@ export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
-	media?: string;
-	sizes?: string;
-	src?: string;
-	height?: number;
-	width?: number;
-	srcSet?: string;
-	type?: string;
+	media?: string
+	sizes?: string
+	src?: string
+	height?: number
+	width?: number
+	srcSet?: string
+	type?: string
 }
 
 export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
-	media?: string;
-	nonce?: string;
-	scoped?: boolean;
-	title?: string;
-	type?: string;
+	media?: string
+	nonce?: string
+	scoped?: boolean
+	title?: string
+	type?: string
 }
 
 export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2195,21 +2231,21 @@ export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
-	autocomplete?: string;
-	autofocus?: "on" | "off";
-	cols?: number;
-	dirName?: string;
-	disabled?: boolean;
-	form?: string;
-	maxLength?: number;
-	minLength?: number;
-	name?: string;
-	placeholder?: string;
-	readOnly?: boolean;
-	required?: boolean;
-	rows?: number;
-	value?: string | string[] | number;
-	wrap?: "soft" | "hard";
+	autocomplete?: string
+	autofocus?: "on" | "off"
+	cols?: number
+	dirName?: string
+	disabled?: boolean
+	form?: string
+	maxLength?: number
+	minLength?: number
+	name?: string
+	placeholder?: string
+	readOnly?: boolean
+	required?: boolean
+	rows?: number
+	value?: string | string[] | number
+	wrap?: "soft" | "hard"
 
 	onChange?: ChangeEventHandler<T>
 }
@@ -2223,12 +2259,12 @@ export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
-	abbr?: string;
-	align?: "left" | "center" | "right" | "justify" | "char";
-	colSpan?: number;
-	headers?: string;
-	rowSpan?: number;
-	scope?: "row" | "col" | "rowgroup" | "colgroup";
+	abbr?: string
+	align?: "left" | "center" | "right" | "justify" | "char"
+	colSpan?: number
+	headers?: string
+	rowSpan?: number
+	scope?: "row" | "col" | "rowgroup" | "colgroup"
 }
 
 export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -2236,17 +2272,17 @@ export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
 }
 
 export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
-	default?: boolean;
+	default?: boolean
 	kind?: (
 		| "subtitles"
 		| "captions"
 		| "descriptions"
 		| "chapters"
 		| "metadata"
-	);
-	label?: string;
-	src?: string;
-	srcLang?: string;
+	)
+	label?: string
+	src?: string
+	srcLang?: string
 }
 
 export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
@@ -2292,7 +2328,6 @@ export interface SyntheticEvent<T = Element> {
 	/**
 	 * A reference to the element from which the event was originally dispatched.
 	 * This might be a child element to the element on which the event listener is registered.
-	 *
 	 * @see currentTarget
 	 */
 	target: EventTarget

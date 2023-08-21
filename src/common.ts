@@ -1,4 +1,4 @@
-import * as cuid from "cuid"
+import * as cuid from "@paralleldrive/cuid2"
 import { Obj } from "@agyemanjp/standard/utility"
 
 /** Names of DOM events. */
@@ -441,7 +441,7 @@ class IdProvider {
 	next() {
 		if (this.pointer >= this.cache.length) {
 			// console.log(`pushing to id provider cache`)
-			this.cache.push(cuid())
+			this.cache.push(cuid.createId())
 		}
 		return this.cache[this.pointer++]
 	}

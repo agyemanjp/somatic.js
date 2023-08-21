@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "es2015",
 		"module": "commonjs",
-		"moduleResolution": "node",
+		"moduleResolution": "Node",
 		// "esModuleInterop": true,
 		"traceResolution": false,
 		"declaration": true,
@@ -20,6 +20,7 @@
 		],
 		"jsx": "react",
 		"jsxFactory": "createElement",
+		"jsxFragmentFactory": "fragment",
 		"preserveConstEnums": true,
 		"experimentalDecorators": true,
 		"strict": true,
@@ -29,7 +30,7 @@
 		"outDir": "./dist"
 	},
 	"include": [
-		"./src",
+		"./src"
 	],
 	"exclude": []
 }

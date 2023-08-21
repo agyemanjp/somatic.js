@@ -1,5 +1,6 @@
 import { hasValue, prependSpaceIfNotEmpty, stringify } from "@agyemanjp/standard"
-import * as cuid from "cuid"
+import * as cuid from "@paralleldrive/cuid2"
+
 import { stringifyAttributes } from "./html"
 import { createDOMShallow, updateDomShallow, isTextDOM, isAugmentedDOM, emptyContainer } from "./dom"
 import { isComponentElt, isIntrinsicElt, isEltProper, getChildren, getLeafAsync, traceToLeafAsync, updateTraceAsync, isFragmentElt } from "./element"
@@ -15,7 +16,6 @@ export function createElement<T extends string | Component>(type: T, props: (typ
 
 	return { type, props: props ?? {}, children: children.flat() }
 }
-export const Fragment = ""
 
 /** Render a UI element into a DOM node (augmented with information used for subsequent updates) */
 export async function renderAsync(elt: UIElement): Promise<(DOMAugmented | DocumentFragment | Text)> {
@@ -196,7 +196,7 @@ export function invalidateUI(invalidatedElementIds?: string[], reason?: string) 
 /** Handler for invalidateUI event, as a separate fn to avoid problems with creating a new fn reference each time is it used */
 async function invalidationHandlerAsync(eventInfo: Event) {
 	const invalidatedElementIds: string[] = []
-	let daemon: NodeJS.Timeout | undefined = undefined
+	let daemon = undefined as NodeJS.Timeout | undefined
 
 	// console.log(`UIInvalidated fired with detail: ${stringify((eventInfo as any).detail)}`)
 	const _invalidatedElementIds = (eventInfo as any).detail?.invalidatedElementIds ?? []
@@ -244,4 +244,4 @@ export async function mountElement(element: UIElement, container: Element) {
 
 /** DOM update/refresh interval. This value seems to work best when tested; Don't change without a good reason */
 const DEFAULT_UPDATE_INTERVAL_MILLISECONDS = 14
-
+export const fragment = ""
