@@ -1,11 +1,11 @@
-import { Comparer, Obj, hasValue, isAsyncGenerator, isGenerator, prependSpaceIfNotEmpty, shallowEquals } from "@agyemanjp/standard"
+import { ArgsType, Comparer, Obj, hasValue, isAsyncGenerator, isGenerator, last, prependSpaceIfNotEmpty, shallowEquals } from "@agyemanjp/standard"
 import { default as morphdom } from "morphdom"
 
 
 import { stringifyAttributes } from "./html"
 import { createDOMShallow } from "./dom"
 import { isComponentElt, isIntrinsicElt, getChildren } from "./element"
-import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, Children, ComponentResult, ComponentElt } from "./types"
+import { Component, DOMElement, UIElement, ValueElement, IntrinsicElement, Children, ComponentElt } from "./types"
 import { selfClosingTags } from "./common"
 
 
@@ -40,9 +40,7 @@ export function createElement<T extends string | Component>(type: T, props: (typ
 	}
 }*/
 
-export const { mountElement, renderAsync } = (() => {
-	const eltCache = new Map<Component, Array<{ props: Obj; children?: Children; result: ComponentResult }>>()
-
+export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = (() => {
 	/** Convenience method to mount the root DOM node of a client app */
 	async function mountElement(element: UIElement, container: Element) {
 		let rendering = Promise.resolve()
@@ -105,32 +103,46 @@ export const { mountElement, renderAsync } = (() => {
 			if (typeof eltUI.type === "undefined")
 				throw "Component element has undefined 'type' property"
 
-			const resultElt = (() => {
-				const { type: comp, props, children } = eltUI
-				const getResult = () => ({
-					props,
-					children,
-					result: ((): ComponentResult => {
+			const { type: comp, props, children } = eltUI
+
+			const resultElt = await (async () => {
+				/** Returns same entry, if passed, with the elt member filled in; Otherwise return a fresh entry */
+				const useableEntry = async (_?: Entry): Promise<Entry<UIElement>> => {
+					const fx = (): ComponentResult<UIElement> => {
 						const r = comp({ ...props, children })
-						if (isAsyncGenerator(r))
-							return { element: r.next().then(_ => _.value), generator: r }
-						else if (isGenerator(r))
-							return { element: r.next().value, generator: r }
-						else return { element: r, generator: undefined }
-					})()
-				})
+						return isAsyncGenerator(r)
+							? { element: r.next().then(_ => _.value), generator: r }
+							: isGenerator(r)
+								? { element: r.next().value, generator: r }
+								: { element: r, generator: undefined }
+					}
+
+					if (_ === undefined) {
+						return { props, children, result: fx() }
+					}
+
+					else {
+						const { result } = _
+						return (result.element
+							? _
+							: result.generator
+								? (result.element = (await result.generator.next()).value, _)
+								: (_.result = fx(), _)
+						) as Entry<UIElement>
+					}
+
+				}
+
 				const matching: Comparer<{ props: ComponentElt["props"], children?: ComponentElt["children"] }> = (a, b) => {
 					return shallowEquals(a.props, b.props) && shallowEquals(Object(a.children), Object(b.children))
 				}
 
-				if (!eltCache.has(comp))
-					eltCache.set(comp, [getResult()])
-				const entry = (eltCache.get(comp)!)
-				if (!entry.find(_ => matching(_, eltUI)))
-					entry.push(getResult())
-
-				return entry.find(_ => matching(_, eltUI))!.result
-			})().element
+				const resultsArr = eltCache.get(comp)
+				return (resultsArr
+					? await useableEntry(resultsArr.find(_ => matching(_, eltUI))) ?? (resultsArr.push(await useableEntry()), last(resultsArr))
+					: last(eltCache.set(comp, [await useableEntry()]).get(comp)!)
+				).result.element as UIElement
+			})()
 
 			return isComponentElt(resultElt)
 				? getLeafAsync(resultElt).then(_ => _ ?? "")
@@ -141,12 +153,24 @@ export const { mountElement, renderAsync } = (() => {
 		}
 	}
 
-	return { mountElement, renderAsync, renderToStringAsync }
+	type ComponentResult<Elt extends UIElement | undefined = UIElement | undefined> = {
+		generator?: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>
+		element: Elt
+	}
+	type Entry<Elt extends UIElement | undefined = UIElement | undefined> = {
+		props: Obj
+		children?: Children
+		result: ComponentResult<Elt>
+	}
+
+	const eltCache = new Map<Component, Array<Entry>>()
+
+	return { mountElement, renderAsync, renderToStringAsync, getLeafAsync }
 })()
 
 
 /** Request re-render */
-export function Render(comps?: ComponentElt[], reason?: string) {
+export function render(comps?: Function[], reason?: string) {
 	const ev = new CustomEvent('Render', { detail: { comps } })
 
 	if (document.readyState === "complete") {

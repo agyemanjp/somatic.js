@@ -1,8 +1,8 @@
 import { createId } from "@paralleldrive/cuid2"
 import { ArgsType, mergeDeep } from "@agyemanjp/standard"
 
-import { Component, HtmlProps, CSSProperties } from "../../types"
-import { createElement, invalidateUI } from "../../core"
+import { Component, ComponentAsyncStateful, HtmlProps, CSSProperties } from "../../types"
+import { createElement, render } from "../../core"
 import { normalizeChildren } from "../../element"
 import { View, ViewProps } from "../view"
 import { StackPanel } from './stack-panel'
@@ -57,7 +57,7 @@ export async function* TabsPanel<THeader = unknown>(_props: ArgsType<Component<P
 				onSelection={args => {
 					console.log(`Setting selected index of tabs panel to ${args.selectedIndex}`)
 					state.selectedIndex = args.selectedIndex
-					invalidateUI([id])
+					render([TabsPanel])
 				}}
 			/>
 			<div>{activeChild}</div>

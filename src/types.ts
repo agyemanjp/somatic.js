@@ -46,22 +46,7 @@ export type ValueElement = | null | string | number | bigint | symbol | boolean 
  */
 export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | /*FragmentElement |*/ ValueElement
 
-export type ComponentResult = {
-	element: UIElement,
-	generator?: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>
-}
-
-export interface ComponentEltAugmented<P extends Obj = Obj> extends ComponentElt<P> {
-	result: ComponentResult
-}
-
-export interface RenderingTrace {
-	componentElts: ComponentEltAugmented[],
-	leafElement: IntrinsicElement | ValueElement
-}
-
 export type DOMElement = SVGElement | HTMLElement
-export type DOMAugmented = DOMElement & { renderTrace: RenderingTrace }
 
 export interface CSSProperties {
 	alignContent?: CSSProperty<(

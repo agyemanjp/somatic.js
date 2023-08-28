@@ -1,6 +1,6 @@
 import { ArgsType, deepMerge, mergeDeep } from "@agyemanjp/standard"
 import * as cuid from "@paralleldrive/cuid2"
-import { createElement, renderToIntrinsicAsync } from "../core"
+import { createElement } from "../core"
 import { normalizeChildren } from "../element"
 import { Component, PanelProps, HtmlProps, CSSProperties, ButtonHTMLAttributes, SVGAttributes, UIElement } from "../types"
 import { stringifyStyle } from "../"

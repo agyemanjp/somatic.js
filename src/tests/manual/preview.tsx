@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2"
 
-import { createElement, fragment, mountElement, invalidateUI } from '../../core'
+import { createElement, fragment, mountElement, render } from '../../core'
 import { Component, ComponentAsyncStateful } from '../../types'
 import { CarouselPanel } from '../../components/panels/carousel-panel'
 import { StackPanel } from '../../components/panels/stack-panel'
@@ -63,19 +63,19 @@ const Preview: ComponentAsyncStateful<{}> = async function* (props) {
 	}
 
 	while (true) {
-		yield < StackPanel id={_id} orientation="vertical" >
+		yield <StackPanel id={_id} orientation="vertical" >
 			<StackPanel style={{ gap: "0.25em" }}>
 				<div
 					style={{ textDecoration: state.tabSelected === "components" ? "underline" : "unset" }}
 					onClick={() => {
 						state.tabSelected = "components"
-						invalidateUI([_id])
+						render([Preview])
 					}}>Components</div>
 				<div
 					style={{ textDecoration: state.tabSelected === "icons" ? "underline" : "unset" }}
 					onClick={() => {
 						state.tabSelected = "icons"
-						invalidateUI([_id])
+						render([Preview])
 					}}>Icons</div>
 			</StackPanel>
 

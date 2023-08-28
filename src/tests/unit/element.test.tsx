@@ -1,8 +1,8 @@
-import * as assert from "assert"
+import assert from "assert"
 import { isGenerator, pick, unique, stringify } from "@agyemanjp/standard"
 
 import { createElement } from "../../core"
-import { isComponentElt, isEltProper, updateResultAsync, getChildren, traceToLeafAsync, isIntrinsicElt, updateTraceAsync } from "../../element"
+import { isComponentElt, isEltProper, getChildren, isIntrinsicElt } from "../../element"
 import { Component, ComponentElt, CSSProperties, IntrinsicElement } from "../../types"
 import { StackPanel } from "../../components"
 
@@ -65,7 +65,7 @@ describe("ELEMENT MODULE", () => {
 		})
 	})
 
-	describe("updateResultAsync", () => {
+	/*describe("updateResultAsync", () => {
 		it("should not mutate input element", async () => {
 			const elt: ComponentElt = <SplashPage /> as any
 			const augmented = await updateResultAsync(elt)
@@ -134,9 +134,9 @@ describe("ELEMENT MODULE", () => {
 				style: { padding: 0, margin: 0 }
 			})
 		})
-	})
+	})*/
 
-	describe("traceToLeafAsync", () => {
+	/*describe("traceToLeafAsync", () => {
 		it("should work for a component element with children", async () => {
 			const trace = await traceToLeafAsync(
 				<StackPanel orientation="horizontal">
@@ -164,35 +164,35 @@ describe("ELEMENT MODULE", () => {
 			} as IntrinsicElement)
 		})
 
-		it("should work for a complex component", async () => {
-			const trace = await traceToLeafAsync(
-				// <Layout user={/*injectedInfo.user*/ undefined}>
-				<SplashPage user={undefined} objectId={undefined} />
-				// </Layout>
-			)
+	it("should work for a complex component", async () => {
+		const trace = await traceToLeafAsync(
+			// <Layout user={ undefined}>
+			<SplashPage user={undefined} objectId={undefined} />
+			// </Layout>
+		)
 
-			assert(typeof trace.leafElement !== "undefined", `Leaf element is undefined`)
-			assert(isIntrinsicElt(trace.leafElement), `Leaf element ${stringify(trace.leafElement)} is not intrinsic`)
-			assert.strictEqual(trace.leafElement.type.toUpperCase(), "DIV")
-		})
-
-		it("should trace with leaf set to the same intrinsic element, when passed an intrinsic element", async () => {
-			const trace = await traceToLeafAsync(
-				<div className={'clss'} style={{ backgroundColor: "blue" }}>
-					{`val`}
-				</div>
-			)
-
-			assert.strictEqual(typeof trace.leafElement, "object")
-			assert.deepStrictEqual(trace.leafElement, {
-				type: "div",
-				props: { className: "clss", style: { backgroundColor: "blue" } },
-				children: ["val"]
-			} as IntrinsicElement)
-		})
+		assert(typeof trace.leafElement !== "undefined", `Leaf element is undefined`)
+		assert(isIntrinsicElt(trace.leafElement), `Leaf element ${stringify(trace.leafElement)} is not intrinsic`)
+		assert.strictEqual(trace.leafElement.type.toUpperCase(), "DIV")
 	})
 
-	describe("updateTraceAsync", () => {
+	it("should trace with leaf set to the same intrinsic element, when passed an intrinsic element", async () => {
+		const trace = await traceToLeafAsync(
+			<div className={'clss'} style={{ backgroundColor: "blue" }}>
+				{`val`}
+			</div>
+		)
+
+		assert.strictEqual(typeof trace.leafElement, "object")
+		assert.deepStrictEqual(trace.leafElement, {
+			type: "div",
+			props: { className: "clss", style: { backgroundColor: "blue" } },
+			children: ["val"]
+		} as IntrinsicElement)
+	})
+})*/
+
+	/*describe("updateTraceAsync", () => {
 		it("should not mutate input trace", async () => {
 			const trace = await traceToLeafAsync(<SplashPage />)
 			const newTrace = await updateTraceAsync(trace)
@@ -200,11 +200,11 @@ describe("ELEMENT MODULE", () => {
 		})
 
 		it("should not have any duplicate elements in output trace", async () => {
-			const trace = await traceToLeafAsync(<Layout user={/*injectedInfo.user*/ undefined}>
+			const trace = await traceToLeafAsync(<Layout user={undefined}>
 				<SplashPage user={undefined} objectId={undefined} />
 			</Layout>)
 
 			assert.strictEqual(trace.componentElts.length, [...unique(trace.componentElts)].length)
 		})
-	})
+	})*/
 })

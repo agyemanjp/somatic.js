@@ -1,13 +1,13 @@
 require('jsdom-global')()
-import * as assert from "assert"
+import assert from "assert"
 
 import { Set } from '@agyemanjp/standard'
 import { renderAsync } from "../../core"
-import { createDOMShallow, emptyContainer, getApexElements, isAugmentedDOM, isTextDOM, setAttribute, truncateChildNodes, updateDomShallow } from "../../dom"
-import { isIntrinsicElt, traceToLeafAsync } from "../../element"
+import { createDOMShallow, isAugmentedDOM, isTextDOM, setAttribute } from "../../dom"
+import { isIntrinsicElt } from "../../element"
 import { IntrinsicElement } from "../../types"
 
-import { CommandBox, StackPanel, View } from "../../components"
+import { CommandBox, StackPanel/*, View*/ } from "../../components"
 
 
 /*describe("isAugmentedDOM", () => {
@@ -246,7 +246,7 @@ describe("DOM MODULE", () => {
 		})
 	})
 
-	describe("updateDOMShallow", () => {
+	/*describe("updateDOMShallow", () => {
 		it("should update original DOM to match input intrinsic with matching tag", async () => {
 			const dom1 = createDOMShallow({
 				type: "div",
@@ -478,7 +478,7 @@ describe("DOM MODULE", () => {
 			), expected))
 
 		})
-	})
+	})*/
 })
 
 

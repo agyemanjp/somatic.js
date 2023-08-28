@@ -4,7 +4,7 @@ import * as cuid from '@paralleldrive/cuid2'
 import { StackPanel } from './stack-panel'
 import { ChevronLeft, ChevronUp, ChevronRight, ChevronDown } from '../../icons'
 import { PanelProps, HtmlProps, CSSLength, Component, Children } from '../../types'
-import { createElement, invalidateUI } from '../..'
+import { createElement, render } from '../..'
 
 export type CarouselPanelProps = PanelProps & HtmlProps & {
 	chevronSize?: CSSLength
@@ -42,7 +42,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 			_state.itemIndex = items.length - 1
 		}
 
-		invalidateUI([id])
+		render([CarouselPanel])
 	}
 
 	const handleNextButtonClicked = (_state: typeof state) => {
@@ -53,7 +53,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 			_state.itemIndex = 0
 		}
 
-		invalidateUI([id])
+		render([CarouselPanel])
 	}
 
 

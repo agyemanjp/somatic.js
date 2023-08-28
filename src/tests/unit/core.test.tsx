@@ -1,13 +1,13 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { expect, use } from 'chai'
-import * as chaiHTML from 'chai-html'
+import chaiHTML from 'chai-html'
 const cleanup = require('jsdom-global')()
 
 import { CSSProperties, Component, DOMAugmented, IntrinsicElement } from '../../types'
 import { idProvider } from '../../common'
-import { createElement, mountElement, renderAsync, renderToIntrinsicAsync, renderToStringAsync, updateAsync, updateChildrenAsync } from '../../core'
+import { createElement, mountElement, renderAsync, renderToStringAsync } from '../../core'
 import { createDOMShallow, isAugmentedDOM, isTextDOM } from '../../dom'
-import { getChildren, traceToLeafAsync } from '../../element'
+import { getChildren } from '../../element'
 import { CommandBox, StackPanel, View } from '../../components'
 import { normalizeHTML } from '../util'
 
@@ -38,7 +38,7 @@ describe('CORE MODULE', () => {
 		)
 	}
 
-	describe('updateChildren', () => {
+	/*describe('updateChildren', () => {
 		it('should work for a single value child', async () => {
 			const intrinsic: IntrinsicElement = {
 				type: 'div',
@@ -129,7 +129,7 @@ describe('CORE MODULE', () => {
 			assert.strictEqual(firstChild.tagName.toUpperCase(), 'DIV')
 			assert.strictEqual(firstChild.style.flexDirection, 'column')
 		})
-	})
+	})*/
 
 	describe('renderAsync', () => {
 		it('should return elt with same html as renderToString, for an elt without children', async () => {
@@ -499,7 +499,7 @@ describe('CORE MODULE', () => {
 		})*/
 	})
 
-	describe('renderToIntrinsicAsync', () => {
+	/*describe('renderToIntrinsicAsync', () => {
 		it('should return elt with same html as renderToString, for an elt without children', async () => {
 			try {
 				const elt = (
@@ -532,7 +532,7 @@ describe('CORE MODULE', () => {
 			const elt = await renderToIntrinsicAsync(`test`)
 			assert.strictEqual(elt, 'test')
 		})
-	})
+	})*/
 
 	describe('renderToStringAsync()', () => {
 		it('should return an empty string when passed null', async () => {
@@ -769,7 +769,7 @@ describe('CORE MODULE', () => {
 		})
 	})*/
 
-	describe('updateAsync', async () => {
+	/*describe('updateAsync', async () => {
 		it('should update while maintaining the element type, if no overriding element is passed', async () => {
 			const dom = await renderAsync(
 				<View<string>
@@ -792,7 +792,7 @@ describe('CORE MODULE', () => {
 			assert(!(updatedDom instanceof DocumentFragment))
 			assert.strictEqual(updatedDom.tagName, dom.tagName)
 		})
-	})
+	})*/
 
 	describe('mountElement', async () => {
 		it('should work', async () => {

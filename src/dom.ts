@@ -1,4 +1,4 @@
-import { keys, skip, first, indexesOf } from "@agyemanjp/standard"
+import { keys, skip } from "@agyemanjp/standard"
 
 import { stringifyStyle } from "./html"
 import { isIntrinsicElt } from "./element"
@@ -114,79 +114,4 @@ export function createDOMShallow(eltUI: LeafElement): DOMElement | DocumentFragm
 	else {
 		return document.createTextNode(globalThis.String(eltUI ?? ""))
 	}
-}
-
-/** Update or create a DOM element based on the passed intrinsic element or primitive value. 
- * If passed an intrinsic element with the same tag as the existing DOM, the DOM is updated to match the intrinsic element
- * Else the existing DOM is replaced (with respect to its parent) with a new shallow DOM based on the intrinsic element
- * If passed a primitive value, the original DOM is replaced with a new text element with content set to the value
- * @returns: The original or new DOM element according to the above rules
- */
-export function updateDomShallow(eltDOM: DOMElement, eltUI: LeafElement) {
-	if ("attributes" in eltDOM && isIntrinsicElt(eltUI) && eltUI.type.toUpperCase() === eltDOM.tagName.toUpperCase()) {
-		// console.log(`updateDomShallow: Removing all existing attributes of ${eltDOM}`);
-
-		[...eltDOM.attributes].forEach(attrib => eltDOM.removeAttribute(attrib.name))
-		const props = eltUI.props ?? {}
-
-		// console.log(`updateDomShallow: Setting props ${stringify(props)} on ${eltDOM}`)
-		Object.keys(props).forEach(key => setAttribute(eltDOM, key, props[key]))
-		return eltDOM
-	}
-	else {
-		const newDom = createDOMShallow(eltUI)
-		// console.log(`updateDomShallow: New dom ${newDom} create to replace ${eltDOM}`)
-
-		if (newDom instanceof DocumentFragment) {
-			eltDOM.replaceWith(...newDom.childNodes)
-		}
-		else {
-			eltDOM.replaceWith(newDom)
-		}
-
-		return newDom
-	}
-}
-
-/** Remove child nodes beyond a certain index */
-export function truncateChildNodes(node: Node, newLength: number) {
-	[...skip([...node.childNodes], newLength)].forEach(child => node.removeChild(child))
-}
-
-/** Empty a node of child nodes */
-export function emptyContainer(container: Node) {
-	container.textContent = ""
-}
-
-/*function detachedUpdate(dom: Node, fn: (dom: Node) => any) {
-	const parent = dom.parentNode
-	if (parent) {
-		const index = first(indexesOf(parent.childNodes.entries(), { value: dom }))
-		parent.removeChild(dom)
-		fn(dom)
-		parent.insertBefore(dom, parent.childNodes.item(index))
-	}
-}*/
-
-/** Get ids of peak DOM elements among a list of elements in a tree */
-export function getApexElementIds(elementIds: string[]): string[] {
-	return elementIds.filter(id => {
-		let parent = document.getElementById(id)?.parentElement
-		while (parent) {
-			if (elementIds.includes(parent.id)) { return false }
-			parent = parent.parentElement
-		}
-		return true
-	})
-}
-/** Get peak DOM elements among a list of elements in a tree */
-export function getApexElements(elements: DOMElement[]): DOMElement[] {
-	return elements.filter(elt => {
-		let parent = elt.parentElement
-		while (parent) {
-			if (elements.includes(parent)) { return false }
-			parent = parent.parentElement
-		}
-		return true
-	})
 }

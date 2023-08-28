@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2"
 import { ArgsType, deepMerge, mergeDeep } from "@agyemanjp/standard"
-import { createElement, renderToIntrinsicAsync } from "../core"
+import { createElement } from "../core"
 import { Component, UIElement, HtmlProps, PanelProps, CSSProperties } from "../types"
 import { StackPanel } from "./panels"
 
@@ -57,13 +57,15 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 					if (onSelection) onSelection({ selectedIndex: 0 })
 				}
 
-				return renderToIntrinsicAsync(itemElement).then(elt => {
+				return itemElement
+				/*renderToIntrinsicAsync(itemElement).then(elt => {
 					// console.log(`rendered intrinsic elt: ${elt as any}`)
 					if (elt !== null && typeof elt === "object" && "props" in elt) {
 						const onClick = elt.props.onClick
 						elt.props.onClick = typeof onClick === "function"
 							? () => {
-								onClick(); clickAction()
+								onClick()
+								clickAction()
 							}
 							: clickAction
 
@@ -73,7 +75,7 @@ export async function* View<T>(_props: ArgsType<Component<ViewProps<T>>>[0]): As
 						}
 					}
 					return elt
-				})
+				})*/
 			}))
 
 			const newProps = (yield <ItemsPanel
