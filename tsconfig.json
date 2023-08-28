@@ -3,7 +3,7 @@
 		"target": "es2015",
 		"module": "commonjs",
 		"moduleResolution": "Node",
-		// "esModuleInterop": true,
+		"esModuleInterop": true,
 		"traceResolution": false,
 		"declaration": true,
 		"lib": [

@@ -35,7 +35,7 @@ export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> 
 }
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> {
 	type: Component<P>,
-	result?: ComponentResult
+	// result?: ComponentResult
 }
 export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
 

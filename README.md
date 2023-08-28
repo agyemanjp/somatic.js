@@ -13,7 +13,16 @@ Somatic supports the JSX syntax popularized by React, allowing you to write HTML
 Somatic allows component authors to manage the interaction between state and props directly in components, without any ugly life-cycle methods as in React, by injecting any props updates in the generators returned from stateful components.
 
 **Strong JSX typing**\
-Somatic supports very strong JSX typing. Elements and children are well typed, and components can specify if they accept children, something not possible in react
+Somatic supports very strong JSX typing. Elements and children are well typed, and components can specify if they accept children (and their type), something not possible with the React typings
+
+**Fragments**
+Somatic supports fragments for grouping elements, e.g., 
+```
+<>
+	<img/>
+	<div/>
+</>
+```
 
 ## Usage
 **1. Install Somatic**\
@@ -24,12 +33,12 @@ Somatic supports very strong JSX typing. Elements and children are well typed, a
 ```json
 "jsx": "react",
 "jsxFactory": "createElement",
-"jsxFragmentFactory": "Fragment",
+"jsxFragmentFactory": "fragment",
 ```
 
 **3. In your code, import from Somatic and write your components**
 ```typescript
-import { createElement, Component, Fragment } from '@agyemanjp/somatic'
+import { createElement, Component, fragment } from '@agyemanjp/somatic'
 ```
 
 See examples below.
@@ -207,9 +216,7 @@ type ViewProps<T = unknown> = HtmlProps & PanelProps & {
 
 	children?: never[]
 
-	/** Selection options, or undefined/null if disabled 
-	 * Mode indicates method of selection 
-	 */
+	/** Selection options, or undefined/null if disabled; Mode indicates method of selection */
 	selectionMode?: "none" | "click" | "check" | "click-or-check"
 	onSelection?: (eventData: { selectedIndex: number }) => void
 }

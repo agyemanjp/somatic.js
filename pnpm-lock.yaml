@@ -11,6 +11,9 @@ dependencies:
   '@paralleldrive/cuid2':
     specifier: ^2.2.1
     version: 2.2.1
+  morphdom:
+    specifier: ^2.7.0
+    version: 2.7.0
   tslib:
     specifier: ^2.6.1
     version: 2.6.1
@@ -2687,6 +2690,10 @@ packages:
       yargs-parser: 20.2.4
       yargs-unparser: 2.0.0
     dev: true
+
+  /morphdom@2.7.0:
+    resolution: {integrity: sha512-8L8DwbdjjWwM/aNqj7BSoSn4G7SQLNiDcxCnMWbf506jojR6lNQ5YOmQqXEIE8u3C492UlkN4d0hQwz97+M1oQ==}
+    dev: false
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}

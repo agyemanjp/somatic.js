@@ -1,10 +1,16 @@
-import { Obj, hasValue, isGenerator, firstOrDefault, SequenceAsync, last, shallowEquals, union, skip } from "@agyemanjp/standard"
+import {
+	Obj, Comparer, SequenceAsync,
+	hasValue, isGenerator, isAsyncGenerator,
+	firstOrDefault, last, shallowEquals, union, skip,
+} from "@agyemanjp/standard"
 import {
 	Children,
 	ComponentResult, ComponentEltAugmented,
 	ComponentElt, UIElement, ValueElement, IntrinsicElement, /*FragmentElement,*/
-	RenderingTrace
+	RenderingTrace,
+	Component
 } from "./types"
+import { deepStrictEqual } from "assert"
 
 export const isEltProper = <P extends Obj>(elt?: UIElement<P>): elt is (IntrinsicElement<P> | ComponentElt<P>) =>
 	(hasValue(elt) && typeof elt === "object" && "type" in elt && (typeof elt.type === "string" || typeof elt.type === "function"))
@@ -12,10 +18,12 @@ export const isIntrinsicElt = <P extends Obj>(elt: UIElement<P>): elt is Intrins
 export const isFragmentElt = (elt: UIElement): boolean /*elt is FragmentElement*/ => isEltProper(elt) && elt.type === ""
 export const isComponentElt = <P extends Obj>(elt: UIElement<P>): elt is ComponentElt<P> => isEltProper(elt) && typeof elt.type !== "string"
 
+
 /** Return a copy of a component element augmented with its invocation results
  * @param elt The input component element (possibly with a result member, which is recomputed)
  */
 export async function updateResultAsync<P extends Obj = Obj>(elt: ComponentElt<P>): Promise<ComponentEltAugmented<P>> {
+
 	const getNextAsync = async (generator: Generator<UIElement, UIElement> | AsyncGenerator<UIElement, UIElement>, newProps?: any): Promise<ComponentResult | undefined> => {
 		let nextInfo = await generator.next(newProps)
 		// If new props were passed, call next() on generator again so latest props is used
@@ -88,27 +96,52 @@ export async function traceToLeafAsync(eltUI: UIElement): Promise<RenderingTrace
 	// return ret
 }
 
-/** Gets leaf (intrinsic or value) element */
-export async function getLeafAsync(eltUI: UIElement): Promise<IntrinsicElement | ValueElement> {
-	if (isComponentElt(eltUI)) {
-		if (typeof eltUI.type === "undefined") {
-			throw "eltUI should be component element, but its 'type' property is undefined, in traceToLeafAsync"
-		}
+/** Gets leaf (intrinsic or value) element; Memoized */
+export const getLeafAsync = (() => {
+	const eltCache = new Map<Component, Array<{ props: Obj; children?: Children; result: ComponentResult }>>()
 
-		const eltUIAugmented = eltUI.result ? eltUI as ComponentEltAugmented : await updateResultAsync(eltUI)
-		const eltResult = eltUIAugmented.result.element
+	return async function (eltUI: UIElement): Promise<IntrinsicElement | ValueElement> {
+		if (isComponentElt(eltUI)) {
+			if (typeof eltUI.type === "undefined")
+				throw "Component element has undefined 'type' property"
 
-		if (isComponentElt(eltResult)) { // eltResult is a component element
-			return (await getLeafAsync(eltResult)) ?? ""
+			const resultElt = (() => {
+				const { type: comp, props, children } = eltUI
+				const getResult = () => ({
+					props,
+					children,
+					result: ((): ComponentResult => {
+						const r = comp({ ...props, children })
+						if (isAsyncGenerator(r))
+							return { element: r.next().then(_ => _.value), generator: r }
+						else if (isGenerator(r))
+							return { element: r.next().value, generator: r }
+						else return { element: r, generator: undefined }
+					})()
+				})
+				const matching: Comparer<{ props: ComponentElt["props"], children?: ComponentElt["children"] }> = (a, b) => {
+					return shallowEquals(a.props, b.props) && shallowEquals(Object(a.children), Object(b.children))
+				}
+
+				if (!eltCache.has(comp))
+					eltCache.set(comp, [getResult()])
+				const entry = (eltCache.get(comp)!)
+				if (!entry.find(_ => matching(_, eltUI)))
+					entry.push(getResult())
+
+				return entry.find(_ => matching(_, eltUI))!.result
+			})().element
+
+			return isComponentElt(resultElt)
+				? getLeafAsync(resultElt).then(_ => _ ?? "")
+				: (resultElt ?? "") // resultElt is a leaf, so just return it
 		}
-		else { // eltResult is a leaf (intrinsic or value element)
-			return eltResult ?? ""
+		else { // eltUI is already a leaf (intrinsic or a value)
+			return eltUI ?? ""
 		}
 	}
-	else { // eltUI is already a leaf (intrinsic or a value)
-		return eltUI ?? ""
-	}
-}
+})()
+
 
 /** Return an updated render-to-leaf trace, to reflect a changed state of the world. Does not mutate input trace
  * @param trace The original rendering trace to update. If intrinsic, it is returned as is.
@@ -165,7 +198,7 @@ export async function updateTraceAsync(trace: RenderingTrace, eltComp?: Componen
 				if (isEltProper(eltResult) && eltResult.type === eltCurrent.type) {
 					const childrenResult = getChildren(eltResult)
 					const childrenCurr = getChildren(eltCurrent)
-
+	
 					return eltResult.type.isPure && childrenCurr.length === 0 && childrenResult.length === 0 && shallowEquals(eltResult.props, eltCurrent.props)
 						? eltCurrent // no need to update results
 						: updateResultAsync({

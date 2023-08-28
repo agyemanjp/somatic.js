@@ -50,6 +50,7 @@ jobs:
 
       - name: Publish to NPM
         run: |
+          rm -rf dist/tests
           cp package.json README.md LICENSE ./dist
           echo "{\"version\": \"$NEW_VERSION\"}" > dist/package.json
           cd dist
