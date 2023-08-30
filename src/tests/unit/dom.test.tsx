@@ -3,7 +3,7 @@ import assert from "assert"
 
 import { Set } from '@agyemanjp/standard'
 import { renderAsync } from "../../core"
-import { createDOMShallow, isAugmentedDOM, isTextDOM, setAttribute } from "../../dom"
+import { createDOMShallow, isTextDOM, setAttribute } from "../../dom"
 import { isIntrinsicElt } from "../../element"
 import { IntrinsicElement } from "../../types"
 
@@ -50,7 +50,7 @@ describe("DOM MODULE", () => {
 		})
 	})
 
-	describe("isAugmentedDOM", () => {
+	/*describe("isAugmentedDOM", () => {
 		it("should return false for a text DOM node", async () => {
 			assert.strictEqual(isAugmentedDOM(document.createTextNode("")), false)
 		})
@@ -69,7 +69,7 @@ describe("DOM MODULE", () => {
 		it("should be true for a DOM element augmented with the 'renderTrace' property", async () => {
 			assert.strictEqual(isAugmentedDOM(Object.assign(document.createElement("div"), { renderTrace: { componentElts: [] } })), true)
 		})
-	})
+	})*/
 
 	describe("setAttribute", () => {
 		it("should set style attribute properly", () => {
@@ -112,7 +112,6 @@ describe("DOM MODULE", () => {
 
 			assert.strictEqual(svg.children.length, 2)
 			assert.strictEqual(svg.children.item(1)?.getAttribute("fill-rule"), "evenodd")
-
 		})
 
 		it("should set svg attributes such that they are properly reflected in html", async () => {

@@ -36,7 +36,8 @@
 		"test-units": "mocha --require ts-node/register src/tests/unit/*.test.*",
 		"test-units-ci": "mocha --require ts-node/register src/tests/unit/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
 		"test-manual": "http-server -c-1 -a localhost -p 4321 -o dist/tests/manual/preview.html",
-		"test": "run-p test-units test-manual",
+		"test-gui": "pnpm playwright install && pnpm playwright test",
+		"test": "run-p test-units",
 		"testci": "run-p test-units-ci"
 	},
 	"dependencies": {
@@ -46,6 +47,7 @@
 		"tslib": "^2.6.1"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.37.1",
 		"@rollup/plugin-commonjs": "^25.0.3",
 		"@rollup/plugin-json": "^6.0.0",
 		"@rollup/plugin-node-resolve": "^15.1.0",

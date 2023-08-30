@@ -3,11 +3,10 @@ import { expect, use } from 'chai'
 import chaiHTML from 'chai-html'
 const cleanup = require('jsdom-global')()
 
-import { CSSProperties, Component, DOMAugmented, IntrinsicElement } from '../../types'
-import { idProvider } from '../../common'
 import { createElement, mountElement, renderAsync, renderToStringAsync } from '../../core'
-import { createDOMShallow, isAugmentedDOM, isTextDOM } from '../../dom'
-import { getChildren } from '../../element'
+import { CSSProperties, Component, DOMElement } from '../../types'
+import { idProvider } from '../../common'
+import { isTextDOM } from '../../dom'
 import { CommandBox, StackPanel, View } from '../../components'
 import { normalizeHTML } from '../util'
 
@@ -142,13 +141,13 @@ describe('CORE MODULE', () => {
 				)
 
 				const dom = await renderAsync(elt)
-				assert(isAugmentedDOM(dom))
+				// assert(isAugmentedDOM(dom))
 
 				const renderedString =
 					(idProvider.reset(), await renderToStringAsync(elt))
 
 				assert.strictEqual(
-					normalizeHTML(dom.outerHTML),
+					normalizeHTML((dom as DOMElement).outerHTML),
 					normalizeHTML(renderedString)
 				)
 			}
@@ -169,10 +168,9 @@ describe('CORE MODULE', () => {
 			)
 
 			const dom = await renderAsync(elt)
-			assert(isAugmentedDOM(dom))
-
 			const renderString = (idProvider.reset(), await renderToStringAsync(elt))
 
+			assert("outerHTML" in dom, `Return value of rendering StackPanel not a DOM element`)
 			assert.strictEqual(
 				normalizeHTML(dom.outerHTML),
 				normalizeHTML(renderString)
@@ -188,7 +186,7 @@ describe('CORE MODULE', () => {
 				</div>
 			)
 
-			assert(isAugmentedDOM(dom))
+			// assert(isAugmentedDOM(dom))
 			assert.strictEqual(dom.textContent, 'test')
 		})
 
@@ -199,9 +197,9 @@ describe('CORE MODULE', () => {
 					style={{ backgroundColor: 'blue' }}>{`test`}</div>
 			)
 
-			assert(isAugmentedDOM(dom))
+			// assert(isAugmentedDOM(dom))
 			assert.strictEqual(
-				(dom as DOMAugmented).getAttribute('class'),
+				(dom as DOMElement).getAttribute('class'),
 				'test-class'
 			)
 		})
@@ -221,7 +219,7 @@ describe('CORE MODULE', () => {
 				</div>
 			)
 
-			assert(isAugmentedDOM(dom))
+			// assert(isAugmentedDOM(dom))
 			assert.strictEqual(dom.childNodes.length, 3)
 			assert.strictEqual(dom.childNodes.item(0).textContent, '1')
 			assert.strictEqual(dom.childNodes.item(1).textContent, '20')
@@ -795,29 +793,55 @@ describe('CORE MODULE', () => {
 	})*/
 
 	describe('mountElement', async () => {
-		it('should work', async () => {
-			const div = document.createElement('div')
-			await mountElement(
-				<View<string>
-					id={'test_view_id'}
-					sourceData={['a', 'b', 'c']}
-					itemsPanel={StackPanel}
-					itemTemplate={item => (
-						<i style={{ width: '7em', border: 'thin solid orange' }}>
-							{item.value}
-						</i>
-					)}
-				/>,
-				document.body
-			)
+		it('does not throw an error', async () => {
+			assert.doesNotThrow(() => {
+				mountElement(
+					<View<string>
+						sourceData={['a', 'b', 'c']}
+						itemsPanel={StackPanel}
+						itemTemplate={item => (
+							<i style={{ width: '7em', border: 'thin solid orange' }}>
+								{item.value}
+							</i>
+						)}
+					/>,
+					document.body
+				)
 
-			document.dispatchEvent(
-				new CustomEvent('UIInvalidated', {
-					detail: { invalidatedElementIds: ['test_view_id'] },
-				})
-			)
+				document.dispatchEvent(new CustomEvent('Render', { detail: { invalidatedElementIds: ['test_view_id'] }, }))
+			})
+		})
+		it("transforms the contents of the container to match the mounted element's children", async () => {
+			const div = document.createElement("div")
+			document.body.appendChild(div)
+			let rendering = await mountElement(<View<string>
+				sourceData={['a', 'b', 'c']}
+				itemsPanel={StackPanel}
+				itemTemplate={item => (
+					<i style={{ width: '7em', border: 'thin solid orange' }}>
+						{item.value}
+					</i>
+				)}
+			/>, div)
 
-			assert(true)
+			assert.deepStrictEqual([...div.childNodes].map(_ => _.textContent), ['a', 'b', 'c'])
+		})
+		it('sets up container to respond to events and change its contents accordingly', async () => {
+			// const div = document.createElement("div")
+			// document.body.appendChild(div)
+			// mountElement(<View<string>
+			// 	sourceData={['a', 'b', 'c']}
+			// 	itemsPanel={StackPanel}
+			// 	itemTemplate={item => (
+			// 		<i style={{ width: '7em', border: 'thin solid orange' }}>
+			// 			{item.value}
+			// 		</i>
+			// 	)}
+			// />, div)
+
+			// assert.strictEqual(div.childNodes.length, 1)
+
+			// document.dispatchEvent(new CustomEvent('Render', { detail: { invalidatedElementIds: ['test_view_id'] }, }))
 		})
 	})
 

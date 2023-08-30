@@ -1,6 +1,5 @@
-import { ArgsType, Comparer, Obj, hasValue, isAsyncGenerator, isGenerator, last, prependSpaceIfNotEmpty, shallowEquals } from "@agyemanjp/standard"
+import { Comparer, Obj, hasValue, isAsyncGenerator, isGenerator, last, prependSpaceIfNotEmpty, shallowEquals } from "@agyemanjp/standard"
 import { default as morphdom } from "morphdom"
-
 
 import { stringifyAttributes } from "./html"
 import { createDOMShallow } from "./dom"
@@ -42,9 +41,8 @@ export function createElement<T extends string | Component>(type: T, props: (typ
 
 export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = (() => {
 	/** Convenience method to mount the root DOM node of a client app */
-	async function mountElement(element: UIElement, container: Element) {
+	function mountElement(element: UIElement, container: Element) {
 		let rendering = Promise.resolve()
-
 		document.addEventListener('Render', (ev) => { // ToDo: Maybe should be separate fn to avoid creating new ref each time	
 			rendering = (rendering ?? Promise.resolve())
 				.then(_ => (ev as any as RenderEvent).detail.comps.forEach(comp => { eltCache.delete(comp) }))
@@ -53,11 +51,11 @@ export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = 
 		})
 
 		document.dispatchEvent(new CustomEvent('Render', { detail: { comps: [] } }))
+		return rendering
 	}
 
 	/** Render a UI element into DOM objects */
 	async function renderAsync(elt: UIElement): Promise<(DOMElement | DocumentFragment | Text)> {
-		// console.assert(!isFragmentElt(elt))
 		if (hasValue(elt) && typeof elt === "object" && "props" in elt && "children" in elt && typeof elt.type === "undefined") {
 			console.warn(`Object appearing to represent proper element has no type member.
 			This is likely an error arising from creating an element with an undefined component tag`)
@@ -65,12 +63,10 @@ export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = 
 
 		const leaf = await getLeafAsync(elt)
 		const dom = createDOMShallow(leaf)
-		if (isIntrinsicElt(leaf)) {
-			// Promise.all(getChildren(leaf).map(renderAsync)).then(_ => dom.())
-			getChildren(leaf).forEach(child => renderAsync(child).then(dom.appendChild))
-		}
-
-		return dom
+		return isIntrinsicElt(leaf)
+			? Promise.all(getChildren(leaf).map(childElt => renderAsync(childElt)))
+				.then(childrenDom => (childrenDom.forEach(domChild => dom.appendChild(domChild)), dom))
+			: Promise.resolve(dom)
 	}
 
 	/** Render a UI element into its HTML string representation */

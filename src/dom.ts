@@ -3,11 +3,11 @@ import { keys, skip } from "@agyemanjp/standard"
 import { stringifyStyle } from "./html"
 import { isIntrinsicElt } from "./element"
 import { svgTags, isEventKey, booleanAttributes, attributeConversions } from "./common"
-import { DOMAugmented, DOMElement, IntrinsicElement, ValueElement } from "./types"
+import { DOMElement, IntrinsicElement, ValueElement } from "./types"
 
 export type LeafElement = IntrinsicElement | ValueElement
 
-export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
+// export const isAugmentedDOM = (node: Node): node is DOMAugmented => node.nodeType === Node.ELEMENT_NODE && "renderTrace" in node
 export const isTextDOM = (node: Node): node is Text => node.nodeType === Node.TEXT_NODE
 
 /** Set a property on a DOM element to a value, in a DOM-idiomatic way. */
