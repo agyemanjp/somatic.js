@@ -20,7 +20,7 @@ export type ComponentAsyncStateful<P extends Obj = Obj> = ComponentBase<ElementG
  * @argument props: Component-specific properties passed to the component function
  * @argument render: Callback used for requesting re-rendering
  */
-export type ComponentBase<Ret, Props extends Obj = Obj> = ((props: ComponentArgs<Props>, render?: UIElementBase["render"]) => Ret) & ComponentOptions<Props>
+export type ComponentBase<Ret, Props extends Obj = Obj> = ((props: ComponentArgs<Props>, render?: () => void) => Ret) & ComponentOptions<Props>
 
 export type ElementGenerator<P extends Obj = Obj, Elt = UIElement> = Generator<Elt, Elt, ComponentArgs<P>>
 export type ElementGeneratorAsync<P extends Obj = Obj, Elt = UIElement> = AsyncGenerator<Elt, Elt, ComponentArgs<P>>
@@ -43,7 +43,7 @@ export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<
 export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
 export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P>, }
 
-export interface UIElementBase<P = unknown> { props: P, children?: Children, render?: () => void }
+export interface UIElementBase<P = unknown> { props: P, children?: Children }
 
 export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
 

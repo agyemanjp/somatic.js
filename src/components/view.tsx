@@ -13,7 +13,7 @@ export async function View(deps:
 
 
 	/** View component */
-	const comp = async function* <T>(_props: ComponentArgs<ViewProps<T>>, render: Function): ElementGeneratorAsync<ViewProps, JSX.Element> {
+	const View = async function* <T>(_props: ComponentArgs<ViewProps<T>>, render: Function): ElementGeneratorAsync<ViewProps, JSX.Element> {
 		// console.log(`"${_props.key}" view render start`)
 
 		const defaultProps = {
@@ -113,8 +113,8 @@ export async function View(deps:
 		}
 	}
 
-	comp.isPure = true
-	return comp
+	View.isPure = true
+	return View
 }
 
 export type ViewProps<T = unknown> = HtmlProps & PanelProps & {

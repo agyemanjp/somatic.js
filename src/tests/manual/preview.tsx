@@ -1,17 +1,19 @@
 import { createId } from "@paralleldrive/cuid2"
 
-import { createElement, fragment, mountElement, render } from '../../core'
+import { createElement, fragment, mountElement } from '../../core'
 import { Component, ComponentAsyncStateful } from '../../types'
 import { CarouselPanel } from '../../components/panels/carousel-panel'
 import { StackPanel } from '../../components/panels/stack-panel'
 import { GridPanel } from "../../components/panels/grid-panel"
 import { TabsPanel } from "../../components/panels/tabs-panel"
 import * as Icons from '../../icons'
+import { noop } from "@agyemanjp/standard"
 
 
-const Preview: ComponentAsyncStateful<{}> = async function* (props) {
+const Preview: ComponentAsyncStateful<{}> = async function* (_props, _render) {
 	const state: State = { tabSelected: "components" }
-	const _id = createId()
+	// const _id = createId()
+	const render = _render ?? noop
 
 	const IconsPreview = () => (
 		<div
@@ -63,19 +65,21 @@ const Preview: ComponentAsyncStateful<{}> = async function* (props) {
 	}
 
 	while (true) {
-		yield <StackPanel id={_id} orientation="vertical" >
+		yield <StackPanel orientation="vertical" >
 			<StackPanel style={{ gap: "0.25em" }}>
 				<div
 					style={{ textDecoration: state.tabSelected === "components" ? "underline" : "unset" }}
 					onClick={() => {
 						state.tabSelected = "components"
-						render([Preview])
+						console.log(`Components tab selected; re-rendering`)
+						render()
 					}}>Components</div>
 				<div
 					style={{ textDecoration: state.tabSelected === "icons" ? "underline" : "unset" }}
 					onClick={() => {
+						console.log(`Icons tab selected; re-rendering`)
 						state.tabSelected = "icons"
-						render([Preview])
+						render()
 					}}>Icons</div>
 			</StackPanel>
 

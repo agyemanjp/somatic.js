@@ -9,6 +9,8 @@ import { idProvider } from '../util'
 import { isTextDOM } from '../../dom'
 import { StackPanel, View, CommandBox } from '../../components'
 import { normalizeHTML } from '../util'
+import { Func } from 'mocha'
+import { stringify } from '@agyemanjp/standard/utility'
 
 describe('CORE MODULE', () => {
 	use(chaiHTML)
@@ -132,6 +134,10 @@ describe('CORE MODULE', () => {
 
 	describe('renderAsync', () => {
 		it('Caches all component function calls', async () => {
+
+			const div = document.createElement("div")
+			document.body.appendChild(div)
+
 			const _View = await View({ _createId: () => idProvider.next() })
 			const CmdBox = await CommandBox({ _createId: () => idProvider.next() })
 
@@ -148,11 +154,23 @@ describe('CORE MODULE', () => {
 					</CmdBox>
 				)}
 			/>
-			const dom = await renderAsync(elt)
-			assert("outerHTML" in dom)
 
-			const renderedString = (idProvider.reset(), await renderToStringAsync(elt))
-			assert.strictEqual(normalizeHTML(dom.outerHTML), normalizeHTML(renderedString))
+			let cache = await mountElement(elt, div)
+			const keys = [...cache.keys()]
+			assert.deepStrictEqual(keys.map(k => k.name), ["View", "StackPanel", "itemTemplate", "CommandBox", "HoverBox"])
+			assert.strictEqual(keys.length, 5)
+
+			const values = [...cache.values()]
+			assert(values.every(val => Array.isArray(val)))
+
+			const cmdBoxEntry = cache.get(CmdBox as Component)
+			assert(cmdBoxEntry !== undefined)
+			// console.log(`Entry type: ${typeof (cmdBoxEntry)}`)
+			// console.log(`Entry: ${stringify(cmdBoxEntry)}`)
+			assert.strictEqual(cmdBoxEntry.length, 3)
+
+			assert(keys.includes(_View as Component<any>))
+
 		})
 
 		it('returns elt with same html as renderToString, for an elt without children', async () => {

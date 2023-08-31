@@ -1,15 +1,16 @@
-import { createId } from "@paralleldrive/cuid2"
-import { ArgsType, mergeDeep } from "@agyemanjp/standard"
+import { mergeDeep, noop } from "@agyemanjp/standard"
 
-import { Component, ComponentAsyncStateful, HtmlProps, CSSProperties } from "../../types"
-import { createElement, render } from "../../core"
+import { HtmlProps, CSSProperties, ComponentArgs, ElementGeneratorAsync } from "../../types"
+import { createElement } from "../../core"
 import { normalizeChildren } from "../../element"
 import { View, ViewProps } from "../view"
 import { StackPanel } from './stack-panel'
 
 
-export async function* TabsPanel<THeader = unknown>(_props: ArgsType<Component<Props<THeader>>>[0]): AsyncGenerator<JSX.Element, JSX.Element, Props<THeader>> {
+export async function* TabsPanel<THeader = unknown>(_props: ComponentArgs<Props<THeader>>, _render: Function): ElementGeneratorAsync<Props<THeader>, JSX.Element> {
 	const _View = await View({})
+
+	const render = _render ?? noop
 
 	const defaultProps/*: Props*/ = {
 		selectedIndex: 0,
@@ -59,7 +60,7 @@ export async function* TabsPanel<THeader = unknown>(_props: ArgsType<Component<P
 				onSelection={args => {
 					console.log(`Setting selected index of tabs panel to ${args.selectedIndex}`)
 					state.selectedIndex = args.selectedIndex
-					render([TabsPanel])
+					render()
 				}}
 			/>
 			<div>{activeChild}</div>

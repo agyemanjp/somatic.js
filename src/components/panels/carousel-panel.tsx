@@ -1,16 +1,18 @@
 
-import { deepMerge } from '@agyemanjp/standard'
+import { deepMerge, noop } from '@agyemanjp/standard'
 import * as cuid from '@paralleldrive/cuid2'
 import { StackPanel } from './stack-panel'
 import { ChevronLeft, ChevronUp, ChevronRight, ChevronDown } from '../../icons'
 import { PanelProps, HtmlProps, CSSLength, Component, Children } from '../../types'
-import { createElement, render } from '../..'
+import { createElement } from '../..'
 
 export type CarouselPanelProps = PanelProps & HtmlProps & {
 	chevronSize?: CSSLength
 }
 
-export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
+export const CarouselPanel: Component<CarouselPanelProps> = function* (_props, _render) {
+	const render = _render ?? noop
+
 	const defaultProps = {
 		// id: cuid.createId(),
 		orientation: 'horizontal',
@@ -42,7 +44,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 			_state.itemIndex = items.length - 1
 		}
 
-		render([CarouselPanel])
+		render()
 	}
 
 	const handleNextButtonClicked = (_state: typeof state) => {
@@ -53,7 +55,7 @@ export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 			_state.itemIndex = 0
 		}
 
-		render([CarouselPanel])
+		render()
 	}
 
 

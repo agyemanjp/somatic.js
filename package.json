@@ -38,6 +38,7 @@
 		"test-manual": "http-server -c-1 -a localhost -p 4321 -o dist/tests/manual/preview.html",
 		"test-gui": "pnpm playwright install && pnpm playwright test",
 		"test": "run-p test-units",
+		"test-old": "run-p test-units test-manual",
 		"testci": "run-p test-units-ci"
 	},
 	"dependencies": {

@@ -16,7 +16,7 @@ export async function CommandBox(deps:
 
 	const _HoverBox = HoverBox({ _createId: deps._createId ?? createId })
 
-	const comp: Component<CommandBoxProps> = (props, render) => {
+	const CommandBox: Component<CommandBoxProps> = (props, render) => {
 		const defaultProps = {
 			orientation: "horizontal" as Required<CommandBoxProps>["orientation"],
 			iconPlacement: "before" as Required<CommandBoxProps>["iconPlacement"],
@@ -83,7 +83,7 @@ export async function CommandBox(deps:
 			</button>
 		</_HoverBox>
 	}
-	return (comp.isPure = true, comp)
+	return (CommandBox.isPure = true, CommandBox)
 }
 
 type CommandBoxProps = Partial<HtmlProps & ButtonHTMLAttributes<any>> & {

@@ -6,7 +6,7 @@ import { stringifyStyle } from "../../html"
 import { CSSProperties, Component, HtmlProps } from "../../types"
 
 export function HoverBox(deps: { _createId?: typeof createId, _mergeDeep?: typeof mergeDeep }) {
-	const comp: Component<HoverBoxProps> = (props) => {
+	const HoverBox: Component<HoverBoxProps> = (props) => {
 		const defaultProps = {
 			style: {
 				display: "inline-block",
@@ -31,8 +31,8 @@ export function HoverBox(deps: { _createId?: typeof createId, _mergeDeep?: typeo
 		</div>
 	}
 
-	comp.isPure = true
-	return comp
+	HoverBox.isPure = true
+	return HoverBox
 }
 
 export type HoverBoxProps = HtmlProps & {
