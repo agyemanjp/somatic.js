@@ -7,7 +7,6 @@ export type StackPanelProps = PanelProps & HtmlProps & {
 
 export const StackPanel: Component<StackPanelProps> = props => {
 	const {
-		key,
 		orientation,
 		itemsAlignH,
 		itemsAlignV,

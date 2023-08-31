@@ -11,10 +11,17 @@ import { selfClosingTags } from "./common"
 /** JSX is transformed into calls of this function
  * @returns UI Element corresponding to inputs
  */
-export function createElement<T extends string | Component>(type: T, props: (typeof type) extends Component<infer P> ? P : unknown, ...children: unknown[]) {
-	if (typeof type !== "string" && typeof type !== "function") { console.warn(`Type argument has invalid type ${typeof type}`) }
+export function createElement<T extends string | Component>(type: T, props: T extends Component<infer P> ? P : unknown, ...children: unknown[]) {
+	if (typeof type !== "string" && typeof type !== "function") {
+		console.warn(`Type argument has invalid type ${typeof type}`)
+	}
 
-	return { type, props: props ?? {}, children: children.flat() }
+	return {
+		type,
+		props: props ?? {},
+		children: children.flat(),
+		render() { if (typeof type !== "string") render(this) }
+	}
 }
 
 /*export async function renderAsync(elt: UIElement): Promise<(DOMAugmented | DocumentFragment | Text)> {
@@ -39,13 +46,22 @@ export function createElement<T extends string | Component>(type: T, props: (typ
 	}
 }*/
 
-export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = (() => {
+export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync, matchingProps } = (() => {
 	/** Convenience method to mount the root DOM node of a client app */
 	function mountElement(element: UIElement, container: Element) {
 		let rendering = Promise.resolve()
 		document.addEventListener('Render', (ev) => { // ToDo: Maybe should be separate fn to avoid creating new ref each time	
 			rendering = (rendering ?? Promise.resolve())
-				.then(_ => (ev as any as RenderEvent).detail.comps.forEach(comp => { eltCache.delete(comp) }))
+				.then(_ => { // remove cached element result
+					const elt = (ev as any as RenderEvent).elt
+					if (elt !== undefined && isComponentElt(elt)) {
+						const entry = eltCache.get(elt.type)
+						if (entry !== undefined) {
+							const idx = entry.findIndex(_ => matchingProps(_, elt))
+							if (idx > 0) entry.splice(idx)
+						}
+					}
+				})
 				.then(_ => renderAsync(element))
 				.then(dom => morphdom(container, dom, { childrenOnly: true }))
 		})
@@ -99,13 +115,13 @@ export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = 
 			if (typeof eltUI.type === "undefined")
 				throw "Component element has undefined 'type' property"
 
-			const { type: comp, props, children } = eltUI
+			const { type: comp, props, children, render } = eltUI
 
 			const resultElt = await (async () => {
 				/** Returns same entry, if passed, with the elt member filled in; Otherwise return a fresh entry */
 				const useableEntry = async (_?: Entry): Promise<Entry<UIElement>> => {
 					const fx = (): ComponentResult<UIElement> => {
-						const r = comp({ ...props, children })
+						const r = comp({ ...props, children }, render)
 						return isAsyncGenerator(r)
 							? { element: r.next().then(_ => _.value), generator: r }
 							: isGenerator(r)
@@ -129,13 +145,9 @@ export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = 
 
 				}
 
-				const matching: Comparer<{ props: ComponentElt["props"], children?: ComponentElt["children"] }> = (a, b) => {
-					return shallowEquals(a.props, b.props) && shallowEquals(Object(a.children), Object(b.children))
-				}
-
 				const resultsArr = eltCache.get(comp)
 				return (resultsArr
-					? await useableEntry(resultsArr.find(_ => matching(_, eltUI))) ?? (resultsArr.push(await useableEntry()), last(resultsArr))
+					? await useableEntry(resultsArr.find(_ => matchingProps(_, eltUI))) ?? (resultsArr.push(await useableEntry()), last(resultsArr))
 					: last(eltCache.set(comp, [await useableEntry()]).get(comp)!)
 				).result.element as UIElement
 			})()
@@ -147,6 +159,10 @@ export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = 
 		else { // eltUI is already a leaf (intrinsic or a value)
 			return eltUI ?? ""
 		}
+	}
+
+	const matchingProps: Comparer<{ props: ComponentElt["props"], children?: ComponentElt["children"] }> = function (a, b) {
+		return shallowEquals(a.props, b.props) && shallowEquals(Object(a.children), Object(b.children))
 	}
 
 	type ComponentResult<Elt extends UIElement | undefined = UIElement | undefined> = {
@@ -161,13 +177,15 @@ export const { mountElement, renderAsync, renderToStringAsync, getLeafAsync } = 
 
 	const eltCache = new Map<Component, Array<Entry>>()
 
-	return { mountElement, renderAsync, renderToStringAsync, getLeafAsync }
+	return { mountElement, renderAsync, renderToStringAsync, getLeafAsync, matchingProps }
 })()
 
 
-/** Request re-render */
-export function render(comps?: Function[], reason?: string) {
-	const ev = new CustomEvent('Render', { detail: { comps } })
+/** Invalidate an element (and thus request its re-rendering) */
+export function render(elt?: UIElement, reason?: string) {
+	const ev = new CustomEvent<RenderEvent>('Render', {
+		detail: { elt },
+	})
 
 	if (document.readyState === "complete") {
 		document.dispatchEvent(ev)
@@ -184,7 +202,7 @@ export function render(comps?: Function[], reason?: string) {
 	}
 }
 
-interface RenderEvent extends Event { detail: { comps: Component[] } }
+interface RenderEvent { elt?: UIElement }
 
 
 /** DOM update/refresh interval. This value seems to work best when tested; Don't change without a good reason */

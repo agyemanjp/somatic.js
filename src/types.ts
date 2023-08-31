@@ -1,50 +1,52 @@
 import { DigitNonZero, Obj } from "@agyemanjp/standard"
 import { colorConstants } from "./common"
 
-/** General component type */
-export type Component<P extends Obj = Obj> = ComponentOptions<P> & (
-	((props: P & { children?: Children, key?: string }/*, extra: { invalidate: () => void }*/) =>
-		// UIElement generic types below should not be generic type since we don't know their props in advance
-		| AsyncGenerator<UIElement, UIElement, typeof props>
-		| Generator<UIElement, UIElement, typeof props>
-		| Promise<UIElement>
-		| UIElement
-	)
-)
-/** Async stateful component type */
-export type ComponentAsyncStateful<P extends Obj = Obj> = ComponentOptions<P> & (
-	(props: P & { children?: Children, key?: string }) => AsyncGenerator<UIElement, UIElement, typeof props>
-)
+/** General component */
+export type Component<Props extends Obj = Obj> = ComponentBase<(
+	// UIElement generic types below should not be generic type since we don't know their props in advance
+	| AsyncGenerator<UIElement, UIElement, ComponentArgs<Props>>
+	| Generator<UIElement, UIElement, ComponentArgs<Props>>
+	| Promise<UIElement>
+	| UIElement
+), Props>
 
-export interface ComponentOptions<P extends Obj = Obj> {
+/** Stateful component */
+export type ComponentStateful<P extends Obj = Obj> = ComponentBase<ElementGenerator<P>, P>
+
+/** Async stateful component */
+export type ComponentAsyncStateful<P extends Obj = Obj> = ComponentBase<ElementGeneratorAsync<P>, P>
+
+/** Generic base component
+ * @argument props: Component-specific properties passed to the component function
+ * @argument render: Callback used for requesting re-rendering
+ */
+export type ComponentBase<Ret, Props extends Obj = Obj> = ((props: ComponentArgs<Props>, render?: UIElementBase["render"]) => Ret) & ComponentOptions<Props>
+
+export type ElementGenerator<P extends Obj = Obj, Elt = UIElement> = Generator<Elt, Elt, ComponentArgs<P>>
+export type ElementGeneratorAsync<P extends Obj = Obj, Elt = UIElement> = AsyncGenerator<Elt, Elt, ComponentArgs<P>>
+
+export type ComponentArgs<Props> = Props & { children?: Children }
+export type ComponentOptions<P extends Obj = Obj> = {
 	name?: string
 	isPure?: boolean
 	defaultProps?: Partial<P>
 }
-
-export type Fragment = ""
-
 export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a
 
-export interface UIElementBase<P = unknown> {
-	props: P,
-	children?: Children
-}
-export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> {
-	type: string
-}
-export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> {
-	type: Component<P>,
-	// result?: ComponentResult
-}
-export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
-
-/** An UI element is, basically, information for a future (component) function invocation,
+/** UI element; basically, information for a future (component) function invocation,
  * I.e., the component function plus the arguments with which to call it
- * A component element produces another component element, recursively,
+ * A component element can produce another component element, recursively,
  * until an intrinsic element is obtained, at which point we can generate an actual node from it
  */
 export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | /*FragmentElement |*/ ValueElement
+
+export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
+export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P>, }
+
+export interface UIElementBase<P = unknown> { props: P, children?: Children, render?: () => void }
+
+export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
+
 
 export type DOMElement = SVGElement | HTMLElement
 

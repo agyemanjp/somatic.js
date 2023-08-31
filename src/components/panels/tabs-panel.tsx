@@ -7,7 +7,10 @@ import { normalizeChildren } from "../../element"
 import { View, ViewProps } from "../view"
 import { StackPanel } from './stack-panel'
 
+
 export async function* TabsPanel<THeader = unknown>(_props: ArgsType<Component<Props<THeader>>>[0]): AsyncGenerator<JSX.Element, JSX.Element, Props<THeader>> {
+	const _View = await View({})
+
 	const defaultProps/*: Props*/ = {
 		selectedIndex: 0,
 		headerItemStyle: {
@@ -20,7 +23,7 @@ export async function* TabsPanel<THeader = unknown>(_props: ArgsType<Component<P
 		selectedHeaderItemStyle: {
 			fontWeight: "bold"
 		},
-		id: createId()
+		// id: createId()
 	}
 
 	let props = mergeDeep()(defaultProps, _props)
@@ -34,7 +37,6 @@ export async function* TabsPanel<THeader = unknown>(_props: ArgsType<Component<P
 			headerItemTemplate,
 			selectedIndex,
 			children,
-			key,
 			id,
 			...htmlProps
 		} = mergeDeep()(props, state)
@@ -44,7 +46,7 @@ export async function* TabsPanel<THeader = unknown>(_props: ArgsType<Component<P
 		// console.log(`Yielding TabsPanel component\nChildren count: ${normedChildren.length}\nActive child: ${stringify(activeChild)}`)
 
 		const newProps = yield <StackPanel id={id} orientation={"vertical"} {...htmlProps}>
-			<View
+			<_View
 				sourceData={headers}
 				itemsPanel={StackPanel}
 				orientation={"horizontal"}

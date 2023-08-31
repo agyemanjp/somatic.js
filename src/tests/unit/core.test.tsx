@@ -3,11 +3,11 @@ import { expect, use } from 'chai'
 import chaiHTML from 'chai-html'
 const cleanup = require('jsdom-global')()
 
-import { createElement, mountElement, renderAsync, renderToStringAsync } from '../../core'
+import { createElement, fragment, mountElement, renderAsync, renderToStringAsync } from '../../core'
 import { CSSProperties, Component, DOMElement } from '../../types'
-import { idProvider } from '../../common'
+import { idProvider } from '../util'
 import { isTextDOM } from '../../dom'
-import { CommandBox, StackPanel, View } from '../../components'
+import { StackPanel, View, CommandBox } from '../../components'
 import { normalizeHTML } from '../util'
 
 describe('CORE MODULE', () => {
@@ -131,34 +131,47 @@ describe('CORE MODULE', () => {
 	})*/
 
 	describe('renderAsync', () => {
-		it('should return elt with same html as renderToString, for an elt without children', async () => {
-			try {
-				const elt = (
-					<CommandBox
-						// icon={{ on: ()=><span>On</span>, off: ()=><span>Off</span> }}
-						style={{ height: 'auto', width: 'auto', fontSize: '14px' }}
-					/>
-				)
+		it('Caches all component function calls', async () => {
+			const _View = await View({ _createId: () => idProvider.next() })
+			const CmdBox = await CommandBox({ _createId: () => idProvider.next() })
 
-				const dom = await renderAsync(elt)
-				// assert(isAugmentedDOM(dom))
+			const elt = <_View<string>
+				id={'test_view'}
+				sourceData={['a', 'b', 'c']}
+				itemsPanel={StackPanel}
+				itemTemplate={item => (
+					<CmdBox
+						id={`button_${item.index}`}
+						onClick={() => { }}
+						style={{ height: 'auto', width: 'auto', fontSize: '14px' }}>
+						<i>{item.value}</i>
+					</CmdBox>
+				)}
+			/>
+			const dom = await renderAsync(elt)
+			assert("outerHTML" in dom)
 
-				const renderedString =
-					(idProvider.reset(), await renderToStringAsync(elt))
-
-				assert.strictEqual(
-					normalizeHTML((dom as DOMElement).outerHTML),
-					normalizeHTML(renderedString)
-				)
-			}
-			catch (e) {
-				assert.equal(1, 1)
-				// console.error(e)
-				// assert.fail()
-			}
+			const renderedString = (idProvider.reset(), await renderToStringAsync(elt))
+			assert.strictEqual(normalizeHTML(dom.outerHTML), normalizeHTML(renderedString))
 		})
 
-		it('should return elt with same html as renderToString, for an elt with children', async () => {
+		it('returns elt with same html as renderToString, for an elt without children', async () => {
+			const CmdBox = await CommandBox({ _createId: () => idProvider.next() })
+
+			const elt = <CmdBox style={{ height: 'auto', width: 'auto', fontSize: '14px' }} />
+
+			const dom = await renderAsync(elt)
+			assert("outerHTML" in dom)
+
+			const renderedString = (idProvider.reset(), await renderToStringAsync(elt))
+
+			assert.strictEqual(
+				normalizeHTML(dom.outerHTML),
+				normalizeHTML(renderedString)
+			)
+		})
+
+		it('returns elt with same html as renderToString, for an elt with children', async () => {
 			const elt = (
 				<StackPanel style={{ height: 'auto', width: 'auto', fontSize: '14px' }}>
 					<span style={{ fontSize: '1.25em', fontWeight: 900 }}>
@@ -177,7 +190,7 @@ describe('CORE MODULE', () => {
 			)
 		})
 
-		it('should render an element with the correct text content', async () => {
+		it('renders an element with the correct text content', async () => {
 			const dom = await renderAsync(
 				<div
 					className={'test'}
@@ -190,12 +203,8 @@ describe('CORE MODULE', () => {
 			assert.strictEqual(dom.textContent, 'test')
 		})
 
-		it('should render an element with its corresponding attributes', async () => {
-			const dom = await renderAsync(
-				<div
-					className={'test-class'}
-					style={{ backgroundColor: 'blue' }}>{`test`}</div>
-			)
+		it('renders an element with its corresponding attributes', async () => {
+			const dom = await renderAsync(<div className={'test-class'} style={{ backgroundColor: 'blue' }}>{`test`}</div>)
 
 			// assert(isAugmentedDOM(dom))
 			assert.strictEqual(
@@ -204,13 +213,13 @@ describe('CORE MODULE', () => {
 			)
 		})
 
-		it('should render a value element correctly', async () => {
+		it('renders a value element correctly', async () => {
 			const dom = await renderAsync('hello')
 			assert(isTextDOM(dom))
 			assert.strictEqual(dom.textContent, 'hello')
 		})
 
-		it('should render multiple children properly', async () => {
+		it('renders multiple children properly', async () => {
 			const dom = await renderAsync(
 				<div>
 					<span>1</span>
@@ -226,7 +235,7 @@ describe('CORE MODULE', () => {
 			assert.strictEqual(dom.childNodes.item(2).textContent, '300')
 		})
 
-		it('should render nested children properly', async () => {
+		it('renders nested children properly', async () => {
 			const dom = await renderAsync(
 				<div id="1">
 					<div id="2">
@@ -260,7 +269,7 @@ describe('CORE MODULE', () => {
 			assert.strictEqual(lastChild.firstChild.textContent, '4000')
 		})
 
-		it('should render SVG elements properly', async () => {
+		it('renders SVG elements properly', async () => {
 			const VytalsLogo = MakeIcon(
 				<svg
 					id="Layer_1"
@@ -367,20 +376,14 @@ describe('CORE MODULE', () => {
 			)
 		})
 
-		/*test("attrs", () => {
-			expect(
-				renderer.render(
-					<Fragment>
-						<input id="toggle" type="checkbox" checked data-checked foo={false} />
-						<label for="toggle" />
-					</Fragment>,
-				),
-			).toEqual(
-				'<input id="toggle" type="checkbox" checked data-checked><label for="toggle"></label>',
-			)
-		})
-		
-		test("styles", () => {
+		// it("attrs", async () => {
+		// 	expect(await renderToStringAsync(<>
+		// 		<input id="toggle" type="checkbox" checked data-checked />
+		// 		<label />
+		// 	</>)).equals('<input id="toggle" type="checkbox" checked data-checked /><label></label>')
+		// })
+
+		/*test("styles", () => {
 			expect(
 				renderer.render(
 					<Fragment>
@@ -395,11 +398,11 @@ describe('CORE MODULE', () => {
 				'<div style="color:red;"></div><img src="x" style="xss:foo;&quot; onerror=&quot;alert(&#039;hack&#039;)&quot; other=&quot;;">',
 			)
 		})
-		
+
 		test("null", () => {
 			expect(renderer.render(null)).toEqual("")
 		})
-		
+
 		test("fragment", () => {
 			expect(
 				renderer.render(
@@ -410,7 +413,7 @@ describe('CORE MODULE', () => {
 				),
 			).toEqual("<span>1</span><span>2</span>")
 		})
-		
+
 		test("array", () => {
 			expect(
 				renderer.render(
@@ -424,7 +427,7 @@ describe('CORE MODULE', () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span></div>",
 			)
 		})
-		
+
 		test("nested arrays", () => {
 			expect(
 				renderer.render(
@@ -438,7 +441,7 @@ describe('CORE MODULE', () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>",
 			)
 		})
-		
+
 		test("keyed array", () => {
 			const spans = [
 				<span crank-key="2">2</span>,
@@ -457,13 +460,13 @@ describe('CORE MODULE', () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>",
 			)
 		})
-		
+
 		test("escaped children", () => {
 			expect(renderer.render(<div>{"< > & \" '"}</div>)).toEqual(
 				"<div>&lt; &gt; &amp; &quot; &#039;</div>",
 			)
 		})
-		
+
 		test("raw html", () => {
 			const html = '<span id="raw">Hi</span>'
 			expect(
@@ -473,7 +476,7 @@ describe('CORE MODULE', () => {
 					</div>,
 				),
 			).toEqual('<div>Raw: <span id="raw">Hi</span></div>')
-		}) */
+		})
 
 		/*it("should have the element with the events listeners attached to it", async () => {
 			const vNode = <div className='test' onClick={() => console.log('')}>
@@ -794,9 +797,10 @@ describe('CORE MODULE', () => {
 
 	describe('mountElement', async () => {
 		it('does not throw an error', async () => {
+			const _View = await View({ _createId: () => idProvider.next() })
 			assert.doesNotThrow(() => {
 				mountElement(
-					<View<string>
+					<_View<string>
 						sourceData={['a', 'b', 'c']}
 						itemsPanel={StackPanel}
 						itemTemplate={item => (
@@ -814,7 +818,8 @@ describe('CORE MODULE', () => {
 		it("transforms the contents of the container to match the mounted element's children", async () => {
 			const div = document.createElement("div")
 			document.body.appendChild(div)
-			let rendering = await mountElement(<View<string>
+			const _View = await View({ _createId: () => idProvider.next() })
+			let rendering = await mountElement(<_View<string>
 				sourceData={['a', 'b', 'c']}
 				itemsPanel={StackPanel}
 				itemTemplate={item => (
@@ -826,28 +831,11 @@ describe('CORE MODULE', () => {
 
 			assert.deepStrictEqual([...div.childNodes].map(_ => _.textContent), ['a', 'b', 'c'])
 		})
-		it('sets up container to respond to events and change its contents accordingly', async () => {
-			// const div = document.createElement("div")
-			// document.body.appendChild(div)
-			// mountElement(<View<string>
-			// 	sourceData={['a', 'b', 'c']}
-			// 	itemsPanel={StackPanel}
-			// 	itemTemplate={item => (
-			// 		<i style={{ width: '7em', border: 'thin solid orange' }}>
-			// 			{item.value}
-			// 		</i>
-			// 	)}
-			// />, div)
-
-			// assert.strictEqual(div.childNodes.length, 1)
-
-			// document.dispatchEvent(new CustomEvent('Render', { detail: { invalidatedElementIds: ['test_view_id'] }, }))
-		})
 	})
 
 	describe('createElement', async () => {
 		it('should create a element with props and children corresponsing to the arguments passed', async () => {
-			const elt = createElement(View as Component, {
+			const elt = createElement(View as any, {
 				sourceData: [],
 				itemsPanel: StackPanel,
 			})

@@ -12,7 +12,7 @@ export type CarouselPanelProps = PanelProps & HtmlProps & {
 
 export const CarouselPanel: Component<CarouselPanelProps> = function* (_props) {
 	const defaultProps = {
-		id: cuid.createId(),
+		// id: cuid.createId(),
 		orientation: 'horizontal',
 		chevronSize: '1em',
 		style: {

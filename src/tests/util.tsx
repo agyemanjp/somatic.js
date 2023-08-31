@@ -1,9 +1,4 @@
-import { ArgsType, deepMerge, mergeDeep } from "@agyemanjp/standard"
 import * as cuid from "@paralleldrive/cuid2"
-import { createElement } from "../core"
-import { normalizeChildren } from "../element"
-import { Component, PanelProps, HtmlProps, CSSProperties, ButtonHTMLAttributes, SVGAttributes, UIElement } from "../types"
-import { stringifyStyle } from "../"
 
 /** Create html element from html string; Requires <document> object to exist */
 export function constructElement(html: string): HTMLElement {
@@ -29,6 +24,30 @@ export function normalizeHTML(html: string) {
 		.replace(/ for="(\w*)"/, ' htmlFor="$1"')
 }
 
+class IdProvider {
+	private cache: string[]
+	private pointer: number
 
+	/** */
+	constructor() {
+		this.cache = []
+		this.pointer = 0
+	}
+
+	/** */
+	next() {
+		if (this.pointer >= this.cache.length) {
+			// console.log(`pushing to id provider cache`)
+			this.cache.push(cuid.createId())
+		}
+		return this.cache[this.pointer++]
+	}
+
+	/** */
+	reset() {
+		this.pointer = 0
+	}
+}
+export const idProvider = new IdProvider()
 
 

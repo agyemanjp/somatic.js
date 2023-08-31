@@ -1,8 +1,8 @@
 import { mergeDeep } from "@agyemanjp/standard"
 import { Component, SVGAttributes, UIElement, createElement, isComponentElt, isIntrinsicElt } from ".."
 
-type SVGProps = SVGAttributes<SVGGElement>;
-export type Icon = Component<SVGProps>;
+type SVGProps = SVGAttributes<SVGGElement>
+export type Icon = Component<SVGProps>
 
 export const create = (elt: UIElement<SVGProps>): Icon => {
 	const defaults = {
@@ -17,7 +17,7 @@ export const create = (elt: UIElement<SVGProps>): Icon => {
 
 	return function (props) {
 		if (isIntrinsicElt(elt) || isComponentElt(elt)) {
-			const { key, children, ...svgProps } = mergeDeep()(
+			const { id, children, ...svgProps } = mergeDeep()(
 				defaults,
 				elt.props ?? {},
 				props

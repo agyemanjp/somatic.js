@@ -5,7 +5,7 @@ import { Component, PanelProps, HtmlProps, CSSLength } from "../../types"
 import { getChildren, isEltProper, normalizeChildren } from "../../element"
 import { StackPanel } from "./stack-panel"
 
-export const GridPanel: Component<GridPanelProps> = function (props) {
+export const GridPanel: Component<GridPanelProps> = function (props, render) {
 	const alignItems = () => {
 		switch (props.orientation === "vertical" ? (props.itemsAlignH) : (props.itemsAlignV)) {
 			case "start":
@@ -50,7 +50,7 @@ export const GridPanel: Component<GridPanelProps> = function (props) {
 		itemsAlignV,
 		rowsOrColumns,
 		style,
-		key,
+		id,
 		children,
 		...htmlProps
 	} = mergeDeep()(props, defaultProps)

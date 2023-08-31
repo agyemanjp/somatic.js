@@ -1,4 +1,3 @@
-import * as cuid from "@paralleldrive/cuid2"
 import { Obj } from "@agyemanjp/standard/utility"
 
 /** Names of DOM events. */
@@ -425,42 +424,3 @@ export const colorConstants/*: Record<string, string>*/ = {
 	"yellowgreen": "#9acd32"
 }
 export const colors: Record<string, string> = colorConstants
-
-
-class IdProvider {
-	private cache: string[]
-	private pointer: number
-
-	/** */
-	constructor() {
-		this.cache = []
-		this.pointer = 0
-	}
-
-	/** */
-	next() {
-		if (this.pointer >= this.cache.length) {
-			// console.log(`pushing to id provider cache`)
-			this.cache.push(cuid.createId())
-		}
-		return this.cache[this.pointer++]
-	}
-
-	/** */
-	reset() {
-		this.pointer = 0
-	}
-}
-
-export const idProvider = new IdProvider()
-
-
-/** Mouse event names */
-/*export const mouseMvmntEventNames = [
- "ONMOUSEENTER",
- "ONMOUSELEAVE",
- "ONMOUSEMOVE",
- "ONMOUSEOUT",
- "ONMOUSEOVER",
- "ONMOUSEUP"
- ]*/

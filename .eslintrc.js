@@ -122,7 +122,7 @@ module.exports = {
 		"no-irregular-whitespace": "warn", // invalid whitespace that is not a normal tab and space
 
 		/* comments */
-		"jsdoc/require-jsdoc": ["off", {
+		"jsdoc/require-jsdoc": ["warn", {
 			"require": {
 				"FunctionDeclaration": true,
 				"MethodDefinition": true,
