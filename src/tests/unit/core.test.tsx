@@ -2,15 +2,18 @@ import assert from 'assert'
 import { expect, use } from 'chai'
 import chaiHTML from 'chai-html'
 const cleanup = require('jsdom-global')()
+import { stringify } from '@agyemanjp/standard/utility'
+import { noop } from '@agyemanjp/standard/functional'
 
-import { createElement, fragment, mountElement, renderAsync, renderToStringAsync } from '../../core'
-import { CSSProperties, Component, DOMElement } from '../../types'
+import { RenderRequestedInfo, createElement, fragment, mountElement, renderAsync, renderToStringAsync } from '../../core'
+import { CSSProperties, Component, ComponentAsyncStateful, DOMElement } from '../../types'
 import { idProvider } from '../util'
 import { isTextDOM } from '../../dom'
 import { StackPanel, View, CommandBox } from '../../components'
 import { normalizeHTML } from '../util'
-import { Func } from 'mocha'
-import { stringify } from '@agyemanjp/standard/utility'
+import * as Icons from '../../icons'
+import { every } from '@agyemanjp/standard'
+
 
 describe('CORE MODULE', () => {
 	use(chaiHTML)
@@ -134,7 +137,6 @@ describe('CORE MODULE', () => {
 
 	describe('renderAsync', () => {
 		it('Caches all component function calls', async () => {
-
 			const div = document.createElement("div")
 			document.body.appendChild(div)
 
@@ -155,7 +157,12 @@ describe('CORE MODULE', () => {
 				)}
 			/>
 
-			let cache = await mountElement(elt, div)
+			document.addEventListener('RenderRequested', (ev) => { // ToDo: Maybe should be separate fn to avoid creating new ref each time	
+				const elt = (ev as any as CustomEvent<RenderRequestedInfo>).detail.elt
+				console.log(`RenderRequested event received for elt = ${stringify(elt)}`)
+			})
+
+			const cache = await mountElement(elt, div)
 			const keys = [...cache.keys()]
 			assert.deepStrictEqual(keys.map(k => k.name), ["View", "StackPanel", "itemTemplate", "CommandBox", "HoverBox"])
 			assert.strictEqual(keys.length, 5)
@@ -173,7 +180,157 @@ describe('CORE MODULE', () => {
 
 		})
 
-		it('returns elt with same html as renderToString, for an elt without children', async () => {
+		it('Caches all component function calls for a copmplex tree', async () => {
+			const div = document.createElement("div")
+			document.body.appendChild(div)
+
+			const Preview: ComponentAsyncStateful<{}> = async function* (_props, _render) {
+				console.log(`Preview component starting`)
+				const state: { tabSelected: "components" | "icons" } = { tabSelected: "components" }
+				const render = _render ?? noop
+
+				const IconsPreview = () => (
+					<div
+						style={{
+							display: 'grid',
+							gridTemplateColumns: '25% 25% 25% 25%',
+							gridGap: '10px',
+							padding: '20px',
+							justifyContent: 'space-evenly',
+							alignContent: 'space-evenly',
+						}}>
+
+						{Object.entries(Icons).map(([key, ico]) => (
+							<div
+								id={key}
+								style={{
+									alignContent: 'center',
+									border: '1px solid',
+									justifyContent: 'center',
+									textAlign: 'center',
+									paddingTop: '10px',
+									paddingBottom: '50px',
+									height: '60px',
+								}}>
+
+								{ico({})}
+
+								<p>{key}</p>
+							</div>
+						))}
+					</div>
+				)
+				const CompsPreview = () => {
+					const children = <>
+						<img
+							src="https://craftinginterpreters.com/image/chunks-of-bytecode/ast.png"
+							alt="AST"
+						/>
+						<img
+							src="https://www.digitalocean.com/_next/static/media/default-avatar.14b0d31d.jpeg"
+							alt="Avatar"
+						/>
+						<div>Some sample text</div>
+						<button>A button</button>
+					</>
+
+					return <StackPanel orientation="vertical"></StackPanel>
+				}
+
+				while (true) {
+					console.log(`Preview component yielding with state = ${stringify(state)}`)
+
+					const elt = <StackPanel orientation="vertical" >
+						<StackPanel style={{ gap: "0.25em" }}>
+							<div
+								id="comps-header"
+								style={{
+									cursor: "pointer",
+									textDecoration: state.tabSelected === "components" ? "underline" : "unset"
+								}}
+								onClick={() => {
+									state.tabSelected = "components"
+									console.log(`Components tab selected; re-rendering`)
+									render()
+								}}>Components</div>
+							<div
+								id="icons-header"
+								style={{
+									cursor: "pointer",
+									textDecoration: state.tabSelected === "icons" ? "underline" : "unset"
+								}}
+								onClick={() => {
+									console.log(`Icons tab selected; re-rendering`)
+									state.tabSelected = "icons"
+									render()
+								}}>Icons</div>
+						</StackPanel>
+
+						{
+							state.tabSelected === "components"
+								? <CompsPreview />
+								: <IconsPreview />
+						}
+					</StackPanel>
+
+					yield elt
+				}
+			}
+
+			let promise = new Promise((resolve, reject) => {
+				mountElement(<Preview />, div, {
+					onRenderFinished: (cache, elt) => {
+						try {
+							if (elt === undefined) { // first render
+								console.log(`RenderFinished event received after initial render`)
+
+								const keys = [...cache.keys()]
+								const keyNames = keys.map(k => k.name)
+								// console.log(keyNames)
+
+								assert(cache.get(Preview as Component) !== undefined)
+								assert(every(["Preview", "CompsPreview"], _ => keyNames.includes(_)))
+
+								const iconsHeader = document.getElementById("icons-header")
+								assert(iconsHeader !== null)
+								// resolve(void (0))
+
+								iconsHeader.click()
+							}
+							else { // render after click
+								console.log(`RenderFinished event received after click`)
+
+								resolve(void (0))
+							}
+						}
+						catch (e) {
+							reject(e)
+						}
+					},
+					onCacheEviction: () => { },
+					onCacheMiss: () => { },
+					onCacheHit: () => { },
+
+				})
+			})
+
+			await promise
+
+			// assert.deepStrictEqual(keys.map(k => k.name), ["View", "StackPanel", "itemTemplate", "CommandBox", "HoverBox"])
+			// assert.strictEqual(keys.length, 5)
+
+			// const values = [...cache.values()]
+			// assert(values.every(val => Array.isArray(val)))
+
+			// // console.log(`Entry type: ${typeof (cmdBoxEntry)}`)
+			// // console.log(`Entry: ${stringify(cmdBoxEntry)}`)
+			// assert.strictEqual(cmdBoxEntry.length, 3)
+
+			// assert(keys.includes(_View as Component<any>))
+
+		})
+
+		it('Returns elt with same html as renderToString, for an elt without children', async () => {
 			const CmdBox = await CommandBox({ _createId: () => idProvider.next() })
 
 			const elt = <CmdBox style={{ height: 'auto', width: 'auto', fontSize: '14px' }} />
@@ -416,11 +573,11 @@ describe('CORE MODULE', () => {
 				'<div style="color:red;"></div><img src="x" style="xss:foo;&quot; onerror=&quot;alert(&#039;hack&#039;)&quot; other=&quot;;">',
 			)
 		})
-
+	
 		test("null", () => {
 			expect(renderer.render(null)).toEqual("")
 		})
-
+	
 		test("fragment", () => {
 			expect(
 				renderer.render(
@@ -431,7 +588,7 @@ describe('CORE MODULE', () => {
 				),
 			).toEqual("<span>1</span><span>2</span>")
 		})
-
+	
 		test("array", () => {
 			expect(
 				renderer.render(
@@ -445,7 +602,7 @@ describe('CORE MODULE', () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span></div>",
 			)
 		})
-
+	
 		test("nested arrays", () => {
 			expect(
 				renderer.render(
@@ -459,7 +616,7 @@ describe('CORE MODULE', () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>",
 			)
 		})
-
+	
 		test("keyed array", () => {
 			const spans = [
 				<span crank-key="2">2</span>,
@@ -478,13 +635,13 @@ describe('CORE MODULE', () => {
 				"<div><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>",
 			)
 		})
-
+	
 		test("escaped children", () => {
 			expect(renderer.render(<div>{"< > & \" '"}</div>)).toEqual(
 				"<div>&lt; &gt; &amp; &quot; &#039;</div>",
 			)
 		})
-
+	
 		test("raw html", () => {
 			const html = '<span id="raw">Hi</span>'
 			expect(
@@ -495,7 +652,7 @@ describe('CORE MODULE', () => {
 				),
 			).toEqual('<div>Raw: <span id="raw">Hi</span></div>')
 		})
-
+	
 		/*it("should have the element with the events listeners attached to it", async () => {
 			const vNode = <div className='test' onClick={() => console.log('')}>
 				<span> Some render</span>
@@ -527,14 +684,14 @@ describe('CORE MODULE', () => {
 						style={{ height: 'auto', width: 'auto', fontSize: '14px' }}
 					/>
 				)
-
+	
 				const intrinsic = await renderToIntrinsicAsync(elt)
 				const dom = await renderAsync(elt)
 				assert(isAugmentedDOM(dom))
-
+	
 				const renderedString =
 					(idProvider.reset(), await renderToStringAsync(elt))
-
+	
 				assert.strictEqual(
 					normalizeHTML(dom.outerHTML),
 					normalizeHTML(renderedString)
@@ -546,7 +703,7 @@ describe('CORE MODULE', () => {
 				// assert.fail()
 			}
 		})
-
+	
 		it('should return an element with the correct content', async () => {
 			const elt = await renderToIntrinsicAsync(`test`)
 			assert.strictEqual(elt, 'test')
@@ -767,21 +924,21 @@ describe('CORE MODULE', () => {
 			const trace = await traceToLeafAsync(elt)
 			assert(isIntrinsicElt(trace.leafElement))
 			assert.strictEqual(trace.leafElement.type.toUpperCase(), 'DIV')
-
+	
 			const dom = document.createElement('span') as HTMLSpanElement
 			assert(!isTextDOM(dom))
-
+	
 			const updatedDom = await applyLeafElementAsync(dom, trace.leafElement)
-
+	
 			assert(!isTextDOM(updatedDom))
 			assert(!(updatedDom instanceof DocumentFragment))
-
+	
 			assert.notStrictEqual(updatedDom, dom)
 			assert.strictEqual(updatedDom.tagName.toUpperCase(), 'DIV')
 			assert.strictEqual(updatedDom.style.flexDirection, 'row')
-
+	
 			assert.strictEqual(updatedDom.childNodes.length, 3)
-
+	
 			const firstChild = updatedDom.childNodes.item(0) as HTMLElement
 			assert.strictEqual(firstChild.tagName.toUpperCase(), 'DIV')
 			assert.strictEqual(firstChild.style.flexDirection, 'column')
@@ -804,9 +961,9 @@ describe('CORE MODULE', () => {
 			)
 			assert(!isTextDOM(dom))
 			assert(!(dom instanceof DocumentFragment))
-
+	
 			const updatedDom = await updateAsync(dom)
-
+	
 			assert(!isTextDOM(updatedDom))
 			assert(!(updatedDom instanceof DocumentFragment))
 			assert.strictEqual(updatedDom.tagName, dom.tagName)

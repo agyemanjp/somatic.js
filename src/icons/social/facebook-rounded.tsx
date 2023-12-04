@@ -22,4 +22,5 @@ export const FacebookRounded = create(
 			strokeWidth="1.39"
 			strokeLinecap="round"
 			strokeLinejoin="round"></path>
-	</svg>)
+	</svg>
+)

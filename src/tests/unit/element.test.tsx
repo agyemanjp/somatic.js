@@ -3,7 +3,7 @@ import { isGenerator, pick, unique, stringify } from "@agyemanjp/standard"
 
 import { createElement } from "../../core"
 import { isComponentElt, isEltProper, getChildren, isIntrinsicElt } from "../../element"
-import { Component, ComponentElt, CSSProperties, IntrinsicElement } from "../../types"
+import { Component, ComponentElement, CSSProperties, IntrinsicElement } from "../../types"
 import { StackPanel } from "../../components"
 
 interface User {

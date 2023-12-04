@@ -1,18 +1,17 @@
-import { createId } from "@paralleldrive/cuid2"
+
+import { noop } from "@agyemanjp/standard"
+import { stringify } from "@agyemanjp/standard"
 
 import { createElement, fragment, mountElement } from '../../core'
-import { Component, ComponentAsyncStateful } from '../../types'
-import { CarouselPanel } from '../../components/panels/carousel-panel'
+import { ComponentAsyncStateful } from '../../types'
 import { StackPanel } from '../../components/panels/stack-panel'
-import { GridPanel } from "../../components/panels/grid-panel"
-import { TabsPanel } from "../../components/panels/tabs-panel"
 import * as Icons from '../../icons'
-import { noop } from "@agyemanjp/standard"
 
 
 const Preview: ComponentAsyncStateful<{}> = async function* (_props, _render) {
+	console.log(`Preview component starting`)
+
 	const state: State = { tabSelected: "components" }
-	// const _id = createId()
 	const render = _render ?? noop
 
 	const IconsPreview = () => (
@@ -46,7 +45,6 @@ const Preview: ComponentAsyncStateful<{}> = async function* (_props, _render) {
 			))}
 		</div>
 	)
-
 	const CompsPreview = () => {
 		const children = <>
 			<img
@@ -65,7 +63,9 @@ const Preview: ComponentAsyncStateful<{}> = async function* (_props, _render) {
 	}
 
 	while (true) {
-		yield <StackPanel orientation="vertical" >
+		console.log(`Preview component yielding with state = ${stringify(state)}`)
+
+		const elt = <StackPanel orientation="vertical" >
 			<StackPanel style={{ gap: "0.25em" }}>
 				<div
 					style={{ textDecoration: state.tabSelected === "components" ? "underline" : "unset" }}
@@ -88,9 +88,10 @@ const Preview: ComponentAsyncStateful<{}> = async function* (_props, _render) {
 					? <CompsPreview />
 					: <IconsPreview />
 			}
-		</StackPanel >
-	}
+		</StackPanel>
 
+		yield elt
+	}
 }
 
 type State = { tabSelected: "components" | "icons" }
@@ -103,7 +104,7 @@ type State = { tabSelected: "components" | "icons" }
 				throw new Error(`Root container with id root not found`)
 			}
 			console.log(`Mounting`)
-			await mountElement(<Preview />, rootContainerNode)
+			let cache = await mountElement(<Preview />, rootContainerNode)
 		})
 	}
 })()

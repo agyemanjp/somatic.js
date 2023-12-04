@@ -20,33 +20,32 @@ export type ComponentAsyncStateful<P extends Obj = Obj> = ComponentBase<ElementG
  * @argument props: Component-specific properties passed to the component function
  * @argument render: Callback used for requesting re-rendering
  */
-export type ComponentBase<Ret, Props extends Obj = Obj> = ((props: ComponentArgs<Props>, render?: () => void) => Ret) & ComponentOptions<Props>
+export type ComponentBase<Ret, Props extends Obj = Obj> =
+	((props: ComponentArgs<Props>, render?: () => void) => Ret)
+	& ComponentOptions<Props>
 
 export type ElementGenerator<P extends Obj = Obj, Elt = UIElement> = Generator<Elt, Elt, ComponentArgs<P>>
 export type ElementGeneratorAsync<P extends Obj = Obj, Elt = UIElement> = AsyncGenerator<Elt, Elt, ComponentArgs<P>>
 
-export type ComponentArgs<Props> = Props & { children?: Children }
+export type ComponentArgs<Props> = Props & { children?: Children, key?: string, id?: string }
 export type ComponentOptions<P extends Obj = Obj> = {
 	name?: string
 	isPure?: boolean
 	defaultProps?: Partial<P>
 }
-export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a
+export type Children = UIElement | UIElement[] // Children can be of various types, so not meaningful to give them a type
 
 /** UI element; basically, information for a future (component) function invocation,
  * I.e., the component function plus the arguments with which to call it
  * A component element can produce another component element, recursively,
  * until an intrinsic element is obtained, at which point we can generate an actual node from it
  */
-export type UIElement<P extends Obj = Obj> = ComponentElt<P> | IntrinsicElement<P> | /*FragmentElement |*/ ValueElement
-
-export interface IntrinsicElement<P extends Obj = Obj> extends UIElementBase<P> { type: string }
-export interface ComponentElt<P extends Obj = Obj> extends UIElementBase<P> { type: Component<P>, }
-
-export interface UIElementBase<P = unknown> { props: P, children?: Children }
+export type UIElement<P extends Obj = Obj> = ComponentElement<P> | IntrinsicElement<P> | /*FragmentElement |*/ ValueElement
+export type IntrinsicElement<P extends Obj = Obj> = UIElementBase<P> & { type: string }
+export type ComponentElement<P extends Obj = Obj> = UIElementBase<P> & { type: Component<P> }
+export type UIElementBase<P = unknown> = { props: P, children?: Children }
 
 export type ValueElement = | null | string | number | bigint | symbol | boolean | Object
-
 
 export type DOMElement = SVGElement | HTMLElement
 
